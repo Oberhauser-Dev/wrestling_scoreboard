@@ -20,6 +20,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -67,25 +68,35 @@ mixin AbstractPersonOverview<T extends DataObject> implements AbstractOverview<P
           ],
           children: [
             ...?tiles,
-            ContentItem(title: person.fullName, subtitle: localizations.name, icon: Icons.person),
-            ContentItem(title: person.age?.toString() ?? '-', subtitle: localizations.age, icon: Icons.event),
+            if (person.imageUri != null)
+              ContentItem(
+                title: person.imageUri!,
+                subtitle: localizations.image,
+                icon: CircularImage(imageUri: person.imageUri!),
+              ),
             ContentItem(
+              title: person.fullName,
+              subtitle: localizations.name,
+              icon: person.imageUri == null ? Icon(Icons.person) : CircularImage(imageUri: person.imageUri!),
+            ),
+            ContentItem.icon(title: person.age?.toString() ?? '-', subtitle: localizations.age, iconData: Icons.event),
+            ContentItem.icon(
               title: person.birthDate?.toDateString(context) ?? '-',
               subtitle: localizations.dateOfBirth,
-              icon: Icons.cake,
+              iconData: Icons.cake,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: person.gender?.localize(context) ?? '-',
               subtitle: localizations.gender,
-              icon: Icons.description,
+              iconData: Icons.description,
             ),
-            ContentItem(
+            ContentItem.icon(
               title:
                   person.nationality == null
                       ? '-'
                       : '${person.nationality?.nationality} (${person.nationality?.isoShortName})',
               subtitle: localizations.nationality,
-              icon: Icons.location_on,
+              iconData: Icons.location_on,
             ),
           ],
         );
@@ -143,7 +154,7 @@ class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> 
                   itemBuilder:
                       (context, membership) => ContentItem(
                         title: '${membership.info},\t${membership.person.gender?.localize(context)}',
-                        icon: Icons.person,
+                        icon: person.imageUri == null ? Icon(Icons.person) : CircularImage(imageUri: person.imageUri!),
                         onTap: () => MembershipOverview.navigateTo(context, membership),
                       ),
                 ),
@@ -152,9 +163,9 @@ class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> 
                 ): FilterableManyConsumer<CompetitionPerson, Person>(
                   filterObject: person,
                   itemBuilder:
-                      (context, competitionPerson) => ContentItem(
+                      (context, competitionPerson) => ContentItem.icon(
                         title: '${competitionPerson.competition.name} | ${competitionPerson.role.localize(context)}',
-                        icon: competitionPerson.role.icon,
+                        iconData: competitionPerson.role.icon,
                         onTap: () => CompetitionPersonOverview.navigateTo(context, competitionPerson),
                       ),
                 ),
@@ -163,10 +174,10 @@ class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> 
                 ): FilterableManyConsumer<TeamMatchPerson, Person>(
                   filterObject: person,
                   itemBuilder:
-                      (context, teamMatchPerson) => ContentItem(
+                      (context, teamMatchPerson) => ContentItem.icon(
                         title:
                             '${teamMatchPerson.teamMatch.localize(context)} | ${teamMatchPerson.role.localize(context)}',
-                        icon: teamMatchPerson.role.icon,
+                        iconData: teamMatchPerson.role.icon,
                         onTap: () => TeamMatchPersonOverview.navigateTo(context, teamMatchPerson),
                       ),
                 ),

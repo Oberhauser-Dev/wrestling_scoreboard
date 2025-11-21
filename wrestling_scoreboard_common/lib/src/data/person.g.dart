@@ -16,6 +16,7 @@ _Person _$PersonFromJson(Map<String, dynamic> json) => _Person(
   gender: $enumDecodeNullable(_$GenderEnumMap, json['gender']),
   birthDate: json['birthDate'] == null ? null : DateTime.parse(json['birthDate'] as String),
   nationality: _$JsonConverterFromJson<String, Country>(json['nationality'], const CountryJsonConverter().fromJson),
+  imageUri: json['imageUri'] as String?,
 );
 
 Map<String, dynamic> _$PersonToJson(_Person instance) => <String, dynamic>{
@@ -27,6 +28,7 @@ Map<String, dynamic> _$PersonToJson(_Person instance) => <String, dynamic>{
   'gender': _$GenderEnumMap[instance.gender],
   'birthDate': instance.birthDate?.toIso8601String(),
   'nationality': _$JsonConverterToJson<String, Country>(instance.nationality, const CountryJsonConverter().toJson),
+  'imageUri': instance.imageUri,
 };
 
 const _$GenderEnumMap = {Gender.male: 'male', Gender.female: 'female', Gender.other: 'other'};

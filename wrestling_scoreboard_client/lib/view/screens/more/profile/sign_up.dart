@@ -42,7 +42,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             key: _formKey,
             child: Column(
               children: [
-                CustomTextInput(
+                CustomTextInput.icon(
                   onSaved: (String? value) => _username = value,
                   label: localizations.username,
                   isMandatory: true,

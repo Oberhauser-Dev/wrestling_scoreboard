@@ -41,7 +41,7 @@ class _UserVerificationScreenState extends ConsumerState<UserVerificationScreen>
             key: _formKey,
             child: Column(
               children: [
-                CustomTextInput(
+                CustomTextInput.icon(
                   label: localizations.auth_verificationCode,
                   initialValue: _verificationCode,
                   onSaved: (String? value) => _verificationCode = value,

@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
@@ -36,30 +37,46 @@ class BoutListItem extends ConsumerWidget {
     double? fontSize,
     required BuildContext context,
   }) {
+    final double width = MediaQuery.of(context).size.width;
+    final avatar =
+        pStatus?.membership.person.imageUri == null
+            ? null
+            : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircularImage(imageUri: pStatus!.membership.person.imageUri!, size: width / 35, borderWidth: 1),
+            );
     return ThemedContainer(
       color: role.color(),
-      child: Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ScaledText(
-              pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.prename,
-              color: pStatus == null ? Colors.white.disabled() : Colors.white,
-              fontSize: 17,
-              minFontSize: 14,
-              textAlign: TextAlign.center,
-            ),
-            if (pStatus != null)
-              ScaledText(
-                ' ${pStatus.membership.person.surname}',
-                color: Colors.white,
-                fontSize: 17,
-                minFontSize: 14,
-                textAlign: TextAlign.center,
-                fontWeight: FontWeight.bold,
+      child: Row(
+        children: [
+          if (avatar != null && role == BoutRole.red) avatar,
+          Expanded(
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ScaledText(
+                    pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.prename,
+                    color: pStatus == null ? Colors.white.disabled() : Colors.white,
+                    fontSize: 17,
+                    minFontSize: 14,
+                    textAlign: TextAlign.center,
+                  ),
+                  if (pStatus != null)
+                    ScaledText(
+                      ' ${pStatus.membership.person.surname}',
+                      color: Colors.white,
+                      fontSize: 17,
+                      minFontSize: 14,
+                      textAlign: TextAlign.center,
+                      fontWeight: FontWeight.bold,
+                    ),
+                ],
               ),
-          ],
-        ),
+            ),
+          ),
+          if (avatar != null && role == BoutRole.blue) avatar,
+        ],
       ),
     );
   }

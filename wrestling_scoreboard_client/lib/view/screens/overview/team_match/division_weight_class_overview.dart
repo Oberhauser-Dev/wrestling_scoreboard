@@ -37,16 +37,16 @@ class DivisionWeightClassOverview extends ConsumerWidget with WeightClassOvervie
           editPage: DivisionWeightClassEdit(divisionWeightClass: data, initialDivision: data.division),
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<DivisionWeightClass>(data),
           tiles: [
-            ContentItem(
+            ContentItem.icon(
               title: data.division.fullname,
               subtitle: localizations.division,
-              icon: Icons.inventory,
+              iconData: Icons.inventory,
               onTap: () => DivisionOverview.navigateTo(context, data.division),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: data.seasonPartition?.asSeasonPartition(context, data.division.seasonPartitions) ?? '-',
               subtitle: localizations.seasonPartition,
-              icon: Icons.sunny_snowing,
+              iconData: Icons.sunny_snowing,
             ),
           ],
           dataId: data.weightClass.id!,

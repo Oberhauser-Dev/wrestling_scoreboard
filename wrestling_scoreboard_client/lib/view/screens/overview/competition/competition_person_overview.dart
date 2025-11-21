@@ -11,6 +11,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/person_overvie
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -47,19 +48,22 @@ class CompetitionPersonOverview extends ConsumerWidget {
             ContentItem(
               title: competitionPerson.person.fullName,
               subtitle: localizations.person,
-              icon: Icons.person,
+              icon:
+                  competitionPerson.person.imageUri == null
+                      ? Icon(Icons.person)
+                      : CircularImage(imageUri: competitionPerson.person.imageUri!),
               onTap: () => PersonOverview.navigateTo(context, competitionPerson.person),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionPerson.competition.name,
               subtitle: localizations.competition,
-              icon: Icons.leaderboard,
+              iconData: Icons.leaderboard,
               onTap: () => CompetitionOverview.navigateTo(context, competitionPerson.competition),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionPerson.role.localize(context),
               subtitle: localizations.role,
-              icon: Icons.label,
+              iconData: Icons.label,
             ),
           ],
         );

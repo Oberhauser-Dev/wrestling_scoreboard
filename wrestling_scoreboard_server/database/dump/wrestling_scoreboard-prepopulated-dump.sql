@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict JyEhLoTecUgr7jj5Dgep2uGX4pHGPw4JTSfgW8X46RR7KAxD8t34PBdepMkdZVe
+\restrict uYlmpKFGuRzT8YhZY13LoOw1F8PBWZMSpqklkHwNY6J1kCi1N7Dh4Hhq76Y4bTA
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -456,7 +456,8 @@ CREATE TABLE public.club (
     no character varying(8),
     name character varying(255) NOT NULL,
     organization_id integer NOT NULL,
-    org_sync_id character varying(127)
+    org_sync_id character varying(127),
+    image_uri text
 );
 
 
@@ -1101,7 +1102,8 @@ CREATE TABLE public.organization (
     abbreviation character varying(64),
     parent_id integer,
     api_provider public.api_provider,
-    report_provider public.report_provider
+    report_provider public.report_provider,
+    image_uri text
 );
 
 
@@ -1200,7 +1202,8 @@ CREATE TABLE public.person (
     gender public.gender,
     nationality character(3) DEFAULT NULL::bpchar,
     org_sync_id character varying(127),
-    organization_id integer
+    organization_id integer,
+    image_uri text
 );
 
 
@@ -1870,9 +1873,9 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 -- Data for Name: club; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
-2	12345	Springfield Wrestlers	1	\N
-1	05432	Quahog Hunters	1	\N
+COPY public.club (id, no, name, organization_id, org_sync_id, image_uri) FROM stdin;
+2	12345	Springfield Wrestlers	1	\N	\N
+1	05432	Quahog Hunters	1	\N	\N
 \.
 
 
@@ -2068,7 +2071,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.8-pre.1	0.3.7
+0.3.8-pre.2	0.3.7
 \.
 
 
@@ -2076,8 +2079,8 @@ COPY public.migration (semver, min_client_version) FROM stdin;
 -- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider) FROM stdin;
-1	United World Wrestling	UWW	\N	\N	\N
+COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider, image_uri) FROM stdin;
+1	United World Wrestling	UWW	\N	\N	\N	\N
 \.
 
 
@@ -2085,30 +2088,30 @@ COPY public.organization (id, name, abbreviation, parent_id, api_provider, repor
 -- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.person (id, prename, surname, birth_date, gender, nationality, org_sync_id, organization_id) FROM stdin;
-18	Ned	Flanders	1964-03-08	male	\N	\N	1
-22	Maggie	Simpson	2020-03-07	female	\N	\N	1
-15	Adam	West	1967-03-08	male	\N	\N	1
-13	Cleveland	Brown	1985-03-08	male	\N	\N	1
-23	Nelson	Muntz	\N	male	\N	\N	1
-20	Krusty	Clown	1983-03-08	male	\N	\N	1
-9	Mr	Referee	\N	other	\N	\N	1
-10	Glenn	Quagmire	1982-03-08	male	\N	\N	1
-12	Joe	Swanson	1976-03-08	male	\N	\N	1
-11	Brian	Griffin	2000-03-07	male	\N	\N	1
-21	Moe	Szyslak	1981-03-08	male	\N	\N	1
-19	Milhouse	Van Houten	2004-03-07	male	\N	\N	1
-17	Mr.	Burns	1925-03-08	male	\N	\N	1
-16	Bonnie	Swanson	1991-03-08	female	\N	\N	1
-14	Stewie	Griffin	2021-03-07	male	\N	\N	1
-5	Chris	Griffin	2005-03-08	male	\N	\N	1
-8	Peter	Griffin	1975-03-08	male	\N	\N	1
-7	Lois	Griffin	1979-03-08	female	\N	\N	1
-4	Homer	Simpson	1975-07-08	male	\N	\N	1
-2	Bart	Simpson	2007-07-08	male	\N	\N	1
-3	March	Simpson	1980-07-08	female	\N	\N	1
-6	Meg	Griffin	2007-03-08	female	\N	\N	1
-1	Lisa	Simpson	2010-07-08	female	USA	\N	1
+COPY public.person (id, prename, surname, birth_date, gender, nationality, org_sync_id, organization_id, image_uri) FROM stdin;
+18	Ned	Flanders	1964-03-08	male	\N	\N	1	\N
+22	Maggie	Simpson	2020-03-07	female	\N	\N	1	\N
+15	Adam	West	1967-03-08	male	\N	\N	1	\N
+13	Cleveland	Brown	1985-03-08	male	\N	\N	1	\N
+23	Nelson	Muntz	\N	male	\N	\N	1	\N
+20	Krusty	Clown	1983-03-08	male	\N	\N	1	\N
+9	Mr	Referee	\N	other	\N	\N	1	\N
+10	Glenn	Quagmire	1982-03-08	male	\N	\N	1	\N
+12	Joe	Swanson	1976-03-08	male	\N	\N	1	\N
+11	Brian	Griffin	2000-03-07	male	\N	\N	1	\N
+21	Moe	Szyslak	1981-03-08	male	\N	\N	1	\N
+19	Milhouse	Van Houten	2004-03-07	male	\N	\N	1	\N
+17	Mr.	Burns	1925-03-08	male	\N	\N	1	\N
+16	Bonnie	Swanson	1991-03-08	female	\N	\N	1	\N
+14	Stewie	Griffin	2021-03-07	male	\N	\N	1	\N
+5	Chris	Griffin	2005-03-08	male	\N	\N	1	\N
+8	Peter	Griffin	1975-03-08	male	\N	\N	1	\N
+7	Lois	Griffin	1979-03-08	female	\N	\N	1	\N
+4	Homer	Simpson	1975-07-08	male	\N	\N	1	\N
+2	Bart	Simpson	2007-07-08	male	\N	\N	1	\N
+3	March	Simpson	1980-07-08	female	\N	\N	1	\N
+6	Meg	Griffin	2007-03-08	female	\N	\N	1	\N
+1	Lisa	Simpson	2010-07-08	female	USA	\N	1	\N
 \.
 
 
@@ -3508,5 +3511,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict JyEhLoTecUgr7jj5Dgep2uGX4pHGPw4JTSfgW8X46RR7KAxD8t34PBdepMkdZVe
+\unrestrict uYlmpKFGuRzT8YhZY13LoOw1F8PBWZMSpqklkHwNY6J1kCi1N7Dh4Hhq76Y4bTA
 

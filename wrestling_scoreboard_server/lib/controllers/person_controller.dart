@@ -35,6 +35,7 @@ class PersonController extends ShelfController<Person> with OrganizationalContro
     raw['nationality'] = null;
     raw['gender'] = null;
     raw['org_sync_id'] = null;
+    raw['image_uri'] = null;
     return raw;
   }
 

@@ -80,7 +80,7 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
           ),
         ),
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.description,
         label: localizations.suffix,
         isMandatory: false,

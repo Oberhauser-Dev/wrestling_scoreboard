@@ -38,16 +38,16 @@ class LeagueWeightClassOverview extends ConsumerWidget with WeightClassOverview<
           editPage: LeagueWeightClassEdit(leagueWeightClass: data, initialLeague: data.league),
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<LeagueWeightClass>(data),
           tiles: [
-            ContentItem(
+            ContentItem.icon(
               title: '${data.league.fullname}, ${data.league.startDate.toDateString(context)}',
               subtitle: localizations.league,
-              icon: Icons.emoji_events,
+              iconData: Icons.emoji_events,
               onTap: () => LeagueOverview.navigateTo(context, data.league),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: data.seasonPartition?.asSeasonPartition(context, data.league.division.seasonPartitions) ?? '-',
               subtitle: localizations.seasonPartition,
-              icon: Icons.sunny_snowing,
+              iconData: Icons.sunny_snowing,
             ),
           ],
           dataId: data.weightClass.id!,

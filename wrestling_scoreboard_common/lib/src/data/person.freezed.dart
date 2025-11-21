@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Person {
 
- int? get id; String? get orgSyncId; Organization? get organization; String get prename; String get surname; Gender? get gender; DateTime? get birthDate;@CountryJsonConverter() Country? get nationality;
+ int? get id; String? get orgSyncId; Organization? get organization; String get prename; String get surname; Gender? get gender; DateTime? get birthDate;@CountryJsonConverter() Country? get nationality; String? get imageUri;
 /// Create a copy of Person
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $PersonCopyWith<Person> get copyWith => _$PersonCopyWithImpl<Person>(this as Per
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Person&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.prename, prename) || other.prename == prename)&&(identical(other.surname, surname) || other.surname == surname)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&(identical(other.nationality, nationality) || other.nationality == nationality));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Person&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.prename, prename) || other.prename == prename)&&(identical(other.surname, surname) || other.surname == surname)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&(identical(other.nationality, nationality) || other.nationality == nationality)&&(identical(other.imageUri, imageUri) || other.imageUri == imageUri));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,prename,surname,gender,birthDate,nationality);
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,prename,surname,gender,birthDate,nationality,imageUri);
 
 @override
 String toString() {
-  return 'Person(id: $id, orgSyncId: $orgSyncId, organization: $organization, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality)';
+  return 'Person(id: $id, orgSyncId: $orgSyncId, organization: $organization, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality, imageUri: $imageUri)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $PersonCopyWith<$Res>  {
   factory $PersonCopyWith(Person value, $Res Function(Person) _then) = _$PersonCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? orgSyncId, Organization? organization, String prename, String surname, Gender? gender, DateTime? birthDate,@CountryJsonConverter() Country? nationality
+ int? id, String? orgSyncId, Organization? organization, String prename, String surname, Gender? gender, DateTime? birthDate,@CountryJsonConverter() Country? nationality, String? imageUri
 });
 
 
@@ -65,7 +65,7 @@ class _$PersonCopyWithImpl<$Res>
 
 /// Create a copy of Person
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? prename = null,Object? surname = null,Object? gender = freezed,Object? birthDate = freezed,Object? nationality = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? prename = null,Object? surname = null,Object? gender = freezed,Object? birthDate = freezed,Object? nationality = freezed,Object? imageUri = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,8 @@ as String,surname: null == surname ? _self.surname : surname // ignore: cast_nul
 as String,gender: freezed == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
 as Gender?,birthDate: freezed == birthDate ? _self.birthDate : birthDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,nationality: freezed == nationality ? _self.nationality : nationality // ignore: cast_nullable_to_non_nullable
-as Country?,
+as Country?,imageUri: freezed == imageUri ? _self.imageUri : imageUri // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of Person
@@ -172,10 +173,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  String prename,  String surname,  Gender? gender,  DateTime? birthDate, @CountryJsonConverter()  Country? nationality)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  String prename,  String surname,  Gender? gender,  DateTime? birthDate, @CountryJsonConverter()  Country? nationality,  String? imageUri)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Person() when $default != null:
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.prename,_that.surname,_that.gender,_that.birthDate,_that.nationality);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.prename,_that.surname,_that.gender,_that.birthDate,_that.nationality,_that.imageUri);case _:
   return orElse();
 
 }
@@ -193,10 +194,10 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.prename,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  String prename,  String surname,  Gender? gender,  DateTime? birthDate, @CountryJsonConverter()  Country? nationality)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? orgSyncId,  Organization? organization,  String prename,  String surname,  Gender? gender,  DateTime? birthDate, @CountryJsonConverter()  Country? nationality,  String? imageUri)  $default,) {final _that = this;
 switch (_that) {
 case _Person():
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.prename,_that.surname,_that.gender,_that.birthDate,_that.nationality);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.prename,_that.surname,_that.gender,_that.birthDate,_that.nationality,_that.imageUri);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +214,10 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.prename,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? orgSyncId,  Organization? organization,  String prename,  String surname,  Gender? gender,  DateTime? birthDate, @CountryJsonConverter()  Country? nationality)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? orgSyncId,  Organization? organization,  String prename,  String surname,  Gender? gender,  DateTime? birthDate, @CountryJsonConverter()  Country? nationality,  String? imageUri)?  $default,) {final _that = this;
 switch (_that) {
 case _Person() when $default != null:
-return $default(_that.id,_that.orgSyncId,_that.organization,_that.prename,_that.surname,_that.gender,_that.birthDate,_that.nationality);case _:
+return $default(_that.id,_that.orgSyncId,_that.organization,_that.prename,_that.surname,_that.gender,_that.birthDate,_that.nationality,_that.imageUri);case _:
   return null;
 
 }
@@ -228,7 +229,7 @@ return $default(_that.id,_that.orgSyncId,_that.organization,_that.prename,_that.
 @JsonSerializable()
 
 class _Person extends Person {
-  const _Person({this.id, this.orgSyncId, this.organization, required this.prename, required this.surname, this.gender, this.birthDate, @CountryJsonConverter() this.nationality}): super._();
+  const _Person({this.id, this.orgSyncId, this.organization, required this.prename, required this.surname, this.gender, this.birthDate, @CountryJsonConverter() this.nationality, this.imageUri}): super._();
   factory _Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
 
 @override final  int? id;
@@ -239,6 +240,7 @@ class _Person extends Person {
 @override final  Gender? gender;
 @override final  DateTime? birthDate;
 @override@CountryJsonConverter() final  Country? nationality;
+@override final  String? imageUri;
 
 /// Create a copy of Person
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +255,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Person&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.prename, prename) || other.prename == prename)&&(identical(other.surname, surname) || other.surname == surname)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&(identical(other.nationality, nationality) || other.nationality == nationality));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Person&&(identical(other.id, id) || other.id == id)&&(identical(other.orgSyncId, orgSyncId) || other.orgSyncId == orgSyncId)&&(identical(other.organization, organization) || other.organization == organization)&&(identical(other.prename, prename) || other.prename == prename)&&(identical(other.surname, surname) || other.surname == surname)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&(identical(other.nationality, nationality) || other.nationality == nationality)&&(identical(other.imageUri, imageUri) || other.imageUri == imageUri));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,prename,surname,gender,birthDate,nationality);
+int get hashCode => Object.hash(runtimeType,id,orgSyncId,organization,prename,surname,gender,birthDate,nationality,imageUri);
 
 @override
 String toString() {
-  return 'Person(id: $id, orgSyncId: $orgSyncId, organization: $organization, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality)';
+  return 'Person(id: $id, orgSyncId: $orgSyncId, organization: $organization, prename: $prename, surname: $surname, gender: $gender, birthDate: $birthDate, nationality: $nationality, imageUri: $imageUri)';
 }
 
 
@@ -273,7 +275,7 @@ abstract mixin class _$PersonCopyWith<$Res> implements $PersonCopyWith<$Res> {
   factory _$PersonCopyWith(_Person value, $Res Function(_Person) _then) = __$PersonCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String? orgSyncId, Organization? organization, String prename, String surname, Gender? gender, DateTime? birthDate,@CountryJsonConverter() Country? nationality
+ int? id, String? orgSyncId, Organization? organization, String prename, String surname, Gender? gender, DateTime? birthDate,@CountryJsonConverter() Country? nationality, String? imageUri
 });
 
 
@@ -290,7 +292,7 @@ class __$PersonCopyWithImpl<$Res>
 
 /// Create a copy of Person
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? prename = null,Object? surname = null,Object? gender = freezed,Object? birthDate = freezed,Object? nationality = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orgSyncId = freezed,Object? organization = freezed,Object? prename = null,Object? surname = null,Object? gender = freezed,Object? birthDate = freezed,Object? nationality = freezed,Object? imageUri = freezed,}) {
   return _then(_Person(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orgSyncId: freezed == orgSyncId ? _self.orgSyncId : orgSyncId // ignore: cast_nullable_to_non_nullable
@@ -300,7 +302,8 @@ as String,surname: null == surname ? _self.surname : surname // ignore: cast_nul
 as String,gender: freezed == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
 as Gender?,birthDate: freezed == birthDate ? _self.birthDate : birthDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,nationality: freezed == nationality ? _self.nationality : nationality // ignore: cast_nullable_to_non_nullable
-as Country?,
+as Country?,imageUri: freezed == imageUri ? _self.imageUri : imageUri // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

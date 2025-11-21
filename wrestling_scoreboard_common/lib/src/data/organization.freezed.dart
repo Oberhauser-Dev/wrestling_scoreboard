@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Organization {
 
- int? get id; String get name; String? get abbreviation; Organization? get parent; WrestlingApiProvider? get apiProvider; WrestlingReportProvider? get reportProvider;
+ int? get id; String get name; String? get abbreviation; Organization? get parent; WrestlingApiProvider? get apiProvider; WrestlingReportProvider? get reportProvider; String? get imageUri;
 /// Create a copy of Organization
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $OrganizationCopyWith<Organization> get copyWith => _$OrganizationCopyWithImpl<O
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Organization&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.abbreviation, abbreviation) || other.abbreviation == abbreviation)&&(identical(other.parent, parent) || other.parent == parent)&&(identical(other.apiProvider, apiProvider) || other.apiProvider == apiProvider)&&(identical(other.reportProvider, reportProvider) || other.reportProvider == reportProvider));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Organization&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.abbreviation, abbreviation) || other.abbreviation == abbreviation)&&(identical(other.parent, parent) || other.parent == parent)&&(identical(other.apiProvider, apiProvider) || other.apiProvider == apiProvider)&&(identical(other.reportProvider, reportProvider) || other.reportProvider == reportProvider)&&(identical(other.imageUri, imageUri) || other.imageUri == imageUri));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,abbreviation,parent,apiProvider,reportProvider);
+int get hashCode => Object.hash(runtimeType,id,name,abbreviation,parent,apiProvider,reportProvider,imageUri);
 
 @override
 String toString() {
-  return 'Organization(id: $id, name: $name, abbreviation: $abbreviation, parent: $parent, apiProvider: $apiProvider, reportProvider: $reportProvider)';
+  return 'Organization(id: $id, name: $name, abbreviation: $abbreviation, parent: $parent, apiProvider: $apiProvider, reportProvider: $reportProvider, imageUri: $imageUri)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $OrganizationCopyWith<$Res>  {
   factory $OrganizationCopyWith(Organization value, $Res Function(Organization) _then) = _$OrganizationCopyWithImpl;
 @useResult
 $Res call({
- int? id, String name, String? abbreviation, Organization? parent, WrestlingApiProvider? apiProvider, WrestlingReportProvider? reportProvider
+ int? id, String name, String? abbreviation, Organization? parent, WrestlingApiProvider? apiProvider, WrestlingReportProvider? reportProvider, String? imageUri
 });
 
 
@@ -65,7 +65,7 @@ class _$OrganizationCopyWithImpl<$Res>
 
 /// Create a copy of Organization
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? abbreviation = freezed,Object? parent = freezed,Object? apiProvider = freezed,Object? reportProvider = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? abbreviation = freezed,Object? parent = freezed,Object? apiProvider = freezed,Object? reportProvider = freezed,Object? imageUri = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,8 @@ as String,abbreviation: freezed == abbreviation ? _self.abbreviation : abbreviat
 as String?,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
 as Organization?,apiProvider: freezed == apiProvider ? _self.apiProvider : apiProvider // ignore: cast_nullable_to_non_nullable
 as WrestlingApiProvider?,reportProvider: freezed == reportProvider ? _self.reportProvider : reportProvider // ignore: cast_nullable_to_non_nullable
-as WrestlingReportProvider?,
+as WrestlingReportProvider?,imageUri: freezed == imageUri ? _self.imageUri : imageUri // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of Organization
@@ -170,10 +171,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  String? abbreviation,  Organization? parent,  WrestlingApiProvider? apiProvider,  WrestlingReportProvider? reportProvider)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  String? abbreviation,  Organization? parent,  WrestlingApiProvider? apiProvider,  WrestlingReportProvider? reportProvider,  String? imageUri)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Organization() when $default != null:
-return $default(_that.id,_that.name,_that.abbreviation,_that.parent,_that.apiProvider,_that.reportProvider);case _:
+return $default(_that.id,_that.name,_that.abbreviation,_that.parent,_that.apiProvider,_that.reportProvider,_that.imageUri);case _:
   return orElse();
 
 }
@@ -191,10 +192,10 @@ return $default(_that.id,_that.name,_that.abbreviation,_that.parent,_that.apiPro
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  String? abbreviation,  Organization? parent,  WrestlingApiProvider? apiProvider,  WrestlingReportProvider? reportProvider)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  String? abbreviation,  Organization? parent,  WrestlingApiProvider? apiProvider,  WrestlingReportProvider? reportProvider,  String? imageUri)  $default,) {final _that = this;
 switch (_that) {
 case _Organization():
-return $default(_that.id,_that.name,_that.abbreviation,_that.parent,_that.apiProvider,_that.reportProvider);case _:
+return $default(_that.id,_that.name,_that.abbreviation,_that.parent,_that.apiProvider,_that.reportProvider,_that.imageUri);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -211,10 +212,10 @@ return $default(_that.id,_that.name,_that.abbreviation,_that.parent,_that.apiPro
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  String? abbreviation,  Organization? parent,  WrestlingApiProvider? apiProvider,  WrestlingReportProvider? reportProvider)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  String? abbreviation,  Organization? parent,  WrestlingApiProvider? apiProvider,  WrestlingReportProvider? reportProvider,  String? imageUri)?  $default,) {final _that = this;
 switch (_that) {
 case _Organization() when $default != null:
-return $default(_that.id,_that.name,_that.abbreviation,_that.parent,_that.apiProvider,_that.reportProvider);case _:
+return $default(_that.id,_that.name,_that.abbreviation,_that.parent,_that.apiProvider,_that.reportProvider,_that.imageUri);case _:
   return null;
 
 }
@@ -226,7 +227,7 @@ return $default(_that.id,_that.name,_that.abbreviation,_that.parent,_that.apiPro
 @JsonSerializable()
 
 class _Organization extends Organization {
-  const _Organization({this.id, required this.name, this.abbreviation, this.parent, this.apiProvider, this.reportProvider}): super._();
+  const _Organization({this.id, required this.name, this.abbreviation, this.parent, this.apiProvider, this.reportProvider, this.imageUri}): super._();
   factory _Organization.fromJson(Map<String, dynamic> json) => _$OrganizationFromJson(json);
 
 @override final  int? id;
@@ -235,6 +236,7 @@ class _Organization extends Organization {
 @override final  Organization? parent;
 @override final  WrestlingApiProvider? apiProvider;
 @override final  WrestlingReportProvider? reportProvider;
+@override final  String? imageUri;
 
 /// Create a copy of Organization
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +251,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Organization&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.abbreviation, abbreviation) || other.abbreviation == abbreviation)&&(identical(other.parent, parent) || other.parent == parent)&&(identical(other.apiProvider, apiProvider) || other.apiProvider == apiProvider)&&(identical(other.reportProvider, reportProvider) || other.reportProvider == reportProvider));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Organization&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.abbreviation, abbreviation) || other.abbreviation == abbreviation)&&(identical(other.parent, parent) || other.parent == parent)&&(identical(other.apiProvider, apiProvider) || other.apiProvider == apiProvider)&&(identical(other.reportProvider, reportProvider) || other.reportProvider == reportProvider)&&(identical(other.imageUri, imageUri) || other.imageUri == imageUri));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,abbreviation,parent,apiProvider,reportProvider);
+int get hashCode => Object.hash(runtimeType,id,name,abbreviation,parent,apiProvider,reportProvider,imageUri);
 
 @override
 String toString() {
-  return 'Organization(id: $id, name: $name, abbreviation: $abbreviation, parent: $parent, apiProvider: $apiProvider, reportProvider: $reportProvider)';
+  return 'Organization(id: $id, name: $name, abbreviation: $abbreviation, parent: $parent, apiProvider: $apiProvider, reportProvider: $reportProvider, imageUri: $imageUri)';
 }
 
 
@@ -269,7 +271,7 @@ abstract mixin class _$OrganizationCopyWith<$Res> implements $OrganizationCopyWi
   factory _$OrganizationCopyWith(_Organization value, $Res Function(_Organization) _then) = __$OrganizationCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String name, String? abbreviation, Organization? parent, WrestlingApiProvider? apiProvider, WrestlingReportProvider? reportProvider
+ int? id, String name, String? abbreviation, Organization? parent, WrestlingApiProvider? apiProvider, WrestlingReportProvider? reportProvider, String? imageUri
 });
 
 
@@ -286,7 +288,7 @@ class __$OrganizationCopyWithImpl<$Res>
 
 /// Create a copy of Organization
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? abbreviation = freezed,Object? parent = freezed,Object? apiProvider = freezed,Object? reportProvider = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? abbreviation = freezed,Object? parent = freezed,Object? apiProvider = freezed,Object? reportProvider = freezed,Object? imageUri = freezed,}) {
   return _then(_Organization(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -294,7 +296,8 @@ as String,abbreviation: freezed == abbreviation ? _self.abbreviation : abbreviat
 as String?,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
 as Organization?,apiProvider: freezed == apiProvider ? _self.apiProvider : apiProvider // ignore: cast_nullable_to_non_nullable
 as WrestlingApiProvider?,reportProvider: freezed == reportProvider ? _self.reportProvider : reportProvider // ignore: cast_nullable_to_non_nullable
-as WrestlingReportProvider?,
+as WrestlingReportProvider?,imageUri: freezed == imageUri ? _self.imageUri : imageUri // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

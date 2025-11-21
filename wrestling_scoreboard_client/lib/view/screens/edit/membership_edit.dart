@@ -141,7 +141,7 @@ class MembershipPersonEditState extends AbstractPersonEditState<MembershipPerson
       id: widget.membership?.id,
       classLocale: localizations.membership,
       fields: [
-        CustomTextInput(
+        CustomTextInput.icon(
           iconData: Icons.tag,
           label: localizations.membershipNumber,
           initialValue: widget.membership?.no,

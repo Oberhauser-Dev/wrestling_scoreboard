@@ -1688,6 +1688,12 @@ abstract class AppLocalizations {
   /// **'Search results'**
   String get searchResults;
 
+  /// No description provided for @image.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get image;
+
   /// No description provided for @red.
   ///
   /// In en, this message translates to:

@@ -6,6 +6,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -53,6 +54,7 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
   String? _authProviderUsername;
   String? _authProviderPassword;
   bool _areCredentialsValid = true;
+  String? _imageUri;
 
   @override
   void initState() {
@@ -60,6 +62,7 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
     _parent = widget.organization?.parent ?? widget.initialParent;
     _apiProvider = widget.organization?.apiProvider;
     _reportProvider = widget.organization?.reportProvider;
+    _imageUri = widget.organization?.imageUri;
 
     _authProviderUsername = widget.initialAuthService?.username;
     _authProviderPassword = widget.initialAuthService?.password;
@@ -72,13 +75,20 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
 
     final items = [
       CustomTextInput(
+        icon: _imageUri == null ? null : CircularImage(imageUri: _imageUri!),
+        label: localizations.image,
+        initialValue: widget.organization?.imageUri,
+        isMandatory: false,
+        onSaved: (value) => _imageUri = value,
+      ),
+      CustomTextInput.icon(
         iconData: Icons.description,
         label: localizations.name,
         initialValue: widget.organization?.name,
         isMandatory: true,
         onSaved: (value) => _name = value,
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.short_text,
         label: localizations.abbreviation,
         initialValue: widget.organization?.abbreviation,
@@ -117,7 +127,7 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
           ),
         ),
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         autofillHints: const [AutofillHints.username],
         iconData: Icons.account_circle,
         label: localizations.username,
@@ -177,6 +187,7 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
           parent: _parent,
           reportProvider: _reportProvider,
           apiProvider: _apiProvider,
+          imageUri: _imageUri,
         ),
       );
       if (widget.organization?.id != null) {

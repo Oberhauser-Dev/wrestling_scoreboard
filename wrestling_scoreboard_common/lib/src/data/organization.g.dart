@@ -13,6 +13,7 @@ _Organization _$OrganizationFromJson(Map<String, dynamic> json) => _Organization
   parent: json['parent'] == null ? null : Organization.fromJson(json['parent'] as Map<String, dynamic>),
   apiProvider: $enumDecodeNullable(_$WrestlingApiProviderEnumMap, json['apiProvider']),
   reportProvider: $enumDecodeNullable(_$WrestlingReportProviderEnumMap, json['reportProvider']),
+  imageUri: json['imageUri'] as String?,
 );
 
 Map<String, dynamic> _$OrganizationToJson(_Organization instance) => <String, dynamic>{
@@ -22,6 +23,7 @@ Map<String, dynamic> _$OrganizationToJson(_Organization instance) => <String, dy
   'parent': instance.parent?.toJson(),
   'apiProvider': _$WrestlingApiProviderEnumMap[instance.apiProvider],
   'reportProvider': _$WrestlingReportProviderEnumMap[instance.reportProvider],
+  'imageUri': instance.imageUri,
 };
 
 const _$WrestlingApiProviderEnumMap = {

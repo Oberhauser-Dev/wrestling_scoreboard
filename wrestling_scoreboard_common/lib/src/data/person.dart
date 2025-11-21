@@ -18,7 +18,7 @@ class CountryJsonConverter extends JsonConverter<Country, String> {
 
 /// The persons information.
 @freezed
-abstract class Person with _$Person implements DataObject, Organizational {
+abstract class Person with _$Person implements DataObject, ImageObjectData, Organizational {
   const Person._();
 
   const factory Person({
@@ -30,6 +30,7 @@ abstract class Person with _$Person implements DataObject, Organizational {
     Gender? gender,
     DateTime? birthDate,
     @CountryJsonConverter() Country? nationality,
+    String? imageUri,
   }) = _Person;
 
   factory Person.fromJson(Map<String, Object?> json) => _$PersonFromJson(json);
@@ -47,6 +48,7 @@ abstract class Person with _$Person implements DataObject, Organizational {
       gender: gender == null ? null : Gender.values.byName(gender),
       birthDate: e['birth_date'] as DateTime?,
       nationality: nationality == null ? null : CountryJsonConverter().fromJson(nationality),
+      imageUri: e['image_uri'] as String?,
     );
   }
 
@@ -61,6 +63,7 @@ abstract class Person with _$Person implements DataObject, Organizational {
       'gender': gender?.name,
       'birth_date': birthDate,
       'nationality': nationality == null ? null : CountryJsonConverter().toJson(nationality!),
+      'image_uri': imageUri,
     };
   }
 

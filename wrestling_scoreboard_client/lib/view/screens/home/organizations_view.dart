@@ -3,6 +3,7 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/organization_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -20,7 +21,7 @@ class OrganizationsView extends StatelessWidget {
         itemBuilder:
             (context, item) => ContentItem(
               title: item.name,
-              icon: Icons.corporate_fare,
+              icon: item.imageUri == null ? Icon(Icons.corporate_fare) : CircularImage(imageUri: item.imageUri!),
               onTap: () => OrganizationOverview.navigateTo(context, item),
             ),
       ),

@@ -656,7 +656,7 @@ class _BackupRuleEditDialogState extends State<BackupRuleEditDialog> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextInput(
+          CustomTextInput.icon(
             label: localizations.name,
             initialValue: _name,
             isMandatory: true,

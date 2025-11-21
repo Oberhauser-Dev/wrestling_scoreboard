@@ -12,6 +12,7 @@ _Club _$ClubFromJson(Map<String, dynamic> json) => _Club(
   organization: Organization.fromJson(json['organization'] as Map<String, dynamic>),
   name: json['name'] as String,
   no: json['no'] as String?,
+  imageUri: json['imageUri'] as String?,
 );
 
 Map<String, dynamic> _$ClubToJson(_Club instance) => <String, dynamic>{
@@ -20,4 +21,5 @@ Map<String, dynamic> _$ClubToJson(_Club instance) => <String, dynamic>{
   'organization': instance.organization.toJson(),
   'name': instance.name,
   'no': instance.no,
+  'imageUri': instance.imageUri,
 };

@@ -31,6 +31,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competi
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
@@ -111,29 +112,37 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               },
               classLocale: localizations.competition,
               children: [
-                ContentItem(title: competition.name, subtitle: localizations.name, icon: Icons.description),
-                ContentItem(title: competition.no ?? '-', subtitle: localizations.competitionNumber, icon: Icons.tag),
-                ContentItem(
+                ContentItem.icon(title: competition.name, subtitle: localizations.name, iconData: Icons.description),
+                ContentItem.icon(
+                  title: competition.no ?? '-',
+                  subtitle: localizations.competitionNumber,
+                  iconData: Icons.tag,
+                ),
+                ContentItem.icon(
                   title: competition.location ?? 'no location',
                   subtitle: localizations.place,
-                  icon: Icons.place,
+                  iconData: Icons.place,
                 ),
-                ContentItem(
+                ContentItem.icon(
                   title: competition.date.toDateTimeString(context),
                   subtitle: localizations.startDate,
-                  icon: Icons.event,
+                  iconData: Icons.event,
                 ),
-                ContentItem(
+                ContentItem.icon(
                   title: competition.endDate?.toDateTimeString(context) ?? '-',
                   subtitle: localizations.endDate,
-                  icon: Icons.event,
+                  iconData: Icons.event,
                 ),
-                ContentItem(
+                ContentItem.icon(
                   title: competition.visitorsCount?.toString() ?? '-',
                   subtitle: localizations.visitors,
-                  icon: Icons.confirmation_number,
+                  iconData: Icons.confirmation_number,
                 ),
-                ContentItem(title: competition.comment ?? '-', subtitle: localizations.comment, icon: Icons.comment),
+                ContentItem.icon(
+                  title: competition.comment ?? '-',
+                  subtitle: localizations.comment,
+                  iconData: Icons.comment,
+                ),
               ],
             );
 
@@ -146,9 +155,9 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 addPageBuilder: (context) => CompetitionLineupEdit(initialCompetition: competition),
                 filterObject: competition,
                 itemBuilder: (context, lineup) {
-                  return ContentItem(
+                  return ContentItem.icon(
                     title: lineup.club.name,
-                    icon: Icons.view_list,
+                    iconData: Icons.view_list,
                     onTap: () async => CompetitionLineupOverview.navigateTo(context, lineup),
                   );
                 },
@@ -160,9 +169,9 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 addPageBuilder: (context) => CompetitionAgeCategoryEdit(initialCompetition: competition),
                 filterObject: competition,
                 itemBuilder: (context, competitionAgeCategory) {
-                  return ContentItem(
+                  return ContentItem.icon(
                     title: competitionAgeCategory.ageCategory.name,
-                    icon: Icons.school,
+                    iconData: Icons.school,
                     onTap: () async => CompetitionAgeCategoryOverview.navigateTo(context, competitionAgeCategory),
                   );
                 },
@@ -174,9 +183,9 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 addPageBuilder: (context) => CompetitionWeightCategoryEdit(initialCompetition: competition),
                 filterObject: competition,
                 itemBuilder: (context, weightCategory) {
-                  return ContentItem(
+                  return ContentItem.icon(
                     title: weightCategory.name,
-                    icon: Icons.fitness_center,
+                    iconData: Icons.fitness_center,
                     onTap: () async => CompetitionWeightCategoryOverview.navigateTo(context, weightCategory),
                   );
                 },
@@ -188,10 +197,10 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 addPageBuilder: (context) => CompetitionSystemAffiliationEdit(initialCompetition: competition),
                 filterObject: competition,
                 itemBuilder: (context, competitionSystemAffiliation) {
-                  return ContentItem(
+                  return ContentItem.icon(
                     title:
                         '${competitionSystemAffiliation.poolGroupCount} × ${competitionSystemAffiliation.competitionSystem.name}',
-                    icon: Icons.account_tree,
+                    iconData: Icons.account_tree,
                     onTap:
                         () async =>
                             CompetitionSystemAffiliationOverview.navigateTo(context, competitionSystemAffiliation),
@@ -222,7 +231,10 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 itemBuilder: (context, competitionPerson) {
                   return ContentItem(
                     title: '${competitionPerson.role.localize(context)} | ${competitionPerson.person.fullName}',
-                    icon: competitionPerson.role.icon,
+                    icon:
+                        competitionPerson.person.imageUri == null
+                            ? Icon(competitionPerson.role.icon)
+                            : CircularImage(imageUri: competitionPerson.person.imageUri!),
                     onTap: () async => CompetitionPersonOverview.navigateTo(context, competitionPerson),
                   );
                 },

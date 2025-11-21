@@ -39,7 +39,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             key: _formKey,
             child: Column(
               children: [
-                CustomTextInput(
+                CustomTextInput.icon(
                   onSaved: (String? value) => _username = value,
                   isMandatory: true,
                   label: localizations.username,

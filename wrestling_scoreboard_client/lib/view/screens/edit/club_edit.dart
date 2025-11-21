@@ -5,6 +5,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ClubEdit extends ConsumerStatefulWidget {
@@ -25,10 +26,12 @@ class ClubEditState extends ConsumerState<ClubEdit> {
   String? _name;
   String? _no;
   late Organization? _organization;
+  String? _imageUri;
 
   @override
   void initState() {
     _organization = widget.club?.organization ?? widget.initialOrganization;
+    _imageUri = widget.club?.imageUri;
     super.initState();
   }
 
@@ -39,13 +42,20 @@ class ClubEditState extends ConsumerState<ClubEdit> {
 
     final items = [
       CustomTextInput(
+        icon: _imageUri == null ? null : CircularImage(imageUri: _imageUri!),
+        label: localizations.image,
+        initialValue: widget.club?.imageUri,
+        isMandatory: false,
+        onSaved: (value) => _imageUri = value,
+      ),
+      CustomTextInput.icon(
         iconData: Icons.description,
         label: localizations.name,
         initialValue: widget.club?.name,
         isMandatory: true,
         onSaved: (value) => _name = value,
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.tag,
         label: localizations.clubNumber,
         initialValue: widget.club?.no,
@@ -92,6 +102,7 @@ class ClubEditState extends ConsumerState<ClubEdit> {
         name: _name!,
         no: _no,
         organization: _organization!,
+        imageUri: _imageUri,
       );
       club = club.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(club));
       if (widget.onCreated != null) {

@@ -16,6 +16,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/lea
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -49,32 +50,35 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
           },
           classLocale: localizations.division,
           children: [
-            ContentItem(title: division.name, subtitle: localizations.name, icon: Icons.description),
-            ContentItem(
+            ContentItem.icon(title: division.name, subtitle: localizations.name, iconData: Icons.description),
+            ContentItem.icon(
               title: division.startDate.toDateString(context),
               subtitle: localizations.startDate,
-              icon: Icons.event,
+              iconData: Icons.event,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: division.endDate.toDateString(context),
               subtitle: localizations.endDate,
-              icon: Icons.event,
+              iconData: Icons.event,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: division.seasonPartitions.toString(),
               subtitle: localizations.seasonPartitions,
-              icon: Icons.sunny_snowing,
+              iconData: Icons.sunny_snowing,
             ),
             ContentItem(
               title: division.organization.fullname,
               subtitle: localizations.organization,
-              icon: Icons.corporate_fare,
+              icon:
+                  division.organization.imageUri == null
+                      ? Icon(Icons.corporate_fare)
+                      : CircularImage(imageUri: division.organization.imageUri!),
               onTap: () => OrganizationOverview.navigateTo(context, division.organization),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: division.parent?.fullname ?? '-',
               subtitle: localizations.division,
-              icon: Icons.inventory,
+              iconData: Icons.inventory,
               onTap: division.parent == null ? null : () => DivisionOverview.navigateTo(context, division.parent!),
             ),
           ],
@@ -98,9 +102,9 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 addPageBuilder: (context) => LeagueEdit(initialDivision: division),
                 filterObject: division,
                 itemBuilder:
-                    (context, item) => ContentItem(
+                    (context, item) => ContentItem.icon(
                       title: '${item.fullname}, ${item.startDate.year}',
-                      icon: Icons.emoji_events,
+                      iconData: Icons.emoji_events,
                       onTap: () => LeagueOverview.navigateTo(context, item),
                     ),
               ),
@@ -109,9 +113,9 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 addPageBuilder: (context) => DivisionWeightClassEdit(initialDivision: division),
                 filterObject: division,
                 itemBuilder:
-                    (context, item) => ContentItem(
+                    (context, item) => ContentItem.icon(
                       title: item.localize(context),
-                      icon: Icons.fitness_center,
+                      iconData: Icons.fitness_center,
                       onTap: () => DivisionWeightClassOverview.navigateTo(context, item),
                     ),
               ),
@@ -120,9 +124,9 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 addPageBuilder: (context) => DivisionEdit(initialParent: division),
                 filterObject: division,
                 itemBuilder:
-                    (context, item) => ContentItem(
+                    (context, item) => ContentItem.icon(
                       title: division.fullname,
-                      icon: Icons.inventory,
+                      iconData: Icons.inventory,
                       onTap: () => DivisionOverview.navigateTo(context, division),
                     ),
               ),

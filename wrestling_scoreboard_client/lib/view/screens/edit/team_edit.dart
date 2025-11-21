@@ -34,14 +34,14 @@ class TeamEditState extends ConsumerState<TeamEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.short_text,
         label: localizations.name,
         initialValue: widget.team?.name,
         isMandatory: true,
         onSaved: (value) => _name = value,
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.subject,
         label: localizations.description,
         initialValue: widget.team?.description,

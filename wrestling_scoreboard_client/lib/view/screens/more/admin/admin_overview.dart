@@ -27,9 +27,9 @@ class AdminOverview extends ConsumerWidget {
             context: context,
             addPageBuilder: (context) => const UserEdit(),
             itemBuilder:
-                (context, item) => ContentItem(
+                (context, item) => ContentItem.icon(
                   title: item.username,
-                  icon: Icons.account_circle,
+                  iconData: Icons.account_circle,
                   onTap: () => UserOverview.navigateTo(item, context),
                 ),
           ),

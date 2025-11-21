@@ -7,7 +7,7 @@ part 'club.g.dart';
 
 /// The sports club.
 @freezed
-abstract class Club with _$Club implements DataObject, Organizational {
+abstract class Club with _$Club implements DataObject, ImageObjectData, Organizational {
   const Club._();
 
   const factory Club({
@@ -16,6 +16,7 @@ abstract class Club with _$Club implements DataObject, Organizational {
     required Organization organization,
     required String name,
     String? no, // Club-ID
+    String? imageUri,
   }) = _Club;
 
   factory Club.fromJson(Map<String, Object?> json) => _$ClubFromJson(json);
@@ -28,6 +29,7 @@ abstract class Club with _$Club implements DataObject, Organizational {
       'organization_id': organization.id!,
       'no': no,
       'name': name,
+      'image_uri': imageUri,
     };
   }
 
@@ -37,6 +39,7 @@ abstract class Club with _$Club implements DataObject, Organizational {
     organization: (await getSingle<Organization>(e['organization_id'] as int)),
     no: e['no'] as String?,
     name: e['name'] as String,
+    imageUri: e['image_uri'] as String?,
   );
 
   @override

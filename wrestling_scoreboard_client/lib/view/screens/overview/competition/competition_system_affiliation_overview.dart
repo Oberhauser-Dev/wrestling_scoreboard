@@ -44,26 +44,26 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
               )).deleteSingle<CompetitionSystemAffiliation>(competitionSystemAffiliation),
           classLocale: localizations.competitionSystem,
           children: [
-            ContentItem(
+            ContentItem.icon(
               title: competitionSystemAffiliation.competition.name,
               subtitle: localizations.competition,
-              icon: Icons.leaderboard,
+              iconData: Icons.leaderboard,
               onTap: () => CompetitionOverview.navigateTo(context, competitionSystemAffiliation.competition),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionSystemAffiliation.competitionSystem.name,
               subtitle: localizations.competitionSystem,
-              icon: Icons.label,
+              iconData: Icons.label,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionSystemAffiliation.poolGroupCount.toString(),
               subtitle: localizations.poolGroupCount,
-              icon: Icons.pool,
+              iconData: Icons.pool,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionSystemAffiliation.maxContestants?.toString() ?? 'unset',
               subtitle: '${localizations.participations} (${localizations.maximum})',
-              icon: Icons.numbers,
+              iconData: Icons.numbers,
             ),
           ],
         );

@@ -20,6 +20,10 @@ abstract class Organizational extends DataObject {
   Organization? get organization;
 }
 
+abstract class ImageObjectData implements DataObject {
+  String? get imageUri;
+}
+
 abstract class PosOrderable implements DataObject {
   int get pos;
 }

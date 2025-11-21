@@ -48,7 +48,7 @@ class DivisionEditState extends ConsumerState<DivisionEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.description,
         label: localizations.name,
         initialValue: widget.division?.name,

@@ -29,30 +29,30 @@ mixin class BoutConfigOverviewTab implements AbstractOverviewTab<BoutConfig> {
           editPage: BoutConfigEdit(boutConfig: boutConfig),
           classLocale: localizations.boutConfig,
           children: [
-            ContentItem(
+            ContentItem.icon(
               title: '${boutConfig.periodDuration.formatMinutesAndSeconds()} ✕ ${boutConfig.periodCount}',
               subtitle: localizations.periodDuration,
-              icon: Icons.timelapse,
+              iconData: Icons.timelapse,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: boutConfig.breakDuration.formatMinutesAndSeconds(),
               subtitle: localizations.breakDuration,
-              icon: Icons.timelapse,
+              iconData: Icons.timelapse,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: boutConfig.activityDuration?.formatMinutesAndSeconds() ?? '-',
               subtitle: localizations.activityDuration,
-              icon: Icons.timelapse,
+              iconData: Icons.timelapse,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: boutConfig.injuryDuration?.formatMinutesAndSeconds() ?? '-',
               subtitle: localizations.injuryDuration,
-              icon: Icons.timelapse,
+              iconData: Icons.timelapse,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: boutConfig.bleedingInjuryDuration?.formatMinutesAndSeconds() ?? '-',
               subtitle: localizations.bleedingInjuryDuration,
-              icon: Icons.timelapse,
+              iconData: Icons.timelapse,
             ),
             FilterableManyConsumer<BoutResultRule, BoutConfig>.add(
               context: context,
@@ -60,9 +60,9 @@ mixin class BoutConfigOverviewTab implements AbstractOverviewTab<BoutConfig> {
               addPageBuilder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
               filterObject: boutConfig,
               itemBuilder:
-                  (context, item) => ContentItem(
+                  (context, item) => ContentItem.icon(
                     title: item.localize(context),
-                    icon: Icons.rule,
+                    iconData: Icons.rule,
                     onTap: () {
                       if (GoRouterState.of(context).isScratchBoutRoute) {
                         // Ensure the provider scope is available

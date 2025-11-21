@@ -41,36 +41,36 @@ class BoutResultRuleOverview extends ConsumerWidget {
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<BoutResultRule>(boutResultRule),
           classLocale: localizations.boutResultRule,
           children: [
-            ContentItem(
+            ContentItem.icon(
               title: boutResultRule.boutConfig.localize(context),
               subtitle: localizations.boutConfig,
-              icon: Icons.tune,
+              iconData: Icons.tune,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: boutResultRule.boutResult.fullName(context),
               subtitle: localizations.boutResult,
-              icon: Icons.label,
+              iconData: Icons.label,
             ),
-            ContentItem(
+            ContentItem.icon(
               title:
                   '${boutResultRule.style?.localize(context) ?? '-'} (${boutResultRule.style?.abbreviation(context) ?? '-'})',
               subtitle: localizations.wrestlingStyle,
-              icon: Icons.style,
+              iconData: Icons.style,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: '${boutResultRule.winnerClassificationPoints} : ${boutResultRule.loserClassificationPoints}',
               subtitle: localizations.classificationPoints,
-              icon: Icons.pin,
+              iconData: Icons.pin,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: '${boutResultRule.winnerTechnicalPoints ?? '-'} : ${boutResultRule.loserTechnicalPoints ?? '-'}',
               subtitle: localizations.technicalPoints,
-              icon: Icons.pin_outlined,
+              iconData: Icons.pin_outlined,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: boutResultRule.technicalPointsDifference?.toString() ?? '-',
               subtitle: '${localizations.technicalPoints} ${localizations.difference}',
-              icon: Icons.difference,
+              iconData: Icons.difference,
             ),
           ],
         );

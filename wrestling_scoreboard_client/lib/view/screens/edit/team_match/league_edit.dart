@@ -62,7 +62,7 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
           },
         ),
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.description,
         label: localizations.name,
         initialValue: widget.league?.name,
