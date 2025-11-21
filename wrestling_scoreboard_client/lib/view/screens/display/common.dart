@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
@@ -56,7 +58,20 @@ class CommonElements {
       ThemedContainer(
         color: Colors.red.shade800,
         padding: edgeInsets,
-        child: Center(child: ScaledText(home.name, fontSize: 28, minFontSize: 16)),
+        child: Row(
+          children: [
+            ManyConsumer<Club, Team>(
+              filterObject: home,
+              builder:
+                  (context, data) => OverlappingCircularImage(
+                    imageUris: data.map((e) => e.imageUri).toList(),
+                    size: width / 30,
+                    borderWidth: 1,
+                  ),
+            ),
+            Expanded(child: Center(child: ScaledText(home.name, fontSize: 28, minFontSize: 16))),
+          ],
+        ),
       ),
       Row(
         children: [
@@ -77,7 +92,20 @@ class CommonElements {
       ThemedContainer(
         color: Colors.blue.shade800,
         padding: edgeInsets,
-        child: Center(child: ScaledText(guest.name, fontSize: 28, minFontSize: 16)),
+        child: Row(
+          children: [
+            Expanded(child: Center(child: ScaledText(guest.name, fontSize: 28, minFontSize: 16))),
+            ManyConsumer<Club, Team>(
+              filterObject: guest,
+              builder:
+                  (context, data) => OverlappingCircularImage(
+                    imageUris: data.map((e) => e.imageUri).toList(),
+                    size: width / 30,
+                    borderWidth: 1,
+                  ),
+            ),
+          ],
+        ),
       ),
     ];
   }

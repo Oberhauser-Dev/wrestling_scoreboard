@@ -7,7 +7,7 @@ part 'organization.g.dart';
 
 /// The league in which the team is bouting.
 @freezed
-abstract class Organization with _$Organization implements DataObject {
+abstract class Organization with _$Organization implements DataObject, ImageObjectData {
   const Organization._();
 
   const factory Organization({
@@ -17,6 +17,7 @@ abstract class Organization with _$Organization implements DataObject {
     Organization? parent,
     WrestlingApiProvider? apiProvider,
     WrestlingReportProvider? reportProvider,
+    String? imageUri,
   }) = _Organization;
 
   factory Organization.fromJson(Map<String, Object?> json) => _$OrganizationFromJson(json);
@@ -33,6 +34,7 @@ abstract class Organization with _$Organization implements DataObject {
       apiProvider: apiProviderStr == null ? null : WrestlingApiProvider.values.byName(apiProviderStr),
       reportProvider: reportProviderStr == null ? null : WrestlingReportProvider.values.byName(reportProviderStr),
       parent: parent,
+      imageUri: e['image_uri'] as String?,
     );
   }
 
@@ -45,6 +47,7 @@ abstract class Organization with _$Organization implements DataObject {
       'parent_id': parent?.id!,
       'api_provider': apiProvider?.name,
       'report_provider': reportProvider?.name,
+      'image_uri': imageUri,
     };
   }
 

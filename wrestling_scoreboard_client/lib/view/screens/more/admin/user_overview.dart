@@ -43,11 +43,11 @@ class UserOverview extends ConsumerWidget {
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<SecuredUser>(data),
           classLocale: localizations.user,
           children: [
-            ContentItem(title: data.username, subtitle: localizations.username, icon: Icons.person),
-            ContentItem(
+            ContentItem.icon(title: data.username, subtitle: localizations.username, iconData: Icons.person),
+            ContentItem.icon(
               title: data.createdAt.toDateTimeString(context),
               subtitle: localizations.joinedOn,
-              icon: Icons.calendar_today,
+              iconData: Icons.calendar_today,
             ),
             if (!data.isEmailVerified && data.email != null && data.email!.isNotEmpty)
               LoadingBuilder(
@@ -60,8 +60,8 @@ class UserOverview extends ConsumerWidget {
                   );
                 },
               ),
-            ContentItem(title: data.email ?? '-', subtitle: localizations.email, icon: Icons.email),
-            ContentItem(title: data.privilege.name, subtitle: localizations.privilege, icon: Icons.key),
+            ContentItem.icon(title: data.email ?? '-', subtitle: localizations.email, iconData: Icons.email),
+            ContentItem.icon(title: data.privilege.name, subtitle: localizations.privilege, iconData: Icons.key),
           ],
         );
         return OverviewScaffold(

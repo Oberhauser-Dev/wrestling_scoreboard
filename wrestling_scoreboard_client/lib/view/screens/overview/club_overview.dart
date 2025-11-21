@@ -14,6 +14,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -42,7 +43,15 @@ class ClubOverview extends ConsumerWidget {
           editPage: ClubEdit(club: club),
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<Club>(club),
           classLocale: localizations.club,
-          children: [ContentItem(title: club.no ?? '-', subtitle: localizations.clubNumber, icon: Icons.tag)],
+          children: [
+            if (club.imageUri != null)
+              ContentItem(
+                title: club.imageUri!,
+                subtitle: localizations.image,
+                icon: CircularImage(imageUri: club.imageUri!),
+              ),
+            ContentItem.icon(title: club.no ?? '-', subtitle: localizations.clubNumber, iconData: Icons.tag),
+          ],
         );
         return FavoriteScaffold<Club>(
           dataObject: club,
@@ -72,7 +81,7 @@ class ClubOverview extends ConsumerWidget {
                 itemBuilder:
                     (context, item) => ContentItem(
                       title: item.name,
-                      icon: Icons.group,
+                      icon: club.imageUri == null ? Icon(Icons.group) : CircularImage(imageUri: club.imageUri!),
                       onTap: () => TeamOverview.navigateTo(context, item),
                     ),
               ),
@@ -84,7 +93,10 @@ class ClubOverview extends ConsumerWidget {
                 itemBuilder:
                     (context, item) => ContentItem(
                       title: '${item.info},\t${item.person.gender?.localize(context)}',
-                      icon: Icons.person,
+                      icon:
+                          item.person.imageUri == null
+                              ? Icon(Icons.person)
+                              : CircularImage(imageUri: item.person.imageUri!),
                       onTap: () => MembershipOverview.navigateTo(context, item),
                     ),
               ),

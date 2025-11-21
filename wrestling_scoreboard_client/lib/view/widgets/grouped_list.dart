@@ -27,11 +27,11 @@ class HeadingItem extends StatelessWidget {
 
 /// A ListItem that contains data to display a message.
 class ContentItem extends StatelessWidget {
-  final IconData? icon;
+  final Widget? icon;
   final String title;
   final String? subtitle;
   final Widget? trailing;
-  final Function()? onTap;
+  final void Function()? onTap;
   final bool isDisabled;
 
   const ContentItem({
@@ -44,10 +44,28 @@ class ContentItem extends StatelessWidget {
     super.key,
   });
 
+  factory ContentItem.icon({
+    required String title,
+    String? subtitle,
+    IconData? iconData,
+    void Function()? onTap,
+    Widget? trailing,
+    bool isDisabled = false,
+    Key? key,
+  }) => ContentItem(
+    title: title,
+    subtitle: subtitle,
+    icon: iconData == null ? null : Icon(iconData),
+    onTap: onTap,
+    trailing: trailing,
+    isDisabled: isDisabled,
+    key: key,
+  );
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: icon != null ? Icon(icon) : null,
+      leading: icon,
       title: Text(title, style: isDisabled ? TextStyle(color: Theme.of(context).disabledColor) : null),
       subtitle: (subtitle != null) ? Text(subtitle!, style: TextStyle(color: Theme.of(context).disabledColor)) : null,
       trailing: trailing ?? (onTap == null ? null : Icon(Icons.chevron_right)),

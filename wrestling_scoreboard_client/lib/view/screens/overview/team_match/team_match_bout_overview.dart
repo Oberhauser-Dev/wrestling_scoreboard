@@ -93,10 +93,10 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
           editPage: TeamMatchBoutEdit(teamMatchBout: teamMatchBout, initialTeamMatch: teamMatchBout.teamMatch),
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<TeamMatchBout>(teamMatchBout),
           tiles: [
-            ContentItem(
+            ContentItem.icon(
               title: teamMatchBout.teamMatch.localize(context),
               subtitle: localizations.match,
-              icon: Icons.event,
+              iconData: Icons.event,
               onTap: () => TeamMatchOverview.navigateTo(context, teamMatchBout.teamMatch),
             ),
           ],

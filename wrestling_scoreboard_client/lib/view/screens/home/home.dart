@@ -38,6 +38,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaffold.dart';
@@ -497,43 +498,77 @@ class _EntityGrid extends ConsumerWidget {
           },
           child: Card(
             clipBehavior: Clip.hardEdge,
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage('assets/images/icons/launcher.png')),
-              ),
-              child: Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: Stack(
+              children: [
+                if (data is TeamMatch)
+                  Row(
                     children: [
-                      ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                          child: Container(
-                            color: Colors.black.withValues(alpha: 0.5),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(getTitle(data), style: const TextStyle(color: Colors.white)),
-                              ),
+                      Expanded(
+                        child: ManyConsumer<Club, Team>(
+                          filterObject: data.home.team,
+                          builder: (context, clubs) => _CardBackgroundImage(imageUri: clubs.firstOrNull?.imageUri),
+                        ),
+                      ),
+                      Expanded(
+                        child: ManyConsumer<Club, Team>(
+                          filterObject: data.guest.team,
+                          builder: (context, clubs) => _CardBackgroundImage(imageUri: clubs.firstOrNull?.imageUri),
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  _CardBackgroundImage(imageUri: data is ImageObjectData ? data.imageUri : null),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ClipRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                        child: Container(
+                          color: Colors.black.withValues(alpha: 0.5),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(getTitle(data), style: const TextStyle(color: Colors.white)),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  if (actionItemBuilder != null)
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: PopupMenuButton<T>(itemBuilder: (context) => actionItemBuilder!(context, id)),
                     ),
-                ],
-              ),
+                  ],
+                ),
+                if (actionItemBuilder != null)
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: PopupMenuButton<T>(itemBuilder: (context) => actionItemBuilder!(context, id)),
+                  ),
+              ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _CardBackgroundImage extends StatelessWidget {
+  final String? imageUri;
+
+  const _CardBackgroundImage({required this.imageUri});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image:
+              imageUri != null ? getImageProviderFromString(imageUri!) : AssetImage('assets/images/icons/launcher.png'),
+          fit: BoxFit.cover,
+          alignment: Alignment.topCenter,
+        ),
+      ),
     );
   }
 }

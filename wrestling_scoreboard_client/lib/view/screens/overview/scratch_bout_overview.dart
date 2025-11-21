@@ -82,10 +82,10 @@ class ScratchBoutOverview extends ConsumerWidget with BoutOverview<ScratchBout>,
                     ),
                   ],
                   tiles: [
-                    ContentItem(
+                    ContentItem.icon(
                       title: scratchBout.weightClass.localize(context),
                       subtitle: localizations.weightClass,
-                      icon: Icons.label,
+                      iconData: Icons.label,
                     ),
                   ],
                   dataId: bout.id!,

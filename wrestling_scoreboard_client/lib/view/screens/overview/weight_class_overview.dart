@@ -44,18 +44,26 @@ mixin WeightClassOverview<T extends DataObject> implements AbstractOverview<Weig
           classLocale: classLocale,
           children: [
             ...tiles,
-            ContentItem(
+            ContentItem.icon(
               title: weightClass.weight.toString(),
               subtitle: localizations.weight,
-              icon: Icons.fitness_center,
+              iconData: Icons.fitness_center,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: weightClass.style.localize(context),
               subtitle: localizations.wrestlingStyle,
-              icon: Icons.style,
+              iconData: Icons.style,
             ),
-            ContentItem(title: weightClass.unit.toAbbr(), subtitle: localizations.weightUnit, icon: Icons.straighten),
-            ContentItem(title: weightClass.suffix ?? '-', subtitle: localizations.suffix, icon: Icons.description),
+            ContentItem.icon(
+              title: weightClass.unit.toAbbr(),
+              subtitle: localizations.weightUnit,
+              iconData: Icons.straighten,
+            ),
+            ContentItem.icon(
+              title: weightClass.suffix ?? '-',
+              subtitle: localizations.suffix,
+              iconData: Icons.description,
+            ),
           ],
         );
         final relations = buildRelations != null ? buildRelations(weightClass) : {};

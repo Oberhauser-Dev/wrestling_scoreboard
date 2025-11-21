@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict AheOWUFAlBD2LwMiiL1Tk6FsJihl5AhAUEAaPFEUyEx5nIRS9BGQJUf7I7eBtWt
+\restrict 7zOWKtfRUfH7hZCljEmVrNgJocWK2mvH600K9CU76R2WtDi7QQaYhr9CplbP1ud
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -456,7 +456,8 @@ CREATE TABLE public.club (
     no character varying(8),
     name character varying(255) NOT NULL,
     organization_id integer NOT NULL,
-    org_sync_id character varying(127)
+    org_sync_id character varying(127),
+    image_uri text
 );
 
 
@@ -1101,7 +1102,8 @@ CREATE TABLE public.organization (
     abbreviation character varying(64),
     parent_id integer,
     api_provider public.api_provider,
-    report_provider public.report_provider
+    report_provider public.report_provider,
+    image_uri text
 );
 
 
@@ -1200,7 +1202,8 @@ CREATE TABLE public.person (
     gender public.gender,
     nationality character(3) DEFAULT NULL::bpchar,
     org_sync_id character varying(127),
-    organization_id integer
+    organization_id integer,
+    image_uri text
 );
 
 
@@ -1810,7 +1813,7 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 -- Data for Name: club; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
+COPY public.club (id, no, name, organization_id, org_sync_id, image_uri) FROM stdin;
 \.
 
 
@@ -1931,7 +1934,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.8-pre.1	0.3.7
+0.3.8-pre.2	0.3.7
 \.
 
 
@@ -1939,7 +1942,7 @@ COPY public.migration (semver, min_client_version) FROM stdin;
 -- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider) FROM stdin;
+COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider, image_uri) FROM stdin;
 \.
 
 
@@ -1947,7 +1950,7 @@ COPY public.organization (id, name, abbreviation, parent_id, api_provider, repor
 -- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.person (id, prename, surname, birth_date, gender, nationality, org_sync_id, organization_id) FROM stdin;
+COPY public.person (id, prename, surname, birth_date, gender, nationality, org_sync_id, organization_id, image_uri) FROM stdin;
 \.
 
 
@@ -3260,5 +3263,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict AheOWUFAlBD2LwMiiL1Tk6FsJihl5AhAUEAaPFEUyEx5nIRS9BGQJUf7I7eBtWt
+\unrestrict 7zOWKtfRUfH7hZCljEmVrNgJocWK2mvH600K9CU76R2WtDi7QQaYhr9CplbP1ud
 

@@ -40,16 +40,16 @@ class LeagueTeamParticipationOverview extends ConsumerWidget {
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<LeagueTeamParticipation>(data),
           classLocale: localizations.team,
           children: [
-            ContentItem(
+            ContentItem.icon(
               title: data.team.name,
               subtitle: localizations.team,
-              icon: Icons.group,
+              iconData: Icons.group,
               onTap: () => TeamOverview.navigateTo(context, data.team),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: '${data.league.fullname}, ${data.league.startDate.toDateString(context)}',
               subtitle: localizations.league,
-              icon: Icons.emoji_events,
+              iconData: Icons.emoji_events,
               onTap: () => LeagueOverview.navigateTo(context, data.league),
             ),
           ],

@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/view/screens/edit/common.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 abstract class AbstractPersonEdit extends ConsumerStatefulWidget {
@@ -27,12 +28,14 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
   DateTime? _dateOfBirth;
   Gender? _gender;
   Country? _nationality;
+  String? _imageUri;
 
   @override
   void initState() {
     _dateOfBirth = widget.person?.birthDate;
     _gender = widget.person?.gender;
     _nationality = widget.person?.nationality;
+    _imageUri = widget.person?.imageUri;
     super.initState();
   }
 
@@ -49,13 +52,20 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
     final items = [
       ...fields,
       CustomTextInput(
+        icon: _imageUri == null ? null : CircularImage(imageUri: _imageUri!),
+        label: localizations.image,
+        initialValue: widget.person?.imageUri,
+        isMandatory: false,
+        onSaved: (value) => _imageUri = value,
+      ),
+      CustomTextInput.icon(
         iconData: Icons.person,
         label: localizations.prename,
         initialValue: widget.person?.prename,
         isMandatory: true,
         onSaved: (value) => _prename = value,
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         label: localizations.surname,
         initialValue: widget.person?.surname,
         isMandatory: true,
@@ -128,6 +138,7 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
         birthDate: _dateOfBirth,
         gender: _gender,
         nationality: _nationality,
+        imageUri: _imageUri,
       );
       person = person.copyWithId(await (await ref.read(dataManagerProvider)).createOrUpdateSingle(person));
       await handleNested(person);

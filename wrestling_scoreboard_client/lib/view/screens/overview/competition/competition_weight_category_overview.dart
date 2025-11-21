@@ -15,6 +15,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
@@ -52,37 +53,37 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
               )).deleteSingle<CompetitionWeightCategory>(competitionWeightCategory),
           classLocale: localizations.weightCategory,
           children: [
-            ContentItem(
+            ContentItem.icon(
               title: competitionWeightCategory.competition.name,
               subtitle: localizations.competition,
-              icon: Icons.leaderboard,
+              iconData: Icons.leaderboard,
               onTap: () => CompetitionOverview.navigateTo(context, competitionWeightCategory.competition),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionWeightCategory.competitionAgeCategory.ageCategory.name,
               subtitle: localizations.ageCategory,
-              icon: Icons.school,
+              iconData: Icons.school,
               onTap:
                   () => CompetitionAgeCategoryOverview.navigateTo(
                     context,
                     competitionWeightCategory.competitionAgeCategory,
                   ),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionWeightCategory.weightClass.localize(context),
               subtitle: localizations.weightClass,
-              icon: Icons.style,
+              iconData: Icons.style,
               // TODO: View weight class (?)
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionWeightCategory.competitionSystem?.name ?? '-',
               subtitle: localizations.competitionSystem,
-              icon: Icons.label,
+              iconData: Icons.label,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionWeightCategory.poolGroupCount.toString(),
               subtitle: localizations.poolGroupCount,
-              icon: Icons.pool,
+              iconData: Icons.pool,
             ),
           ],
         );
@@ -134,7 +135,10 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
                 itemBuilder:
                     (context, item) => ContentItem(
                       title: item.name,
-                      icon: Icons.person,
+                      icon:
+                          item.membership.person.imageUri == null
+                              ? Icon(Icons.person)
+                              : CircularImage(imageUri: item.membership.person.imageUri!),
                       onTap: () => CompetitionParticipationOverview.navigateTo(context, item),
                     ),
               ),

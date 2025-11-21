@@ -37,16 +37,16 @@ class AgeCategoryOverview extends ConsumerWidget {
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<AgeCategory>(ageCategory),
           classLocale: localizations.ageCategory,
           children: [
-            ContentItem(title: ageCategory.name, subtitle: localizations.name, icon: Icons.description),
-            ContentItem(
+            ContentItem.icon(title: ageCategory.name, subtitle: localizations.name, iconData: Icons.description),
+            ContentItem.icon(
               title: ageCategory.minAge.toString(),
               subtitle: '${localizations.age} (${localizations.minimum})',
-              icon: Icons.school,
+              iconData: Icons.school,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: ageCategory.maxAge.toString(),
               subtitle: '${localizations.age} (${localizations.maximum})',
-              icon: Icons.school,
+              iconData: Icons.school,
             ),
           ],
         );

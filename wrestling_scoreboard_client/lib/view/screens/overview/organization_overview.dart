@@ -21,6 +21,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/div
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -51,30 +52,39 @@ class OrganizationOverview extends ConsumerWidget {
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<Organization>(organization),
           classLocale: localizations.organization,
           children: [
-            ContentItem(title: organization.name, subtitle: localizations.name, icon: Icons.description),
-            ContentItem(
+            if (organization.imageUri != null)
+              ContentItem(
+                title: organization.imageUri!,
+                subtitle: localizations.image,
+                icon: CircularImage(imageUri: organization.imageUri!),
+              ),
+            ContentItem.icon(title: organization.name, subtitle: localizations.name, iconData: Icons.description),
+            ContentItem.icon(
               title: organization.abbreviation ?? '-',
               subtitle: localizations.abbreviation,
-              icon: Icons.short_text,
+              iconData: Icons.short_text,
             ),
             ContentItem(
               title: organization.parent?.name ?? '-',
               subtitle: localizations.umbrellaOrganization,
-              icon: Icons.corporate_fare,
+              icon:
+                  organization.parent?.imageUri == null
+                      ? Icon(Icons.corporate_fare)
+                      : CircularImage(imageUri: organization.parent!.imageUri!),
               onTap:
                   organization.parent == null
                       ? null
                       : () => OrganizationOverview.navigateTo(context, organization.parent!),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: organization.apiProvider?.name ?? '-',
               subtitle: localizations.apiProvider,
-              icon: Icons.api,
+              iconData: Icons.api,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: organization.reportProvider?.name ?? '-',
               subtitle: localizations.reportProvider,
-              icon: Icons.description,
+              iconData: Icons.description,
             ),
           ],
         );
@@ -106,9 +116,9 @@ class OrganizationOverview extends ConsumerWidget {
                     addPageBuilder: (context) => DivisionEdit(initialOrganization: organization),
                     getInitialIndex: (data) => data.indexWhere((division) => division.endDate.compareTo(today) >= 0),
                     itemBuilder:
-                        (context, item) => ContentItem(
+                        (context, item) => ContentItem.icon(
                           title: '${item.fullname}, ${item.startDate.year}',
-                          icon: Icons.inventory,
+                          iconData: Icons.inventory,
                           isDisabled: item.endDate.isBefore(today),
                           onTap: () => DivisionOverview.navigateTo(context, item),
                         ),
@@ -120,7 +130,8 @@ class OrganizationOverview extends ConsumerWidget {
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: item.name,
-                          icon: Icons.foundation,
+                          icon:
+                              item.imageUri == null ? Icon(Icons.foundation) : CircularImage(imageUri: item.imageUri!),
                           onTap: () => ClubOverview.navigateTo(context, item),
                         ),
                   ),
@@ -130,9 +141,9 @@ class OrganizationOverview extends ConsumerWidget {
                     addPageBuilder: (context) => CompetitionEdit(initialOrganization: organization),
                     getInitialIndex: (data) => data.indexWhere((competition) => competition.date.compareTo(today) >= 0),
                     itemBuilder:
-                        (context, item) => ContentItem(
+                        (context, item) => ContentItem.icon(
                           title: item.name,
-                          icon: Icons.leaderboard,
+                          iconData: Icons.leaderboard,
                           isDisabled: item.date.isBefore(today),
                           onTap: () => CompetitionOverview.navigateTo(context, item),
                         ),
@@ -142,9 +153,9 @@ class OrganizationOverview extends ConsumerWidget {
                     filterObject: organization,
                     addPageBuilder: (context) => AgeCategoryEdit(initialOrganization: organization),
                     itemBuilder:
-                        (context, item) => ContentItem(
+                        (context, item) => ContentItem.icon(
                           title: '${item.name} (${item.minAge} - ${item.maxAge})',
-                          icon: Icons.school,
+                          iconData: Icons.school,
                           onTap: () => AgeCategoryOverview.navigateTo(context, item),
                         ),
                   ),
@@ -170,7 +181,7 @@ class OrganizationOverview extends ConsumerWidget {
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: item.fullName,
-                          icon: Icons.person,
+                          icon: item.imageUri == null ? Icon(Icons.person) : CircularImage(imageUri: item.imageUri!),
                           onTap: () => PersonOverview.navigateTo(context, item),
                         ),
                   ),
@@ -181,7 +192,10 @@ class OrganizationOverview extends ConsumerWidget {
                     itemBuilder:
                         (context, item) => ContentItem(
                           title: item.fullname,
-                          icon: Icons.inventory,
+                          icon:
+                              item.imageUri == null
+                                  ? Icon(Icons.corporate_fare)
+                                  : CircularImage(imageUri: item.imageUri!),
                           onTap: () => OrganizationOverview.navigateTo(context, item),
                         ),
                   ),

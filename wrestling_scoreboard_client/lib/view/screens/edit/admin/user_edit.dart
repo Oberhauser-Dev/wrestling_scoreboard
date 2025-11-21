@@ -43,7 +43,7 @@ class UserEditState extends ConsumerState<UserEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      CustomTextInput(
+      CustomTextInput.icon(
         onSaved: (String? value) => _username = value,
         label: localizations.username,
         isMandatory: true,

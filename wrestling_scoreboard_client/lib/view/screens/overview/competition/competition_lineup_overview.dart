@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -45,16 +46,16 @@ class CompetitionLineupOverview extends ConsumerWidget {
               () async => (await ref.read(dataManagerProvider)).deleteSingle<CompetitionLineup>(competitionLineup),
           classLocale: localizations.lineup,
           children: [
-            ContentItem(
+            ContentItem.icon(
               title: competitionLineup.club.name,
               subtitle: localizations.club,
-              icon: Icons.foundation,
+              iconData: Icons.foundation,
               onTap: () => ClubOverview.navigateTo(context, competitionLineup.club),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionLineup.competition.name,
               subtitle: localizations.competition,
-              icon: Icons.leaderboard,
+              iconData: Icons.leaderboard,
               onTap: () => CompetitionOverview.navigateTo(context, competitionLineup.competition),
             ),
           ],
@@ -79,7 +80,10 @@ class CompetitionLineupOverview extends ConsumerWidget {
                 itemBuilder:
                     (context, item) => ContentItem(
                       title: item.name,
-                      icon: Icons.person,
+                      icon:
+                          item.membership.person.imageUri == null
+                              ? Icon(Icons.person)
+                              : CircularImage(imageUri: item.membership.person.imageUri!),
                       onTap: () => CompetitionParticipationOverview.navigateTo(context, item),
                     ),
               ),

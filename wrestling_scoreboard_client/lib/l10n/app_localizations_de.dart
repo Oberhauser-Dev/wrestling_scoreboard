@@ -836,6 +836,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get searchResults => 'Suchresultate';
 
   @override
+  String get image => 'Bild';
+
+  @override
   String get red => 'Rot';
 
   @override

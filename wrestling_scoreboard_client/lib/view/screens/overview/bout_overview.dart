@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/membership_ove
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -53,41 +54,51 @@ mixin BoutOverview<T extends DataObject> implements AbstractOverview<Bout, T> {
             ContentItem(
               title: bout.r?.fullName(context) ?? localizations.participantVacant,
               subtitle: localizations.red,
-              icon: Icons.person,
+              icon:
+                  bout.r?.membership.person.imageUri == null
+                      ? Icon(Icons.person)
+                      : CircularImage(imageUri: bout.r!.membership.person.imageUri!),
               onTap: bout.r == null ? null : () => MembershipOverview.navigateTo(context, bout.r!.membership),
             ),
             ContentItem(
               title: bout.b?.fullName(context) ?? localizations.participantVacant,
               subtitle: localizations.blue,
-              icon: Icons.person,
+              icon:
+                  bout.b?.membership.person.imageUri == null
+                      ? Icon(Icons.person)
+                      : CircularImage(imageUri: bout.b!.membership.person.imageUri!),
               onTap: bout.b == null ? null : () => MembershipOverview.navigateTo(context, bout.b!.membership),
             ),
-            ContentItem(title: bout.winnerRole?.name ?? '-', subtitle: localizations.winner, icon: Icons.emoji_events),
+            ContentItem.icon(
+              title: bout.winnerRole?.name ?? '-',
+              subtitle: localizations.winner,
+              iconData: Icons.emoji_events,
+            ),
             TooltipVisibility(
               visible: bout.result != null,
               child: Tooltip(
                 message: bout.result?.description(context) ?? '-',
-                child: ContentItem(
+                child: ContentItem.icon(
                   title: bout.result?.abbreviation(context) ?? '-',
                   subtitle: localizations.result,
-                  icon: Icons.label,
+                  iconData: Icons.label,
                 ),
               ),
             ),
             LoadingBuilder<bool>(
               future: ref.watch(timeCountDownProvider),
               builder: (context, isTimeCountDown) {
-                return ContentItem(
+                return ContentItem.icon(
                   title:
                       bout.duration
                           .invertIf(isTimeCountDown, max: boutConfig!.totalPeriodDuration)
                           .formatMinutesAndSeconds(),
                   subtitle: localizations.duration,
-                  icon: Icons.timer,
+                  iconData: Icons.timer,
                 );
               },
             ),
-            ContentItem(title: bout.comment ?? '-', subtitle: localizations.comment, icon: Icons.comment),
+            ContentItem.icon(title: bout.comment ?? '-', subtitle: localizations.comment, iconData: Icons.comment),
           ],
         );
         final relations = buildRelations != null ? buildRelations(bout) : {};

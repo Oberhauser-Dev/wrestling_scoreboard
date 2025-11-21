@@ -14,6 +14,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/lea
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -43,7 +44,11 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<Team>(team),
           classLocale: localizations.team,
           children: [
-            ContentItem(title: team.description ?? '-', subtitle: localizations.description, icon: Icons.subject),
+            ContentItem.icon(
+              title: team.description ?? '-',
+              subtitle: localizations.description,
+              iconData: Icons.subject,
+            ),
           ],
         );
         return FavoriteScaffold<Team>(
@@ -81,7 +86,7 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                 itemBuilder:
                     (context, club) => ContentItem(
                       title: club.name,
-                      icon: Icons.foundation,
+                      icon: club.imageUri == null ? Icon(Icons.foundation) : CircularImage(imageUri: club.imageUri!),
                       onTap: () => ClubOverview.navigateTo(context, club),
                     ),
               ),
@@ -97,9 +102,9 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                           return a.league.fullname.compareTo(b.league.fullname);
                         }),
                 itemBuilder:
-                    (context, item) => ContentItem(
+                    (context, item) => ContentItem.icon(
                       title: '${item.league.fullname}, ${item.league.startDate.year}',
-                      icon: Icons.emoji_events,
+                      iconData: Icons.emoji_events,
                       onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
                     ),
               ),

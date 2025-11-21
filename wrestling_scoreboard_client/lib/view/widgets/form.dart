@@ -9,7 +9,7 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class CustomTextInput extends StatelessWidget {
   final FormFieldSetter<String>? onSaved;
   final ValueChanged<String>? onChanged;
-  final IconData? iconData;
+  final Widget? icon;
   final String label;
   final String? initialValue;
   final bool isMultiline;
@@ -22,7 +22,7 @@ class CustomTextInput extends StatelessWidget {
     this.onSaved,
     this.onChanged,
     required this.label,
-    this.iconData,
+    this.icon,
     this.initialValue,
     this.isMultiline = false,
     this.isMandatory = false,
@@ -32,11 +32,37 @@ class CustomTextInput extends StatelessWidget {
     this.errorText,
   });
 
+  factory CustomTextInput.icon({
+    FormFieldSetter<String>? onSaved,
+    ValueChanged<String>? onChanged,
+    required String label,
+    IconData? iconData,
+    String? initialValue,
+    bool isMultiline = false,
+    bool isMandatory = false,
+    Key? key,
+    FormFieldValidator<String>? validator,
+    Iterable<String>? autofillHints,
+    String? errorText,
+  }) => CustomTextInput(
+    onSaved: onSaved,
+    onChanged: onChanged,
+    label: label,
+    icon: iconData == null ? null : Icon(iconData),
+    initialValue: initialValue,
+    isMandatory: isMandatory,
+    isMultiline: isMultiline,
+    key: key,
+    validator: validator,
+    autofillHints: autofillHints,
+    errorText: errorText,
+  );
+
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
     return ListTile(
-      leading: iconData != null ? Icon(iconData) : const SizedBox(),
+      leading: icon ?? const SizedBox(),
       title: TextFormField(
         autofillHints: autofillHints,
         readOnly: onSaved == null && onChanged == null,

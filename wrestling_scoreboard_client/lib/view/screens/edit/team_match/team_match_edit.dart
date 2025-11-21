@@ -68,14 +68,14 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.tag,
         label: localizations.matchNumber,
         initialValue: widget.teamMatch?.no,
         isMandatory: false,
         onSaved: (value) => _no = value,
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.place,
         label: localizations.place,
         initialValue: widget.teamMatch?.location,
@@ -140,7 +140,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         isMandatory: false,
         onSaved: (int? value) => _visitorsCount = value,
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.comment,
         label: localizations.comment,
         initialValue: widget.teamMatch?.comment,

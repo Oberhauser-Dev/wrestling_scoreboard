@@ -47,20 +47,28 @@ class LeagueOverview extends ConsumerWidget {
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<League>(data),
           classLocale: localizations.league,
           children: [
-            ContentItem(
+            ContentItem.icon(
               title: data.division.fullname,
               subtitle: localizations.division,
-              icon: Icons.inventory,
+              iconData: Icons.inventory,
               onTap: () => DivisionOverview.navigateTo(context, data.division),
             ),
-            ContentItem(title: data.name, subtitle: localizations.name, icon: Icons.description),
-            ContentItem(
+            ContentItem.icon(title: data.name, subtitle: localizations.name, iconData: Icons.description),
+            ContentItem.icon(
               title: data.startDate.toDateString(context),
               subtitle: localizations.startDate,
-              icon: Icons.event,
+              iconData: Icons.event,
             ),
-            ContentItem(title: data.endDate.toDateString(context), subtitle: localizations.endDate, icon: Icons.event),
-            ContentItem(title: data.boutDays.toString(), subtitle: localizations.boutDays, icon: Icons.calendar_month),
+            ContentItem.icon(
+              title: data.endDate.toDateString(context),
+              subtitle: localizations.endDate,
+              iconData: Icons.event,
+            ),
+            ContentItem.icon(
+              title: data.boutDays.toString(),
+              subtitle: localizations.boutDays,
+              iconData: Icons.calendar_month,
+            ),
           ],
         );
         return ConditionalOrganizationImportActionBuilder(
@@ -90,9 +98,9 @@ class LeagueOverview extends ConsumerWidget {
                     mapData:
                         (teamParticipations) => teamParticipations..sort((a, b) => a.team.name.compareTo(b.team.name)),
                     itemBuilder:
-                        (context, item) => ContentItem(
+                        (context, item) => ContentItem.icon(
                           title: item.team.name,
-                          icon: Icons.group,
+                          iconData: Icons.group,
                           onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
                         ),
                   ),
@@ -101,9 +109,9 @@ class LeagueOverview extends ConsumerWidget {
                     addPageBuilder: (context) => LeagueWeightClassEdit(initialLeague: data),
                     filterObject: data,
                     itemBuilder:
-                        (context, item) => ContentItem(
+                        (context, item) => ContentItem.icon(
                           title: item.localize(context),
-                          icon: Icons.fitness_center,
+                          iconData: Icons.fitness_center,
                           onTap: () => LeagueWeightClassOverview.navigateTo(context, item),
                         ),
                   ),

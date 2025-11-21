@@ -70,7 +70,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                 String text = '';
                 final result = await showOkCancelDialog(
                   context: context,
-                  child: CustomTextInput(
+                  child: CustomTextInput.icon(
                     iconData: Icons.comment,
                     isMultiline: true,
                     label: localizations.comment,

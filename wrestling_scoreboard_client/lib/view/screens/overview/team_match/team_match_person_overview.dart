@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/tea
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -47,16 +48,23 @@ class TeamMatchPersonOverview extends ConsumerWidget {
             ContentItem(
               title: teamMatchPerson.person.fullName,
               subtitle: localizations.person,
-              icon: Icons.person,
+              icon:
+                  teamMatchPerson.person.imageUri == null
+                      ? Icon(Icons.person)
+                      : CircularImage(imageUri: teamMatchPerson.person.imageUri!),
               onTap: () => PersonOverview.navigateTo(context, teamMatchPerson.person),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: teamMatchPerson.teamMatch.localize(context),
               subtitle: localizations.match,
-              icon: Icons.event,
+              iconData: Icons.event,
               onTap: () => TeamMatchOverview.navigateTo(context, teamMatchPerson.teamMatch),
             ),
-            ContentItem(title: teamMatchPerson.role.localize(context), subtitle: localizations.role, icon: Icons.label),
+            ContentItem.icon(
+              title: teamMatchPerson.role.localize(context),
+              subtitle: localizations.role,
+              iconData: Icons.label,
+            ),
           ],
         );
         return OverviewScaffold(

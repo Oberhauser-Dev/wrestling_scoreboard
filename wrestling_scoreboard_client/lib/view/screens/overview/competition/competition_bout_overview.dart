@@ -74,26 +74,30 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
           ),
           onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<CompetitionBout>(competitionBout),
           tiles: [
-            ContentItem(title: competitionBout.mat?.toString() ?? '-', subtitle: localizations.mat, icon: Icons.adjust),
-            ContentItem(
+            ContentItem.icon(
+              title: competitionBout.mat?.toString() ?? '-',
+              subtitle: localizations.mat,
+              iconData: Icons.adjust,
+            ),
+            ContentItem.icon(
               title: competitionBout.round?.toString() ?? '-',
               subtitle: localizations.round,
-              icon: Icons.restart_alt,
+              iconData: Icons.restart_alt,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionBout.roundType.localize(context),
               subtitle: localizations.roundType,
-              icon: Icons.restart_alt,
+              iconData: Icons.restart_alt,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionBout.displayRanks ?? '-',
               subtitle: localizations.rank,
-              icon: Icons.leaderboard,
+              iconData: Icons.leaderboard,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionBout.competition.name,
               subtitle: localizations.competition,
-              icon: Icons.event,
+              iconData: Icons.event,
               onTap: () => CompetitionOverview.navigateTo(context, competitionBout.competition),
             ),
           ],

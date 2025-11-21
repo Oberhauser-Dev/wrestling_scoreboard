@@ -34,6 +34,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -141,58 +142,58 @@ class TeamMatchOverview extends ConsumerWidget {
                                   () async => (await ref.read(dataManagerProvider)).deleteSingle<TeamMatch>(match),
                               classLocale: localizations.match,
                               children: [
-                                ContentItem(
+                                ContentItem.icon(
                                   title: match.no ?? '-',
                                   subtitle: localizations.matchNumber,
-                                  icon: Icons.tag,
+                                  iconData: Icons.tag,
                                 ),
-                                ContentItem(
+                                ContentItem.icon(
                                   title: match.location ?? 'no location',
                                   subtitle: localizations.place,
-                                  icon: Icons.place,
+                                  iconData: Icons.place,
                                 ),
-                                ContentItem(
+                                ContentItem.icon(
                                   title: match.date.toDateTimeString(context),
                                   subtitle: localizations.startDate,
-                                  icon: Icons.event,
+                                  iconData: Icons.event,
                                 ),
-                                ContentItem(
+                                ContentItem.icon(
                                   title: match.endDate?.toDateTimeString(context) ?? '-',
                                   subtitle: localizations.endDate,
-                                  icon: Icons.event,
+                                  iconData: Icons.event,
                                 ),
-                                ContentItem(
+                                ContentItem.icon(
                                   title: homeLineup.team.name,
                                   subtitle: '${localizations.team} ${localizations.red}',
-                                  icon: Icons.group,
+                                  iconData: Icons.group,
                                   onTap: () => TeamOverview.navigateTo(context, homeLineup.team),
                                 ),
-                                ContentItem(
+                                ContentItem.icon(
                                   title: guestLineup.team.name,
                                   subtitle: '${localizations.team} ${localizations.blue}',
-                                  icon: Icons.group,
+                                  iconData: Icons.group,
                                   onTap: () => TeamOverview.navigateTo(context, guestLineup.team),
                                 ),
-                                ContentItem(
+                                ContentItem.icon(
                                   title: match.visitorsCount?.toString() ?? '-',
                                   subtitle: localizations.visitors,
-                                  icon: Icons.confirmation_number,
+                                  iconData: Icons.confirmation_number,
                                 ),
-                                ContentItem(
+                                ContentItem.icon(
                                   title: match.comment ?? '-',
                                   subtitle: localizations.comment,
-                                  icon: Icons.comment,
+                                  iconData: Icons.comment,
                                 ),
-                                ContentItem(
+                                ContentItem.icon(
                                   title: match.league?.fullname ?? '-',
                                   subtitle: localizations.league,
-                                  icon: Icons.emoji_events,
+                                  iconData: Icons.emoji_events,
                                   onTap:
                                       match.league == null
                                           ? null
                                           : () => LeagueOverview.navigateTo(context, match.league!),
                                 ),
-                                ContentItem(
+                                ContentItem.icon(
                                   title:
                                       match.seasonPartition?.asSeasonPartition(
                                         context,
@@ -200,7 +201,7 @@ class TeamMatchOverview extends ConsumerWidget {
                                       ) ??
                                       '-',
                                   subtitle: localizations.seasonPartition,
-                                  icon: Icons.sunny_snowing,
+                                  iconData: Icons.sunny_snowing,
                                 ),
                               ],
                             ),
@@ -211,7 +212,14 @@ class TeamMatchOverview extends ConsumerWidget {
                                   final items = [
                                     ContentItem(
                                       title: homeLineup.team.name,
-                                      icon: Icons.view_list,
+                                      icon: ManyConsumer<Club, Team>(
+                                        filterObject: homeLineup.team,
+                                        builder: (context, clubs) {
+                                          return clubs.firstOrNull?.imageUri == null
+                                              ? Icon(Icons.view_list)
+                                              : CircularImage(imageUri: clubs.first.imageUri!);
+                                        },
+                                      ),
                                       onTap:
                                           (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
                                               ? null
@@ -220,7 +228,14 @@ class TeamMatchOverview extends ConsumerWidget {
                                     ),
                                     ContentItem(
                                       title: guestLineup.team.name,
-                                      icon: Icons.view_list,
+                                      icon: ManyConsumer<Club, Team>(
+                                        filterObject: guestLineup.team,
+                                        builder: (context, clubs) {
+                                          return clubs.firstOrNull?.imageUri == null
+                                              ? Icon(Icons.view_list)
+                                              : CircularImage(imageUri: clubs.first.imageUri!);
+                                        },
+                                      ),
                                       onTap:
                                           (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
                                               ? null
@@ -285,7 +300,10 @@ class TeamMatchOverview extends ConsumerWidget {
                                 return ContentItem(
                                   title:
                                       '${teamMatchPerson.role.localize(context)} | ${teamMatchPerson.person.fullName}',
-                                  icon: teamMatchPerson.role.icon,
+                                  icon:
+                                      teamMatchPerson.person.imageUri == null
+                                          ? Icon(teamMatchPerson.role.icon)
+                                          : CircularImage(imageUri: teamMatchPerson.person.imageUri!),
                                   onTap: () async => TeamMatchPersonOverview.navigateTo(context, teamMatchPerson),
                                 );
                               },

@@ -12,6 +12,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/membership_ove
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -48,22 +49,25 @@ class CompetitionParticipationOverview extends ConsumerWidget {
               )).deleteSingle<CompetitionParticipation>(competitionParticipation),
           classLocale: localizations.participation,
           children: [
-            ContentItem(
+            ContentItem.icon(
               title: competitionParticipation.lineup.club.name,
               subtitle: localizations.lineup,
-              icon: Icons.view_list,
+              iconData: Icons.view_list,
               onTap: () => CompetitionLineupOverview.navigateTo(context, competitionParticipation.lineup),
             ),
             ContentItem(
               title: competitionParticipation.membership.info,
               subtitle: localizations.membership,
-              icon: Icons.person,
+              icon:
+                  competitionParticipation.membership.person.imageUri == null
+                      ? Icon(Icons.person)
+                      : CircularImage(imageUri: competitionParticipation.membership.person.imageUri!),
               onTap: () => MembershipOverview.navigateTo(context, competitionParticipation.membership),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionParticipation.weightCategory?.name ?? '-',
               subtitle: localizations.weightCategory,
-              icon: Icons.category,
+              iconData: Icons.category,
               onTap:
                   competitionParticipation.weightCategory == null
                       ? null
@@ -72,25 +76,25 @@ class CompetitionParticipationOverview extends ConsumerWidget {
                         competitionParticipation.weightCategory!,
                       ),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionParticipation.weight?.toString() ?? '-',
               subtitle: localizations.weight,
-              icon: Icons.fitness_center,
+              iconData: Icons.fitness_center,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionParticipation.poolGroup?.toString() ?? '-',
               subtitle: localizations.pool,
-              icon: Icons.pool,
+              iconData: Icons.pool,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionParticipation.displayPoolDrawNumber?.toString() ?? '-',
               subtitle: localizations.numberAbbreviation,
-              icon: Icons.numbers,
+              iconData: Icons.numbers,
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionParticipation.contestantStatus?.localize(context) ?? '-',
               subtitle: localizations.contestantStatus,
-              icon: Icons.cancel_outlined,
+              iconData: Icons.cancel_outlined,
             ),
           ],
         );

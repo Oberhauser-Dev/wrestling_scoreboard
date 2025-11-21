@@ -119,7 +119,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
           },
         ),
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.comment,
         label: localizations.comment,
         initialValue: widget.bout?.comment,

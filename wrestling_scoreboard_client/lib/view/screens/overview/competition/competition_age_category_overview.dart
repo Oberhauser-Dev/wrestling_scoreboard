@@ -46,16 +46,16 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
                   (await ref.read(dataManagerProvider)).deleteSingle<CompetitionAgeCategory>(competitionAgeCategory),
           classLocale: localizations.ageCategory,
           children: [
-            ContentItem(
+            ContentItem.icon(
               title: competitionAgeCategory.competition.name,
               subtitle: localizations.competition,
-              icon: Icons.leaderboard,
+              iconData: Icons.leaderboard,
               onTap: () => CompetitionOverview.navigateTo(context, competitionAgeCategory.competition),
             ),
-            ContentItem(
+            ContentItem.icon(
               title: competitionAgeCategory.ageCategory.name,
               subtitle: localizations.ageCategory,
-              icon: Icons.school,
+              iconData: Icons.school,
               onTap: () => AgeCategoryOverview.navigateTo(context, competitionAgeCategory.ageCategory),
             ),
           ],
@@ -75,9 +75,9 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
                     (context) => CompetitionWeightCategoryEdit(initialCompetition: competitionAgeCategory.competition),
                 filterObject: competitionAgeCategory,
                 itemBuilder: (context, weightCategory) {
-                  return ContentItem(
+                  return ContentItem.icon(
                     title: weightCategory.name,
-                    icon: Icons.fitness_center,
+                    iconData: Icons.fitness_center,
                     onTap: () async => CompetitionWeightCategoryOverview.navigateTo(context, weightCategory),
                   );
                 },

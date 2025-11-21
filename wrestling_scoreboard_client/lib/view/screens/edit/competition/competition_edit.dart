@@ -43,21 +43,21 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
     final navigator = Navigator.of(context);
 
     final items = [
-      CustomTextInput(
+      CustomTextInput.icon(
         onSaved: (String? value) => _name = value,
         label: localizations.name,
         isMandatory: true,
         iconData: Icons.short_text,
         initialValue: widget.competition?.name,
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.tag,
         label: localizations.competitionNumber,
         initialValue: widget.competition?.no,
         isMandatory: false,
         onSaved: (value) => _no = value,
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         onSaved: (String? value) => _location = value,
         label: localizations.place,
         isMandatory: true,
@@ -103,7 +103,7 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
         isMandatory: false,
         onSaved: (int? value) => _visitorsCount = value,
       ),
-      CustomTextInput(
+      CustomTextInput.icon(
         iconData: Icons.comment,
         label: localizations.comment,
         initialValue: widget.competition?.comment,
