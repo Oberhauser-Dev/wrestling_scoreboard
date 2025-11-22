@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
@@ -203,6 +204,7 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
@@ -311,9 +313,11 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
           ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Text(
-            _searchResults == null ? localizations.favorites : localizations.searchResults,
-            style: Theme.of(context).textTheme.titleMedium,
+          child: Center(
+            child: Text(
+              _searchResults == null ? localizations.favorites : localizations.searchResults,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
         ),
         Expanded(child: SingleChildScrollView(child: gridEntries)),
@@ -323,6 +327,9 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
 }
 
 class _EntityGrid extends ConsumerWidget {
+  final double cardMinWidth = 100;
+  final double cardMaxWidth = 150;
+  final cardMinCount = 2;
   final Map<String, Map<int, DataObject?>> entities;
   final Future<void> Function<T extends DataObject>({
     required int id,
@@ -445,7 +452,24 @@ class _EntityGrid extends ConsumerWidget {
           })(),
       };
     });
-    return Column(children: children.toList());
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final columnCount = math.max(constraints.maxWidth ~/ (cardMinWidth * cardMinCount), 1);
+        return Wrap(
+          alignment: WrapAlignment.start,
+          crossAxisAlignment: WrapCrossAlignment.start,
+          children:
+              children
+                  .map(
+                    (e) => ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: constraints.maxWidth / columnCount),
+                      child: e,
+                    ),
+                  )
+                  .toList(),
+        );
+      },
+    );
   }
 
   Widget _buildGroup<T extends DataObject>(
@@ -456,12 +480,14 @@ class _EntityGrid extends ConsumerWidget {
     required BuildContext context,
   }) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(title: Text(localizeType(context, T)), leading: Icon(iconData)),
         GridView.extent(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          maxCrossAxisExtent: 150,
+          maxCrossAxisExtent: cardMaxWidth,
           children:
               ids.entries
                   .map((entry) => _createItem<T>(entry.key, entry.value, route, getTitle, context: context))
