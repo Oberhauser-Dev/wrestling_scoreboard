@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -63,12 +64,14 @@ class SearchController {
         final entityController = ShelfController.getControllerFromDataType(searchType);
         Map<String, dynamic>? manyJson;
         if (isValidLikeSearch) {
-          manyJson = await entityController?.getManyJsonLike(
-            raw,
-            likeParam,
-            organizationId: searchOrganizationId,
-            obfuscate: obfuscate,
-          );
+          manyJson = await _filterObfuscated(obfuscate, (obfuscate) async {
+            return await entityController?.getManyJsonLike(
+              raw,
+              likeParam,
+              organizationId: searchOrganizationId,
+              obfuscate: obfuscate,
+            );
+          });
           if (!searchAllTypes && useProvider && searchOrganizationId != null) {
             final orgSearchRes = await OrganizationController().search(
               request,
@@ -79,11 +82,14 @@ class SearchController {
             manyJson = manyToJson(orgSearchRes, searchType, CRUD.read, isRaw: false);
           }
         } else if (!searchAllTypes) {
-          manyJson = await entityController?.getManyJson(
-            isRaw: raw,
-            conditions: searchOrganizationId != null ? ['organization_id = @org'] : null,
-            substitutionValues: searchOrganizationId != null ? {'org': searchOrganizationId} : null,
-            obfuscate: obfuscate,
+          manyJson = await _filterObfuscated(
+            obfuscate,
+            (obfuscate) async => await entityController?.getManyJson(
+              isRaw: raw,
+              conditions: searchOrganizationId != null ? ['organization_id = @org'] : null,
+              substitutionValues: searchOrganizationId != null ? {'org': searchOrganizationId} : null,
+              obfuscate: obfuscate,
+            ),
           );
         } else {
           return Response.badRequest(
@@ -110,5 +116,19 @@ class SearchController {
       );
       return Response.internalServerError(body: '{"err": "$err", "stackTrace": $stackTrace}');
     }
+  }
+
+  /// Filter out any entity which is obfuscated to avoid sniffing through search.
+  Future<Map<String, dynamic>?> _filterObfuscated(
+    bool obfuscate,
+    Future<Map<String, dynamic>?> Function(dynamic obfuscate) getEntities,
+  ) async {
+    final res = await getEntities(false);
+    if (obfuscate && res != null && res.isNotEmpty) {
+      final obfuscatedRes = await getEntities(true);
+      // If any property was obfuscated (differs), don't return the entity
+      if (!DeepCollectionEquality().equals(obfuscatedRes, res)) return null;
+    }
+    return res;
   }
 }
