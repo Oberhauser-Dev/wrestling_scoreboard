@@ -9,14 +9,15 @@ part 'account_provider.g.dart';
 class UserNotifier extends _$UserNotifier {
   @override
   Raw<Future<User?>> build() async {
+    // Setting the jwt token triggers rebuilding this provider, thus updating the user.
     final dataManager = await ref.watch(dataManagerProvider);
     return await dataManager.getUser();
   }
 
   Future<void> signUp(User user) async {
     final dataManager = await ref.read(dataManagerProvider);
-    await dataManager.signUp(user);
-    await signInPassword(username: user.username, password: user.password!);
+    final token = await dataManager.signUp(user);
+    await ref.read(jwtProvider.notifier).setState(token);
   }
 
   Future<void> signInPassword({required String username, required String password}) async {
@@ -39,7 +40,8 @@ class UserNotifier extends _$UserNotifier {
 
   Future<void> updateUser({required User user}) async {
     final dataManager = await ref.read(dataManagerProvider);
-    await dataManager.updateUser(user);
+    final token = await dataManager.updateUser(user);
+    await ref.read(jwtProvider.notifier).setState(token);
   }
 
   Future<void> deleteUser() async {

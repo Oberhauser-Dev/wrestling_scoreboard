@@ -307,15 +307,15 @@ class RestDataManager extends DataManager {
   }
 
   @override
-  Future<void> signUp(User user) async {
-    final body = jsonEncode(singleToJson(user, User, user.id != null ? CRUD.update : CRUD.create));
+  Future<String> signUp(User user) async {
+    final body = jsonEncode(singleToJson(user, User, CRUD.create));
     final uri = Uri.parse('$_apiUrl/auth/sign_up');
     final response = await http.post(uri, headers: _headers, body: body);
     await _handleResponse(
       response,
       errorMessage: 'Failed to ${user.id != null ? 'UPDATE' : 'CREATE'} single ${user.tableName}',
     );
-    return jsonDecode(response.body);
+    return response.body;
   }
 
   @override
@@ -348,11 +348,13 @@ class RestDataManager extends DataManager {
   }
 
   @override
-  Future<void> updateUser(User user) async {
+  Future<String> updateUser(User user) async {
+    final body = jsonEncode(singleToJson(user, User, CRUD.update));
     final uri = Uri.parse('$_apiUrl/auth/user');
-    final response = await http.post(uri, headers: _headers, body: jsonEncode(user.toJson()));
+    final response = await http.post(uri, headers: _headers, body: body);
 
     await _handleResponse(response, errorMessage: 'Failed to change password');
+    return response.body;
   }
 
   @override

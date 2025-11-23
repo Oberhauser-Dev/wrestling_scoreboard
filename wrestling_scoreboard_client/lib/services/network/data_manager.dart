@@ -190,11 +190,11 @@ abstract class AuthManager {
 
   Future<String> signInWithVerification(UserVerification verification);
 
-  Future<void> signUp(User user);
+  Future<String> signUp(User user);
 
   Future<User?> getUser();
 
-  Future<void> updateUser(User user);
+  Future<String> updateUser(User user);
 
   Future<void> deleteUser();
 

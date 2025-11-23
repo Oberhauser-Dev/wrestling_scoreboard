@@ -6,7 +6,6 @@ import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
-// TODO: refactor to a user edit form
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   static const route = 'change-password';
 
@@ -46,8 +45,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   child: ElevatedButton(
                     onPressed:
                         () => catchAsync(context, () async {
-                          _formKey.currentState!.save();
                           if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
                             if (_password != _passwordAgain) {
                               throw Exception('Passwords must match!');
                             }

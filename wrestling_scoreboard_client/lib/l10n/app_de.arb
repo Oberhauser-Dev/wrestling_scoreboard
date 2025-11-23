@@ -121,6 +121,7 @@
   "auth_verification_confirmation": "Nutzer wurde erfolgreich verifiziert.",
   "auth_forgotPassword": "Passwort vergessen?",
   "auth_resetPassword": "Passwort zurücksetzen",
+  "auth_verificationCodeSend": "Verifizierungs-Code senden",
   "auth_verificationCodeSend_confirmation": "Falls das Konto existiert, solltest du eine E-Mail mit einem Verifizierungs-Code erhalten.",
 
   "imprint": "Impressum",

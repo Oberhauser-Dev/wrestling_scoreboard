@@ -30,11 +30,11 @@ class UserEditState extends ConsumerState<UserEdit> {
 
   @override
   void initState() {
-    super.initState();
     _username = widget.user?.username;
     _email = widget.user?.email;
     _person = widget.user?.person;
     _userPrivilege = widget.user?.privilege ?? UserPrivilege.none;
+    super.initState();
   }
 
   @override

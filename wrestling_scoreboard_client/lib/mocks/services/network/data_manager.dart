@@ -516,7 +516,7 @@ class MockDataManager extends DataManager {
   }
 
   @override
-  Future<void> signUp(User user) {
+  Future<String> signUp(User user) {
     // TODO: implement signUp
     throw UnimplementedError();
   }
@@ -527,7 +527,7 @@ class MockDataManager extends DataManager {
   }
 
   @override
-  Future<void> updateUser(User user) {
+  Future<String> updateUser(User user) {
     // TODO: implement changePassword
     throw UnimplementedError();
   }

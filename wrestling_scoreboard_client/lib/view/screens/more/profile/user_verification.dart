@@ -3,8 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class UserVerificationScreen extends ConsumerStatefulWidget {
@@ -36,42 +40,55 @@ class _UserVerificationScreenState extends ConsumerState<UserVerificationScreen>
     return Scaffold(
       appBar: AppBar(title: Text(localizations.auth_verfication)),
       body: ResponsiveScrollView(
-        child: Card(
+        child: PaddedCard(
           child: Form(
             key: _formKey,
             child: Column(
+              spacing: 16,
               children: [
+                ContentItem.icon(iconData: Icons.person, title: widget.username, subtitle: localizations.username),
                 CustomTextInput.icon(
                   label: localizations.auth_verificationCode,
                   initialValue: _verificationCode,
                   onSaved: (String? value) => _verificationCode = value,
                   isMandatory: true,
+                  inputFormatters: [UpperCaseTextFormatter()],
+                  textCapitalization: TextCapitalization.characters,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ElevatedButton(
-                    onPressed:
-                        () => catchAsync(context, () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            await ref
-                                .read(userProvider.notifier)
-                                .signInVerificationCode(
-                                  username: widget.username,
-                                  verificationCode: _verificationCode!,
-                                );
-                            if (!context.mounted) return;
-                            await showOkDialog(
-                              context: context,
-                              child: Text(localizations.auth_verification_confirmation),
-                            );
-                            if (context.mounted) {
-                              context.pop();
-                            }
+                ElevatedButton(
+                  onPressed:
+                      () => catchAsync(context, () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          await ref
+                              .read(userProvider.notifier)
+                              .signInVerificationCode(username: widget.username, verificationCode: _verificationCode!);
+                          if (!context.mounted) return;
+                          await showOkDialog(
+                            context: context,
+                            child: Text(localizations.auth_verification_confirmation),
+                          );
+                          if (context.mounted) {
+                            context.pop();
                           }
-                        }),
-                    child: Text(localizations.auth_verfication),
-                  ),
+                        }
+                      }),
+                  child: Text(localizations.auth_verfication),
+                ),
+                InkWell(
+                  onTap:
+                      () => catchAsync(context, () async {
+                        final user = await ref.read(userProvider);
+                        if (user != null) {
+                          await (await ref.read(dataManagerProvider)).requestVerificationCode(username: user.username);
+                          if (!context.mounted) return;
+                          await showOkDialog(
+                            context: context,
+                            child: Text(localizations.auth_verificationCodeSend_confirmation),
+                          );
+                        }
+                      }),
+                  child: Text(localizations.auth_verificationCodeSend),
                 ),
               ],
             ),

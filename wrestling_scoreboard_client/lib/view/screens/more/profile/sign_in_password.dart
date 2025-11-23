@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 
 class SignInPasswordScreen extends ConsumerStatefulWidget {
@@ -26,11 +28,12 @@ class _SignInPasswordScreenState extends ConsumerState<SignInPasswordScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(localizations.auth_signIn)),
       body: ResponsiveScrollView(
-        child: Card(
+        child: PaddedCard(
           child: Form(
             key: _formKey,
             child: Column(
               children: [
+                ContentItem.icon(iconData: Icons.person, title: widget.username, subtitle: localizations.username),
                 PasswordInput(
                   onSaved: (String? value) => _password = value,
                   isMandatory: true,

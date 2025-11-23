@@ -79,8 +79,8 @@ class ApiRoute {
     router.post('/auth/sign_in', authController.signIn);
     router.post('/auth/${UserVerification.cTableName}', authController.signInVerification);
     router.post('/auth/sign_up', authController.signUp);
-    router.restrictedPost('/auth/user', authController.updateSingle);
-    router.restrictedDelete('/auth/user', authController.deleteSingle);
+    router.restrictedPost('/auth/user', authController.updateSingle, UserPrivilege.none);
+    router.restrictedDelete('/auth/user', authController.deleteSingle, UserPrivilege.none);
     router.post('/auth/${VerificationCodeRequest.cTableName}', authController.requestVerificationCode);
 
     final userController = SecuredUserController();
