@@ -1,3 +1,11 @@
+## 0.3.8
+
+ - **FIX**: Sort filtered membership results. ([4000d5c8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/4000d5c8b655f47aa700bda142a43beaadeb5f40))
+ - **FEAT**: Update user profile (closes [#241](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/241)). ([da011d38](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/da011d38efc597a4b1dc60127407926f63dabb37))
+ - **FEAT**: Support image for Organization, Club and Person ([#45](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/45)). ([d0ecee24](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d0ecee241d360f0520089e6647750f62c7112aed))
+ - **FEAT**: Verfiy and login via email ([#237](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/237)). ([166b7b2d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/166b7b2d636de9575556e0cc767e702b5f7d1e9b))
+ - **FEAT**: Option to delete own user account ([#237](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/237)). ([2962f1ba](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2962f1ba886a1e97c3776e727376787d4d30a209))
+
 ## 0.3.7
 
  - **FIX**: Avoid failure on unknown bout result on import. ([08c58823](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/08c588233c1e8bfdcd175a08b08c16ceaddd1fca))

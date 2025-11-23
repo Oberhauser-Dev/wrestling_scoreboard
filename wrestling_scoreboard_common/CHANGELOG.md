@@ -1,3 +1,8 @@
+## 0.3.7
+
+ - **FEAT**: Support image for Organization, Club and Person ([#45](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/45)). ([d0ecee24](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d0ecee241d360f0520089e6647750f62c7112aed))
+ - **FEAT**: Verfiy and login via email ([#237](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/237)). ([166b7b2d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/166b7b2d636de9575556e0cc767e702b5f7d1e9b))
+
 ## 0.3.6
 
  - **FIX**: Disallow starting ObservableStopwatch, if hasEnded. ([6f61c5cd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6f61c5cda0cf1ed5be93de67d330cddbbafd3846))

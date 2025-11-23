@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-11-23
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.9`](#wrestling_scoreboard_client---v039)
+ - [`wrestling_scoreboard_common` - `v0.3.7`](#wrestling_scoreboard_common---v037)
+ - [`wrestling_scoreboard_server` - `v0.3.8`](#wrestling_scoreboard_server---v038)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.9`
+
+ - **FIX**: Wrap verify button in user profile. ([9312340c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9312340c59ddfaeacb7143d62d411ba0375f2d63))
+ - **FIX**: Wait until loading dialog has closed. ([2e1180c9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2e1180c9c0ba0bf80d501280454d1c65a7638766))
+ - **FIX**: Avoid point on third Passivity no matter which wrestler. ([89064cff](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/89064cffe6e803a991ad34b9efb5715355070bf6))
+ - **FIX**: Sanitize filename and allow empty team match exports (closes [#238](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/238)). ([727c793e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/727c793e42a6da466d15303a061a90e0e7cffe1d))
+ - **FEAT**: Update user profile (closes [#241](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/241)). ([da011d38](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/da011d38efc597a4b1dc60127407926f63dabb37))
+ - **FEAT**: Wrap favorites in home ([#223](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/223)). ([126a2aaf](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/126a2aafa2f81ece4c1e52ce9f1ccf74cef89756))
+ - **FEAT**: Support image for Organization, Club and Person ([#45](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/45)). ([d0ecee24](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d0ecee241d360f0520089e6647750f62c7112aed))
+ - **FEAT**: Sort filtered membership results. ([f1c6dba9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f1c6dba9e64312028ba7d1c1be25e0c1c95a4ed5))
+ - **FEAT**: Warn when giving passivity before verbal admonition. ([04801887](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/04801887bfa4b97f9d7c12d9dc552e2b29d3c4b3))
+ - **FEAT**: Verfiy and login via email ([#237](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/237)). ([166b7b2d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/166b7b2d636de9575556e0cc767e702b5f7d1e9b))
+ - **FEAT**: Option to delete own user account ([#237](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/237)). ([2962f1ba](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2962f1ba886a1e97c3776e727376787d4d30a209))
+
+#### `wrestling_scoreboard_common` - `v0.3.7`
+
+ - **FEAT**: Support image for Organization, Club and Person ([#45](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/45)). ([d0ecee24](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d0ecee241d360f0520089e6647750f62c7112aed))
+ - **FEAT**: Verfiy and login via email ([#237](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/237)). ([166b7b2d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/166b7b2d636de9575556e0cc767e702b5f7d1e9b))
+
+#### `wrestling_scoreboard_server` - `v0.3.8`
+
+ - **FIX**: Sort filtered membership results. ([4000d5c8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/4000d5c8b655f47aa700bda142a43beaadeb5f40))
+ - **FEAT**: Update user profile (closes [#241](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/241)). ([da011d38](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/da011d38efc597a4b1dc60127407926f63dabb37))
+ - **FEAT**: Support image for Organization, Club and Person ([#45](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/45)). ([d0ecee24](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d0ecee241d360f0520089e6647750f62c7112aed))
+ - **FEAT**: Verfiy and login via email ([#237](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/237)). ([166b7b2d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/166b7b2d636de9575556e0cc767e702b5f7d1e9b))
+ - **FEAT**: Option to delete own user account ([#237](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/237)). ([2962f1ba](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2962f1ba886a1e97c3776e727376787d4d30a209))
+
+
 ## 2025-11-11
 
 ### Changes
