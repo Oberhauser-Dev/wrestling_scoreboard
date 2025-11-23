@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict uYlmpKFGuRzT8YhZY13LoOw1F8PBWZMSpqklkHwNY6J1kCi1N7Dh4Hhq76Y4bTA
+\restrict 4UVYSAHfkIo76YSk12N1XPcqYJKPR4oB8FQGALQDddVaFnTPSnUoUVG7hI9zCNK
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -2071,7 +2071,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.8-pre.2	0.3.7
+0.3.8	0.3.9
 \.
 
 
@@ -3511,5 +3511,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict uYlmpKFGuRzT8YhZY13LoOw1F8PBWZMSpqklkHwNY6J1kCi1N7Dh4Hhq76Y4bTA
+\unrestrict 4UVYSAHfkIo76YSk12N1XPcqYJKPR4oB8FQGALQDddVaFnTPSnUoUVG7hI9zCNK
 

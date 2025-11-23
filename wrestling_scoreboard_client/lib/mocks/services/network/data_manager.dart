@@ -449,8 +449,8 @@ class MockDataManager extends DataManager {
   Future<RemoteConfig> getRemoteConfig() async {
     return RemoteConfig(
       migration: Migration(
-        semver: Version(0, 3, 7).canonicalizedVersion,
-        minClientVersion: Version(0, 3, 7).canonicalizedVersion,
+        semver: Version(0, 3, 8).canonicalizedVersion,
+        minClientVersion: Version(0, 3, 9).canonicalizedVersion,
       ),
     );
   }
