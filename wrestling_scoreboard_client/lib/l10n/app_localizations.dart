@@ -572,6 +572,12 @@ abstract class AppLocalizations {
   /// **'Reset password'**
   String get auth_resetPassword;
 
+  /// No description provided for @auth_verificationCodeSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send verification code'**
+  String get auth_verificationCodeSend;
+
   /// No description provided for @auth_verificationCodeSend_confirmation.
   ///
   /// In en, this message translates to:

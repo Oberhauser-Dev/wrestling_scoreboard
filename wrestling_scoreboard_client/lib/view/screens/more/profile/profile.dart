@@ -5,9 +5,10 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
-import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/change_password.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/profile/profile_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/user_verification.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/card.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
@@ -39,6 +40,19 @@ class ProfileScreen extends ConsumerWidget {
                       leading: const Icon(Icons.person),
                       title: Text(user.username),
                       subtitle: Text(localizations.username),
+                      trailing: IconButton(
+                        tooltip: localizations.edit,
+                        onPressed: () async {
+                          final user = await ref.readAsync(userProvider);
+                          if (context.mounted && user != null) {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ProfileEditScreen(user: user)),
+                            );
+                          }
+                        },
+                        icon: const Icon(Icons.edit),
+                      ),
                     ),
                     if (!user.isEmailVerified && user.email != null && user.email!.isNotEmpty)
                       LoadingBuilder(
@@ -54,22 +68,12 @@ class ProfileScreen extends ConsumerWidget {
                                   padding: const EdgeInsets.symmetric(horizontal: 16),
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      await (await ref.read(
-                                        dataManagerProvider,
-                                      )).requestVerificationCode(username: user.username);
-                                      if (!context.mounted) return;
-                                      await showOkDialog(
-                                        context: context,
-                                        child: Text(localizations.auth_verificationCodeSend_confirmation),
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => UserVerificationScreen(username: user.username),
+                                        ),
                                       );
-                                      if (context.mounted) {
-                                        await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => UserVerificationScreen(username: user.username),
-                                          ),
-                                        );
-                                      }
                                     },
                                     child: Text(localizations.auth_verfication),
                                   ),

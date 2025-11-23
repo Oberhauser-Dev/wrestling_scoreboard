@@ -121,6 +121,14 @@ class SecuredUserController extends ShelfController<SecuredUser> {
     return dataObject;
   }
 
+  @override
+  Future<bool> deleteSingle(int id) async {
+    final existingSecuredUser = await getSingle(id, obfuscate: false);
+    final success = await super.deleteSingle(id);
+    if (supportEmail && success) await sendAccountDeletionEmail(existingSecuredUser);
+    return success;
+  }
+
   Future<SecuredUser?> getSingleByUsername(String username) async {
     final many = await getMany(
       conditions: ['username = @username'],
@@ -149,6 +157,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
   }
 
   Future<void> sendWelcomeEmail(SecuredUser securedUser) async {
+    if (securedUser.email == null) return;
     await sendMail(
       recipient: securedUser.email!,
       subject: 'Welcome to Wrestling Scoreboard',
@@ -165,6 +174,7 @@ class SecuredUserController extends ShelfController<SecuredUser> {
   }
 
   Future<void> sendVerificationEmail(SecuredUser securedUser) async {
+    if (securedUser.email == null) return;
     await sendMail(
       recipient: securedUser.email!,
       subject: 'Email verification code for Wrestling Scoreboard',
@@ -174,6 +184,19 @@ class SecuredUserController extends ShelfController<SecuredUser> {
 <p>Please login with your username and verification code:</p>
 <p style="text-align: center; margin: 30px 0;"><code>${securedUser.emailVerificationCode}</code></p>
 <p>You are advised to use a password and change it, if necessary.</p>
+''',
+    );
+  }
+
+  Future<void> sendAccountDeletionEmail(SecuredUser securedUser) async {
+    if (securedUser.email == null) return;
+    await sendMail(
+      recipient: securedUser.email!,
+      subject: 'Account deleted for Wrestling Scoreboard',
+      body: '''
+<p>Dear <strong>${securedUser.username}</strong>,</p>
+<p>Your account for <strong>Wrestling Scoreboard</strong> was deleted.</p>
+<p>This cannot be undone. Please create a new account if you want to rejoin.</p>
 ''',
     );
   }

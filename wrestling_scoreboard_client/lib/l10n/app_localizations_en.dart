@@ -267,6 +267,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get auth_resetPassword => 'Reset password';
 
   @override
+  String get auth_verificationCodeSend => 'Send verification code';
+
+  @override
   String get auth_verificationCodeSend_confirmation =>
       'If the accounts exists, you should receive an email containing a verification code.';
 

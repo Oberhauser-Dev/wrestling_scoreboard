@@ -10,6 +10,7 @@ import 'package:wrestling_scoreboard_client/view/screens/more/profile/sign_in.da
 import 'package:wrestling_scoreboard_client/view/screens/more/profile/user_verification.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -49,7 +50,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   validator:
                       (v) => (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
                 ),
-                EmailInput(initialValue: _email, onSaved: (String? value) => _email = value, isMandatory: false),
+                LoadingBuilder(
+                  future: ref.watch(remoteConfigProvider.future),
+                  builder: (context, remoteConfig) {
+                    return EmailInput(
+                      initialValue: _email,
+                      onSaved: (String? value) => _email = value,
+                      isMandatory: remoteConfig.hasEmailVerification,
+                    );
+                  },
+                ),
                 PasswordInput(onSaved: (String? value) => _password = value, isNewPassword: true, isMandatory: true),
                 PasswordInput(
                   onSaved: (String? value) => _passwordAgain = value,
@@ -62,8 +72,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   child: ElevatedButton(
                     onPressed:
                         () => catchAsync(context, () async {
-                          _formKey.currentState!.save();
                           if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
                             if (_password != _passwordAgain) {
                               throw Exception('Passwords must match!');
                             }

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
-import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/user_controller.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 import 'package:wrestling_scoreboard_server/services/mail.dart';
@@ -49,8 +48,10 @@ class AuthController {
       // Do always set the current date time as createdAt property.
       createdAt: MockableDateTime.now(),
     );
-    await SecuredUserController().createSingle(user.toSecuredUser());
-    return Response.ok('{"status": "success"}');
+    final securedUser = await SecuredUserController().createSingleReturn(user.toSecuredUser());
+
+    final String token = _signToken(securedUser);
+    return Response.ok(token);
   }
 
   Future<Response> updateSingle(Request request, User? user) async {
@@ -63,11 +64,12 @@ class AuthController {
       );
     }
 
-    final updatedSecuredUser = updatedUser.toSecuredUser();
-    final securedUser = await SecuredUserController().updateSingleReturn(updatedSecuredUser);
+    SecuredUser updatedSecuredUser = updatedUser.toSecuredUser();
+    updatedSecuredUser = await SecuredUserController().updateSingleReturn(updatedSecuredUser);
 
-    unicastUpdateSingle<SecuredUser>((obfuscate) async => securedUser, user: user);
-    return Response.ok('{"status": "success"}');
+    // Need to update and return the token, as the username could have changed.
+    final String token = _signToken(updatedSecuredUser);
+    return Response.ok(token);
   }
 
   Future<Response> deleteSingle(Request request, User? user) async {
@@ -119,7 +121,7 @@ Ask another admin to remove you.''',
         // Also allow already verified emails to authenticate
         securedUser.emailVerificationCode != null &&
         securedUser.emailVerificationCode!.isNotEmpty &&
-        securedUser.emailVerificationCode == userVerification.verificationCode &&
+        securedUser.emailVerificationCode?.toUpperCase() == userVerification.verificationCode.toUpperCase() &&
         securedUser.emailVerificationCodeExpirationDate != null &&
         securedUser.emailVerificationCodeExpirationDate!.isAfter(MockableDateTime.now())) {
       await SecuredUserController().updateSingle(

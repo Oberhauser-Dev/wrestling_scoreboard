@@ -17,6 +17,8 @@ class CustomTextInput extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final Iterable<String>? autofillHints;
   final String? errorText;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextCapitalization textCapitalization;
 
   const CustomTextInput({
     this.onSaved,
@@ -30,6 +32,8 @@ class CustomTextInput extends StatelessWidget {
     this.validator,
     this.autofillHints,
     this.errorText,
+    this.inputFormatters,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   factory CustomTextInput.icon({
@@ -44,6 +48,8 @@ class CustomTextInput extends StatelessWidget {
     FormFieldValidator<String>? validator,
     Iterable<String>? autofillHints,
     String? errorText,
+    List<TextInputFormatter>? inputFormatters,
+    TextCapitalization textCapitalization = TextCapitalization.none,
   }) => CustomTextInput(
     onSaved: onSaved,
     onChanged: onChanged,
@@ -56,6 +62,8 @@ class CustomTextInput extends StatelessWidget {
     validator: validator,
     autofillHints: autofillHints,
     errorText: errorText,
+    inputFormatters: inputFormatters,
+    textCapitalization: textCapitalization,
   );
 
   @override
@@ -64,6 +72,7 @@ class CustomTextInput extends StatelessWidget {
     return ListTile(
       leading: icon ?? const SizedBox(),
       title: TextFormField(
+        textCapitalization: textCapitalization,
         autofillHints: autofillHints,
         readOnly: onSaved == null && onChanged == null,
         maxLines: isMultiline ? null : 1,
@@ -79,6 +88,7 @@ class CustomTextInput extends StatelessWidget {
               }
               return null;
             },
+        inputFormatters: inputFormatters,
         initialValue: initialValue,
         decoration: CustomInputDecoration(
           isMandatory: isMandatory,

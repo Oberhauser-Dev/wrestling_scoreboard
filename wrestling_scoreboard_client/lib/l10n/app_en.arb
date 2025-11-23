@@ -124,6 +124,7 @@
   "auth_verification_confirmation": "User was verified successfully.",
   "auth_forgotPassword": "Forgot password?",
   "auth_resetPassword": "Reset password",
+  "auth_verificationCodeSend": "Send verification code",
   "auth_verificationCodeSend_confirmation": "If the accounts exists, you should receive an email containing a verification code.",
 
   "imprint": "Imprint",
