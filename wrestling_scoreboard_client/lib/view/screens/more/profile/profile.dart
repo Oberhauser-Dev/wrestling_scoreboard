@@ -61,7 +61,9 @@ class ProfileScreen extends ConsumerWidget {
                           if (!remoteConfig.hasEmailVerification) return SizedBox.shrink();
                           return IconCard(
                             icon: const Icon(Icons.warning),
-                            child: Row(
+                            child: Wrap(
+                              runSpacing: 16,
+                              alignment: WrapAlignment.center,
                               children: [
                                 Text(localizations.auth_warning_email_not_verified),
                                 Padding(
