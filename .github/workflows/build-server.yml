@@ -15,7 +15,7 @@ on:
     inputs:
       flutter_version:
         required: false
-        default: '3.35.5'
+        default: '3.38.5'
         type: string
 
 jobs:
