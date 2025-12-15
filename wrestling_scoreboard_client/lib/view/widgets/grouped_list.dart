@@ -315,28 +315,30 @@ class GroupedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        header,
-        if (itemCount <= 0)
-          ListTile(title: Center(child: Text(context.l10n.noItems, style: Theme.of(context).textTheme.bodySmall)))
-        else if (shrinkWrap)
-          ScrollablePositionedList.builder(
-            shrinkWrap: true,
-            itemCount: itemCount,
-            initialScrollIndex: initialItemIndex,
-            itemBuilder: (context, index) => itemBuilder(context, index),
-          )
-        else
-          Expanded(
-            child: ScrollablePositionedList.builder(
-              shrinkWrap: false,
+    return SafeArea(
+      child: Column(
+        children: [
+          header,
+          if (itemCount <= 0)
+            ListTile(title: Center(child: Text(context.l10n.noItems, style: Theme.of(context).textTheme.bodySmall)))
+          else if (shrinkWrap)
+            ScrollablePositionedList.builder(
+              shrinkWrap: true,
               itemCount: itemCount,
               initialScrollIndex: initialItemIndex,
               itemBuilder: (context, index) => itemBuilder(context, index),
+            )
+          else
+            Expanded(
+              child: ScrollablePositionedList.builder(
+                shrinkWrap: false,
+                itemCount: itemCount,
+                initialScrollIndex: initialItemIndex,
+                itemBuilder: (context, index) => itemBuilder(context, index),
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -668,99 +668,101 @@ class BoutState extends ConsumerState<BoutScreen> {
           child: WindowStateScaffold(
             hideAppBarOnFullscreen: true,
             actions: [...widget.actions, pdfAction],
-            body: SingleChildScrollView(
-              child: Column(
-                spacing: padding,
-                children: [
-                  row(
-                    children:
-                        widget.headerItems
-                            .asMap()
-                            .entries
-                            .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                            .toList(),
-                  ),
-                  row(
-                    children: [
-                      Expanded(
-                        flex: 50,
-                        child: _ParticipantDisplay(
-                          bout,
-                          BoutRole.red,
-                          padding,
-                          widget.weightR,
-                          widget.weightClass?.style,
-                          widget.boutRules,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  spacing: padding,
+                  children: [
+                    row(
+                      children:
+                          widget.headerItems
+                              .asMap()
+                              .entries
+                              .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                              .toList(),
+                    ),
+                    row(
+                      children: [
+                        Expanded(
+                          flex: 50,
+                          child: _ParticipantDisplay(
+                            bout,
+                            BoutRole.red,
+                            padding,
+                            widget.weightR,
+                            widget.weightClass?.style,
+                            widget.boutRules,
+                          ),
                         ),
-                      ),
-                      if (isBigScreen) Expanded(flex: 20, child: boutInfo),
-                      Expanded(
-                        flex: 50,
-                        child: _ParticipantDisplay(
-                          bout,
-                          BoutRole.blue,
-                          padding,
-                          widget.weightB,
-                          widget.weightClass?.style,
-                          widget.boutRules,
+                        if (isBigScreen) Expanded(flex: 20, child: boutInfo),
+                        Expanded(
+                          flex: 50,
+                          child: _ParticipantDisplay(
+                            bout,
+                            BoutRole.blue,
+                            padding,
+                            widget.weightB,
+                            widget.weightClass?.style,
+                            widget.boutRules,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  row(
-                    children: [
-                      ResponsiveTechnicalPoints(
-                        pStatusModel: _r,
-                        role: BoutRole.red,
-                        wrestlingStyle: weightClass?.style,
-                        bout: bout,
-                        boutConfig: boutConfig,
-                        actionCallback: handleOrCatchIntent,
-                      ),
-                      Expanded(
-                        flex: 50,
-                        child: Center(
-                          child: DelayedTooltip(
-                            message: '${localizations.edit} ${localizations.duration} (↑ | ↓)',
-                            child: ValueListenableBuilder(
-                              valueListenable: mainStopwatch.isBreak,
-                              builder: (context, isBreak, _) {
-                                return TimeDisplay(
-                                  showDeciSecond: true,
-                                  mainStopwatch.stopwatch,
-                                  isBreak ? Colors.orange : Theme.of(context).colorScheme.onSurface,
-                                  fontSize: 128,
-                                  maxDuration: isBreak ? boutConfig.breakDuration : boutConfig.totalPeriodDuration,
-                                );
-                              },
+                      ],
+                    ),
+                    row(
+                      children: [
+                        ResponsiveTechnicalPoints(
+                          pStatusModel: _r,
+                          role: BoutRole.red,
+                          wrestlingStyle: weightClass?.style,
+                          bout: bout,
+                          boutConfig: boutConfig,
+                          actionCallback: handleOrCatchIntent,
+                        ),
+                        Expanded(
+                          flex: 50,
+                          child: Center(
+                            child: DelayedTooltip(
+                              message: '${localizations.edit} ${localizations.duration} (↑ | ↓)',
+                              child: ValueListenableBuilder(
+                                valueListenable: mainStopwatch.isBreak,
+                                builder: (context, isBreak, _) {
+                                  return TimeDisplay(
+                                    showDeciSecond: true,
+                                    mainStopwatch.stopwatch,
+                                    isBreak ? Colors.orange : Theme.of(context).colorScheme.onSurface,
+                                    fontSize: 128,
+                                    maxDuration: isBreak ? boutConfig.breakDuration : boutConfig.totalPeriodDuration,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      ResponsiveTechnicalPoints(
-                        pStatusModel: _b,
-                        role: BoutRole.blue,
-                        wrestlingStyle: weightClass?.style,
-                        bout: bout,
-                        boutConfig: boutConfig,
-                        actionCallback: handleOrCatchIntent,
-                      ),
-                    ],
-                  ),
-                  ManyConsumer<BoutAction, Bout>(
-                    filterObject: bout,
-                    builder: (context, actions) {
-                      return ActionsWidget(
-                        actions,
-                        boutConfig: boutConfig,
-                        onDeleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
-                        onCreateOrUpdateAction:
-                            (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
-                      );
-                    },
-                  ),
-                  BoutMainControls(handleOrCatchIntent, this),
-                ],
+                        ResponsiveTechnicalPoints(
+                          pStatusModel: _b,
+                          role: BoutRole.blue,
+                          wrestlingStyle: weightClass?.style,
+                          bout: bout,
+                          boutConfig: boutConfig,
+                          actionCallback: handleOrCatchIntent,
+                        ),
+                      ],
+                    ),
+                    ManyConsumer<BoutAction, Bout>(
+                      filterObject: bout,
+                      builder: (context, actions) {
+                        return ActionsWidget(
+                          actions,
+                          boutConfig: boutConfig,
+                          onDeleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
+                          onCreateOrUpdateAction:
+                              (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
+                        );
+                      },
+                    ),
+                    BoutMainControls(handleOrCatchIntent, this),
+                  ],
+                ),
               ),
             ),
           ),

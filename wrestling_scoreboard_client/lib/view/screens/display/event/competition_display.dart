@@ -178,22 +178,24 @@ class CompetitionDisplay extends StatelessWidget {
                     ),
                     Divider(height: 1),
                     Expanded(
-                      child: ScrollablePositionedList.builder(
-                        // TODO: initialScrollIndex is not updated in ScrollablePositionedList, this also cannot properly be set via the itemScrollController
-                        // ScrollablePositionedList currently is not maintained
-                        key: ValueKey(competitionBouts),
-                        initialScrollIndex: initialScrollIndex,
-                        itemCount: competitionBouts.length,
-                        itemBuilder: (context, index) {
-                          if (index == -1) return Center(child: Text(localizations.noItems));
-                          final competitionBout = competitionBouts[index];
-                          return Column(
-                            children: [
-                              _CompetitionBoutListItem(competition: competition, competitionBout: competitionBout),
-                              const Divider(height: 1),
-                            ],
-                          );
-                        },
+                      child: SafeArea(
+                        child: ScrollablePositionedList.builder(
+                          // TODO: initialScrollIndex is not updated in ScrollablePositionedList, this also cannot properly be set via the itemScrollController
+                          // ScrollablePositionedList currently is not maintained
+                          key: ValueKey(competitionBouts),
+                          initialScrollIndex: initialScrollIndex,
+                          itemCount: competitionBouts.length,
+                          itemBuilder: (context, index) {
+                            if (index == -1) return Center(child: Text(localizations.noItems));
+                            final competitionBout = competitionBouts[index];
+                            return Column(
+                              children: [
+                                _CompetitionBoutListItem(competition: competition, competitionBout: competitionBout),
+                                const Divider(height: 1),
+                              ],
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
