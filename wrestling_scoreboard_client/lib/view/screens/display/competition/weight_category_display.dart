@@ -251,9 +251,11 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                             ),
                             Divider(),
                             Expanded(
-                              child: ListView.builder(
-                                itemCount: participantWidgets.length,
-                                itemBuilder: (context, index) => participantWidgets[index],
+                              child: SafeArea(
+                                child: ListView.builder(
+                                  itemCount: participantWidgets.length,
+                                  itemBuilder: (context, index) => participantWidgets[index],
+                                ),
                               ),
                             ),
                           ],

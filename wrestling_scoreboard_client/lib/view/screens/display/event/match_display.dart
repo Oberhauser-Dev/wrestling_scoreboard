@@ -104,32 +104,34 @@ class MatchDisplay extends ConsumerWidget {
                               ),
                             ),
                             Expanded(
-                              child: ListView.builder(
-                                itemCount: teamMatchBouts.length,
-                                itemBuilder: (context, index) {
-                                  return SingleConsumer<TeamMatchBout>(
-                                    id: teamMatchBouts[index].id,
-                                    initialData: teamMatchBouts[index],
-                                    builder: (context, teamMatchBout) {
-                                      return Column(
-                                        children: [
-                                          InkWell(
-                                            onTap: () => TeamMatchBoutDisplay.navigateTo(context, teamMatchBout),
-                                            child: IntrinsicHeight(
-                                              child: BoutListItem(
-                                                boutConfig:
-                                                    match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                                                bout: teamMatchBout.bout,
-                                                weightClass: teamMatchBout.weightClass,
+                              child: SafeArea(
+                                child: ListView.builder(
+                                  itemCount: teamMatchBouts.length,
+                                  itemBuilder: (context, index) {
+                                    return SingleConsumer<TeamMatchBout>(
+                                      id: teamMatchBouts[index].id,
+                                      initialData: teamMatchBouts[index],
+                                      builder: (context, teamMatchBout) {
+                                        return Column(
+                                          children: [
+                                            InkWell(
+                                              onTap: () => TeamMatchBoutDisplay.navigateTo(context, teamMatchBout),
+                                              child: IntrinsicHeight(
+                                                child: BoutListItem(
+                                                  boutConfig:
+                                                      match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                                                  bout: teamMatchBout.bout,
+                                                  weightClass: teamMatchBout.weightClass,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          const Divider(height: 1),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
+                                            const Divider(height: 1),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                             Row(
