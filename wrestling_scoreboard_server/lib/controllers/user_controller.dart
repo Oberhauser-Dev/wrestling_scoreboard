@@ -132,14 +132,18 @@ class SecuredUserController extends ShelfController<SecuredUser> {
   Future<SecuredUser?> getSingleByUsername(String username) async {
     final many = await getMany(
       conditions: ['username = @username'],
-      substitutionValues: {'username': username},
+      substitutionValues: {'username': username.toLowerCase()},
       obfuscate: false,
     );
     return many.zeroOrOne;
   }
 
   Future<SecuredUser?> getSingleByEmail(String email) async {
-    final many = await getMany(conditions: ['email = @email'], substitutionValues: {'email': email}, obfuscate: false);
+    final many = await getMany(
+      conditions: ['email = @email'],
+      substitutionValues: {'email': email.toLowerCase()},
+      obfuscate: false,
+    );
     return many.zeroOrOne;
   }
 

@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 4UVYSAHfkIo76YSk12N1XPcqYJKPR4oB8FQGALQDddVaFnTPSnUoUVG7hI9zCNK
+\restrict 9IJ71QJl3KFDAthrwR2JqKK27dHmqoKNIfClHQ9Hv5zS4MYPStOJLcNQ4zzxpRG
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -2071,7 +2071,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.8	0.3.9
+0.3.9-pre.1	0.3.9
 \.
 
 
@@ -2803,6 +2803,14 @@ ALTER TABLE ONLY public.person
 
 
 --
+-- Name: secured_user secured_user_email_unique; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.secured_user
+    ADD CONSTRAINT secured_user_email_unique UNIQUE (email);
+
+
+--
 -- Name: team_club_affiliation team_club_affiliation_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -3511,5 +3519,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 4UVYSAHfkIo76YSk12N1XPcqYJKPR4oB8FQGALQDddVaFnTPSnUoUVG7hI9zCNK
+\unrestrict 9IJ71QJl3KFDAthrwR2JqKK27dHmqoKNIfClHQ9Hv5zS4MYPStOJLcNQ4zzxpRG
 

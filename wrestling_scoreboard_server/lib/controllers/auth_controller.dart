@@ -28,6 +28,7 @@ class AuthController {
     // Do sending without awaiting to not give an attacker the possibility to find out if the email is correct.
     (() async {
       SecuredUser? securedUser = await SecuredUserController().getSingleByUsername(verificationCodeRequest.username!);
+      securedUser ??= await SecuredUserController().getSingleByEmail(verificationCodeRequest.username!);
       // Return silently, if email is incorrect the user should not get a feedback.
       if (securedUser == null) return;
       securedUser = await SecuredUserController().generateVerificationCode(securedUser);
@@ -98,7 +99,8 @@ Ask another admin to remove you.''',
 
     // Use the same response for username or password, so an attacker cannot differentiate which email is registered.
     final badUserOrPasswordResponse = Response.badRequest(body: 'Username or password incorrect.');
-    final securedUser = await SecuredUserController().getSingleByUsername(authService.username);
+    SecuredUser? securedUser = await SecuredUserController().getSingleByUsername(authService.username);
+    securedUser ??= await SecuredUserController().getSingleByEmail(authService.username);
     if (securedUser == null) return badUserOrPasswordResponse;
 
     if (!securedUser.checkPassword(authService.password)) {
@@ -116,7 +118,8 @@ Ask another admin to remove you.''',
         body: 'Verification method "${userVerification.method}" is not supported at the moment.',
       );
     }
-    final securedUser = await SecuredUserController().getSingleByUsername(userVerification.username);
+    SecuredUser? securedUser = await SecuredUserController().getSingleByUsername(userVerification.username);
+    securedUser ??= await SecuredUserController().getSingleByEmail(userVerification.username);
     if (securedUser != null &&
         // Also allow already verified emails to authenticate
         securedUser.emailVerificationCode != null &&
