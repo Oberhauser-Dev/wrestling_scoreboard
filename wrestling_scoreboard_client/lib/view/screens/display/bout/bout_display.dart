@@ -51,7 +51,7 @@ class BoutScreen extends ConsumerStatefulWidget {
   final List<BoutResultRule> boutRules;
   final List<Widget> headerItems;
   final int boutIndex;
-  final List<ResponsiveScaffoldActionItem> actions;
+  final List<ResponsiveScaffoldActionItemBuilder> actions;
   final void Function(BuildContext context, int boutIndex) navigateToBoutByIndex;
 
   const BoutScreen({
@@ -596,7 +596,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     final double width = MediaQuery.of(context).size.width;
     final double padding = width / 100;
 
-    final pdfAction = ResponsiveScaffoldActionItem(
+    final pdfAction = DefaultResponsiveScaffoldActionItem(
       label: localizations.print,
       icon: const Icon(Icons.print),
       onTap: () async {

@@ -37,7 +37,7 @@ mixin AbstractPersonOverview<T extends DataObject> implements AbstractOverview<P
     required Widget editPage,
     required VoidCallback? onDelete,
     List<Widget>? tiles,
-    List<ResponsiveScaffoldActionItem> actions = const [],
+    List<DefaultResponsiveScaffoldActionItem> actions = const [],
     Map<Tab, Widget> Function(Person data)? buildRelations,
     required int dataId,
     Person? initialData,

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/buttons.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 
 class ResponsiveContainer extends StatelessWidget {
   final Widget child;
@@ -42,108 +44,145 @@ class ResponsiveColumn extends StatelessWidget {
   }
 }
 
-class ResponsiveScaffoldActionItem {
+abstract class ResponsiveScaffoldActionItemBuilder {
+  Widget buildForAppBar(BuildContext context);
+
+  Widget buildForPopupMenu(BuildContext context);
+
+  final ResponsiveScaffoldActionItemStyle style;
+
+  const ResponsiveScaffoldActionItemBuilder({this.style = ResponsiveScaffoldActionItemStyle.icon});
+}
+
+class DefaultResponsiveScaffoldActionItem extends ResponsiveScaffoldActionItemBuilder {
   final Widget icon;
   final String label;
   final FutureOr<void> Function()? onTap;
-  final ResponsiveScaffoldActionItemStyle style;
 
-  const ResponsiveScaffoldActionItem({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.style = ResponsiveScaffoldActionItemStyle.icon,
+  const DefaultResponsiveScaffoldActionItem({super.style, required this.icon, required this.label, this.onTap});
+
+  @override
+  Widget buildForAppBar(BuildContext context) {
+    if (style == ResponsiveScaffoldActionItemStyle.elevatedIconAndText) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: AsyncElevatedButton(icon: icon, onTap: onTap, label: Text(label)),
+      );
+    }
+    return AsyncIconButton(onTap: onTap, icon: icon, tooltip: label);
+  }
+
+  @override
+  Widget buildForPopupMenu(BuildContext context) {
+    return MenuItemButton(onPressed: onTap, child: ListTile(leading: icon, title: Text(label)));
+  }
+}
+
+class ConsumerResponsiveScaffoldActionItem<T> extends ResponsiveScaffoldActionItemBuilder {
+  final Future<T> Function(WidgetRef ref) futureBuilder;
+  final Widget Function(BuildContext context, T data) iconBuilder;
+  final String Function(T data) labelBuilder;
+  final FutureOr<void> Function(T data)? onTap;
+
+  const ConsumerResponsiveScaffoldActionItem({
+    super.style,
+    required this.futureBuilder,
+    required this.iconBuilder,
+    required this.labelBuilder,
+    this.onTap,
   });
+
+  @override
+  Widget buildForAppBar(BuildContext context) {
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        return LoadingBuilder<T>.icon(
+          future: futureBuilder(ref),
+          builder: (context, data) {
+            final onTapData = onTap == null ? null : () => onTap?.call(data);
+            final iconData = iconBuilder(context, data);
+            final labelData = labelBuilder(data);
+            if (style == ResponsiveScaffoldActionItemStyle.elevatedIconAndText) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: AsyncElevatedButton(icon: iconData, onTap: onTapData, label: Text(labelData)),
+              );
+            }
+            return AsyncIconButton(onTap: onTapData, icon: iconData, tooltip: labelData);
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildForPopupMenu(BuildContext context) {
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        return LoadingBuilder<T>.icon(
+          future: futureBuilder(ref),
+          builder: (context, data) {
+            return MenuItemButton(
+              onPressed: onTap == null ? null : () => onTap?.call(data),
+              child: ListTile(leading: iconBuilder(context, data), title: Text(labelBuilder(data))),
+            );
+          },
+        );
+      },
+    );
+  }
 }
 
 enum ResponsiveScaffoldActionItemStyle { icon, elevatedIconAndText }
 
 class ResponsiveScaffoldActions extends StatelessWidget {
-  final List<ResponsiveScaffoldActionItem> actionContents;
+  final List<ResponsiveScaffoldActionItemBuilder> actionContents;
 
   const ResponsiveScaffoldActions({super.key, required this.actionContents});
 
   @override
   Widget build(BuildContext context) {
     final showActionsInAppBar = context.isMediumScreenOrLarger || actionContents.length <= 2;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (showActionsInAppBar)
-          ...actionContents.map((a) {
-            if (a.style == ResponsiveScaffoldActionItemStyle.elevatedIconAndText) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: AsyncElevatedButton(icon: a.icon, onTap: a.onTap, label: Text(a.label)),
-              );
-            }
-            return AsyncIconButton(onTap: a.onTap, icon: a.icon, tooltip: a.label);
-          }),
-        Visibility(
-          visible: !showActionsInAppBar,
-          // Maintain state so the popup menu still finds its ancestor
-          maintainState: true,
-          maintainSize: false,
-          child: AutoClosePopupMenuButton(actionContents: actionContents),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (showActionsInAppBar) ...actionContents.map((a) => a.buildForAppBar(context)),
+          Visibility(
+            visible: !showActionsInAppBar,
+            // Maintain state so the popup menu still finds its ancestor
+            maintainState: true,
+            maintainSize: false,
+            child: DefaultPopupMenuButton(actionContents: actionContents),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class AutoClosePopupMenuButton extends StatefulWidget {
-  final List<ResponsiveScaffoldActionItem> actionContents;
+class DefaultPopupMenuButton extends StatelessWidget {
+  final List<ResponsiveScaffoldActionItemBuilder> actionContents;
 
-  const AutoClosePopupMenuButton({super.key, required this.actionContents});
-
-  @override
-  State<AutoClosePopupMenuButton> createState() => _AutoClosePopupMenuButtonState();
-}
-
-class _AutoClosePopupMenuButtonState extends State<AutoClosePopupMenuButton> with WidgetsBindingObserver {
-  bool _isOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _updateMetrics();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeMetrics() {
-    _updateMetrics();
-  }
-
-  void _updateMetrics() {
-    if (_isOpen && View.of(context).physicalSize.width > mediumScreenMinWidth) {
-      // Close the popup menu, when the size gets larger, so it is closed, when the three dot button disappears.
-      Navigator.of(context).pop();
-    }
-  }
+  const DefaultPopupMenuButton({super.key, required this.actionContents});
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      onOpened: () => _isOpen = true,
-      onCanceled: () => _isOpen = false,
-      onSelected: (_) => _isOpen = false,
-      itemBuilder: (context) {
-        return widget.actionContents
-            .map((a) => PopupMenuItem<String>(onTap: a.onTap, child: ListTile(leading: a.icon, title: Text(a.label))))
-            .toList();
-      },
+    return MenuAnchor(
+      builder:
+          (context, controller, child) => IconButton(
+            onPressed: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+            icon: const Icon(Icons.more_vert),
+            tooltip: MaterialLocalizations.of(context).popupMenuLabel,
+          ),
+      menuChildren: actionContents.map((a) => a.buildForPopupMenu(context)).toList(),
     );
   }
 }

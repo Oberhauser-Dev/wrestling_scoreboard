@@ -74,7 +74,7 @@ class ScratchBoutOverview extends ConsumerWidget with BoutOverview<ScratchBout>,
                   details: '${bout.r?.membership.person.fullName} - ${bout.b?.membership.person.fullName}',
                   editPage: ScratchBoutEdit(scratchBout: scratchBout),
                   actions: [
-                    ResponsiveScaffoldActionItem(
+                    DefaultResponsiveScaffoldActionItem(
                       style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
                       icon: const Icon(Icons.tv),
                       onTap: () => ScratchBoutDisplay.navigateTo(context),

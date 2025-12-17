@@ -47,43 +47,55 @@ class ActionsWidget extends ConsumerWidget {
                     initialData: action,
                     builder: (context, action) {
                       final color = action.role.color();
-                      return PopupMenuButton(
-                        itemBuilder: (context) {
-                          return [
-                            PopupMenuItem<String>(
-                              child: Text(localizations.remove),
-                              onTap: () async => await onDeleteAction(action),
-                            ),
-                            PopupMenuItem<String>(
-                              child: Text(localizations.edit),
-                              onTap: () async {
-                                final val = await showDurationDialog(
-                                  context: context,
-                                  initialDuration: action.duration.invertIf(
-                                    isTimeCountDown,
-                                    max: boutConfig.totalPeriodDuration,
-                                  ),
-                                  maxValue: boutConfig.totalPeriodDuration,
-                                );
-                                if (val != null) {
-                                  onCreateOrUpdateAction(
-                                    action.copyWith(
-                                      duration: isTimeCountDown ? boutConfig.totalPeriodDuration - val : val,
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ];
+                      return MenuAnchor(
+                        builder: (context, controller, child) {
+                          return InkWell(
+                            child: child,
+                            onTap: () {
+                              if (controller.isOpen) {
+                                controller.close();
+                              } else {
+                                controller.open();
+                              }
+                            },
+                          );
                         },
-                        tooltip:
-                            (isTimeCountDown ? boutConfig.totalPeriodDuration - action.duration : action.duration)
-                                .formatMinutesAndSeconds(),
-                        child: ThemedContainer(
-                          margin: const EdgeInsets.symmetric(horizontal: 1),
-                          padding: EdgeInsets.all(padding),
-                          color: color,
-                          child: ScaledText(action.actionValue, fontSize: 28, softWrap: false),
+                        menuChildren: [
+                          MenuItemButton(
+                            child: Text(localizations.remove),
+                            onPressed: () async => await onDeleteAction(action),
+                          ),
+                          MenuItemButton(
+                            child: Text(localizations.edit),
+                            onPressed: () async {
+                              final val = await showDurationDialog(
+                                context: context,
+                                initialDuration: action.duration.invertIf(
+                                  isTimeCountDown,
+                                  max: boutConfig.totalPeriodDuration,
+                                ),
+                                maxValue: boutConfig.totalPeriodDuration,
+                              );
+                              if (val != null) {
+                                onCreateOrUpdateAction(
+                                  action.copyWith(
+                                    duration: isTimeCountDown ? boutConfig.totalPeriodDuration - val : val,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                        child: Tooltip(
+                          message:
+                              (isTimeCountDown ? boutConfig.totalPeriodDuration - action.duration : action.duration)
+                                  .formatMinutesAndSeconds(),
+                          child: ThemedContainer(
+                            margin: const EdgeInsets.symmetric(horizontal: 1),
+                            padding: EdgeInsets.all(padding),
+                            color: color,
+                            child: ScaledText(action.actionValue, fontSize: 28, softWrap: false),
+                          ),
                         ),
                       );
                     },

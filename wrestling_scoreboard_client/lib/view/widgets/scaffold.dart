@@ -38,7 +38,7 @@ class WindowStateScaffold extends ConsumerWidget {
   final PreferredSizeWidget? appBarBottom;
   final bool hideAppBarOnFullscreen;
   final Widget body;
-  final List<ResponsiveScaffoldActionItem>? actions;
+  final List<ResponsiveScaffoldActionItemBuilder>? actions;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,7 +62,7 @@ class WindowStateScaffold extends ConsumerWidget {
                   actionContents: [
                     ...?actions,
                     if (webClientUrl != null && !kIsWeb)
-                      ResponsiveScaffoldActionItem(
+                      DefaultResponsiveScaffoldActionItem(
                         icon: const Icon(Icons.share),
                         onTap: () async {
                           final shareUrl = Uri.parse(webClientUrl + GoRouterState.of(context).matchedLocation);
@@ -71,7 +71,7 @@ class WindowStateScaffold extends ConsumerWidget {
                         label: localizations.share,
                       ),
                     if (isOnDesktop)
-                      ResponsiveScaffoldActionItem(
+                      DefaultResponsiveScaffoldActionItem(
                         icon: data.isFullscreen() ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
                         onTap: () => ref.read(windowStateProvider.notifier).requestToggleFullScreen(),
                         label: localizations.toggleFullscreen,

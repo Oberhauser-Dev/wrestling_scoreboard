@@ -53,7 +53,7 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                           boutIndex: 0,
                           bout: bout,
                           actions: [
-                            ResponsiveScaffoldActionItem(
+                            DefaultResponsiveScaffoldActionItem(
                               icon: const Icon(Icons.restore_page),
                               onTap: () async {
                                 final result = await showOkCancelDialog(

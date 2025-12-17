@@ -46,7 +46,7 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
       id: id,
       initialData: competitionWeightCategory,
       builder: (context, competitionWeightCategory) {
-        final infoAction = ResponsiveScaffoldActionItem(
+        final infoAction = DefaultResponsiveScaffoldActionItem(
           label: localizations.info,
           icon: const Icon(Icons.info),
           onTap: () => CompetitionWeightCategoryOverview.navigateTo(context, competitionWeightCategory),

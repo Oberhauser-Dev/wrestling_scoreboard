@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/exception.dart';
 
 final _logger = Logger('LoadingBuilder');
@@ -25,6 +26,25 @@ class LoadingBuilder<T> extends ConsumerWidget {
     this.initialData,
     this.onRetry,
   });
+
+  factory LoadingBuilder.icon({
+    required Future<T> future,
+    T? initialData,
+    void Function()? onRetry,
+    Widget Function(BuildContext context)? onLoad,
+    required Widget Function(BuildContext context, T data) builder,
+  }) => LoadingBuilder(
+    onException:
+        (context, exception, {stackTrace}) => IconButton(
+          onPressed: () => showExceptionDialog(context: context, exception: exception ?? '', stackTrace: stackTrace),
+          icon: const Icon(Icons.warning),
+        ),
+    future: future,
+    builder: builder,
+    initialData: initialData,
+    onRetry: onRetry,
+    onLoad: onLoad,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

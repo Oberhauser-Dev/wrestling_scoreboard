@@ -15,7 +15,7 @@ class ConditionalOrganizationImportActionBuilder extends StatelessWidget {
   final Organization? organization;
   final int id;
   final OrganizationImportType importType;
-  final Widget Function(BuildContext context, ResponsiveScaffoldActionItem? actionItem) builder;
+  final Widget Function(BuildContext context, ResponsiveScaffoldActionItemBuilder? actionItem) builder;
 
   const ConditionalOrganizationImportActionBuilder({
     required this.id,
@@ -45,7 +45,7 @@ class OrganizationImportAction extends ConsumerStatefulWidget {
   final Organization organization;
   final int id;
   final OrganizationImportType importType;
-  final Widget Function(BuildContext context, ResponsiveScaffoldActionItem? actionItem) builder;
+  final Widget Function(BuildContext context, ResponsiveScaffoldActionItemBuilder? actionItem) builder;
 
   const OrganizationImportAction({
     required this.id,
@@ -71,7 +71,7 @@ class _OrganizationImportActionState extends ConsumerState<OrganizationImportAct
     final localizations = context.l10n;
     return widget.builder(
       context,
-      ResponsiveScaffoldActionItem(
+      DefaultResponsiveScaffoldActionItem(
         label: localizations.importFromApiProvider,
         onTap: () async {
           final authService = await ref.read(orgAuthProvider.notifier).getByOrganization(widget.organization.id!);
@@ -228,7 +228,7 @@ class _IncludeSubjacentDialogState extends State<_IncludeSubjacentDialog> {
   }
 }
 
-class OrganizationReportActionItem extends ResponsiveScaffoldActionItem {
+class OrganizationReportActionItem extends DefaultResponsiveScaffoldActionItem {
   OrganizationReportActionItem({
     required BuildContext context,
     required Organization organization,

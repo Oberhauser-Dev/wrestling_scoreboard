@@ -40,7 +40,7 @@ class MatchDisplay extends ConsumerWidget {
           id: id,
           initialData: teamMatch,
           builder: (context, match) {
-            final chronologicalSortAction = ResponsiveScaffoldActionItem(
+            final chronologicalSortAction = DefaultResponsiveScaffoldActionItem(
               label: sortChronologically ? localizations.sortedChronologically : localizations.sortedByWeightClass,
               icon: Icon(sortChronologically ? Icons.timeline : Icons.format_list_numbered),
               onTap:
@@ -48,12 +48,12 @@ class MatchDisplay extends ConsumerWidget {
                       .read(teamMatchChronologicalSortProvider.notifier)
                       .setState(sortChronologically = !sortChronologically),
             );
-            final infoAction = ResponsiveScaffoldActionItem(
+            final infoAction = DefaultResponsiveScaffoldActionItem(
               label: localizations.info,
               icon: const Icon(Icons.info),
               onTap: () => TeamMatchOverview.navigateTo(context, match),
             );
-            final pdfAction = ResponsiveScaffoldActionItem(
+            final pdfAction = DefaultResponsiveScaffoldActionItem(
               label: localizations.print,
               icon: const Icon(Icons.print),
               onTap: () => TeamMatchOverview.shareTeamMatchTranscript(context, ref, match),

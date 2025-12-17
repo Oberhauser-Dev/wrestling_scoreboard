@@ -92,13 +92,13 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
           label: localizations.weightCategory,
           details: competitionWeightCategory.name,
           actions: [
-            ResponsiveScaffoldActionItem(
+            DefaultResponsiveScaffoldActionItem(
               style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
               icon: const Icon(Icons.tv),
               onTap: () => CompetitionWeightCategoryDisplay.navigateTo(context, competitionWeightCategory),
               label: localizations.display,
             ),
-            ResponsiveScaffoldActionItem(
+            DefaultResponsiveScaffoldActionItem(
               icon: const Icon(Icons.autorenew),
               label: localizations.pairBouts,
               onTap: () async {

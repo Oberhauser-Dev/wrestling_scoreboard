@@ -29,7 +29,7 @@ mixin BoutOverview<T extends DataObject> implements AbstractOverview<Bout, T> {
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
-    List<ResponsiveScaffoldActionItem> actions = const [],
+    List<DefaultResponsiveScaffoldActionItem> actions = const [],
     required int dataId,
     Bout? initialData,
     Map<Tab, Widget> Function(Bout data)? buildRelations,

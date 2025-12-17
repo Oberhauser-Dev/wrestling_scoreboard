@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -13,15 +12,10 @@ class Restricted extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return LoadingBuilder(
+    return LoadingBuilder.icon(
       future: ref.watch(userProvider),
       // Center widget has no size, so use CircularProgressIndicator directly.
       onLoad: (context) => const CircularProgressIndicator(),
-      onException:
-          (context, exception, {stackTrace}) => IconButton(
-            onPressed: () => showExceptionDialog(context: context, exception: exception ?? '', stackTrace: stackTrace),
-            icon: const Icon(Icons.warning),
-          ),
       builder: (context, user) {
         return Visibility(visible: user != null && user.privilege >= privilege, child: child);
       },
@@ -37,15 +31,10 @@ class RestrictedBuilder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return LoadingBuilder(
+    return LoadingBuilder.icon(
       future: ref.watch(userProvider),
       // Center widget has no size, so use CircularProgressIndicator directly.
       onLoad: (context) => const CircularProgressIndicator(),
-      onException:
-          (context, exception, {stackTrace}) => IconButton(
-            onPressed: () => showExceptionDialog(context: context, exception: exception ?? '', stackTrace: stackTrace),
-            icon: const Icon(Icons.warning),
-          ),
       builder: (context, user) {
         return builder(context, user != null && user.privilege >= privilege);
       },

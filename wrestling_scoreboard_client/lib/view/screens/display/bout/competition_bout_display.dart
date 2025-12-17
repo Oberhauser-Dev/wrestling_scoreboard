@@ -85,7 +85,7 @@ class CompetitionBoutDisplay extends ConsumerWidget {
                           bout: bout,
                           mat: competitionBout.displayMat,
                           actions: [
-                            ResponsiveScaffoldActionItem(
+                            DefaultResponsiveScaffoldActionItem(
                               label: localizations.info,
                               icon: const Icon(Icons.info),
                               onTap: () => CompetitionBoutOverview.navigateTo(context, competitionBout),

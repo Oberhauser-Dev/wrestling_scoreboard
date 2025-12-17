@@ -103,7 +103,7 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
           ],
           actions: [
             // pdfAction,
-            ResponsiveScaffoldActionItem(
+            DefaultResponsiveScaffoldActionItem(
               style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
               icon: const Icon(Icons.tv),
               onTap: () => CompetitionBoutDisplay.navigateTo(context, competitionBout),
