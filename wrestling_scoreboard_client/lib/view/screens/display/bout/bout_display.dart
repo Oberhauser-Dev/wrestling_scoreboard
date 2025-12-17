@@ -825,7 +825,23 @@ class _ParticipantDisplay extends StatelessWidget {
                         final technicalPointsBlue = AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue);
                         BoutRole? predictedWinnerRole;
                         if (technicalPointsBlue == technicalPointsRed) {
-                          predictedWinnerRole =
+                          // 1. Highest score / value of holds
+                          final pointActions = actions.where((e) => e.actionType == BoutActionType.points);
+                          for (int i = 5; i > 0; i--) {
+                            predictedWinnerRole = _getRoleWithMostActions(
+                              pointActions.where((element) => element.pointCount == i),
+                            );
+                            if (predictedWinnerRole != null) break;
+                          }
+
+                          // 2. Least amount of cautions
+                          predictedWinnerRole ??=
+                              _getRoleWithMostActions(
+                                actions.where((element) => element.actionType == BoutActionType.caution),
+                              )?.opponent;
+
+                          // 3. Last technical point scored
+                          predictedWinnerRole ??=
                               actions.lastWhereOrNull((e) => e.actionType == BoutActionType.points)?.role;
                         } else {
                           predictedWinnerRole = technicalPointsRed > technicalPointsBlue ? BoutRole.red : BoutRole.blue;
@@ -868,6 +884,18 @@ class _ParticipantDisplay extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  BoutRole? _getRoleWithMostActions(Iterable<BoutAction> actions) {
+    final byRole = actions.groupSetsBy((element) => element.role);
+    final countRed = byRole[BoutRole.red]?.length ?? 0;
+    final countBlue = byRole[BoutRole.blue]?.length ?? 0;
+    if (countRed > countBlue) {
+      return BoutRole.red;
+    } else if (countRed < countBlue) {
+      return BoutRole.blue;
+    }
+    return null;
   }
 
   Widget displayClassificationPoints(
