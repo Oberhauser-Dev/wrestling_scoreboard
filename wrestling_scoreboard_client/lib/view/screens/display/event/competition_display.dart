@@ -42,7 +42,7 @@ class CompetitionDisplay extends StatelessWidget {
       id: id,
       initialData: competition,
       builder: (context, competition) {
-        final infoAction = ResponsiveScaffoldActionItem(
+        final infoAction = DefaultResponsiveScaffoldActionItem(
           label: localizations.info,
           icon: const Icon(Icons.info),
           onTap: () => CompetitionOverview.navigateTo(context, competition),

@@ -64,7 +64,7 @@ class TeamMatchOverview extends ConsumerWidget {
           id: match.organization?.id,
           initialData: match.organization,
           builder: (context, organization) {
-            final pdfAction = ResponsiveScaffoldActionItem(
+            final pdfAction = DefaultResponsiveScaffoldActionItem(
               label: localizations.print,
               icon: const Icon(Icons.print),
               onTap: () => shareTeamMatchTranscript(context, ref, match),
@@ -80,7 +80,7 @@ class TeamMatchOverview extends ConsumerWidget {
                   label: localizations.match,
                   details: '${match.home.team.name} - ${match.guest.team.name}',
                   actions: [
-                    ResponsiveScaffoldActionItem(
+                    DefaultResponsiveScaffoldActionItem(
                       onTap:
                           () async => ScratchBoutOverview.navigateTo(
                             context,
@@ -113,7 +113,7 @@ class TeamMatchOverview extends ConsumerWidget {
                       },
                     ),
                     pdfAction,
-                    ResponsiveScaffoldActionItem(
+                    DefaultResponsiveScaffoldActionItem(
                       style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
                       icon: const Icon(Icons.tv),
                       onTap: () => MatchDisplay.navigateTo(context, match),

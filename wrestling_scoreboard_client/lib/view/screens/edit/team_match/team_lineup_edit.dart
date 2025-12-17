@@ -150,11 +150,11 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     }
   }
 
-  List<ResponsiveScaffoldActionItem> _buildActions(BuildContext context) {
+  List<ResponsiveScaffoldActionItemBuilder> _buildActions(BuildContext context) {
     final localizations = context.l10n;
     final navigator = Navigator.of(context);
     return [
-      ResponsiveScaffoldActionItem(
+      DefaultResponsiveScaffoldActionItem(
         style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
         icon: const Icon(Icons.save),
         label: localizations.save,

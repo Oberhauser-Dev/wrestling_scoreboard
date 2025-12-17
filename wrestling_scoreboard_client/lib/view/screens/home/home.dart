@@ -58,32 +58,29 @@ class Home extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
-    return LoadingBuilder<User?>(
-      future: ref.watch(userProvider),
-      builder: (context, user) {
-        return WindowStateScaffold(
-          appBarTitle: Text(localizations.start),
-          actions: [
-            ResponsiveScaffoldActionItem(
-              onTap: () => ScratchBoutOverview.navigateTo(context, ref),
-              icon: const Icon(Icons.rocket_launch),
-              label: localizations.launchScratchBout,
-            ),
-            ResponsiveScaffoldActionItem(
-              onTap: () {
-                if (user == null) {
-                  context.push('/${MoreScreen.route}/${SignInScreen.route}');
-                } else {
-                  context.push('/${MoreScreen.route}/${ProfileScreen.route}');
-                }
-              },
-              icon: Icon(user == null ? Icons.login : Icons.account_circle),
-              label: user == null ? localizations.auth_signIn : '${localizations.profile}: ${user.username}',
-            ),
-          ],
-          body: ResponsiveContainer(child: _HomeSearch()),
-        );
-      },
+    return WindowStateScaffold(
+      appBarTitle: Text(localizations.start),
+      actions: [
+        DefaultResponsiveScaffoldActionItem(
+          onTap: () => ScratchBoutOverview.navigateTo(context, ref),
+          icon: const Icon(Icons.rocket_launch),
+          label: localizations.launchScratchBout,
+        ),
+        ConsumerResponsiveScaffoldActionItem(
+          futureBuilder: (ref) => ref.watch(userProvider),
+          onTap: (user) {
+            if (user == null) {
+              context.push('/${MoreScreen.route}/${SignInScreen.route}');
+            } else {
+              context.push('/${MoreScreen.route}/${ProfileScreen.route}');
+            }
+          },
+          iconBuilder: (context, user) => Icon(user == null ? Icons.login : Icons.account_circle),
+          labelBuilder:
+              (user) => user == null ? localizations.auth_signIn : '${localizations.profile}: ${user.username}',
+        ),
+      ],
+      body: ResponsiveContainer(child: _HomeSearch()),
     );
   }
 }

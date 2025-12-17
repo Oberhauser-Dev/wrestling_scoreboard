@@ -44,7 +44,7 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
           manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
         );
 
-        final pdfAction = ResponsiveScaffoldActionItem(
+        final pdfAction = DefaultResponsiveScaffoldActionItem(
           label: localizations.print,
           icon: const Icon(Icons.print),
           onTap: () async {
@@ -102,7 +102,7 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
           ],
           actions: [
             pdfAction,
-            ResponsiveScaffoldActionItem(
+            DefaultResponsiveScaffoldActionItem(
               style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
               icon: const Icon(Icons.tv),
               onTap: () => TeamMatchBoutDisplay.navigateTo(context, teamMatchBout),

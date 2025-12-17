@@ -247,7 +247,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               tabs: [Tab(child: HeadingText(localizations.info)), ...tabItems.keys, boutConfigTab],
               body: TabGroup(items: [description, ...tabItems.values, boutConfigTabContent]),
               actions: [
-                ResponsiveScaffoldActionItem(
+                DefaultResponsiveScaffoldActionItem(
                   onTap: () async => ScratchBoutOverview.navigateTo(context, ref, boutConfig: competition.boutConfig),
                   icon: const Icon(Icons.rocket_launch),
                   label: localizations.launchScratchBout,
@@ -314,7 +314,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                   },
                 ),
                 // pdfAction,
-                ResponsiveScaffoldActionItem(
+                DefaultResponsiveScaffoldActionItem(
                   icon: const Icon(Icons.tv),
                   onTap: () => CompetitionDisplay.navigateTo(context, competition),
                   label: localizations.display,

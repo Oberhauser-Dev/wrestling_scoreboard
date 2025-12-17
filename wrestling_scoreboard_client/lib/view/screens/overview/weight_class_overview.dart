@@ -23,7 +23,7 @@ mixin WeightClassOverview<T extends DataObject> implements AbstractOverview<Weig
     required Widget editPage,
     required VoidCallback onDelete,
     required List<Widget> tiles,
-    List<ResponsiveScaffoldActionItem> actions = const [],
+    List<DefaultResponsiveScaffoldActionItem> actions = const [],
     required int dataId,
     WeightClass? initialData,
     Map<Tab, Widget> Function(WeightClass data)? buildRelations,

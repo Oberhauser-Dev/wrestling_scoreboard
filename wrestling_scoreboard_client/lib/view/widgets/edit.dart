@@ -11,10 +11,10 @@ class EditWidget extends StatelessWidget {
 
   const EditWidget({super.key, required this.typeLocalization, required this.onSubmit, required this.items, this.id});
 
-  List<ResponsiveScaffoldActionItem> _buildActions(BuildContext context) {
+  List<ResponsiveScaffoldActionItemBuilder> _buildActions(BuildContext context) {
     final localizations = context.l10n;
     return [
-      ResponsiveScaffoldActionItem(
+      DefaultResponsiveScaffoldActionItem(
         icon: const Icon(Icons.save),
         label: localizations.save,
         onTap: () => catchAsync(context, onSubmit),
@@ -37,7 +37,7 @@ class EditWidget extends StatelessWidget {
 class CustomizableEditWidget extends StatelessWidget {
   final String typeLocalization;
   final int? id;
-  final List<ResponsiveScaffoldActionItem> Function(BuildContext context) buildActions;
+  final List<ResponsiveScaffoldActionItemBuilder> Function(BuildContext context) buildActions;
   final List<Widget> items;
 
   const CustomizableEditWidget({

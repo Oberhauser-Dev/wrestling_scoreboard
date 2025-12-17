@@ -91,7 +91,7 @@ class TeamMatchBoutDisplay extends ConsumerWidget {
                                       boutIndex: teamMatchBoutIndex,
                                       bout: bout,
                                       actions: [
-                                        ResponsiveScaffoldActionItem(
+                                        DefaultResponsiveScaffoldActionItem(
                                           label: localizations.info,
                                           icon: const Icon(Icons.info),
                                           onTap: () => TeamMatchBoutOverview.navigateTo(context, teamMatchBout),
