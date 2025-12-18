@@ -402,11 +402,20 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
                   isMandatory: false,
                   label: localizations.weight,
                   localizations: localizations,
+                  suffixIcon:
+                      (_curWeight ?? 0) > widget.weightClass.weight
+                          ? Tooltip(
+                            message: localizations.warningOverweight,
+                            child: Icon(Icons.warning, color: Colors.yellow),
+                          )
+                          : null,
                 ),
                 inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
                 onChanged: (String? value) {
                   final newValue = (value == null || value.isEmpty) ? null : double.parse(value);
-                  _curWeight = newValue;
+                  setState(() {
+                    _curWeight = newValue;
+                  });
                 },
               ),
             ),

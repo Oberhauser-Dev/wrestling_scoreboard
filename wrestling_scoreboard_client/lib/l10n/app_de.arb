@@ -351,6 +351,7 @@
   "periodCount": "Anzahl der Kampfabschnitte",
   "minimum": "Minimum",
   "maximum": "Maximum",
+  "warningOverweight": "Übergewicht",
   "warningCautionNoPoints": "Auf eine Verwarnung müssen ein oder zwei Punkte folgen.",
   "warningFreestyleVerbalPrecedePassivity": "Eine Passivität (P) mit Aktivitätszeit sollte nur nach einer Verbalen Ermahnung (V) erfolgen. Willst du trotzdem fortfahren?",
 

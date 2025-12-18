@@ -947,6 +947,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get maximum => 'Maximum';
 
   @override
+  String get warningOverweight => 'Overweight';
+
+  @override
   String get warningCautionNoPoints => 'A caution must be followed by one or two points.';
 
   @override
