@@ -356,6 +356,7 @@ class CustomInputDecoration extends InputDecoration {
     required AppLocalizations localizations,
     super.errorText,
     super.icon,
+    super.suffixIcon,
   }) : super(
          border: const UnderlineInputBorder(),
          labelText:

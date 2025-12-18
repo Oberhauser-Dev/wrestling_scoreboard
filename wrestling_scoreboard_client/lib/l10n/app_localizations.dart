@@ -1916,6 +1916,12 @@ abstract class AppLocalizations {
   /// **'Maximum'**
   String get maximum;
 
+  /// No description provided for @warningOverweight.
+  ///
+  /// In en, this message translates to:
+  /// **'Overweight'**
+  String get warningOverweight;
+
   /// No description provided for @warningCautionNoPoints.
   ///
   /// In en, this message translates to:
