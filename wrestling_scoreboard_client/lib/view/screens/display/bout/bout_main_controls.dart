@@ -45,7 +45,6 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
           child:
               widget.boutState.widget.bouts.first.id == widget.boutState.bout.id
                   ? IconButton(
-                    color: Theme.of(context).disabledColor,
                     icon: const Icon(Icons.close),
                     onPressed: () {
                       widget.callback(const BoutScreenActionIntent.quit());
@@ -54,7 +53,6 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                   : DelayedTooltip(
                     message: '${localizations.previous} (←)',
                     child: IconButton(
-                      color: Theme.of(context).disabledColor,
                       icon: const Icon(Icons.arrow_back),
                       onPressed: () {
                         widget.callback(const BoutScreenActionIntent.previousBout());
@@ -107,7 +105,6 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
           child:
               widget.boutState.widget.bouts.last.id == widget.boutState.bout.id
                   ? IconButton(
-                    color: Theme.of(context).disabledColor,
                     icon: const Icon(Icons.close),
                     onPressed: () {
                       widget.callback(const BoutScreenActionIntent.quit());
@@ -116,7 +113,6 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
                   : DelayedTooltip(
                     message: '${localizations.next} (→)',
                     child: IconButton(
-                      color: Theme.of(context).disabledColor,
                       icon: const Icon(Icons.arrow_forward),
                       onPressed: () {
                         widget.callback(const BoutScreenActionIntent.nextBout());
