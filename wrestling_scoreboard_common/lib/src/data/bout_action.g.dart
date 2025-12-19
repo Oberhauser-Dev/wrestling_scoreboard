@@ -30,6 +30,7 @@ const _$BoutActionTypeEnumMap = {
   BoutActionType.verbal: 'verbal',
   BoutActionType.caution: 'caution',
   BoutActionType.dismissal: 'dismissal',
+  BoutActionType.legFoul: 'legFoul',
 };
 
 const _$BoutRoleEnumMap = {BoutRole.red: 'red', BoutRole.blue: 'blue'};

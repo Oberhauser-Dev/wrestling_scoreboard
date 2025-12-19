@@ -887,6 +887,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get passivityAbbr => 'P';
 
   @override
+  String get legFoul => 'Beinarbeit Verteidiger';
+
+  @override
+  String get legFoulAbbr => 'L';
+
+  @override
   String get caution => 'Verwarnung';
 
   @override

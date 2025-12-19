@@ -1790,6 +1790,18 @@ abstract class AppLocalizations {
   /// **'P'**
   String get passivityAbbr;
 
+  /// No description provided for @legFoul.
+  ///
+  /// In en, this message translates to:
+  /// **'Leg Foul Defender'**
+  String get legFoul;
+
+  /// No description provided for @legFoulAbbr.
+  ///
+  /// In en, this message translates to:
+  /// **'L'**
+  String get legFoulAbbr;
+
   /// No description provided for @caution.
   ///
   /// In en, this message translates to:
@@ -1817,7 +1829,7 @@ abstract class AppLocalizations {
   /// No description provided for @activityTime.
   ///
   /// In en, this message translates to:
-  /// **'activity time'**
+  /// **'Activity Time'**
   String get activityTime;
 
   /// No description provided for @activityTimeAbbr.
@@ -1829,7 +1841,7 @@ abstract class AppLocalizations {
   /// No description provided for @injuryTime.
   ///
   /// In en, this message translates to:
-  /// **'injury time'**
+  /// **'Injury Time'**
   String get injuryTime;
 
   /// No description provided for @injuryTimeShort.

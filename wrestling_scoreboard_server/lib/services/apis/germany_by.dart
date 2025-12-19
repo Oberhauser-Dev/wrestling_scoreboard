@@ -767,7 +767,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               case 'D':
                 actionType = BoutActionType.dismissal;
               case 'L': // Leg Foul
-                actionType = BoutActionType.caution;
+                actionType = BoutActionType.legFoul;
               case 'C':
               // TODO: unknown bout action
               // https://www.brv-ringen.de/Api/dev/cs/?op=getCompetition&sid=2023&cid=006108b
