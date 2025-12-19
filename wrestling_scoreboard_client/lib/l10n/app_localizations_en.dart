@@ -884,6 +884,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passivityAbbr => 'P';
 
   @override
+  String get legFoul => 'Leg Foul Defender';
+
+  @override
+  String get legFoulAbbr => 'L';
+
+  @override
   String get caution => 'Caution';
 
   @override
@@ -896,13 +902,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dismissalAbbr => 'D';
 
   @override
-  String get activityTime => 'activity time';
+  String get activityTime => 'Activity Time';
 
   @override
   String get activityTimeAbbr => 'AT';
 
   @override
-  String get injuryTime => 'injury time';
+  String get injuryTime => 'Injury Time';
 
   @override
   String get injuryTimeShort => 'IT';

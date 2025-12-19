@@ -70,6 +70,16 @@ class BoutActionControls extends StatelessWidget {
         color,
         tooltipMessage: localizations.passivity,
       ),
+      if (wrestlingStyle == WrestlingStyle.greco)
+        _ActionControl(
+          localizations.legFoulAbbr,
+          prepareCallback(
+            RoleBoutActionIntent.legFoul(role: BoutRole.red),
+            RoleBoutActionIntent.legFoul(role: BoutRole.blue),
+          ),
+          color,
+          tooltipMessage: localizations.legFoul,
+        ),
       _ActionControl(
         localizations.cautionAbbr,
         prepareCallback(RoleBoutActionIntent.redCaution(), RoleBoutActionIntent.blueCaution()),

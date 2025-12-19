@@ -59,6 +59,8 @@ abstract class BoutAction with _$BoutAction implements DataObject {
         return 'O';
       case BoutActionType.dismissal:
         return 'D';
+      case BoutActionType.legFoul:
+        return 'L';
     }
   }
 

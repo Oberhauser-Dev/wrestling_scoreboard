@@ -330,6 +330,8 @@
   "verbalWarningAbbr": "V",
   "passivity": "Passivität",
   "passivityAbbr": "P",
+  "legFoul": "Beinarbeit Verteidiger",
+  "legFoulAbbr": "L",
   "caution": "Verwarnung",
   "cautionAbbr": "O",
   "dismissal": "Ausschluss",

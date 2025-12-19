@@ -55,7 +55,8 @@ CREATE TYPE public.bout_action_type AS ENUM (
     'passivity',
     'verbal',
     'caution',
-    'dismissal'
+    'dismissal',
+    'legFoul'
 );
 
 
@@ -2071,7 +2072,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.9-pre.1	0.3.9
+0.3.9-pre.2	0.3.9
 \.
 
 
