@@ -36,7 +36,13 @@ class LoadingBuilder<T> extends ConsumerWidget {
   }) => LoadingBuilder(
     onException:
         (context, exception, {stackTrace}) => IconButton(
-          onPressed: () => showExceptionDialog(context: context, exception: exception ?? '', stackTrace: stackTrace),
+          onPressed:
+              () => showExceptionDialog(
+                context: context,
+                exception: exception ?? '',
+                stackTrace: stackTrace,
+                onRetry: onRetry,
+              ),
           icon: const Icon(Icons.warning),
         ),
     future: future,

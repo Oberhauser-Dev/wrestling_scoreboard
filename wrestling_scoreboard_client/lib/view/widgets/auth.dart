@@ -19,6 +19,7 @@ class Restricted extends ConsumerWidget {
       builder: (context, user) {
         return Visibility(visible: user != null && user.privilege >= privilege, child: child);
       },
+      onRetry: () => ref.refresh(userProvider),
     );
   }
 }
@@ -38,6 +39,7 @@ class RestrictedBuilder extends ConsumerWidget {
       builder: (context, user) {
         return builder(context, user != null && user.privilege >= privilege);
       },
+      onRetry: () => ref.refresh(userProvider),
     );
   }
 }
