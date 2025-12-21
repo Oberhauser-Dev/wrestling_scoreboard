@@ -75,6 +75,179 @@ class TeamMatchOverview extends ConsumerWidget {
               organization: organization,
               importType: OrganizationImportType.teamMatch,
               builder: (context, importAction) {
+                final items = [
+                  InfoWidget(
+                    obj: match,
+                    editPage: TeamMatchEdit(teamMatch: match, initialOrganization: organization),
+                    onDelete: () async => (await ref.read(dataManagerProvider)).deleteSingle<TeamMatch>(match),
+                    classLocale: localizations.match,
+                    children: [
+                      ContentItem.icon(
+                        title: match.no ?? '-',
+                        subtitle: localizations.matchNumber,
+                        iconData: Icons.tag,
+                      ),
+                      ContentItem.icon(
+                        title: match.location ?? 'no location',
+                        subtitle: localizations.place,
+                        iconData: Icons.place,
+                      ),
+                      ContentItem.icon(
+                        title: match.date.toDateTimeString(context),
+                        subtitle: localizations.startDate,
+                        iconData: Icons.event,
+                      ),
+                      ContentItem.icon(
+                        title: match.endDate?.toDateTimeString(context) ?? '-',
+                        subtitle: localizations.endDate,
+                        iconData: Icons.event,
+                      ),
+                      SingleConsumer<TeamLineup>(
+                        id: match.home.id!,
+                        initialData: match.home,
+                        builder: (context, homeLineup) {
+                          return ContentItem.icon(
+                            title: homeLineup.team.name,
+                            subtitle: '${localizations.team} ${localizations.red}',
+                            iconData: Icons.group,
+                            onTap: () => TeamOverview.navigateTo(context, homeLineup.team),
+                          );
+                        },
+                      ),
+                      SingleConsumer<TeamLineup>(
+                        id: match.guest.id!,
+                        initialData: match.guest,
+                        builder: (context, guestLineup) {
+                          return ContentItem.icon(
+                            title: guestLineup.team.name,
+                            subtitle: '${localizations.team} ${localizations.blue}',
+                            iconData: Icons.group,
+                            onTap: () => TeamOverview.navigateTo(context, guestLineup.team),
+                          );
+                        },
+                      ),
+                      ContentItem.icon(
+                        title: match.visitorsCount?.toString() ?? '-',
+                        subtitle: localizations.visitors,
+                        iconData: Icons.confirmation_number,
+                      ),
+                      ContentItem.icon(
+                        title: match.comment ?? '-',
+                        subtitle: localizations.comment,
+                        iconData: Icons.comment,
+                      ),
+                      ContentItem.icon(
+                        title: match.league?.fullname ?? '-',
+                        subtitle: localizations.league,
+                        iconData: Icons.emoji_events,
+                        onTap: match.league == null ? null : () => LeagueOverview.navigateTo(context, match.league!),
+                      ),
+                      ContentItem.icon(
+                        title:
+                            match.seasonPartition?.asSeasonPartition(
+                              context,
+                              match.league?.division.seasonPartitions,
+                            ) ??
+                            '-',
+                        subtitle: localizations.seasonPartition,
+                        iconData: Icons.sunny_snowing,
+                      ),
+                    ],
+                  ),
+                  if (match.league != null)
+                    LoadingBuilder<User?>(
+                      future: ref.watch(userProvider),
+                      builder: (context, user) {
+                        final items =
+                            [match.home, match.guest].map((lineup) {
+                              return SingleConsumer<TeamLineup>(
+                                id: lineup.id!,
+                                initialData: lineup,
+                                builder: (context, lineup) {
+                                  return ManyConsumer<Club, Team>(
+                                    filterObject: lineup.team,
+                                    builder: (context, clubs) {
+                                      return ContentItem(
+                                        title: lineup.team.name,
+                                        // Do not wrap the loading animation in the icon, which leads to stuttering.
+                                        icon:
+                                            clubs.firstOrNull?.imageUri == null
+                                                ? Icon(Icons.view_list)
+                                                : CircularImage(imageUri: clubs.first.imageUri!),
+                                        onTap:
+                                            (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
+                                                ? null
+                                                : () async =>
+                                                    handleSelectedLineup(context, ref, lineup, match, navigator),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            }).toList();
+                        return GroupedList(
+                          header: HeadingItem(
+                            trailing: Restricted(
+                              privilege: UserPrivilege.write,
+                              child: AsyncElevatedButton(
+                                icon: const Icon(Icons.autorenew),
+                                label: Text(localizations.pairBouts),
+                                onTap: () async {
+                                  final hasConfirmed = await showOkCancelDialog(
+                                    context: context,
+                                    title: Text(localizations.pairBouts),
+                                    child: Text(localizations.warningBoutGenerate),
+                                  );
+                                  if (hasConfirmed && context.mounted) {
+                                    await catchAsync(context, () async {
+                                      final dataManager = await ref.read(dataManagerProvider);
+                                      await dataManager.generateBouts<TeamMatch>(match, false);
+                                      if (context.mounted) {
+                                        await showOkDialog(
+                                          context: context,
+                                          child: Text(localizations.actionSuccessful),
+                                        );
+                                      }
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          itemCount: items.length,
+                          itemBuilder: (context, index) => items[index],
+                        );
+                      },
+                    ),
+                  TeamMatchBoutList(filterObject: match),
+                  FilterableManyConsumer<TeamMatchPerson, TeamMatch>.addOrCreate(
+                    context: context,
+                    addPageBuilder:
+                        (context) =>
+                            TeamMatchPersonEdit(initialTeamMatch: match, initialOrganization: match.organization!),
+                    createPageBuilder:
+                        (context) => PersonEdit(
+                          initialOrganization: match.organization!,
+                          onCreated: (person) async {
+                            // TODO: ability to change role inside another implementation of PersonEdit.
+                            await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
+                              TeamMatchPerson(teamMatch: match, person: person, role: PersonRole.steward),
+                            );
+                          },
+                        ),
+                    filterObject: match,
+                    itemBuilder: (context, teamMatchPerson) {
+                      return ContentItem(
+                        title: '${teamMatchPerson.role.localize(context)} | ${teamMatchPerson.person.fullName}',
+                        icon:
+                            teamMatchPerson.person.imageUri == null
+                                ? Icon(teamMatchPerson.role.icon)
+                                : CircularImage(imageUri: teamMatchPerson.person.imageUri!),
+                        onTap: () async => TeamMatchPersonOverview.navigateTo(context, teamMatchPerson),
+                      );
+                    },
+                  ),
+                ];
                 return FavoriteScaffold<TeamMatch>(
                   dataObject: match,
                   label: localizations.match,
@@ -126,194 +299,7 @@ class TeamMatchOverview extends ConsumerWidget {
                     Tab(child: HeadingText(localizations.bouts)),
                     Tab(child: HeadingText(localizations.officials)),
                   ],
-                  body: SingleConsumer<TeamLineup>(
-                    id: match.home.id!,
-                    initialData: match.home,
-                    builder: (context, homeLineup) {
-                      return SingleConsumer<TeamLineup>(
-                        id: match.guest.id!,
-                        initialData: match.guest,
-                        builder: (context, guestLineup) {
-                          final items = [
-                            InfoWidget(
-                              obj: match,
-                              editPage: TeamMatchEdit(teamMatch: match, initialOrganization: organization),
-                              onDelete:
-                                  () async => (await ref.read(dataManagerProvider)).deleteSingle<TeamMatch>(match),
-                              classLocale: localizations.match,
-                              children: [
-                                ContentItem.icon(
-                                  title: match.no ?? '-',
-                                  subtitle: localizations.matchNumber,
-                                  iconData: Icons.tag,
-                                ),
-                                ContentItem.icon(
-                                  title: match.location ?? 'no location',
-                                  subtitle: localizations.place,
-                                  iconData: Icons.place,
-                                ),
-                                ContentItem.icon(
-                                  title: match.date.toDateTimeString(context),
-                                  subtitle: localizations.startDate,
-                                  iconData: Icons.event,
-                                ),
-                                ContentItem.icon(
-                                  title: match.endDate?.toDateTimeString(context) ?? '-',
-                                  subtitle: localizations.endDate,
-                                  iconData: Icons.event,
-                                ),
-                                ContentItem.icon(
-                                  title: homeLineup.team.name,
-                                  subtitle: '${localizations.team} ${localizations.red}',
-                                  iconData: Icons.group,
-                                  onTap: () => TeamOverview.navigateTo(context, homeLineup.team),
-                                ),
-                                ContentItem.icon(
-                                  title: guestLineup.team.name,
-                                  subtitle: '${localizations.team} ${localizations.blue}',
-                                  iconData: Icons.group,
-                                  onTap: () => TeamOverview.navigateTo(context, guestLineup.team),
-                                ),
-                                ContentItem.icon(
-                                  title: match.visitorsCount?.toString() ?? '-',
-                                  subtitle: localizations.visitors,
-                                  iconData: Icons.confirmation_number,
-                                ),
-                                ContentItem.icon(
-                                  title: match.comment ?? '-',
-                                  subtitle: localizations.comment,
-                                  iconData: Icons.comment,
-                                ),
-                                ContentItem.icon(
-                                  title: match.league?.fullname ?? '-',
-                                  subtitle: localizations.league,
-                                  iconData: Icons.emoji_events,
-                                  onTap:
-                                      match.league == null
-                                          ? null
-                                          : () => LeagueOverview.navigateTo(context, match.league!),
-                                ),
-                                ContentItem.icon(
-                                  title:
-                                      match.seasonPartition?.asSeasonPartition(
-                                        context,
-                                        match.league?.division.seasonPartitions,
-                                      ) ??
-                                      '-',
-                                  subtitle: localizations.seasonPartition,
-                                  iconData: Icons.sunny_snowing,
-                                ),
-                              ],
-                            ),
-                            if (match.league != null)
-                              LoadingBuilder<User?>(
-                                future: ref.watch(userProvider),
-                                builder: (context, user) {
-                                  final items = [
-                                    ContentItem(
-                                      title: homeLineup.team.name,
-                                      icon: ManyConsumer<Club, Team>(
-                                        filterObject: homeLineup.team,
-                                        builder: (context, clubs) {
-                                          return clubs.firstOrNull?.imageUri == null
-                                              ? Icon(Icons.view_list)
-                                              : CircularImage(imageUri: clubs.first.imageUri!);
-                                        },
-                                      ),
-                                      onTap:
-                                          (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
-                                              ? null
-                                              : () async =>
-                                                  handleSelectedLineup(context, ref, homeLineup, match, navigator),
-                                    ),
-                                    ContentItem(
-                                      title: guestLineup.team.name,
-                                      icon: ManyConsumer<Club, Team>(
-                                        filterObject: guestLineup.team,
-                                        builder: (context, clubs) {
-                                          return clubs.firstOrNull?.imageUri == null
-                                              ? Icon(Icons.view_list)
-                                              : CircularImage(imageUri: clubs.first.imageUri!);
-                                        },
-                                      ),
-                                      onTap:
-                                          (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
-                                              ? null
-                                              : () async =>
-                                                  handleSelectedLineup(context, ref, guestLineup, match, navigator),
-                                    ),
-                                  ];
-                                  return GroupedList(
-                                    header: HeadingItem(
-                                      trailing: Restricted(
-                                        privilege: UserPrivilege.write,
-                                        child: AsyncElevatedButton(
-                                          icon: const Icon(Icons.autorenew),
-                                          label: Text(localizations.pairBouts),
-                                          onTap: () async {
-                                            final hasConfirmed = await showOkCancelDialog(
-                                              context: context,
-                                              title: Text(localizations.pairBouts),
-                                              child: Text(localizations.warningBoutGenerate),
-                                            );
-                                            if (hasConfirmed && context.mounted) {
-                                              await catchAsync(context, () async {
-                                                final dataManager = await ref.read(dataManagerProvider);
-                                                await dataManager.generateBouts<TeamMatch>(match, false);
-                                                if (context.mounted) {
-                                                  await showOkDialog(
-                                                    context: context,
-                                                    child: Text(localizations.actionSuccessful),
-                                                  );
-                                                }
-                                              });
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    itemCount: items.length,
-                                    itemBuilder: (context, index) => items[index],
-                                  );
-                                },
-                              ),
-                            TeamMatchBoutList(filterObject: match),
-                            FilterableManyConsumer<TeamMatchPerson, TeamMatch>.addOrCreate(
-                              context: context,
-                              addPageBuilder:
-                                  (context) => TeamMatchPersonEdit(
-                                    initialTeamMatch: match,
-                                    initialOrganization: match.organization!,
-                                  ),
-                              createPageBuilder:
-                                  (context) => PersonEdit(
-                                    initialOrganization: match.organization!,
-                                    onCreated: (person) async {
-                                      // TODO: ability to change role inside another implementation of PersonEdit.
-                                      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
-                                        TeamMatchPerson(teamMatch: match, person: person, role: PersonRole.steward),
-                                      );
-                                    },
-                                  ),
-                              filterObject: match,
-                              itemBuilder: (context, teamMatchPerson) {
-                                return ContentItem(
-                                  title:
-                                      '${teamMatchPerson.role.localize(context)} | ${teamMatchPerson.person.fullName}',
-                                  icon:
-                                      teamMatchPerson.person.imageUri == null
-                                          ? Icon(teamMatchPerson.role.icon)
-                                          : CircularImage(imageUri: teamMatchPerson.person.imageUri!),
-                                  onTap: () async => TeamMatchPersonOverview.navigateTo(context, teamMatchPerson),
-                                );
-                              },
-                            ),
-                          ];
-                          return TabGroup(items: items);
-                        },
-                      );
-                    },
-                  ),
+                  body: TabGroup(items: items),
                 );
               },
             );
