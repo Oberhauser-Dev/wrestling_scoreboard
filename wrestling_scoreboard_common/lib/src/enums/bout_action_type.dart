@@ -4,5 +4,7 @@ enum BoutActionType {
   verbal, // Verbal admonition 'V'
   caution, // yellow card 'O'
   dismissal, // red card 'D'
-  legFoul, // 'L'
+  legFoul; // 'L'
+
+  bool get isCaution => this == caution || this == legFoul;
 }

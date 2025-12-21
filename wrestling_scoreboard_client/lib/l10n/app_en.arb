@@ -359,6 +359,8 @@
   "warningOverweight": "Overweight",
   "warningCautionNoPoints": "A caution must be followed by one or two points.",
   "warningFreestyleVerbalPrecedePassivity": "A passivity (P) with activity period should only occur after a verbal admonition (V). Do you want to continue anyways?",
+  "warningDisqualificationOnLegFoul": "The defensive wrestler commited the second leg foul (L). Should the wrestler be disqualified?",
+  "warningDisqualificationOnCautions": "The wrestler has received their third caution (O). Should the wrestler be disqualified?",
 
   "official": "Official",
   "officials": "Officials",

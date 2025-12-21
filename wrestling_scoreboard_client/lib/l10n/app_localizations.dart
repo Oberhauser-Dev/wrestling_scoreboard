@@ -1946,6 +1946,18 @@ abstract class AppLocalizations {
   /// **'A passivity (P) with activity period should only occur after a verbal admonition (V). Do you want to continue anyways?'**
   String get warningFreestyleVerbalPrecedePassivity;
 
+  /// No description provided for @warningDisqualificationOnLegFoul.
+  ///
+  /// In en, this message translates to:
+  /// **'The defensive wrestler commited the second leg foul (L). Should the wrestler be disqualified?'**
+  String get warningDisqualificationOnLegFoul;
+
+  /// No description provided for @warningDisqualificationOnCautions.
+  ///
+  /// In en, this message translates to:
+  /// **'The wrestler has received their third caution (O). Should the wrestler be disqualified?'**
+  String get warningDisqualificationOnCautions;
+
   /// No description provided for @official.
   ///
   /// In en, this message translates to:
