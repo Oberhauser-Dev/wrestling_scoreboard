@@ -119,12 +119,6 @@ class BoutActionControls extends StatelessWidget {
           color,
           tooltipMessage: localizations.bleedingInjuryDuration,
         ),
-      _ActionControl(
-        '⎌',
-        prepareCallback(const RoleScreenActionIntent.redUndo(), const RoleScreenActionIntent.blueUndo()),
-        color,
-        tooltipMessage: '${localizations.deleteLatestAction} (⌫)',
-      ),
     ];
     if (isHorizontal) {
       return Wrap(
