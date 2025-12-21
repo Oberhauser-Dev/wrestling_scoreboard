@@ -211,6 +211,8 @@ void main() {
           // Following entities should get deleted by its providing entity:
           // e.g. Bout is deleted by TeamMatchBout, or CompetitionBout.
           if (dataType == Bout) continue;
+          if (dataType == BoutAction) continue;
+          if (dataType == AthleteBoutState) continue;
 
           final objs = mockedData.getByType(dataType);
           if (objs.isEmpty) throw 'No mocked datatypes provided for $dataType';
