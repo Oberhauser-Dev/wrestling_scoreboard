@@ -959,6 +959,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get warningOverweight => 'Übergewicht';
 
   @override
+  String get warningVictoryOnForfeit =>
+      'Ein Ringer ist nicht angetreten oder hat das Gewicht für diese Gewichtsklasse nicht eingehalten. Soll der Kampf entsprechend gewertet werden?';
+
+  @override
   String get warningCautionNoPoints => 'Auf eine Verwarnung müssen ein oder zwei Punkte folgen.';
 
   @override

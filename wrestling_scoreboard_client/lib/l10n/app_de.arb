@@ -354,6 +354,7 @@
   "minimum": "Minimum",
   "maximum": "Maximum",
   "warningOverweight": "Übergewicht",
+  "warningVictoryOnForfeit": "Ein Ringer ist nicht angetreten oder hat das Gewicht für diese Gewichtsklasse nicht eingehalten. Soll der Kampf entsprechend gewertet werden?",
   "warningCautionNoPoints": "Auf eine Verwarnung müssen ein oder zwei Punkte folgen.",
   "warningFreestyleVerbalPrecedePassivity": "Eine Passivität (P) mit Aktivitätszeit sollte nur nach einer Verbalen Ermahnung (V) erfolgen. Willst du trotzdem fortfahren?",
   "warningDisqualificationOnLegFoul": "Der angreifende Ringer hat die zweite Beinarbeit (L) begangen. Soll der Ringer disqualifiziert werden?",

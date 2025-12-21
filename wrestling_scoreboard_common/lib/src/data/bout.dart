@@ -68,7 +68,7 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
 
   Bout updateBoutResult({
     required BoutResult? result,
-    required BoutRole winnerRole,
+    required BoutRole? winnerRole,
     required List<BoutAction> actions,
     required List<BoutResultRule> rules,
     required WrestlingStyle style,

@@ -315,6 +315,29 @@ class BoutState extends ConsumerState<BoutScreen> {
         fireImmediately: true,
       );
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final useSmartBoutActions = await ref.readAsync(smartBoutActionsProvider);
+      if (mounted && useSmartBoutActions && bout.result == null && weightClass != null) {
+        final isRedForfeit = bout.r == null || (widget.weightR != null && weightClass!.weight < widget.weightR!);
+        final isBlueForfeit = bout.b == null || (widget.weightB != null && weightClass!.weight < widget.weightB!);
+        if (isRedForfeit || isBlueForfeit) {
+          final result = await showOkCancelDialog(context: context, child: Text(context.l10n.warningVictoryOnForfeit));
+
+          if (result) {
+            final bothForfeit = isRedForfeit && isBlueForfeit;
+            await (await ref.read(dataManagerProvider)).updateBoutResult(
+              bout: bout,
+              result: bothForfeit ? BoutResult.bothVfo : BoutResult.vfo,
+              winnerRole: bothForfeit ? null : (isRedForfeit ? BoutRole.blue : BoutRole.red),
+              style: weightClass?.style,
+              actions: await _getActions(),
+              rules: boutRules,
+            );
+          }
+        }
+      }
+    });
   }
 
   @override
@@ -537,7 +560,7 @@ class BoutState extends ConsumerState<BoutScreen> {
               bout = bout.copyWith(isRunning: false);
               await (await ref.read(dataManagerProvider)).updateBoutResult(
                 bout: bout,
-                result: BoutResult.dsq,
+                result: BoutResult.vca,
                 winnerRole: intent.role.opponent,
                 style: weightClass?.style,
                 actions: await _getActions(),
@@ -565,7 +588,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                 bout = bout.copyWith(isRunning: false);
                 await (await ref.read(dataManagerProvider)).updateBoutResult(
                   bout: bout,
-                  result: BoutResult.dsq,
+                  result: BoutResult.vca,
                   winnerRole: intent.role.opponent,
                   style: weightClass?.style,
                   actions: await _getActions(),
