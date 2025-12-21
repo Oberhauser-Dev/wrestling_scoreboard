@@ -27,18 +27,18 @@ class NullableSingleConsumer<T extends DataObject> extends ConsumerWidget {
     if (id == null && initialData?.id == null) {
       return builder(context, initialData);
     }
-    final stream = ref.watch(
-      singleDataStreamProvider<T>(SingleProviderData<T>(initialData: initialData, id: id ?? initialData!.id!)).future,
+    final singleDataProvider = singleDataStreamProvider<T>(
+      SingleProviderData<T>(initialData: initialData, id: id ?? initialData!.id!),
     );
     return LoadingBuilder<T>(
       builder: builder,
-      future: stream,
+      future: ref.watch(singleDataProvider.future),
       initialData: null,
       // Handle initial data via the stream
-      onRetry:
-          () async => (await ref.read(
-            webSocketManagerProvider,
-          )).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
+      onRetry: () async {
+        (await ref.read(webSocketManagerProvider)).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
+        ref.invalidate(singleDataProvider);
+      },
       onException: onException,
     );
   }
@@ -80,16 +80,17 @@ class ManyConsumer<T extends DataObject, S extends DataObject?> extends Consumer
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stream = ref.watch(manyDataStreamProvider<T, S>(ManyProviderData<T, S>(filterObject: filterObject)).future);
+    final manyStreamProvider = manyDataStreamProvider<T, S>(ManyProviderData<T, S>(filterObject: filterObject));
+    final stream = ref.watch(manyStreamProvider.future);
     return LoadingBuilder<List<T>>(
       builder: builder,
       future: stream,
       initialData: null,
       // Handle initial data via the stream
-      onRetry:
-          () async => (await ref.read(
-            webSocketManagerProvider,
-          )).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting),
+      onRetry: () async {
+        (await ref.read(webSocketManagerProvider)).onWebSocketConnection.sink.add(WebSocketConnectionState.connecting);
+        ref.invalidate(manyStreamProvider);
+      },
       onException: onException,
     );
   }
