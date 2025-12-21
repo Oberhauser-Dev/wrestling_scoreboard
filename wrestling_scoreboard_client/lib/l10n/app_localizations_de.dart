@@ -966,6 +966,14 @@ class AppLocalizationsDe extends AppLocalizations {
       'Eine Passivität (P) mit Aktivitätszeit sollte nur nach einer Verbalen Ermahnung (V) erfolgen. Willst du trotzdem fortfahren?';
 
   @override
+  String get warningDisqualificationOnLegFoul =>
+      'Der angreifende Ringer hat die zweite Beinarbeit (L) begangen. Soll der Ringer disqualifiziert werden?';
+
+  @override
+  String get warningDisqualificationOnCautions =>
+      'Der Ringer hat die dritte Verwarnung (O) erhalten. Soll der Ringer disqualifiziert werden?';
+
+  @override
   String get official => 'Offizielle(r)';
 
   @override

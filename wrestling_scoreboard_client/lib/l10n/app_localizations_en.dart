@@ -963,6 +963,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'A passivity (P) with activity period should only occur after a verbal admonition (V). Do you want to continue anyways?';
 
   @override
+  String get warningDisqualificationOnLegFoul =>
+      'The defensive wrestler commited the second leg foul (L). Should the wrestler be disqualified?';
+
+  @override
+  String get warningDisqualificationOnCautions =>
+      'The wrestler has received their third caution (O). Should the wrestler be disqualified?';
+
+  @override
   String get official => 'Official';
 
   @override

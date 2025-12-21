@@ -381,6 +381,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     Future<void> Function(BoutAction action) deleteAction,
     Future<void> Function(BoutAction action) createOrUpdateAction,
   ) async {
+    final localizations = context.l10n;
     final useSmartBoutActions = await ref.readAsync(smartBoutActionsProvider);
     List<BoutAction>? prevActions;
     if (useSmartBoutActions) {
@@ -391,7 +392,6 @@ class BoutState extends ConsumerState<BoutScreen> {
         if (prevActions.last.actionType == BoutActionType.caution) {
           if (intent is! RolePointBoutActionIntent || intent.points > 2 || intent.role == prevActions.last.role) {
             // A caution must follow one or two points.
-            final localizations = context.l10n;
             await showOkDialog(context: context, child: Text(localizations.warningCautionNoPoints));
             return;
           }
@@ -486,37 +486,94 @@ class BoutState extends ConsumerState<BoutScreen> {
     }
 
     if (useSmartBoutActions && mounted) {
-      final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
-      if (intent is RoleBoutActionIntent && intent.boutActionType == BoutActionType.passivity) {
-        // Smart actions, after the actual action.
-        final wrestlingStyle = weightClass?.style ?? WrestlingStyle.free;
+      assert(prevActions != null, 'prevActions should already be initialized');
 
-        if (wrestlingStyle == WrestlingStyle.free) {
-          // In free style, stop the timer and start activity time on passivity (P)
-          mainStopwatch.stopwatch.stop();
-          // Dispose previous activity times, so it is not toggled off
-          psm.activityStopwatch?.dispose();
-          psm.activityStopwatchNotifier.value = null;
-          await handleIntent(RoleScreenActionIntent(role: intent.role, type: RoleScreenActionType.activityTime));
-        } else {
-          assert(prevActions != null, 'prevActions should already be initialized');
-          Future<bool> includesZeroOrOnePassivity() async {
+      final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
+      if (intent is RoleBoutActionIntent) {
+        if (intent is RolePointBoutActionIntent) {
+          // End activity stop watch, if a point is made.
+          if (psm.activityStopwatch != null) {
+            psm.activityStopwatch?.dispose();
+            psm.activityStopwatchNotifier.value = null;
+          }
+        } else if (intent.boutActionType == BoutActionType.passivity) {
+          // Smart actions, after the actual action.
+          final wrestlingStyle = weightClass?.style ?? WrestlingStyle.free;
+
+          if (wrestlingStyle == WrestlingStyle.free) {
+            // In free style, stop the timer and start activity time on passivity (P)
+            mainStopwatch.stopwatch.stop();
+            // Dispose previous activity times, so it is not toggled off
+            psm.activityStopwatch?.dispose();
+            psm.activityStopwatchNotifier.value = null;
+            await handleIntent(RoleScreenActionIntent(role: intent.role, type: RoleScreenActionType.activityTime));
+          } else {
+            // In greco, stop the timer (P)
+            // Give one point to the opponent at the first and the second (P) (no matter which wrestler).
+            mainStopwatch.stopwatch.stop();
+
             // At this moment, the new passivity is not yet updated by the websocket (even if freshly getting the list),
             // so we need to treat them as one less.
-            return prevActions!.where((la) => la.actionType == BoutActionType.passivity).length <= 1;
+            final includesZeroOrOnePassivity =
+                prevActions!.where((la) => la.actionType == BoutActionType.passivity).length <= 1;
+            if (!includesZeroOrOnePassivity) return;
+            await handleIntent(RolePointBoutActionIntent(role: intent.role.opponent, points: 1));
           }
+        } else if (intent.boutActionType.isCaution) {
+          final prevCautions = prevActions!.where((la) => la.actionType.isCaution && la.role == intent.role);
 
-          // In greco, stop the timer (P)
-          // Give one point to the opponent at the first and the second (P) (no matter which wrestler).
-          mainStopwatch.stopwatch.stop();
-          if (!await includesZeroOrOnePassivity()) return;
-          await handleIntent(RolePointBoutActionIntent(role: intent.role.opponent, points: 1));
-        }
-      } else if (intent is RolePointBoutActionIntent) {
-        // End activity stop watch, if a point is made.
-        if (psm.activityStopwatch != null) {
-          psm.activityStopwatch?.dispose();
-          psm.activityStopwatchNotifier.value = null;
+          // At this moment, the new caution is not yet updated by the websocket (even if freshly getting the list),
+          // so we need to treat them as one less.
+          final hasThreeOrMoreCautions = prevCautions.length > 1;
+          if (hasThreeOrMoreCautions) {
+            // 3 Cautions given to one wrestler
+            mainStopwatch.stopwatch.stop();
+
+            final result = await showOkCancelDialog(
+              context: context,
+              child: Text(localizations.warningDisqualificationOnCautions),
+            );
+            if (result) {
+              bout = bout.copyWith(isRunning: false);
+              await (await ref.read(dataManagerProvider)).updateBoutResult(
+                bout: bout,
+                result: BoutResult.dsq,
+                winnerRole: intent.role.opponent,
+                style: weightClass?.style,
+                actions: await _getActions(),
+                rules: boutRules,
+              );
+            }
+          } else if (intent.boutActionType == BoutActionType.legFoul) {
+            // In Greco-Roman wrestling, if a defensive wrestler commits a leg foul, the referee shall:
+            // - On the 1st offense, stop the match and award the guilty wrestler's opponent 2 points and the guilty
+            //   wrestler shall receive a caution.
+            // - On the 2nd offense, the guilty wrestler will lose the concerned bout.
+
+            mainStopwatch.stopwatch.stop();
+
+            final hasZeroLegFouls = prevCautions.where((la) => la.actionType == BoutActionType.legFoul).isEmpty;
+
+            if (hasZeroLegFouls) {
+              await handleIntent(RolePointBoutActionIntent(role: intent.role.opponent, points: 2));
+            } else {
+              final result = await showOkCancelDialog(
+                context: context,
+                child: Text(localizations.warningDisqualificationOnLegFoul),
+              );
+              if (result) {
+                bout = bout.copyWith(isRunning: false);
+                await (await ref.read(dataManagerProvider)).updateBoutResult(
+                  bout: bout,
+                  result: BoutResult.dsq,
+                  winnerRole: intent.role.opponent,
+                  style: weightClass?.style,
+                  actions: await _getActions(),
+                  rules: boutRules,
+                );
+              }
+            }
+          }
         }
       }
     }
@@ -837,7 +894,7 @@ class _ParticipantDisplay extends StatelessWidget {
                           // 2. Least amount of cautions
                           predictedWinnerRole ??=
                               _getRoleWithMostActions(
-                                actions.where((element) => element.actionType == BoutActionType.caution),
+                                actions.where((element) => element.actionType.isCaution),
                               )?.opponent;
 
                           // 3. Last technical point scored

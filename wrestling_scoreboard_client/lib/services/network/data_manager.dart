@@ -57,6 +57,27 @@ abstract class DataManager implements AuthManager {
   /// Returns the id of the object
   Future<int> createOrUpdateSingle<T extends DataObject>(T single);
 
+  Future<void> updateBoutResult({
+    required Bout bout,
+    required BoutResult? result,
+    required BoutRole winnerRole,
+    required List<BoutAction> actions,
+    required List<BoutResultRule> rules,
+    required WrestlingStyle? style,
+  }) async {
+    final updatedBout = bout.updateBoutResult(
+      result: result,
+      winnerRole: winnerRole,
+      actions: actions,
+      rules: rules,
+      style: style ?? WrestlingStyle.free,
+    );
+    await createOrUpdateSingle(updatedBout);
+    // Need to await saving, otherwise a read of the AthleteBoutState list happens on old values within createOrUpdateSingle (e.g. for local running local bouts).
+    if (updatedBout.r != null) await createOrUpdateSingle(updatedBout.r!);
+    if (updatedBout.b != null) await createOrUpdateSingle(updatedBout.b!);
+  }
+
   /// DELETE: delete a single object
   Future<void> deleteSingle<T extends DataObject>(T single);
 

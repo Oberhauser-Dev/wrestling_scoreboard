@@ -229,19 +229,14 @@ class _MainControlDropDown extends ConsumerWidget {
                   options: boutResultOptions,
                   onChange: (BoutResult? val) async {
                     final dataManager = await ref.read(dataManagerProvider);
-                    var updatedBout = bout.copyWith(
-                      winnerRole: val != null && !val.affectsBoth() ? role : null,
+                    await dataManager.updateBoutResult(
+                      bout: bout,
                       result: val,
-                    );
-                    updatedBout = updatedBout.updateClassificationPoints(
-                      actions,
+                      winnerRole: role,
+                      actions: actions,
                       rules: boutRules,
                       style: wrestlingStyle ?? WrestlingStyle.free,
                     );
-                    await dataManager.createOrUpdateSingle(updatedBout);
-                    // Need to await saving, otherwise a read of the AthleteBoutState list happens on old values within createOrUpdateSingle (e.g. for local running local bouts).
-                    if (updatedBout.r != null) await dataManager.createOrUpdateSingle(updatedBout.r!);
-                    if (updatedBout.b != null) await dataManager.createOrUpdateSingle(updatedBout.b!);
                   },
                 );
               },
