@@ -89,6 +89,29 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
   Future<void> handleSubmit(NavigatorState navigator) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
+      // Ask to generate bouts, if opponent also has saved their participants
+      final opponentLineup = widget.teamMatch.home == widget.lineup ? widget.teamMatch.guest : widget.teamMatch.home;
+      final opponentParticipations = await ref.readAsync(
+        manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+          ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: opponentLineup),
+        ).future,
+      );
+      final bool isPairBouts;
+      if (opponentParticipations.isNotEmpty && mounted) {
+        final localizations = context.l10n;
+        isPairBouts = await showOkCancelDialog(
+          context: context,
+          title: Text(localizations.pairBouts),
+          child: Text(localizations.warningBoutGenerate),
+          okText: localizations.saveAndPairBouts,
+          cancelText: localizations.save,
+        );
+      } else {
+        // Do not pair, if opponent is not ready yet.
+        isPairBouts = false;
+      }
+
       final dataManager = await ref.read(dataManagerProvider);
       await dataManager.createOrUpdateSingle(widget.lineup.copyWith(leader: _leader, coach: _coach));
       await Future.forEach(_deleteParticipations, (TeamLineupParticipation element) async {
@@ -126,26 +149,11 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
         await dataManager.createOrUpdateSingle<TeamLineupParticipation>(participation);
       }
 
-      // Ask to generate bouts, if opponent also has saved their participants
-      final opponentLineup = widget.teamMatch.home == widget.lineup ? widget.teamMatch.guest : widget.teamMatch.home;
-      final opponentParticipations = await ref.readAsync(
-        manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-          ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: opponentLineup),
-        ).future,
-      );
-      if (opponentParticipations.isNotEmpty && mounted) {
-        final localizations = context.l10n;
-        final hasConfirmed = await showOkCancelDialog(
-          context: context,
-          title: Text(localizations.pairBouts),
-          child: Text(localizations.warningBoutGenerate),
-          okText: localizations.saveAndPairBouts,
-          cancelText: localizations.save,
-        );
-        if (hasConfirmed) {
-          await dataManager.generateBouts<TeamMatch>(widget.teamMatch, false);
-        }
+      // Should also pair bouts
+      if (isPairBouts) {
+        await dataManager.generateBouts<TeamMatch>(widget.teamMatch, false);
       }
+
       navigator.pop();
     }
   }

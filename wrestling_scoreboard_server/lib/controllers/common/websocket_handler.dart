@@ -190,7 +190,7 @@ void _broadcastUpdateManyRawInListOfFilter(
 }
 
 /// Update filtered lists (often the list they are contained in).
-/// Currently do not update list of all entities (as it should only be used in special cases)
+/// Currently do not update list of all entities, as it should only be used in dependant cases.
 void broadcastDependants<T extends DataObject>(T single) async {
   directDataObjectRelations[T]?.forEach((propertyType, properties) {
     for (final property in properties) {
