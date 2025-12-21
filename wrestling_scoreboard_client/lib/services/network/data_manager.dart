@@ -60,7 +60,7 @@ abstract class DataManager implements AuthManager {
   Future<void> updateBoutResult({
     required Bout bout,
     required BoutResult? result,
-    required BoutRole winnerRole,
+    required BoutRole? winnerRole,
     required List<BoutAction> actions,
     required List<BoutResultRule> rules,
     required WrestlingStyle? style,

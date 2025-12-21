@@ -1934,6 +1934,12 @@ abstract class AppLocalizations {
   /// **'Overweight'**
   String get warningOverweight;
 
+  /// No description provided for @warningVictoryOnForfeit.
+  ///
+  /// In en, this message translates to:
+  /// **'A wrestler did not compete or did not meet the weight requirement for this weight class. Should the bout be counted accordingly?'**
+  String get warningVictoryOnForfeit;
+
   /// No description provided for @warningCautionNoPoints.
   ///
   /// In en, this message translates to:

@@ -956,6 +956,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get warningOverweight => 'Overweight';
 
   @override
+  String get warningVictoryOnForfeit =>
+      'A wrestler did not compete or did not meet the weight requirement for this weight class. Should the bout be counted accordingly?';
+
+  @override
   String get warningCautionNoPoints => 'A caution must be followed by one or two points.';
 
   @override
