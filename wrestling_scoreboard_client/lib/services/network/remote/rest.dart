@@ -16,7 +16,7 @@ class RestDataManager extends DataManager {
 
   late final String? _apiUrl;
 
-  late WebSocketManager _webSocketManager;
+  // late WebSocketManager _webSocketManager;
 
   final Future<void> Function() onResetAuth;
 
@@ -98,14 +98,22 @@ class RestDataManager extends DataManager {
 
     await _handleResponse(
       response,
-      errorMessage: 'Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName}',
+      errorMessage:
+          'Failed to ${obj.id != null ? 'UPDATE' : 'CREATE'} single ${obj.tableName} ${obj.id != null ? '(${obj.id})' : ''} ',
     );
     return jsonDecode(response.body);
   }
 
   @override
   Future<void> deleteSingle<T extends DataObject>(T single) async {
-    _webSocketManager.addToSink(jsonEncode(singleToJson(single, T, CRUD.delete)));
+    // _webSocketManager.addToSink(jsonEncode(singleToJson(single, T, CRUD.delete)));
+    // Use rest, as it can be awaited.
+
+    final uri = Uri.parse('$_apiUrl/${single.tableName}/${single.id}');
+    final response = await http.delete(uri, headers: _headers);
+
+    await _handleResponse(response, errorMessage: 'Failed to DELETE single ${single.tableName} (${single.id})');
+    return jsonDecode(response.body);
   }
 
   @override
@@ -176,7 +184,7 @@ class RestDataManager extends DataManager {
 
   @override
   set webSocketManager(WebSocketManager manager) {
-    _webSocketManager = manager;
+    // _webSocketManager = manager;
   }
 
   Future<void> _import(int id, String table, {bool includeSubjacent = false, AuthService? authService}) async {

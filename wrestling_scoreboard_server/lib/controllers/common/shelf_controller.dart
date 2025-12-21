@@ -131,9 +131,16 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
     return Response.ok(jsonEncode(id));
   }
 
-  Future<Response> deleteRequestSingle(Request request, User? user, String id) async {
-    final deletionSuccessful = await deleteSingle(int.parse(id));
-    return Response.ok(jsonEncode(deletionSuccessful));
+  Future<Response> deleteRequestSingle(Request request, User? user, String idStr) async {
+    final id = int.parse(idStr);
+    try {
+      final single = await getSingle(id, obfuscate: false);
+      await handleSingle(operation: CRUD.delete, single: single, privilege: user!.privilege);
+      return Response.ok(jsonEncode(true));
+    } catch (e, st) {
+      _logger.warning('Could not delete single $T ($idStr).', e, st);
+      return Response.ok(jsonEncode(false));
+    }
   }
 
   static ShelfController? getControllerFromDataType(Type t) {
