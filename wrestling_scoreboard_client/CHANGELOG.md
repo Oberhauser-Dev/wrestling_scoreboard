@@ -1,3 +1,20 @@
+## 0.3.10
+
+ - **REFACTOR**: Use enabled color for bout navigation buttons. ([7a504886](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7a504886f07f14fcd3a340d6273cf22c7d646c13))
+ - **REFACTOR**: Migrate PopupMenuButton to MenuAnchor (closes [#248](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/248)). ([f5a96e5d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f5a96e5d49961882430b94a1f38846ee87e1bfca))
+ - **FIX**: Invalidate provider on refresh after error. ([df319c08](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/df319c08b142fa20d1a3351982441fd47a82490e))
+ - **FIX**: Stuttering on TeamMatch Lineups. ([598eb60e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/598eb60e5a8c6d3d6c2eaa342a7b9af497522c78))
+ - **FIX**: Make entity deletion more rubust. ([eec3b04b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eec3b04bc91c0fac82f49a3e2e3f42d2aab86e86))
+ - **FIX**: Show dialog for lineup before sending save request. ([c43aa20a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c43aa20a66be348aab6809875454a34496b56a6f))
+ - **FIX**: Allow retry of auth provider. ([a700ef7b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a700ef7b241c49f509d04d2fe939b719da6dfe94))
+ - **FIX**: Consider value of holds and least amount of cautions for prediction. ([3b4cc5af](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3b4cc5af49f870060702c699b7d719513deec175))
+ - **FIX**: Avoid list items hidden below OS elements (closes [#251](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/251)). ([012ed6ca](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/012ed6ca8733e0bf34d157474ecc9e96cff4cc9b))
+ - **FEAT**: Warning on forfeit ([#227](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/227)). ([04497093](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0449709310449ed3c51f4dfa749c4ea871fd4911))
+ - **FEAT**: Move undo action to the center. ([b907b847](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b907b84757e7252279016d3339fa926b07b1f522))
+ - **FEAT**: Disqualify on two leg fouls or three cautions ([#227](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/227)). ([93715246](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/937152464334558d1072781d8d87a5548320f295))
+ - **FEAT**: Leg Foul (closes [#226](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/226)). ([eab13e79](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eab13e7916d064e17305a0a48e52e9b1792ca7d1))
+ - **FEAT**: Show warning icon on over weight. ([5a36ca33](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5a36ca3342d925d77fbcc9212d89da7b185d3f17))
+
 ## 0.3.9
 
  - **FIX**: Wrap verify button in user profile. ([9312340c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9312340c59ddfaeacb7143d62d411ba0375f2d63))

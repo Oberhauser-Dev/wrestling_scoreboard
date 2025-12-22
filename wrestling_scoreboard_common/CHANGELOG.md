@@ -1,3 +1,9 @@
+## 0.3.8
+
+ - **FEAT**: Warning on forfeit ([#227](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/227)). ([04497093](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0449709310449ed3c51f4dfa749c4ea871fd4911))
+ - **FEAT**: Disqualify on two leg fouls or three cautions ([#227](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/227)). ([93715246](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/937152464334558d1072781d8d87a5548320f295))
+ - **FEAT**: Leg Foul (closes [#226](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/226)). ([eab13e79](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eab13e7916d064e17305a0a48e52e9b1792ca7d1))
+
 ## 0.3.7
 
  - **FEAT**: Support image for Organization, Club and Person ([#45](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/45)). ([d0ecee24](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d0ecee241d360f0520089e6647750f62c7112aed))
