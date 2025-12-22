@@ -1,3 +1,10 @@
+## 0.3.9
+
+ - **FIX**: Make entity deletion more rubust. ([eec3b04b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eec3b04bc91c0fac82f49a3e2e3f42d2aab86e86))
+ - **FIX**: Show dialog for lineup before sending save request. ([c43aa20a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c43aa20a66be348aab6809875454a34496b56a6f))
+ - **FEAT**: Leg Foul (closes [#226](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/226)). ([eab13e79](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eab13e7916d064e17305a0a48e52e9b1792ca7d1))
+ - **FEAT**: Option to get user by email (closes [#246](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/246)). ([fc79ab20](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fc79ab20d7dd5f51ecaadc4cd0d0b5d8ced95361))
+
 ## 0.3.8
 
  - **FIX**: Sort filtered membership results. ([4000d5c8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/4000d5c8b655f47aa700bda142a43beaadeb5f40))
