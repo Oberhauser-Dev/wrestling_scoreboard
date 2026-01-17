@@ -67,18 +67,22 @@ class TeamMatchBoutDisplay extends ConsumerWidget {
                                 return SingleConsumer<Bout>(
                                   id: teamMatchBout.bout.id,
                                   builder: (context, bout) {
-                                    final homeParticipation =
-                                        TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
-                                          participations: homeParticipations,
-                                          membership: bout.r?.membership,
-                                          weightClass: teamMatchBout.weightClass,
-                                        );
-                                    final guestParticipation =
-                                        TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
-                                          participations: guestParticipations,
-                                          membership: bout.b?.membership,
-                                          weightClass: teamMatchBout.weightClass,
-                                        );
+                                    final homeParticipation = TeamLineupParticipation.fromParticipationsAndWeightClass(
+                                      participations: homeParticipations,
+                                      weightClass: teamMatchBout.weightClass,
+                                    );
+                                    assert(
+                                      homeParticipation?.membership == bout.r?.membership,
+                                      'Memberships of home do not match',
+                                    );
+                                    final guestParticipation = TeamLineupParticipation.fromParticipationsAndWeightClass(
+                                      participations: guestParticipations,
+                                      weightClass: teamMatchBout.weightClass,
+                                    );
+                                    assert(
+                                      guestParticipation?.membership == bout.b?.membership,
+                                      'Memberships of guest do not match',
+                                    );
 
                                     return BoutScreen(
                                       wrestlingEvent: match,

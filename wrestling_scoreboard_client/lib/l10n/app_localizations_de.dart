@@ -481,6 +481,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get teamMatchScoreSheet => 'Punktzettel für Mannschaftskämpfe';
 
   @override
+  String get teamMatchWeightList => 'Wiegeliste für Mannschaftskämpfe';
+
+  @override
   String get singleCompetitionTranscript => 'Protokoll für Einzelmeisterschaften';
 
   @override
@@ -551,6 +554,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get numberAbbreviation => 'Nr.';
+
+  @override
+  String get replacement => 'Ersatz';
 
   @override
   String get total => 'Gesamt';

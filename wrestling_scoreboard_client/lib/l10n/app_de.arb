@@ -193,6 +193,7 @@
   "wrestlingRulesPdf": "https://www.ringen.de/wp-content/uploads/2019/01/Internationales-Regelwerk_Januar-2019_.pdf",
   "teamMatchTranscript": "Protokoll für Mannschaftskämpfe",
   "teamMatchScoreSheet": "Punktzettel für Mannschaftskämpfe",
+  "teamMatchWeightList": "Wiegeliste für Mannschaftskämpfe",
   "singleCompetitionTranscript": "Protokoll für Einzelmeisterschaften",
   "singleCompetitionScoreSheet": "Punktzettel für Einzelmeisterschaften",
   "signature": "Unterschrift",
@@ -217,6 +218,7 @@
   "status": "Status",
   "visitors": "Besucher",
   "numberAbbreviation": "Nr.",
+  "replacement": "Ersatz",
   "total": "Gesamt",
   "participantVacant": "unbesetzt",
 

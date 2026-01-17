@@ -21,14 +21,11 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
 
   factory TeamLineupParticipation.fromJson(Map<String, Object?> json) => _$TeamLineupParticipationFromJson(json);
 
-  static TeamLineupParticipation? fromParticipationsAndMembershipAndWeightClass({
+  static TeamLineupParticipation? fromParticipationsAndWeightClass({
     required Iterable<TeamLineupParticipation> participations,
-    required Membership? membership,
     required WeightClass? weightClass,
   }) {
-    return participations
-        .where((element) => element.membership == membership && element.weightClass == weightClass)
-        .zeroOrOne;
+    return participations.where((element) => element.weightClass == weightClass).zeroOrOne;
   }
 
   static Future<TeamLineupParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {

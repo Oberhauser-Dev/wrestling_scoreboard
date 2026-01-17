@@ -4,10 +4,12 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
+import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
+import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_pdf_common.dart';
 import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -32,6 +34,7 @@ class TeamMatchTranscript extends PdfSheet {
   final TeamMatch teamMatch;
   final Map<Person, PersonRole> officials;
   final bool isTimeCountDown;
+  late final TeamMatchPdfCommon teamMatchPdfCommon = TeamMatchPdfCommon(localizations);
 
   Iterable<Bout> get bouts => teamMatchBoutActions.keys.map((tmb) => tmb.bout);
 
@@ -69,7 +72,9 @@ class TeamMatchTranscript extends PdfSheet {
                     [
                       const FlexColumnWidth(1), // Winner
                       const FlexColumnWidth(1), // Visitors count
-                      const FlexColumnWidth(6), // Comment
+                      const FlexColumnWidth(0.5), // Begin
+                      const FlexColumnWidth(0.5), // End
+                      const FlexColumnWidth(4), // Comment
                     ].asMap(),
                 children: [
                   TableRow(
@@ -85,6 +90,18 @@ class TeamMatchTranscript extends PdfSheet {
                         content: teamMatch.visitorsCount?.toString() ?? '',
                         height: 30.0,
                         color: PdfColors.grey100,
+                      ),
+                      buildFormCell(
+                        title: localizations.startDate,
+                        content: teamMatch.date.toTimeStringFromLocaleName(localizations.localeName),
+                        color: PdfColors.grey100,
+                        height: 30,
+                      ),
+                      buildFormCell(
+                        title: localizations.endDate,
+                        content: teamMatch.endDate?.toTimeStringFromLocaleName(localizations.localeName),
+                        color: PdfColors.grey100,
+                        height: 30,
                       ),
                       buildFormCell(
                         title: localizations.comment,
@@ -119,7 +136,7 @@ class TeamMatchTranscript extends PdfSheet {
             style: TextStyle(color: baseColor, fontWeight: FontWeight.bold, fontSize: 12),
           ),
         ),
-        Container(padding: const EdgeInsets.all(8), height: 48, child: _logo != null ? SvgImage(svg: _logo!) : null),
+        Container(height: 48, child: _logo != null ? SvgImage(svg: _logo!) : null),
       ],
     );
   }
@@ -162,7 +179,7 @@ class TeamMatchTranscript extends PdfSheet {
                   (p) => Column(
                     children: [
                       p,
-                      buildFormCell(title: localizations.signature, height: 30.0, color: PdfColors.grey100),
+                      buildFormCell(title: localizations.signature, height: 25.0, color: PdfColors.grey100),
                     ],
                   ),
                 ),
@@ -190,11 +207,6 @@ class TeamMatchTranscript extends PdfSheet {
   }
 
   Widget _buildBoutTable(Context context) {
-    const titleCellHeight = 16.0;
-    const headerCellHeight = 30.0;
-    const cellHeight = 16.0;
-    const headerFontSize = 10.0;
-    const cellFontSize = 10.0;
     const marginBottom = EdgeInsets.only(bottom: PdfSheet.verticalGap);
 
     List<TableColumnWidth> participantStateColumnWidths() => [
@@ -204,30 +216,12 @@ class TeamMatchTranscript extends PdfSheet {
       const FlexColumnWidth(0.5), // Status
     ];
 
-    List<Widget> buildTeamHeader(Team team, BoutRole role) {
-      final textColor = role.textPdfColor;
-      return [
-        TableCell(
-          columnSpan: 4,
-          child: buildTextCell(
-            '${role == BoutRole.red ? localizations.home : localizations.guest}: ${team.name}',
-            color: role.pdfColor,
-            height: titleCellHeight,
-            textColor: textColor,
-            fontSize: headerFontSize,
-            borderColor: role.pdfColor,
-            alignment: Alignment.center,
-          ),
-        ),
-      ];
-    }
-
     List<Widget> buildTeamFooter(BoutRole role) {
       return [
-        Container(color: role.pdfColor, height: titleCellHeight),
-        Container(color: role.pdfColor, height: titleCellHeight),
-        Container(color: role.pdfColor, height: titleCellHeight),
-        Container(color: role.pdfColor, height: titleCellHeight),
+        Container(color: role.pdfColor, height: cellHeight),
+        Container(color: role.pdfColor, height: cellHeight),
+        Container(color: role.pdfColor, height: cellHeight),
+        Container(color: role.pdfColor, height: cellHeight),
       ];
     }
 
@@ -281,15 +275,15 @@ class TeamMatchTranscript extends PdfSheet {
       Iterable<TeamLineupParticipation> participations,
     ) {
       final borderColor = role.pdfColor;
+      final teamMatchParticipation = TeamLineupParticipation.fromParticipationsAndWeightClass(
+        participations: participations,
+        weightClass: weightClass,
+      );
       final membership = (role == BoutRole.red ? bout.r : bout.b)?.membership;
+      assert(teamMatchParticipation?.membership == membership, 'Memberships do not match');
       return [
         buildTextCell(
-          TeamLineupParticipation.fromParticipationsAndMembershipAndWeightClass(
-                participations: participations,
-                membership: membership,
-                weightClass: weightClass,
-              )?.weight?.toString() ??
-              '',
+          teamMatchParticipation?.weight?.toString() ?? '',
           height: cellHeight,
           borderColor: borderColor,
           fontSize: cellFontSize,
@@ -332,14 +326,10 @@ class TeamMatchTranscript extends PdfSheet {
             Container(height: titleCellHeight),
             Container(height: titleCellHeight),
             Container(height: titleCellHeight),
-            ...buildTeamHeader(teamMatch.home.team, BoutRole.red),
-            Container(color: BoutRole.red.pdfColor, height: titleCellHeight),
-            Container(color: BoutRole.red.pdfColor, height: titleCellHeight),
+            ...teamMatchPdfCommon.buildTeamHeader(teamMatch.home.team, BoutRole.red, columnSpan: 6),
             Container(height: titleCellHeight),
             Container(height: titleCellHeight),
-            Container(color: BoutRole.blue.pdfColor, height: titleCellHeight),
-            Container(color: BoutRole.blue.pdfColor, height: titleCellHeight),
-            ...buildTeamHeader(teamMatch.guest.team, BoutRole.blue),
+            ...teamMatchPdfCommon.buildTeamHeader(teamMatch.guest.team, BoutRole.blue, columnSpan: 6),
             Container(height: titleCellHeight),
           ],
         ),
@@ -428,7 +418,7 @@ class TeamMatchTranscript extends PdfSheet {
           final PdfColor? winnerTextColor = bout.bout.winnerRole?.textPdfColor;
           return TableRow(
             children: [
-              buildTextCell(bout.pos.toString(), height: cellHeight, fontSize: cellFontSize),
+              buildTextCell((bout.pos + 1).toString(), height: cellHeight, fontSize: cellFontSize),
               buildTextCell(bout.weightClass?.name ?? '-', height: cellHeight, fontSize: cellFontSize),
               buildTextCell(
                 bout.weightClass?.style.abbreviation(buildContext) ?? '-',
@@ -488,29 +478,29 @@ class TeamMatchTranscript extends PdfSheet {
           children: [
             TableCell(
               columnSpan: 3,
-              child: buildTextCell(localizations.total, height: titleCellHeight, fontSize: headerFontSize),
+              child: buildTextCell(localizations.total, height: cellHeight, fontSize: cellFontSize),
             ),
             ...buildTeamFooter(BoutRole.red),
-            Container(color: BoutRole.red.pdfColor, height: titleCellHeight),
+            Container(color: BoutRole.red.pdfColor, height: cellHeight),
             buildTextCell(
               TeamMatch.getHomePoints(teamMatchBoutActions.keys).toString(),
               borderColor: BoutRole.red.pdfColor,
-              height: titleCellHeight,
-              fontSize: headerFontSize,
+              height: cellHeight,
+              fontSize: cellFontSize,
               borderWidth: 2.0,
             ),
-            Container(height: titleCellHeight),
-            Container(height: titleCellHeight),
+            Container(height: cellHeight),
+            Container(height: cellHeight),
             buildTextCell(
               TeamMatch.getGuestPoints(teamMatchBoutActions.keys).toString(),
               borderColor: BoutRole.blue.pdfColor,
-              height: titleCellHeight,
-              fontSize: headerFontSize,
+              height: cellHeight,
+              fontSize: cellFontSize,
               borderWidth: 2.0,
             ),
-            Container(color: BoutRole.blue.pdfColor, height: titleCellHeight),
+            Container(color: BoutRole.blue.pdfColor, height: cellHeight),
             ...buildTeamFooter(BoutRole.blue),
-            Container(height: titleCellHeight),
+            Container(height: cellHeight),
           ],
         ),
       ],

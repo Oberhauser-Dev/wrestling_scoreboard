@@ -477,6 +477,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get teamMatchScoreSheet => 'Score sheet for Team Matches';
 
   @override
+  String get teamMatchWeightList => 'Weight List for Team Matches';
+
+  @override
   String get singleCompetitionTranscript => 'Transcript for Single Competitions';
 
   @override
@@ -547,6 +550,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get numberAbbreviation => 'No.';
+
+  @override
+  String get replacement => 'Replacement';
 
   @override
   String get total => 'Total';
