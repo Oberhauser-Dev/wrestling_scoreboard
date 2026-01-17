@@ -245,23 +245,36 @@ class TeamMatchController extends ShelfController<TeamMatch>
     TeamLineup lineup,
     Map<WeightClass, AthleteBoutState?> participantsMap,
   ) async {
+    final updated =
+        participantsMap.entries
+            .map((entry) {
+              final weightClass = entry.key;
+              final athleteBoutState = entry.value;
+              if (athleteBoutState == null) return null;
+              return TeamLineupParticipation(
+                lineup: lineup,
+                membership: athleteBoutState.membership,
+                weight: null, // TODO: Weight not available in import (yet)
+                weightClass: weightClass,
+              );
+            })
+            .nonNulls
+            .toList();
     await TeamLineupParticipationController().updateOnDiffMany(
-      participantsMap.entries
-          .map((entry) {
-            final weightClass = entry.key;
-            final athleteBoutState = entry.value;
-            if (athleteBoutState == null) return null;
-            return TeamLineupParticipation(
-              lineup: lineup,
-              membership: athleteBoutState.membership,
-              weight: null, // TODO: Weight not available in import (yet)
-              weightClass: weightClass,
-            );
-          })
-          .nonNulls
-          .toList(),
+      updated,
       filterType: TeamLineup,
       filterId: lineup.id,
+      // Keep previous weight on import
+      // TODO: remove when weight is available on import.
+      modify: (previous) {
+        return updated
+            .map(
+              (c) => c.copyWith(
+                weight: c.weight ?? previous.where((p) => p.weightClass == c.weightClass).firstOrNull?.weight,
+              ),
+            )
+            .toList();
+      },
     );
   }
 

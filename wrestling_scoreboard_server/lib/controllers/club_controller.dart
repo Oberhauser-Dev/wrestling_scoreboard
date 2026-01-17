@@ -15,6 +15,21 @@ class ClubController extends ShelfController<Club> with OrganizationalController
 
   ClubController._internal() : super();
 
+  @override
+  Future<Club> updateOrCreateSingleOfOrg(
+    Club dataObject, {
+    Future<Club> Function(Club? previous)? onUpdateOrCreate,
+    Future<void> Function(Club? previous, Club current)? onUpdatedOrCreated,
+  }) async {
+    // Keep previous imageUri on import
+    onUpdateOrCreate ??= (previous) async => dataObject.copyWith(imageUri: dataObject.imageUri ?? previous?.imageUri);
+    return super.updateOrCreateSingleOfOrg(
+      dataObject,
+      onUpdateOrCreate: onUpdateOrCreate,
+      onUpdatedOrCreated: onUpdatedOrCreated,
+    );
+  }
+
   static const teamsQuery = '''
         SELECT t.*
         FROM ${Team.cTableName} AS t

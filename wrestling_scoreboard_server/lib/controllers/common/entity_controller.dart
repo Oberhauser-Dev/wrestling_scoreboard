@@ -199,10 +199,16 @@ abstract class EntityController<T extends DataObject> {
     return dataObject;
   }
 
-  Future<List<T>> updateOnDiffMany(List<T> dataObjects, {Type? filterType, int? filterId}) async {
+  Future<List<T>> updateOnDiffMany(
+    List<T> dataObjects, {
+    Type? filterType,
+    int? filterId,
+    List<T> Function(List<T> previous)? modify,
+  }) async {
     final conditions = ['${directDataObjectRelations[T]![filterType]!.first} = @fid'];
     final substitutionValues = {'fid': filterId};
     final previous = await getMany(conditions: conditions, substitutionValues: substitutionValues, obfuscate: false);
+    if (modify != null) dataObjects = modify(previous);
 
     // Keep unchanged data objects to avoid conflicts with unique constraint
     final unchangedDataObjects = previous.where((p) => dataObjects.contains(p.copyWithId(null)));

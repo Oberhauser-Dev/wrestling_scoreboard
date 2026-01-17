@@ -39,6 +39,21 @@ class PersonController extends ShelfController<Person> with OrganizationalContro
     return raw;
   }
 
+  @override
+  Future<Person> updateOrCreateSingleOfOrg(
+    Person dataObject, {
+    Future<Person> Function(Person? previous)? onUpdateOrCreate,
+    Future<void> Function(Person? previous, Person current)? onUpdatedOrCreated,
+  }) async {
+    // Keep previous imageUri on import
+    onUpdateOrCreate ??= (previous) async => dataObject.copyWith(imageUri: dataObject.imageUri ?? previous?.imageUri);
+    return super.updateOrCreateSingleOfOrg(
+      dataObject,
+      onUpdateOrCreate: onUpdateOrCreate,
+      onUpdatedOrCreated: onUpdatedOrCreated,
+    );
+  }
+
   Future<Response> postMerge(Request request, User? user) async {
     final message = await request.readAsString();
     try {
