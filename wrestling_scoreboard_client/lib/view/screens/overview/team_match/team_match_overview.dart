@@ -13,6 +13,7 @@ import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
+import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_weight_list.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
@@ -179,6 +180,11 @@ class TeamMatchOverview extends ConsumerWidget {
                                                 ? null
                                                 : () async =>
                                                     handleSelectedLineup(context, ref, lineup, match, navigator),
+                                        trailing: IconButton(
+                                          tooltip: localizations.print,
+                                          icon: const Icon(Icons.print),
+                                          onPressed: () => shareTeamMatchWeightList(context, ref, match, lineup),
+                                        ),
                                       );
                                     },
                                   );
@@ -359,6 +365,36 @@ class TeamMatchOverview extends ConsumerWidget {
     return weightClasses;
   }
 
+  static Future<void> shareTeamMatchWeightList(
+    BuildContext context,
+    WidgetRef ref,
+    TeamMatch match,
+    TeamLineup lineup,
+  ) async {
+    final weightClasses = await _getWeightClasses(ref, match);
+
+    final participations = await ref.readAsync(
+      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: lineup),
+      ).future,
+    );
+
+    final officials = await _getOfficials(ref, match: match);
+
+    if (context.mounted) {
+      final bytes =
+          await TeamMatchWeightList(
+            weightClasses: weightClasses,
+            buildContext: context,
+            teamMatch: match,
+            officials: officials,
+            participations: participations,
+            lineup: lineup,
+          ).buildPdf();
+      await Printing.sharePdf(bytes: bytes, filename: '${match.lineupFileBaseName(lineup)}.pdf');
+    }
+  }
+
   static Future<void> shareTeamMatchTranscript(BuildContext context, WidgetRef ref, TeamMatch match) async {
     final teamMatchBouts = await _getBouts(ref, match: match);
 
@@ -487,6 +523,12 @@ class TeamMatchOverview extends ConsumerWidget {
 extension TeamMatchFileExt on TeamMatch {
   String get fileBaseName {
     final fileNameBuilder = [date.toFileNameDateFormat(), league?.fullname, no, home.team.name, '–', guest.team.name];
+    fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
+    return fileNameBuilder.join('_').sanitizedFileName;
+  }
+
+  String lineupFileBaseName(TeamLineup lineup) {
+    final fileNameBuilder = [date.toFileNameDateFormat(), league?.fullname, no, lineup.team.name, 'Weight-List'];
     fileNameBuilder.removeWhere((e) => e == null || e.isEmpty);
     return fileNameBuilder.join('_').sanitizedFileName;
   }

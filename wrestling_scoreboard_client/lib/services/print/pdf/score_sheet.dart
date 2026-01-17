@@ -173,7 +173,7 @@ class ScoreSheet extends PdfSheet {
               title: localizations.wrestlingStyle,
               content: Row(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(localizations.freeStyle, style: const TextStyle(fontSize: 7)),
                   buildCheckBox(

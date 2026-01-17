@@ -980,6 +980,12 @@ abstract class AppLocalizations {
   /// **'Score sheet for Team Matches'**
   String get teamMatchScoreSheet;
 
+  /// No description provided for @teamMatchWeightList.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight List for Team Matches'**
+  String get teamMatchWeightList;
+
   /// No description provided for @singleCompetitionTranscript.
   ///
   /// In en, this message translates to:
@@ -1123,6 +1129,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No.'**
   String get numberAbbreviation;
+
+  /// No description provided for @replacement.
+  ///
+  /// In en, this message translates to:
+  /// **'Replacement'**
+  String get replacement;
 
   /// No description provided for @total.
   ///

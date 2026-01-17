@@ -196,6 +196,7 @@
   "wrestlingRulesPdf": "https://uww.org/sites/default/files/2019-12/wrestling_rules.pdf",
   "teamMatchTranscript": "Transcript for Team Matches",
   "teamMatchScoreSheet": "Score sheet for Team Matches",
+  "teamMatchWeightList": "Weight List for Team Matches",
   "singleCompetitionTranscript": "Transcript for Single Competitions",
   "singleCompetitionScoreSheet": "Score sheet for Single Competitions",
   "signature": "Signature",
@@ -220,6 +221,7 @@
   "status": "Status",
   "visitors": "Visitors",
   "numberAbbreviation": "No.",
+  "replacement": "Replacement",
   "total": "Total",
   "participantVacant": "vacant",
 

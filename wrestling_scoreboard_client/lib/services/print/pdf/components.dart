@@ -7,14 +7,14 @@ Container buildCheckBox({
   bool isChecked = false,
   PdfColor pencilColor = PdfSheet.pencilColor,
   PdfColor? checkBoxColor,
+  double size = 20,
 }) => Container(
   color: checkBoxColor,
-  margin: const EdgeInsets.all(4),
-  height: 20,
-  width: 20,
+  height: size,
+  width: size,
   foregroundDecoration: BoxDecoration(border: Border.all(color: PdfColors.grey, width: .5)),
   alignment: Alignment.center,
-  child: isChecked ? Text('×', style: TextStyle(fontSize: 20, color: pencilColor)) : null,
+  child: isChecked ? Text('×', style: TextStyle(fontSize: size, color: pencilColor)) : null,
 );
 
 Widget buildTextCell(
@@ -29,17 +29,41 @@ Widget buildTextCell(
   EdgeInsets? margin,
   Alignment alignment = Alignment.centerLeft,
 }) {
+  return buildTableCellWidget(
+    child: Text(title, style: TextStyle(fontSize: fontSize, color: textColor ?? PdfColors.black)),
+    margin: margin,
+    height: height,
+    alignment: alignment,
+    borderColor: borderColor,
+    borderWidth: borderWidth,
+    color: color,
+    width: width,
+  );
+}
+
+Widget buildTableCellWidget({
+  required Widget child,
+  double? height = 60,
+  double? width,
+  PdfColor? borderColor,
+  double? borderWidth,
+  PdfColor? color,
+  EdgeInsets? margin,
+  Alignment alignment = Alignment.centerLeft,
+}) {
+  borderWidth ??= 0.5;
   return Container(
     color: color,
     margin: margin,
     padding: const EdgeInsets.all(2),
     alignment: alignment,
-    foregroundDecoration: BoxDecoration(
-      border: Border.all(color: borderColor ?? PdfColors.grey, width: borderWidth ?? .5),
-    ),
+    foregroundDecoration:
+        borderWidth <= 0
+            ? null
+            : BoxDecoration(border: Border.all(color: borderColor ?? PdfColors.grey, width: borderWidth)),
     height: height,
     width: width,
-    child: Text(title, style: TextStyle(fontSize: fontSize, color: textColor ?? PdfColors.black)),
+    child: child,
   );
 }
 
@@ -74,23 +98,25 @@ Widget buildFormCellWidget({
   PdfColor? color,
   PdfColor pencilColor = PdfSheet.pencilColor,
   AlignmentGeometry? contentAlignment = Alignment.center,
-  EdgeInsets? contentPadding = const EdgeInsets.all(2),
+  EdgeInsets? contentPadding = const EdgeInsets.symmetric(horizontal: 2),
 }) {
   return Container(
     height: height,
     width: width,
     foregroundDecoration: BoxDecoration(border: Border.all(color: borderColor, width: .5)),
     color: color,
-    child: Stack(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (title != null)
           Container(
-            alignment: Alignment.topLeft,
-            padding: const EdgeInsets.all(2),
+            padding: const EdgeInsets.only(left: 2, top: 2),
             child: Text(title.toUpperCase(), style: const TextStyle(fontSize: 6, fontWeight: FontWeight.bold)),
           ),
-        if (content != null)
-          Expanded(child: Container(padding: contentPadding, alignment: contentAlignment, child: content)),
+        content == null
+            ? SizedBox.expand()
+            : Expanded(child: Container(padding: contentPadding, alignment: contentAlignment, child: content)),
       ],
     ),
   );
