@@ -80,9 +80,6 @@ class RoleBoutActionIntent extends RoleScreenActionIntent {
   factory RoleBoutActionIntent.caution({required BoutRole role}) =>
       RoleBoutActionIntent(boutActionType: BoutActionType.caution, role: role);
 
-  factory RoleBoutActionIntent.legFoul({required BoutRole role}) =>
-      RoleBoutActionIntent(boutActionType: BoutActionType.legFoul, role: role);
-
   factory RoleBoutActionIntent.redCaution() => RoleBoutActionIntent.caution(role: BoutRole.red);
 
   factory RoleBoutActionIntent.blueCaution() => RoleBoutActionIntent.caution(role: BoutRole.blue);
