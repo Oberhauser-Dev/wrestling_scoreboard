@@ -876,7 +876,7 @@ class _ParticipantDisplay extends StatelessWidget {
                         final technicalPointsBlue = AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue);
                         BoutRole? predictedWinnerRole;
                         if (technicalPointsBlue == technicalPointsRed) {
-                          // 1. Highest score / value of holds
+                          // 1./2. The biggest number of action(s)/hold(s) of the highest value.
                           final pointActions = actions.where((e) => e.actionType == BoutActionType.points);
                           for (int i = 5; i > 0; i--) {
                             predictedWinnerRole = _getRoleWithMostActions(
@@ -885,13 +885,32 @@ class _ParticipantDisplay extends StatelessWidget {
                             if (predictedWinnerRole != null) break;
                           }
 
-                          // 2. Least amount of cautions
+                          // 3. Least amount of cautions
                           predictedWinnerRole ??=
                               _getRoleWithMostActions(
                                 actions.where((element) => element.actionType.isCaution),
                               )?.opponent;
 
-                          // 3. Last technical point scored
+                          // 4.1 Greco roman with 1:1
+                          if (predictedWinnerRole == null &&
+                              wrestlingStyle == WrestlingStyle.greco &&
+                              technicalPointsRed == 1 &&
+                              technicalPointsBlue == 1) {
+                            // A passivity always results in a point for the opponent.
+                            // Thus if a wrestler has a passivity, the point he has made for himself is a technical point.
+                            // So the wrestler with the most passivities will win.
+                            // If both have a passivity or do not have one, no winner will be predicted
+                            predictedWinnerRole = _getRoleWithMostActions(
+                              actions.where(
+                                (element) =>
+                                    // A non-technical point can also result from a challenge (not implemented yet)
+                                    // element.actionType == BoutActionType.challenge ||
+                                    element.actionType == BoutActionType.passivity,
+                              ),
+                            );
+                          }
+
+                          // 4. Last technical point scored
                           predictedWinnerRole ??=
                               actions.lastWhereOrNull((e) => e.actionType == BoutActionType.points)?.role;
                         } else {
