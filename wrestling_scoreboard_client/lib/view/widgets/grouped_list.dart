@@ -308,10 +308,11 @@ class GroupedList extends StatelessWidget {
     required this.header,
     required this.itemBuilder,
     super.key,
-    int? initialItemIndex,
+    int initialItemIndex = 0,
     required this.itemCount,
     this.shrinkWrap = false,
-  }) : initialItemIndex = math.max(0, initialItemIndex ?? 0);
+    // If no item was matching (-1) the condition, it probably should scroll to the last item available.
+  }) : initialItemIndex = initialItemIndex >= 0 ? initialItemIndex : math.max(0, itemCount - 1);
 
   @override
   Widget build(BuildContext context) {
