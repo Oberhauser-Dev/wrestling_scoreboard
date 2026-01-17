@@ -4,6 +4,7 @@ enum BoutActionType {
   verbal, // Verbal admonition 'V'
   caution, // yellow card 'O'
   dismissal, // red card 'D'
+  /// Deprecated: Leg fouls count as regular caution since 2026 (UWW)
   legFoul; // 'L'
 
   bool get isCaution => this == caution || this == legFoul;

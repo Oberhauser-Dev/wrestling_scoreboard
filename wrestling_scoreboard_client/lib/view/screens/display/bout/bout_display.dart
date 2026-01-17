@@ -567,35 +567,6 @@ class BoutState extends ConsumerState<BoutScreen> {
                 rules: boutRules,
               );
             }
-          } else if (intent.boutActionType == BoutActionType.legFoul) {
-            // In Greco-Roman wrestling, if a defensive wrestler commits a leg foul, the referee shall:
-            // - On the 1st offense, stop the match and award the guilty wrestler's opponent 2 points and the guilty
-            //   wrestler shall receive a caution.
-            // - On the 2nd offense, the guilty wrestler will lose the concerned bout.
-
-            mainStopwatch.stopwatch.stop();
-
-            final hasZeroLegFouls = prevCautions.where((la) => la.actionType == BoutActionType.legFoul).isEmpty;
-
-            if (hasZeroLegFouls) {
-              await handleIntent(RolePointBoutActionIntent(role: intent.role.opponent, points: 2));
-            } else {
-              final result = await showOkCancelDialog(
-                context: context,
-                child: Text(localizations.warningDisqualificationOnLegFoul),
-              );
-              if (result) {
-                bout = bout.copyWith(isRunning: false);
-                await (await ref.read(dataManagerProvider)).updateBoutResult(
-                  bout: bout,
-                  result: BoutResult.vca,
-                  winnerRole: intent.role.opponent,
-                  style: weightClass?.style,
-                  actions: await _getActions(),
-                  rules: boutRules,
-                );
-              }
-            }
           }
         }
       }
