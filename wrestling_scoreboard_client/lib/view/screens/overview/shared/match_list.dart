@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
@@ -46,7 +44,7 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
                   ),
                 ),
           ),
-          initialItemIndex: firstFutureMatchIndex >= 0 ? firstFutureMatchIndex : (math.max(matches.length - 1, 0)),
+          initialItemIndex: firstFutureMatchIndex,
           items: matches,
           itemBuilder:
               (context, match) => SingleConsumer<TeamMatch>(
