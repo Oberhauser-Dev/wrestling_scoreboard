@@ -5,6 +5,12 @@ on:
     tags:
       - 'wrestling_scoreboard_server-*'
   workflow_dispatch:
+    inputs:
+      app_version:
+        description: 'App version'
+        required: true
+        default: ''
+        type: string
 
 jobs:
   pre-run:
@@ -13,7 +19,7 @@ jobs:
     steps:
       - id: release-version
         run: |
-          TAG="${{ github.ref_name }}"
+          TAG="${{ inputs.app_version || github.ref_name }}"
           RELEASE_VERSION="${TAG#*wrestling_scoreboard_server-}"
           echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
     outputs:
@@ -49,10 +55,10 @@ jobs:
       - run: flutter --version
       - uses: bluefireteam/melos-action@v3
       - name: Release
-        uses: oberhauser-dev/dart-release-action@v0
+        uses: oberhauser-dev/dart-release-action@dev
         with:
           working-directory: wrestling_scoreboard_server
-          dry-run: false
+          dry-run: true
           main-path: 'bin/server.dart'
           app-name: 'wrestling_scoreboard_server'
           app-version: ${{ needs.pre-run.outputs.release-version }}
@@ -82,7 +88,7 @@ jobs:
           channel: 'stable'
       - uses: bluefireteam/melos-action@v3
       - name: Deploy
-        uses: oberhauser-dev/dart-release-action@v0
+        uses: oberhauser-dev/dart-release-action@dev
         with:
           working-directory: wrestling_scoreboard_server
           dry-run: false
