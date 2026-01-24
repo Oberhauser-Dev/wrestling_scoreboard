@@ -11,6 +11,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/event/match_dis
 import 'package:wrestling_scoreboard_client/view/screens/home/explore.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/home.dart';
 import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
+import 'package:wrestling_scoreboard_client/view/screens/league_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/about.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/admin/admin_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/more/admin/user_overview.dart';
@@ -78,6 +79,13 @@ GoRouter getRouter() {
       path: '${LeagueOverview.route}/:league_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
       builder: (context, state) => LeagueOverview(id: int.parse(state.pathParameters['league_id']!)),
+      routes: [
+        GoRoute(
+          path: LeagueDisplay.route,
+          parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+          builder: (context, state) => LeagueDisplay(id: int.parse(state.pathParameters['league_id']!)),
+        ),
+      ],
     ),
     GoRoute(
       path: '${TeamMatchOverview.route}/:match_id',

@@ -815,6 +815,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get classificationPointsAbbr => 'KP';
 
   @override
+  String get teamPoints => 'Mannschaftspunkte';
+
+  @override
+  String get wins => 'Siege';
+
+  @override
+  String get ties => 'Unentschieden';
+
+  @override
+  String get losses => 'Verluste';
+
+  @override
+  String get matchCount => '#Kampftage';
+
+  @override
   String get difference => 'Differenz';
 
   @override
@@ -855,9 +870,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get winner => 'Gewinner';
-
-  @override
-  String get wins => 'Siege';
 
   @override
   String get loser => 'Verlierer';

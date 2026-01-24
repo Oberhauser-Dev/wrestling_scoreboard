@@ -9,6 +9,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_team_participation_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/league_weight_class_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/league_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/match_list.dart';
@@ -19,6 +20,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/info.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tab_group.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -80,7 +82,15 @@ class LeagueOverview extends ConsumerWidget {
               dataObject: data,
               label: localizations.league,
               details: '${data.fullname}, ${data.startDate.year}',
-              actions: [if (importAction != null) importAction],
+              actions: [
+                if (importAction != null) importAction,
+                DefaultResponsiveScaffoldActionItem(
+                  icon: const Icon(Icons.tv),
+                  onTap: () => LeagueDisplay.navigateTo(context, data),
+                  label: localizations.display,
+                  style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
+                ),
+              ],
               tabs: [
                 Tab(child: HeadingText(localizations.info)),
                 Tab(child: HeadingText(localizations.matches)),

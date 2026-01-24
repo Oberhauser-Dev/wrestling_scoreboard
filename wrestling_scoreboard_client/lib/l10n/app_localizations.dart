@@ -1646,6 +1646,36 @@ abstract class AppLocalizations {
   /// **'CP'**
   String get classificationPointsAbbr;
 
+  /// No description provided for @teamPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Points'**
+  String get teamPoints;
+
+  /// No description provided for @wins.
+  ///
+  /// In en, this message translates to:
+  /// **'Wins'**
+  String get wins;
+
+  /// No description provided for @ties.
+  ///
+  /// In en, this message translates to:
+  /// **'Ties'**
+  String get ties;
+
+  /// No description provided for @losses.
+  ///
+  /// In en, this message translates to:
+  /// **'Losses'**
+  String get losses;
+
+  /// No description provided for @matchCount.
+  ///
+  /// In en, this message translates to:
+  /// **'#Matches'**
+  String get matchCount;
+
   /// No description provided for @difference.
   ///
   /// In en, this message translates to:
@@ -1729,12 +1759,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Winner'**
   String get winner;
-
-  /// No description provided for @wins.
-  ///
-  /// In en, this message translates to:
-  /// **'Wins'**
-  String get wins;
 
   /// No description provided for @loser.
   ///
