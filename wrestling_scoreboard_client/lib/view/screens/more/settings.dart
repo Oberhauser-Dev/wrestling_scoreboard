@@ -355,7 +355,7 @@ class CustomSettingsScreen extends ConsumerWidget {
                 title: localizations.network,
                 action: TextButton(
                   onPressed: () async {
-                    const defaultNetworkTimeout = Duration(seconds: 10);
+                    const defaultNetworkTimeout = Duration(seconds: 20);
                     await ref.read(networkTimeoutProvider.notifier).setState(defaultNetworkTimeout);
 
                     apiUrl = Env.apiUrl.fromString();

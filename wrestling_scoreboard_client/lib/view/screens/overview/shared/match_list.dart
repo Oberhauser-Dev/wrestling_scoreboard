@@ -18,7 +18,7 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
     final today = MockableDateTime.now().copyWith(hour: 0, minute: 0, millisecond: 0, microsecond: 0);
     return ManyConsumer<TeamMatch, T>(
       filterObject: filterObject,
-      builder: (BuildContext context, List<TeamMatch> matches) {
+      builder: (context, matches) {
         final firstFutureMatchIndex = matches.indexWhere((match) => match.date.compareTo(today) >= 0);
         return SearchableGroupedList(
           trailing: RestrictedAddButton(
