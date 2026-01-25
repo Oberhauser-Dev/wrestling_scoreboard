@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/match_result_role.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -48,6 +49,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
   DateTime? _endDate;
   int? _visitorsCount;
   String? _comment;
+  MatchResultRole? _resultRole;
 
   @override
   void initState() {
@@ -60,6 +62,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
     _league = widget.teamMatch?.league ?? widget.initialLeague;
     // Set initial season partition to 0, if match has a league.
     _seasonPartition = widget.teamMatch?.seasonPartition ?? (_league != null ? 0 : null);
+    _resultRole = widget.teamMatch?.resultRole;
   }
 
   @override
@@ -130,6 +133,19 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
               }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async => await _getTeams(),
+        ),
+      ),
+      ListTile(
+        leading: const Icon(Icons.emoji_events),
+        title: ButtonTheme(
+          alignedDropdown: true,
+          child: SimpleDropdown<MatchResultRole>(
+            label: localizations.winner,
+            isNullable: true,
+            selected: _resultRole,
+            options: MatchResultRole.values.map((value) => MapEntry(value, Text(value.localize(context)))),
+            onSaved: (newValue) => _resultRole = newValue,
+          ),
         ),
       ),
       NumericalInput(
@@ -245,6 +261,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           seasonPartition: _seasonPartition,
           comment: _comment,
           visitorsCount: _visitorsCount,
+          resultRole: _resultRole,
         ),
       );
       navigator.pop();

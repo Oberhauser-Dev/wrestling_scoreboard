@@ -310,6 +310,7 @@
   "classificationPointsAbbr": "CP",
   "teamPoints": "Team Points",
   "wins": "Wins",
+  "tie": "Tie",
   "ties": "Ties",
   "losses": "Losses",
   "matchCount": "#Matches",

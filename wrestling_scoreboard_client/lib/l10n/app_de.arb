@@ -307,6 +307,7 @@
   "classificationPointsAbbr": "KP",
   "teamPoints": "Mannschaftspunkte",
   "wins": "Siege",
+  "tie": "Unentschieden",
   "ties": "Unentschieden",
   "losses": "Verluste",
   "matchCount": "#Kampftage",

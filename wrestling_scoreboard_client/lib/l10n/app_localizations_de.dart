@@ -821,6 +821,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get wins => 'Siege';
 
   @override
+  String get tie => 'Unentschieden';
+
+  @override
   String get ties => 'Unentschieden';
 
   @override

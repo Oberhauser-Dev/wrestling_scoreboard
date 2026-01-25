@@ -18,6 +18,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     Organization? organization,
     required TeamLineup home,
     required TeamLineup guest,
+    MatchResultRole? resultRole,
     League? league,
     int? seasonPartition,
     String? no,
@@ -35,6 +36,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     final guest = await getSingle<TeamLineup>(e['guest_id'] as int);
     final int? leagueId = e['league_id'];
     final organizationId = e['organization_id'] as int?;
+    final resultRole = e['result_role'] as String?;
     // TODO ditch weightclasses, always handle at client
     // final weightClasses = home != null && home.team.league != null
     // ? await LeagueController().getWeightClasses(home.team.league!.id.toString())
@@ -53,6 +55,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       comment: e['comment'] as String?,
       home: home,
       guest: guest,
+      resultRole: resultRole == null ? null : MatchResultRole.values.byName(resultRole),
       league: leagueId == null ? null : await getSingle<League>(leagueId),
       seasonPartition: e['season_partition'] as int?,
     );
@@ -65,6 +68,7 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
       'guest_id': guest.id!,
       'league_id': league?.id!,
       'season_partition': seasonPartition,
+      'result_role': resultRole?.name,
     });
   }
 

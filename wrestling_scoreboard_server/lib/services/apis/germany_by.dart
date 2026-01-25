@@ -534,6 +534,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           final matchDateTime = DateTime.parse(
             '${values['boutDate']} ${values['scaleTime']}',
           ).fromLocation(timeZoneLocation);
+          final decision = competitionJson['decision'] as String?;
           return MapEntry(
             TeamMatch(
               home: TeamLineup(
@@ -546,6 +547,12 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                   (competitionJson['opponentTeamName'] as String).sanitizedName,
                 ), // teamId is not unique across all IDs
               ),
+              resultRole: switch (decision) {
+                'home' => MatchResultRole.home,
+                'guest' || 'opponent' => MatchResultRole.guest,
+                'tie' => MatchResultRole.tie,
+                _ => null,
+              },
               date: matchDateTime.toUtc(),
               visitorsCount: int.tryParse(values['audience']),
               location: values['location'],
