@@ -5,6 +5,7 @@ export 'enums/competition_system.dart';
 export 'enums/contestant_status.dart';
 export 'enums/crud.dart';
 export 'enums/gender.dart';
+export 'enums/match_result_role.dart';
 export 'enums/person_role.dart';
 export 'enums/round_type.dart';
 export 'enums/user_privilege.dart';

@@ -63,9 +63,11 @@ class LeagueDisplay extends ConsumerWidget {
                               final bouts = (await _getTeamMatchBouts(ref, tm));
                               final homeCPoints = TeamMatch.getHomePoints(bouts);
                               final guestCPoints = TeamMatch.getGuestPoints(bouts);
-                              if (homeCPoints == guestCPoints) {
+                              final matchEndedValue = tm.resultRole == null ? 0 : 1;
+                              if (tm.resultRole == MatchResultRole.tie ||
+                                  (tm.resultRole == null && homeCPoints == guestCPoints)) {
                                 // If the match has not yet taken place, do not count it as tie.
-                                final matchStartedValue = homeCPoints == 0 ? 0 : 1;
+                                final matchStartedValue = tm.resultRole == null && homeCPoints == 0 ? 0 : 1;
                                 final homePoints = LeagueTeamPoints(
                                   teamPoints: matchStartedValue,
                                   teamLossPoints: matchStartedValue,
@@ -74,7 +76,7 @@ class LeagueDisplay extends ConsumerWidget {
                                   wins: 0,
                                   ties: matchStartedValue,
                                   losses: 0,
-                                  matchCount: matchStartedValue,
+                                  matchCount: matchEndedValue,
                                 );
                                 final guestPoints = LeagueTeamPoints(
                                   teamPoints: matchStartedValue,
@@ -84,12 +86,15 @@ class LeagueDisplay extends ConsumerWidget {
                                   wins: 0,
                                   ties: matchStartedValue,
                                   losses: 0,
-                                  matchCount: matchStartedValue,
+                                  matchCount: matchEndedValue,
                                 );
                                 return MapEntry(tm, (homePoints, guestPoints));
                               }
                               final LeagueTeamPoints winner, looser;
-                              final isHomeWinner = homeCPoints > guestCPoints;
+                              final isHomeWinner =
+                                  tm.resultRole == null
+                                      ? homeCPoints > guestCPoints
+                                      : tm.resultRole == MatchResultRole.home;
                               winner = LeagueTeamPoints(
                                 teamPoints: 2,
                                 teamLossPoints: 0,
@@ -98,7 +103,7 @@ class LeagueDisplay extends ConsumerWidget {
                                 wins: 1,
                                 ties: 0,
                                 losses: 0,
-                                matchCount: 1,
+                                matchCount: matchEndedValue,
                               );
                               looser = LeagueTeamPoints(
                                 teamPoints: 0,
@@ -108,7 +113,7 @@ class LeagueDisplay extends ConsumerWidget {
                                 wins: 0,
                                 ties: 0,
                                 losses: 1,
-                                matchCount: 1,
+                                matchCount: matchEndedValue,
                               );
                               return MapEntry(tm, isHomeWinner ? (winner, looser) : (looser, winner));
                             }),

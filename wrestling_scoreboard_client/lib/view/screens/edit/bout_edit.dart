@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
+import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
@@ -80,7 +81,7 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
             label: localizations.winner,
             isNullable: true,
             selected: _winnerRole,
-            options: BoutRole.values.map((BoutRole value) => MapEntry(value, Text(value.name))),
+            options: BoutRole.values.map((BoutRole value) => MapEntry(value, Text(value.localize(context)))),
             onSaved: (BoutRole? newValue) => _winnerRole = newValue,
           ),
         ),

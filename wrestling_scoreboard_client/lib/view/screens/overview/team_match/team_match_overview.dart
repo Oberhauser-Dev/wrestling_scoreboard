@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/localization/match_result_role.dart';
 import 'package:wrestling_scoreboard_client/localization/person_role.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
 import 'package:wrestling_scoreboard_client/models/organization_import_type.dart';
@@ -126,6 +127,11 @@ class TeamMatchOverview extends ConsumerWidget {
                             onTap: () => TeamOverview.navigateTo(context, guestLineup.team),
                           );
                         },
+                      ),
+                      ContentItem.icon(
+                        title: match.resultRole?.localize(context) ?? '-',
+                        subtitle: localizations.winner,
+                        iconData: Icons.emoji_events,
                       ),
                       ContentItem.icon(
                         title: match.visitorsCount?.toString() ?? '-',

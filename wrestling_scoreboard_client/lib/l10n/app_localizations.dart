@@ -1658,6 +1658,12 @@ abstract class AppLocalizations {
   /// **'Wins'**
   String get wins;
 
+  /// No description provided for @tie.
+  ///
+  /// In en, this message translates to:
+  /// **'Tie'**
+  String get tie;
+
   /// No description provided for @ties.
   ///
   /// In en, this message translates to:
