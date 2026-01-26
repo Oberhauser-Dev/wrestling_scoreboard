@@ -177,8 +177,8 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
       teamMatch.date.toGerman, // 5:Datum
       _sanitizeString(teamMatch.home.team.name), // 6:Heim
       _sanitizeString(teamMatch.guest.team.name), // 7:Gast
-      TeamMatch.getHomePoints(bouts),
-      TeamMatch.getGuestPoints(bouts),
+      teamMatch.home.classificationPoints ?? TeamMatch.getHomePoints(bouts),
+      teamMatch.guest.classificationPoints ?? TeamMatch.getGuestPoints(bouts),
       teamMatch.visitorsCount ?? '',
       _sanitizeString(referee?.surname ?? ''),
       _sanitizeString(referee?.prename ?? ''),

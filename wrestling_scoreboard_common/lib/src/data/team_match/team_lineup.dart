@@ -12,6 +12,7 @@ abstract class TeamLineup with _$TeamLineup implements DataObject {
 
   const factory TeamLineup({
     int? id,
+    int? classificationPoints,
     required Team team,
     Membership? leader, // Mannschaftsführer
     Membership? coach, // Trainer
@@ -24,6 +25,7 @@ abstract class TeamLineup with _$TeamLineup implements DataObject {
     final coachId = e['coach_id'] as int?;
     return TeamLineup(
       id: e['id'] as int?,
+      classificationPoints: e['classification_points'] as int?,
       team: await getSingle<Team>(e['team_id'] as int),
       leader: leaderId == null ? null : await getSingle<Membership>(leaderId),
       coach: coachId == null ? null : await getSingle<Membership>(coachId),
@@ -32,7 +34,13 @@ abstract class TeamLineup with _$TeamLineup implements DataObject {
 
   @override
   Map<String, dynamic> toRaw() {
-    return {if (id != null) 'id': id, 'team_id': team.id!, 'leader_id': leader?.id!, 'coach_id': coach?.id!};
+    return {
+      if (id != null) 'id': id,
+      'classification_points': classificationPoints,
+      'team_id': team.id!,
+      'leader_id': leader?.id!,
+      'coach_id': coach?.id!,
+    };
   }
 
   @override

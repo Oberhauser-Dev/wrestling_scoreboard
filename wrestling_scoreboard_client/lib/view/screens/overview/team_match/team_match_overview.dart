@@ -128,10 +128,23 @@ class TeamMatchOverview extends ConsumerWidget {
                           );
                         },
                       ),
-                      ContentItem.icon(
-                        title: match.resultRole?.localize(context) ?? '-',
-                        subtitle: localizations.winner,
-                        iconData: Icons.emoji_events,
+                      SingleConsumer<TeamLineup>(
+                        id: match.home.id!,
+                        initialData: match.home,
+                        builder: (context, homeLineup) {
+                          return SingleConsumer<TeamLineup>(
+                            id: match.guest.id!,
+                            initialData: match.guest,
+                            builder: (context, guestLineup) {
+                              return ContentItem.icon(
+                                title:
+                                    '${match.resultRole?.localize(context) ?? '-'} (${homeLineup.classificationPoints ?? '-'} : ${guestLineup.classificationPoints ?? '-'})',
+                                subtitle: localizations.winner,
+                                iconData: Icons.emoji_events,
+                              );
+                            },
+                          );
+                        },
                       ),
                       ContentItem.icon(
                         title: match.visitorsCount?.toString() ?? '-',

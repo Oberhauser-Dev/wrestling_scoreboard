@@ -43,6 +43,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
   String? _no;
   Team? _homeTeam;
   Team? _guestTeam;
+  int? _homeClassificationPoints;
+  int? _guestClassificationPoints;
   League? _league;
   int? _seasonPartition;
   late DateTime _startDate;
@@ -56,6 +58,8 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
     super.initState();
     _homeTeam = widget.teamMatch?.home.team ?? widget.initialHomeTeam;
     _guestTeam = widget.teamMatch?.guest.team ?? widget.initialGuestTeam;
+    _homeClassificationPoints = widget.teamMatch?.home.classificationPoints;
+    _guestClassificationPoints = widget.teamMatch?.guest.classificationPoints;
     _startDate = widget.teamMatch?.date ?? DateTime.now();
     _endDate = widget.teamMatch?.endDate;
     _comment = widget.teamMatch?.comment;
@@ -149,6 +153,22 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         ),
       ),
       NumericalInput(
+        iconData: Icons.onetwothree,
+        initialValue: _homeClassificationPoints,
+        label: '${localizations.home}: ${localizations.classificationPoints}',
+        inputFormatter: NumericalRangeFormatter(min: 1, max: 9223372036854775808),
+        isMandatory: false,
+        onSaved: (int? value) => _homeClassificationPoints = value,
+      ),
+      NumericalInput(
+        iconData: Icons.onetwothree,
+        initialValue: _guestClassificationPoints,
+        label: '${localizations.guest}: ${localizations.classificationPoints}',
+        inputFormatter: NumericalRangeFormatter(min: 1, max: 9223372036854775808),
+        isMandatory: false,
+        onSaved: (int? value) => _guestClassificationPoints = value,
+      ),
+      NumericalInput(
         iconData: Icons.confirmation_number,
         initialValue: widget.teamMatch?.visitorsCount,
         label: localizations.visitors,
@@ -227,22 +247,22 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      var home = widget.teamMatch?.home;
-      if (home == null) {
-        final homeId = await (await ref.read(dataManagerProvider)).createOrUpdateSingle(TeamLineup(team: _homeTeam!));
-        home = TeamLineup(id: homeId, team: _homeTeam!); // TODO check if it works without refetching the objects
-      } else if (home.team != _homeTeam) {
-        // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(TeamLineup(id: home.id, team: _homeTeam!));
+      var home = widget.teamMatch?.home ?? TeamLineup(team: _homeTeam!);
+      home = home.copyWith(team: _homeTeam!, classificationPoints: _homeClassificationPoints);
+      if (home.id == null) {
+        final homeId = await (await ref.read(dataManagerProvider)).createOrUpdateSingle(home);
+        home = home.copyWith(id: homeId); // TODO: check if it works without refetching the objects
+      } else {
+        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(home);
       }
 
-      var guest = widget.teamMatch?.guest;
-      if (guest == null) {
-        final guestId = await (await ref.read(dataManagerProvider)).createOrUpdateSingle(TeamLineup(team: _guestTeam!));
-        guest = TeamLineup(id: guestId, team: _guestTeam!); // TODO check if it works without refetching the objects
-      } else if (guest.team != _guestTeam) {
-        // Update Lineup team only, no need to replace whole lineup
-        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(TeamLineup(id: guest.id, team: _guestTeam!));
+      var guest = widget.teamMatch?.guest ?? TeamLineup(team: _guestTeam!);
+      guest = guest.copyWith(team: _guestTeam!, classificationPoints: _guestClassificationPoints);
+      if (guest.id == null) {
+        final guestId = await (await ref.read(dataManagerProvider)).createOrUpdateSingle(guest);
+        guest = guest.copyWith(id: guestId); // TODO: check if it works without refetching the objects
+      } else {
+        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(guest);
       }
 
       await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
