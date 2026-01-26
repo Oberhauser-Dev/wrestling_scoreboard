@@ -114,8 +114,6 @@ void main() {
     orgSyncId: 'SV Untergriesbach',
   );
 
-  final testLineupUntergriesbach = TeamLineup(team: testTeamUntergriesbach);
-
   final testTeamClubAffiliationUntergriesbach = TeamClubAffiliation(
     team: testTeamUntergriesbach,
     club: testClubUntergriesbach,
@@ -133,8 +131,6 @@ void main() {
     club: testClubBerchtesgaden,
   );
 
-  final testLineupBerchtesgaden = TeamLineup(team: testTeamBerchtesgaden, leader: null, coach: null);
-
   final testTeamMatch = TeamMatch(
     league: testBayerligaSuedLeague,
     no: '005029c',
@@ -142,8 +138,8 @@ void main() {
     seasonPartition: 1,
     organization: organizationNRW,
     comment: 'Verspäteter Beginn aufgrund Vorkämpfe',
-    home: testLineupUntergriesbach,
-    guest: testLineupBerchtesgaden,
+    home: TeamLineup(team: testTeamUntergriesbach, classificationPoints: 22),
+    guest: TeamLineup(team: testTeamBerchtesgaden, leader: null, coach: null, classificationPoints: 11),
     date: DateTime.utc(2023, 10, 28, 17),
     visitorsCount: 295,
     location: 'Verbandsschulturnhalle, Passauerstr. 47, 94107 Untergriesbach',
@@ -640,8 +636,8 @@ void main() {
             orgSyncId: '029013c',
             no: '029013c',
             organization: organizationNRW,
-            home: testLineupBerchtesgaden,
-            guest: TeamLineup(team: testTeamMering, leader: null, coach: null),
+            home: TeamLineup(team: testTeamBerchtesgaden, leader: null, coach: null, classificationPoints: 17),
+            guest: TeamLineup(team: testTeamMering, leader: null, coach: null, classificationPoints: 10),
             league: testBayerligaSuedLeague,
             seasonPartition: 0,
             location: 'Kongresshaus Berchtesgaden, Maximilianstr. 9, 83471 Berchtesgaden',

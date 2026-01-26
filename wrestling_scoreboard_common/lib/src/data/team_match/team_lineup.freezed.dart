@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TeamLineup {
 
- int? get id; Team get team; Membership? get leader;// Mannschaftsführer
+ int? get id; int? get classificationPoints; Team get team; Membership? get leader;// Mannschaftsführer
  Membership? get coach;
 /// Create a copy of TeamLineup
 /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +29,16 @@ $TeamLineupCopyWith<TeamLineup> get copyWith => _$TeamLineupCopyWithImpl<TeamLin
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamLineup&&(identical(other.id, id) || other.id == id)&&(identical(other.team, team) || other.team == team)&&(identical(other.leader, leader) || other.leader == leader)&&(identical(other.coach, coach) || other.coach == coach));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamLineup&&(identical(other.id, id) || other.id == id)&&(identical(other.classificationPoints, classificationPoints) || other.classificationPoints == classificationPoints)&&(identical(other.team, team) || other.team == team)&&(identical(other.leader, leader) || other.leader == leader)&&(identical(other.coach, coach) || other.coach == coach));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,team,leader,coach);
+int get hashCode => Object.hash(runtimeType,id,classificationPoints,team,leader,coach);
 
 @override
 String toString() {
-  return 'TeamLineup(id: $id, team: $team, leader: $leader, coach: $coach)';
+  return 'TeamLineup(id: $id, classificationPoints: $classificationPoints, team: $team, leader: $leader, coach: $coach)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $TeamLineupCopyWith<$Res>  {
   factory $TeamLineupCopyWith(TeamLineup value, $Res Function(TeamLineup) _then) = _$TeamLineupCopyWithImpl;
 @useResult
 $Res call({
- int? id, Team team, Membership? leader, Membership? coach
+ int? id, int? classificationPoints, Team team, Membership? leader, Membership? coach
 });
 
 
@@ -66,9 +66,10 @@ class _$TeamLineupCopyWithImpl<$Res>
 
 /// Create a copy of TeamLineup
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? team = null,Object? leader = freezed,Object? coach = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? classificationPoints = freezed,Object? team = null,Object? leader = freezed,Object? coach = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,classificationPoints: freezed == classificationPoints ? _self.classificationPoints : classificationPoints // ignore: cast_nullable_to_non_nullable
 as int?,team: null == team ? _self.team : team // ignore: cast_nullable_to_non_nullable
 as Team,leader: freezed == leader ? _self.leader : leader // ignore: cast_nullable_to_non_nullable
 as Membership?,coach: freezed == coach ? _self.coach : coach // ignore: cast_nullable_to_non_nullable
@@ -190,10 +191,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  Team team,  Membership? leader,  Membership? coach)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  int? classificationPoints,  Team team,  Membership? leader,  Membership? coach)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TeamLineup() when $default != null:
-return $default(_that.id,_that.team,_that.leader,_that.coach);case _:
+return $default(_that.id,_that.classificationPoints,_that.team,_that.leader,_that.coach);case _:
   return orElse();
 
 }
@@ -211,10 +212,10 @@ return $default(_that.id,_that.team,_that.leader,_that.coach);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  Team team,  Membership? leader,  Membership? coach)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  int? classificationPoints,  Team team,  Membership? leader,  Membership? coach)  $default,) {final _that = this;
 switch (_that) {
 case _TeamLineup():
-return $default(_that.id,_that.team,_that.leader,_that.coach);case _:
+return $default(_that.id,_that.classificationPoints,_that.team,_that.leader,_that.coach);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -231,10 +232,10 @@ return $default(_that.id,_that.team,_that.leader,_that.coach);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  Team team,  Membership? leader,  Membership? coach)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  int? classificationPoints,  Team team,  Membership? leader,  Membership? coach)?  $default,) {final _that = this;
 switch (_that) {
 case _TeamLineup() when $default != null:
-return $default(_that.id,_that.team,_that.leader,_that.coach);case _:
+return $default(_that.id,_that.classificationPoints,_that.team,_that.leader,_that.coach);case _:
   return null;
 
 }
@@ -246,10 +247,11 @@ return $default(_that.id,_that.team,_that.leader,_that.coach);case _:
 @JsonSerializable()
 
 class _TeamLineup extends TeamLineup {
-  const _TeamLineup({this.id, required this.team, this.leader, this.coach}): super._();
+  const _TeamLineup({this.id, this.classificationPoints, required this.team, this.leader, this.coach}): super._();
   factory _TeamLineup.fromJson(Map<String, dynamic> json) => _$TeamLineupFromJson(json);
 
 @override final  int? id;
+@override final  int? classificationPoints;
 @override final  Team team;
 @override final  Membership? leader;
 // Mannschaftsführer
@@ -268,16 +270,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamLineup&&(identical(other.id, id) || other.id == id)&&(identical(other.team, team) || other.team == team)&&(identical(other.leader, leader) || other.leader == leader)&&(identical(other.coach, coach) || other.coach == coach));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamLineup&&(identical(other.id, id) || other.id == id)&&(identical(other.classificationPoints, classificationPoints) || other.classificationPoints == classificationPoints)&&(identical(other.team, team) || other.team == team)&&(identical(other.leader, leader) || other.leader == leader)&&(identical(other.coach, coach) || other.coach == coach));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,team,leader,coach);
+int get hashCode => Object.hash(runtimeType,id,classificationPoints,team,leader,coach);
 
 @override
 String toString() {
-  return 'TeamLineup(id: $id, team: $team, leader: $leader, coach: $coach)';
+  return 'TeamLineup(id: $id, classificationPoints: $classificationPoints, team: $team, leader: $leader, coach: $coach)';
 }
 
 
@@ -288,7 +290,7 @@ abstract mixin class _$TeamLineupCopyWith<$Res> implements $TeamLineupCopyWith<$
   factory _$TeamLineupCopyWith(_TeamLineup value, $Res Function(_TeamLineup) _then) = __$TeamLineupCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, Team team, Membership? leader, Membership? coach
+ int? id, int? classificationPoints, Team team, Membership? leader, Membership? coach
 });
 
 
@@ -305,9 +307,10 @@ class __$TeamLineupCopyWithImpl<$Res>
 
 /// Create a copy of TeamLineup
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? team = null,Object? leader = freezed,Object? coach = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? classificationPoints = freezed,Object? team = null,Object? leader = freezed,Object? coach = freezed,}) {
   return _then(_TeamLineup(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,classificationPoints: freezed == classificationPoints ? _self.classificationPoints : classificationPoints // ignore: cast_nullable_to_non_nullable
 as int?,team: null == team ? _self.team : team // ignore: cast_nullable_to_non_nullable
 as Team,leader: freezed == leader ? _self.leader : leader // ignore: cast_nullable_to_non_nullable
 as Membership?,coach: freezed == coach ? _self.coach : coach // ignore: cast_nullable_to_non_nullable

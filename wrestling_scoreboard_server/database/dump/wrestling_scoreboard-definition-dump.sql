@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 2sMIcltWccv3MbclFTlCzWOUBzbI9oGSpN8UtdaNWHX726fKHjHP69jJtZchDgk
+\restrict HQEriQaMxaoWorttwoJhDgdTeQQI2CVZdO4MEuXezjw6UrypFa6TWnA7LcLZW5L
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -134,6 +134,19 @@ CREATE TYPE public.gender AS ENUM (
 
 
 ALTER TYPE public.gender OWNER TO wrestling;
+
+--
+-- Name: match_result_role; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.match_result_role AS ENUM (
+    'home',
+    'guest',
+    'tie'
+);
+
+
+ALTER TYPE public.match_result_role OWNER TO wrestling;
 
 --
 -- Name: person_role; Type: TYPE; Schema: public; Owner: wrestling
@@ -1015,7 +1028,8 @@ CREATE TABLE public.team_lineup (
     id integer NOT NULL,
     team_id integer,
     leader_id integer,
-    coach_id integer
+    coach_id integer,
+    classification_points integer
 );
 
 
@@ -1338,7 +1352,8 @@ CREATE TABLE public.team_match (
     home_id integer,
     guest_id integer,
     league_id integer,
-    season_partition integer
+    season_partition integer,
+    result_role public.match_result_role
 )
 INHERITS (public.wrestling_event);
 
@@ -1935,7 +1950,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.9	0.3.10
+0.3.10-pre.1	0.3.10
 \.
 
 
@@ -1984,7 +1999,7 @@ COPY public.team_club_affiliation (id, team_id, club_id) FROM stdin;
 -- Data for Name: team_lineup; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_lineup (id, team_id, leader_id, coach_id) FROM stdin;
+COPY public.team_lineup (id, team_id, leader_id, coach_id, classification_points) FROM stdin;
 \.
 
 
@@ -2000,7 +2015,7 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, home_id, guest_id, league_id, season_partition) FROM stdin;
+COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, home_id, guest_id, league_id, season_partition, result_role) FROM stdin;
 \.
 
 
@@ -3272,5 +3287,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 2sMIcltWccv3MbclFTlCzWOUBzbI9oGSpN8UtdaNWHX726fKHjHP69jJtZchDgk
+\unrestrict HQEriQaMxaoWorttwoJhDgdTeQQI2CVZdO4MEuXezjw6UrypFa6TWnA7LcLZW5L
 

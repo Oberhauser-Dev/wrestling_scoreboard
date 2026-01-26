@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict O7Y6RyIcDnbugGanE1pIollItEsoiYJOTCajkrLo76iPrUAhBOJOLY660gtrMdj
+\restrict 8cAE6u9dOsqomnLi6wudbwNiIWJlihGR0S8ut4uzztaLbyvBfTQxSrDc1MJ7QqF
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -55,7 +55,8 @@ CREATE TYPE public.bout_action_type AS ENUM (
     'passivity',
     'verbal',
     'caution',
-    'dismissal'
+    'dismissal',
+    'legFoul'
 );
 
 
@@ -133,6 +134,19 @@ CREATE TYPE public.gender AS ENUM (
 
 
 ALTER TYPE public.gender OWNER TO wrestling;
+
+--
+-- Name: match_result_role; Type: TYPE; Schema: public; Owner: wrestling
+--
+
+CREATE TYPE public.match_result_role AS ENUM (
+    'home',
+    'guest',
+    'tie'
+);
+
+
+ALTER TYPE public.match_result_role OWNER TO wrestling;
 
 --
 -- Name: person_role; Type: TYPE; Schema: public; Owner: wrestling
@@ -257,13 +271,31 @@ ALTER SEQUENCE public.age_category_id_seq OWNED BY public.age_category.id;
 
 
 --
+-- Name: api_metadata; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.api_metadata (
+    entity_id integer NOT NULL,
+    entity_type character varying NOT NULL,
+    last_import timestamp with time zone
+);
+
+
+ALTER TABLE public.api_metadata OWNER TO wrestling;
+
+--
 -- Name: athlete_bout_state; Type: TABLE; Schema: public; Owner: wrestling
 --
 
 CREATE TABLE public.athlete_bout_state (
     id integer NOT NULL,
     classification_points smallint,
-    membership_id integer NOT NULL
+    membership_id integer NOT NULL,
+    activity_time_millis integer,
+    injury_time_millis integer,
+    is_injury_time_running boolean DEFAULT false NOT NULL,
+    bleeding_injury_time_millis integer,
+    is_bleeding_injury_time_running boolean DEFAULT false NOT NULL
 );
 
 
@@ -282,7 +314,8 @@ CREATE TABLE public.bout (
     duration_millis integer,
     org_sync_id character varying(127),
     organization_id integer,
-    comment text
+    comment text,
+    is_running boolean DEFAULT false NOT NULL
 );
 
 
@@ -437,7 +470,8 @@ CREATE TABLE public.club (
     no character varying(8),
     name character varying(255) NOT NULL,
     organization_id integer NOT NULL,
-    org_sync_id character varying(127)
+    org_sync_id character varying(127),
+    image_uri text
 );
 
 
@@ -477,7 +511,8 @@ CREATE TABLE public.wrestling_event (
     comment text,
     no character varying(16),
     organization_id integer,
-    org_sync_id character varying(127)
+    org_sync_id character varying(127),
+    end_date timestamp with time zone
 );
 
 
@@ -993,7 +1028,8 @@ CREATE TABLE public.team_lineup (
     id integer NOT NULL,
     team_id integer,
     leader_id integer,
-    coach_id integer
+    coach_id integer,
+    classification_points integer
 );
 
 
@@ -1081,7 +1117,8 @@ CREATE TABLE public.organization (
     abbreviation character varying(64),
     parent_id integer,
     api_provider public.api_provider,
-    report_provider public.report_provider
+    report_provider public.report_provider,
+    image_uri text
 );
 
 
@@ -1180,7 +1217,8 @@ CREATE TABLE public.person (
     gender public.gender,
     nationality character(3) DEFAULT NULL::bpchar,
     org_sync_id character varying(127),
-    organization_id integer
+    organization_id integer,
+    image_uri text
 );
 
 
@@ -1220,7 +1258,10 @@ CREATE TABLE public.secured_user (
     person_id integer,
     salt character varying(127) NOT NULL,
     created_at date NOT NULL,
-    privilege public.user_privilege DEFAULT 'none'::public.user_privilege NOT NULL
+    privilege public.user_privilege DEFAULT 'none'::public.user_privilege NOT NULL,
+    is_email_verified boolean DEFAULT false NOT NULL,
+    email_verification_code character varying,
+    email_verification_code_expiration_date timestamp with time zone
 );
 
 
@@ -1311,7 +1352,8 @@ CREATE TABLE public.team_match (
     home_id integer,
     guest_id integer,
     league_id integer,
-    season_partition integer
+    season_partition integer,
+    result_role public.match_result_role
 )
 INHERITS (public.wrestling_event);
 
@@ -1736,12 +1778,23 @@ COPY public.age_category (id, org_sync_id, organization_id, name, min_age, max_a
 
 
 --
+-- Data for Name: api_metadata; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.api_metadata (entity_id, entity_type, last_import) FROM stdin;
+2	organization	2026-01-26 22:27:57.043402+00
+11	league	2026-01-26 22:27:57.205956+00
+2	team_match	2026-01-26 22:27:57.484574+00
+\.
+
+
+--
 -- Data for Name: athlete_bout_state; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.athlete_bout_state (id, classification_points, membership_id) FROM stdin;
-79	0	23
-80	1	24
+COPY public.athlete_bout_state (id, classification_points, membership_id, activity_time_millis, injury_time_millis, is_injury_time_running, bleeding_injury_time_millis, is_bleeding_injury_time_running) FROM stdin;
+79	0	23	\N	\N	f	\N	f
+80	1	24	\N	\N	f	\N	f
 \.
 
 
@@ -1749,8 +1802,8 @@ COPY public.athlete_bout_state (id, classification_points, membership_id) FROM s
 -- Data for Name: bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id, comment) FROM stdin;
-52	79	80	blue	vpo	360000	005029c_61_kg_free	2	Test comment
+COPY public.bout (id, red_id, blue_id, winner_role, bout_result, duration_millis, org_sync_id, organization_id, comment, is_running) FROM stdin;
+52	79	80	blue	vpo	360000	005029c_61_kg_free	2	Test comment	f
 \.
 
 
@@ -1873,13 +1926,13 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 -- Data for Name: club; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
-3	30525	RG Willmering	2	30525
-4	30074	ASV Cham	2	30074
-5	20178	TV Geiselhöring	2	20178
-6	70434	TSC Mering	2	70434
-7	10142	TSV Berchtesgaden	2	10142
-8	20696	SV Untergriesbach	2	20696
+COPY public.club (id, no, name, organization_id, org_sync_id, image_uri) FROM stdin;
+3	30525	RG Willmering	2	30525	\N
+4	30074	ASV Cham	2	30074	\N
+5	20178	TV Geiselhöring	2	20178	\N
+6	70434	TSC Mering	2	70434	\N
+7	10142	TSV Berchtesgaden	2	10142	\N
+8	20696	SV Untergriesbach	2	20696	\N
 \.
 
 
@@ -1887,7 +1940,7 @@ COPY public.club (id, no, name, organization_id, org_sync_id) FROM stdin;
 -- Data for Name: competition; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id, mat_count, max_ranking) FROM stdin;
+COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id, mat_count, max_ranking, end_date) FROM stdin;
 \.
 
 
@@ -2244,7 +2297,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.7-pre.1	0.3.4
+0.3.10-pre.1	0.3.10
 \.
 
 
@@ -2252,8 +2305,8 @@ COPY public.migration (semver, min_client_version) FROM stdin;
 -- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider) FROM stdin;
-2	BaRiVe	BRV	\N	deByRingenApi	\N
+COPY public.organization (id, name, abbreviation, parent_id, api_provider, report_provider, image_uri) FROM stdin;
+2	BaRiVe	BRV	\N	deByRingenApi	\N	\N
 \.
 
 
@@ -2261,11 +2314,11 @@ COPY public.organization (id, name, abbreviation, parent_id, api_provider, repor
 -- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.person (id, prename, surname, birth_date, gender, nationality, org_sync_id, organization_id) FROM stdin;
-24	Mustafa	Durak	\N	\N	\N	Mustafa_Durak_null	2
-25	Fröhlich	Peter	\N	\N	\N	Fröhlich_Peter_null	2
-26	Max	Muster	2000-01-31	male	DEU	Max_Muster_2000-01-31	2
-27	Tobias	Müller	2000-03-02	male	DEU	Tobias_Müller_2000-03-02	2
+COPY public.person (id, prename, surname, birth_date, gender, nationality, org_sync_id, organization_id, image_uri) FROM stdin;
+24	Mustafa	Durak	\N	\N	\N	Mustafa_Durak_null	2	\N
+25	Fröhlich	Peter	\N	\N	\N	Fröhlich_Peter_null	2	\N
+26	Max	Muster	2000-01-31	male	DEU	Max_Muster_2000-01-31	2	\N
+27	Tobias	Müller	2000-03-02	male	DEU	Tobias_Müller_2000-03-02	2	\N
 \.
 
 
@@ -2273,8 +2326,8 @@ COPY public.person (id, prename, surname, birth_date, gender, nationality, org_s
 -- Data for Name: secured_user; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.secured_user (id, username, password_hash, email, person_id, salt, created_at, privilege) FROM stdin;
-2	admin	\\x9b452a2e6bc24ddb4117dfb727f78f5da9ed569201a094a9f3e9d8a1671f891a	\N	\N	36jSKg==	2024-10-23	admin
+COPY public.secured_user (id, username, password_hash, email, person_id, salt, created_at, privilege, is_email_verified, email_verification_code, email_verification_code_expiration_date) FROM stdin;
+2	admin	\\x9b452a2e6bc24ddb4117dfb727f78f5da9ed569201a094a9f3e9d8a1671f891a	\N	\N	36jSKg==	2024-10-23	admin	f	\N	\N
 \.
 
 
@@ -2333,11 +2386,11 @@ COPY public.team_club_affiliation (id, team_id, club_id) FROM stdin;
 -- Data for Name: team_lineup; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_lineup (id, team_id, leader_id, coach_id) FROM stdin;
-5	19	\N	\N
-6	14	\N	\N
-7	14	\N	\N
-8	10	\N	\N
+COPY public.team_lineup (id, team_id, leader_id, coach_id, classification_points) FROM stdin;
+5	19	\N	\N	22
+6	14	\N	\N	11
+7	14	\N	\N	17
+8	10	\N	\N	10
 \.
 
 
@@ -2355,9 +2408,9 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, league_id, season_partition) FROM stdin;
-2	2023-10-28 17:00:00+00	Verbandsschulturnhalle, Passauerstr. 47, 94107 Untergriesbach	295	Verspäteter Beginn aufgrund Vorkämpfe	005029c	2	005029c	5	6	11	1
-3	2023-10-21 17:00:00+00	Kongresshaus Berchtesgaden, Maximilianstr. 9, 83471 Berchtesgaden	813	TSV BGD 57kg übergewicht	029013c	2	029013c	7	8	11	0
+COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, league_id, season_partition, end_date, result_role) FROM stdin;
+2	2023-10-28 17:00:00+00	Verbandsschulturnhalle, Passauerstr. 47, 94107 Untergriesbach	295	Verspäteter Beginn aufgrund Vorkämpfe	005029c	2	005029c	5	6	11	1	\N	home
+3	2023-10-21 17:00:00+00	Kongresshaus Berchtesgaden, Maximilianstr. 9, 83471 Berchtesgaden	813	TSV BGD 57kg übergewicht	029013c	2	029013c	7	8	11	0	\N	home
 \.
 
 
@@ -2612,7 +2665,7 @@ COPY public.weight_class (id, suffix, weight, style, unit) FROM stdin;
 -- Data for Name: wrestling_event; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.wrestling_event (id, date, location, visitors_count, comment, no, organization_id, org_sync_id) FROM stdin;
+COPY public.wrestling_event (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date) FROM stdin;
 \.
 
 
@@ -2861,6 +2914,14 @@ ALTER TABLE ONLY public.age_category
 
 ALTER TABLE ONLY public.age_category
     ADD CONSTRAINT age_category_pk PRIMARY KEY (id);
+
+
+--
+-- Name: api_metadata api_metadata_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.api_metadata
+    ADD CONSTRAINT api_metadata_pk PRIMARY KEY (entity_id, entity_type);
 
 
 --
@@ -3125,6 +3186,14 @@ ALTER TABLE ONLY public.person
 
 ALTER TABLE ONLY public.person
     ADD CONSTRAINT person_pk PRIMARY KEY (id);
+
+
+--
+-- Name: secured_user secured_user_email_unique; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.secured_user
+    ADD CONSTRAINT secured_user_email_unique UNIQUE (email);
 
 
 --
@@ -3836,5 +3905,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict O7Y6RyIcDnbugGanE1pIollItEsoiYJOTCajkrLo76iPrUAhBOJOLY660gtrMdj
+\unrestrict 8cAE6u9dOsqomnLi6wudbwNiIWJlihGR0S8ut4uzztaLbyvBfTQxSrDc1MJ7QqF
 

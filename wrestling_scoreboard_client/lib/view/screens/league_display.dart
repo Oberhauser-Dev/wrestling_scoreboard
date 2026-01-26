@@ -60,9 +60,13 @@ class LeagueDisplay extends ConsumerWidget {
                       final List<MapEntry<TeamMatch, (LeagueTeamPoints, LeagueTeamPoints)>> teamMatchBoutsMap =
                           await Future.wait(
                             matches.map((tm) async {
-                              final bouts = (await _getTeamMatchBouts(ref, tm));
-                              final homeCPoints = TeamMatch.getHomePoints(bouts);
-                              final guestCPoints = TeamMatch.getGuestPoints(bouts);
+                              int? homeCPoints = tm.home.classificationPoints;
+                              int? guestCPoints = tm.guest.classificationPoints;
+                              if (homeCPoints == null || guestCPoints == null) {
+                                final bouts = (await _getTeamMatchBouts(ref, tm));
+                                homeCPoints = TeamMatch.getHomePoints(bouts);
+                                guestCPoints = TeamMatch.getGuestPoints(bouts);
+                              }
                               final matchEndedValue = tm.resultRole == null ? 0 : 1;
                               if (tm.resultRole == MatchResultRole.tie ||
                                   (tm.resultRole == null && homeCPoints == guestCPoints)) {
