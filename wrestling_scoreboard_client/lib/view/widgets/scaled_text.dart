@@ -11,6 +11,7 @@ class ScaledText extends StatelessWidget {
   final bool? softWrap;
   final TextDecoration? decoration;
   final TextAlign? textAlign;
+  final TextOverflow? overflow;
 
   const ScaledText(
     this.data, {
@@ -22,6 +23,7 @@ class ScaledText extends StatelessWidget {
     this.softWrap,
     this.decoration,
     this.textAlign,
+    this.overflow,
     super.key,
   });
 
@@ -34,6 +36,7 @@ class ScaledText extends StatelessWidget {
       textScaler: AutoTextScaler(minFontSize: minFontSize ?? fontSize),
       softWrap: softWrap,
       textAlign: textAlign,
+      overflow: overflow,
     );
   }
 }
