@@ -59,24 +59,31 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> with Or
           }
         }
       }
-    } else if (updatedCompetitionBout.weightCategory?.id != null) {
+    }
+    return super.handlePostRequestSingle(json);
+  }
+
+  Future<void> processOnResult(CompetitionBout competitionBout) async {
+    if (competitionBout.bout.result != null && competitionBout.weightCategory?.id != null) {
+      final obfuscate = false;
+      // If bout has a result, check if can pair a new round
       final weightCategory = await CompetitionWeightCategoryController().getSingle(
-        updatedCompetitionBout.weightCategory!.id!,
+        competitionBout.weightCategory!.id!,
         obfuscate: obfuscate,
       );
 
       if (weightCategory.pairedRound != null &&
-          updatedCompetitionBout.round != null &&
-          updatedCompetitionBout.round! >= weightCategory.pairedRound!) {
+          competitionBout.round != null &&
+          competitionBout.round! >= weightCategory.pairedRound!) {
         // Only compute if pairedRound is equal to round of updated bout
-        if (updatedCompetitionBout.round! > weightCategory.pairedRound!) {
+        if (competitionBout.round! > weightCategory.pairedRound!) {
           throw Exception(
-            'Round of bout $updatedCompetitionBout must be smaller or equal to paired round ${weightCategory.pairedRound}',
+            'Round of bout $competitionBout must be smaller or equal to paired round ${weightCategory.pairedRound}',
           );
         }
 
         final pastCompetitionBouts = await getByWeightCategory(
-          updatedCompetitionBout.weightCategory!.id!,
+          competitionBout.weightCategory!.id!,
           obfuscate: obfuscate,
         );
         final pastCompetitionBoutsWithActions = await Future.wait(
@@ -84,11 +91,11 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> with Or
             (cb) async => MapEntry(cb, await BoutActionController().getByBout(cb.bout.id!, obfuscate: obfuscate)),
           ),
         );
-        final competitionBoutsOfRound = pastCompetitionBouts.where((cb) => cb.round == updatedCompetitionBout.round);
+        final competitionBoutsOfRound = pastCompetitionBouts.where((cb) => cb.round == competitionBout.round);
 
         if (competitionBoutsOfRound.every((cb) => cb.bout.result != null)) {
           // Every bout has a bout result, so can pair a new round
-          RoundType roundType = updatedCompetitionBout.roundType;
+          RoundType roundType = competitionBout.roundType;
           final pairedRound = weightCategory.pairedRound! + 1;
 
           final participations = await CompetitionParticipationController().getByWeightCategory(
@@ -186,7 +193,6 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> with Or
         }
       }
     }
-    return super.handlePostRequestSingle(json);
   }
 
   @override
@@ -200,6 +206,10 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> with Or
       substitutionValues: {'id': id},
       obfuscate: obfuscate,
     );
+  }
+
+  Future<List<CompetitionBout>> getByBout(int id, {required bool obfuscate}) async {
+    return await getMany(conditions: ['bout_id = @id'], substitutionValues: {'id': id}, obfuscate: obfuscate);
   }
 
   static const maxPoolFinalists = 3;

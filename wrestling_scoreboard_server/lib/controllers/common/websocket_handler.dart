@@ -199,6 +199,7 @@ void broadcastDependants<T extends DataObject>(T single) async {
   });
 
   if (single is Bout) {
+    // TODO: check if need to broadcast team match bout.
     // Update the competition bout, if its bout has changed, but only if the a result is present.
     if (single.result != null) {
       broadcastUpdateMany<CompetitionBout>(

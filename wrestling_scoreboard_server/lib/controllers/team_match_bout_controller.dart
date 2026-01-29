@@ -1,9 +1,9 @@
-import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/orderable_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
 
@@ -34,22 +34,20 @@ class TeamMatchBoutController extends ShelfController<TeamMatchBout>
     );
   }
 
-  @override
-  Future<Response> handlePostRequestSingle(Map<String, Object?> json) async {
-    final updatedTeamMatchBout = parseSingleJson<TeamMatchBout>(json);
-    final obfuscate = false;
+  Future<List<TeamMatchBout>> getByBout(int id, {required bool obfuscate}) async {
+    return await getMany(conditions: ['bout_id = @id'], substitutionValues: {'id': id}, obfuscate: obfuscate);
+  }
 
+  Future<void> processOnResult(TeamMatchBout teamMatchBout) async {
     // Update team match result, if every bout has a result.
-    if (updatedTeamMatchBout.bout.result != null && updatedTeamMatchBout.teamMatch.id != null) {
+    if (teamMatchBout.bout.result != null && teamMatchBout.teamMatch.id != null) {
+      final obfuscate = false;
       final teamMatchBouts = await TeamMatchBoutController().getByTeamMatch(
-        updatedTeamMatchBout.teamMatch.id!,
+        teamMatchBout.teamMatch.id!,
         obfuscate: obfuscate,
       );
       if (teamMatchBouts.every((tmb) => tmb.bout.result != null)) {
-        final teamMatch = await TeamMatchController().getSingle(
-          updatedTeamMatchBout.teamMatch.id!,
-          obfuscate: obfuscate,
-        );
+        var teamMatch = await TeamMatchController().getSingle(teamMatchBout.teamMatch.id!, obfuscate: obfuscate);
         if (teamMatch.resultRole == null ||
             teamMatch.home.classificationPoints == null ||
             teamMatch.guest.classificationPoints == null) {
@@ -61,14 +59,26 @@ class TeamMatchBoutController extends ShelfController<TeamMatchBout>
             final resultRole = MatchResultRole.fromDiff(homeClassificationPoints - guestClassificationPoints);
             final endDate = teamMatch.endDate ?? MockableDateTime.now().toUtc();
             await TeamLineupController().updateSingle(home);
+            broadcastUpdateSingle(
+              (obfuscate) async =>
+                  obfuscate ? (await TeamLineupController().getSingle(teamMatch.home.id!, obfuscate: obfuscate)) : home,
+            );
             await TeamLineupController().updateSingle(guest);
-            await TeamMatchController().updateSingle(
-              teamMatch.copyWith(resultRole: resultRole, home: home, guest: guest, endDate: endDate),
+            broadcastUpdateSingle(
+              (obfuscate) async =>
+                  obfuscate
+                      ? (await TeamLineupController().getSingle(teamMatch.guest.id!, obfuscate: obfuscate))
+                      : guest,
+            );
+            teamMatch = teamMatch.copyWith(resultRole: resultRole, home: home, guest: guest, endDate: endDate);
+            await TeamMatchController().updateSingle(teamMatch);
+            broadcastUpdateSingle(
+              (obfuscate) async =>
+                  obfuscate ? (await TeamMatchController().getSingle(teamMatch.id!, obfuscate: obfuscate)) : teamMatch,
             );
           }
         }
       }
     }
-    return super.handlePostRequestSingle(json);
   }
 }
