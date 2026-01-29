@@ -65,8 +65,8 @@ abstract class User with _$User implements AbstractUser {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      if (person != null) 'person_id': person!.id!,
-      if (email != null) 'email': email!,
+      'person_id': person?.id!,
+      'email': email,
       'username': username,
       if (password != null) 'password': password,
       'created_at': createdAt,
@@ -160,8 +160,8 @@ abstract class SecuredUser with _$SecuredUser implements AbstractUser {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      if (person != null) 'person_id': person!.id!,
-      if (email != null) 'email': email!,
+      'person_id': person?.id!,
+      'email': email,
       'username': username,
       if (passwordHash != null) 'password_hash': passwordHash,
       if (salt != null) 'salt': salt,

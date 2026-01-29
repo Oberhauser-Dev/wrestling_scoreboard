@@ -64,8 +64,8 @@ abstract class TeamMatchBout with _$TeamMatchBout implements DataObject, Organiz
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      if (organization != null) 'organization_id': organization?.id!,
+      'org_sync_id': orgSyncId,
+      'organization_id': organization?.id!,
       'pos': pos,
       'team_match_id': teamMatch.id!,
       'bout_id': bout.id!,

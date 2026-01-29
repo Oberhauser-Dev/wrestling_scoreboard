@@ -129,11 +129,41 @@ class MockedData {
   late final b3 = Membership(id: 7, person: p7, club: guestClub);
   late final b4 = Membership(id: 8, person: p8, club: guestClub);
 
-  final referee = const Person(id: 9, prename: 'Mr', surname: 'Referee', gender: Gender.male);
-  final judge = const Person(id: 10, prename: 'Mrs', surname: 'Judge', gender: Gender.female);
-  final matChairman = const Person(id: 11, prename: 'Mr', surname: 'Chairman', gender: Gender.male);
-  final timeKeeper = const Person(id: 12, prename: 'Mr', surname: 'Time-Keeper', gender: Gender.male);
-  final transcriptWriter = const Person(id: 13, prename: 'Mrs', surname: 'Transcript-Writer', gender: Gender.female);
+  late final referee = Person(
+    id: 9,
+    prename: 'Mr',
+    surname: 'Referee',
+    gender: Gender.male,
+    organization: organization,
+  );
+  late final judge = Person(
+    id: 10,
+    prename: 'Mrs',
+    surname: 'Judge',
+    gender: Gender.female,
+    organization: organization,
+  );
+  late final matChairman = Person(
+    id: 11,
+    prename: 'Mr',
+    surname: 'Chairman',
+    gender: Gender.male,
+    organization: organization,
+  );
+  late final timeKeeper = Person(
+    id: 12,
+    prename: 'Mr',
+    surname: 'Time-Keeper',
+    gender: Gender.male,
+    organization: organization,
+  );
+  late final transcriptWriter = Person(
+    id: 13,
+    prename: 'Mrs',
+    surname: 'Transcript-Writer',
+    gender: Gender.female,
+    organization: organization,
+  );
 
   TeamMatch initMenRPWMatch() {
     final menRpwHomeTeamLineup = TeamLineup(id: 1, team: homeTeam);
