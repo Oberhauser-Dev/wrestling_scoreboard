@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_common/src/mocked_data.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
@@ -40,8 +41,6 @@ void main() {
     });
 
     test('Start server and load the prepopulated database', () async {
-      final db = PostgresDb();
-      await db.open();
       await db.clear();
 
       // Server init loads the prepopulated database, if no db exists yet.
@@ -54,9 +53,7 @@ void main() {
     });
 
     test('Start server and migrate definition database', () async {
-      final db = PostgresDb();
-      await db.open();
-      await db.restore('./database/migration/v0.0.0_Setup-DB.sql');
+      await db.restore('./database/migration/v0.0.0_Setup-DB.sql', prepare: false);
 
       final instance = await server.init();
       await instance.close();
@@ -68,9 +65,7 @@ void main() {
     }, timeout: const Timeout(Duration(seconds: 60)));
 
     test('Migrate data to match prepopulated database', () async {
-      final db = PostgresDb();
-      await db.open();
-      await db.restore('./database/migration/v0.0.0_Setup-DB.sql');
+      await db.restore('./database/migration/v0.0.0_Setup-DB.sql', prepare: false);
 
       final dataMigratonMap = Map.fromEntries(
         await DatabaseExt.readMigrationScripts(folderPath: './test/res/migration'),
@@ -80,7 +75,7 @@ void main() {
       // On each migration step, one can add additional data, which should be present for testing.
       // This data then is also migrated by the following scripts.
       await db.migrate(
-        skipPreparation: true,
+        prepare: false,
         onMigrate: (version) async {
           if (dataMigratonMap.containsKey(version)) {
             await db.executeSqlFile(dataMigratonMap[version]!.path);
@@ -115,42 +110,39 @@ void main() {
       return await _canonicalExport(db);
     }
 
-    test('Import External API twice', () async {
-      final db = PostgresDb();
-      await db.open();
-      await db.reset();
+    group('External API', () {
+      tz.initializeTimeZones();
+      test('Import twice', () async {
+        await db.reset();
 
-      final org = await OrganizationController().createSingleReturn(
-        Organization(name: 'BaRiVe', abbreviation: 'BRV', apiProvider: WrestlingApiProvider.deByRingenApi),
-      );
+        final org = await OrganizationController().createSingleReturn(
+          Organization(name: 'BaRiVe', abbreviation: 'BRV', apiProvider: WrestlingApiProvider.deByRingenApi),
+        );
 
-      final firstImportSql = await executeMockedImport(db, org);
-      final secondImportSql = await executeMockedImport(db, org);
+        final firstImportSql = await executeMockedImport(db, org);
+        final secondImportSql = await executeMockedImport(db, org);
 
-      expect(DatabaseExt.sanitizeSql(firstImportSql), DatabaseExt.sanitizeSql(secondImportSql));
-    }, timeout: const Timeout(Duration(seconds: 60)));
+        expect(DatabaseExt.sanitizeSql(firstImportSql), DatabaseExt.sanitizeSql(secondImportSql));
+      }, timeout: const Timeout(Duration(seconds: 60)));
 
-    test('Changes in external API import', () async {
-      final db = PostgresDb();
-      await db.open();
-      await db.restore('./test/res/outdated_api_import.sql');
-      await db.migrate(/*skipPreparation: true*/); // Skip preparation, if need to squash old migration scripts
+      test('Data has changed', () async {
+        await db.restore('./test/res/outdated_api_import.sql', prepare: false);
+        await db.migrate(/*skipPreparation: true*/); // Skip preparation, if need to squash old migration scripts
 
-      final org = (await OrganizationController().getMany(obfuscate: false)).single;
-      // This should update the outdated import:
-      final updatedImportSql = await executeMockedImport(db, org);
+        final org = (await OrganizationController().getMany(obfuscate: false)).single;
+        // This should update the outdated import:
+        final updatedImportSql = await executeMockedImport(db, org);
 
-      await db.restore('./test/res/expected_api_import.sql');
-      await db.migrate();
-      final expectedSql = await db.export();
+        await db.restore('./test/res/expected_api_import.sql', prepare: false);
+        await db.migrate();
+        final expectedSql = await db.export();
 
-      expect(DatabaseExt.sanitizeSql(updatedImportSql), DatabaseExt.sanitizeSql(expectedSql));
-    }, timeout: const Timeout(Duration(seconds: 60)));
+        expect(DatabaseExt.sanitizeSql(updatedImportSql), DatabaseExt.sanitizeSql(expectedSql));
+      }, timeout: const Timeout(Duration(seconds: 60)));
+    });
 
     group('API', () {
       test('GET all', () async {
-        final db = PostgresDb();
-        await db.open();
         await db.clear();
 
         final instance = await server.init();
@@ -170,8 +162,6 @@ void main() {
       });
 
       test('POST, GET, DELETE single', () async {
-        final db = PostgresDb();
-        await db.open();
         await db.reset();
 
         final instance = await server.init();

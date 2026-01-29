@@ -30,7 +30,7 @@ class DatabaseController {
   Future<Response> restore(Request request, User? user) async {
     try {
       final message = await request.readAsString();
-      await PostgresDb().restoreFromString(message);
+      await PostgresDb().restoreFromString(message, prepare: false);
       await PostgresDb().migrate();
       return Response.ok('{"status": "success"}');
     } catch (err, stackTrace) {
