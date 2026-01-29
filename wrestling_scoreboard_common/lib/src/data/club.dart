@@ -25,7 +25,7 @@ abstract class Club with _$Club implements DataObject, ImageObjectData, Organiza
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      if (orgSyncId != null) 'org_sync_id': orgSyncId,
+      'org_sync_id': orgSyncId,
       'organization_id': organization.id!,
       'no': no,
       'name': name,

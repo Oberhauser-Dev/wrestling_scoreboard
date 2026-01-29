@@ -29,8 +29,8 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      if (organization != null) 'organization_id': organization?.id!,
+      'org_sync_id': orgSyncId,
+      'organization_id': organization?.id!,
       'red_id': r?.id!,
       'blue_id': b?.id!,
       'winner_role': winnerRole?.name,

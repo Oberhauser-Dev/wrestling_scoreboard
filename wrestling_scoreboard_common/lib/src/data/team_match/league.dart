@@ -45,8 +45,8 @@ abstract class League with _$League implements DataObject, Organizational {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      if (organization != null) 'organization_id': organization?.id!,
+      'org_sync_id': orgSyncId,
+      'organization_id': organization?.id!,
       'name': name,
       'start_date': startDate,
       'end_date': endDate,

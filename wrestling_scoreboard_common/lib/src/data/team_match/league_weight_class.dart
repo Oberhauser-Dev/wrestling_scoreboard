@@ -26,8 +26,8 @@ abstract class LeagueWeightClass with _$LeagueWeightClass implements DataObject,
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      if (organization != null) 'organization_id': organization?.id!,
+      'org_sync_id': orgSyncId,
+      'organization_id': organization?.id!,
       'pos': pos,
       'league_id': league.id!,
       'weight_class_id': weightClass.id!,

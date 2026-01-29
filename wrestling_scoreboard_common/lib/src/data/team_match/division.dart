@@ -45,7 +45,7 @@ abstract class Division with _$Division implements DataObject, Organizational {
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      if (orgSyncId != null) 'org_sync_id': orgSyncId,
+      'org_sync_id': orgSyncId,
       'organization_id': organization.id!,
       'name': name,
       'start_date': startDate,

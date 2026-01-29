@@ -56,8 +56,8 @@ abstract class Person with _$Person implements DataObject, ImageObjectData, Orga
   Map<String, dynamic> toRaw() {
     return {
       if (id != null) 'id': id,
-      if (orgSyncId != null) 'org_sync_id': orgSyncId,
-      if (organization != null) 'organization_id': organization?.id!,
+      'org_sync_id': orgSyncId,
+      'organization_id': organization?.id!,
       'prename': prename,
       'surname': surname,
       'gender': gender?.name,
