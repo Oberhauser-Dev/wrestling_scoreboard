@@ -112,7 +112,7 @@ void main() {
       final teamMatchProgress = TeamMatchController().import(entity: teamMatch, apiProvider: apiProvider);
       await for (final _ in teamMatchProgress) {}
 
-      return await db.export();
+      return await _canonicalExport(db);
     }
 
     test('Import External API twice', () async {
