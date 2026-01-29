@@ -78,7 +78,7 @@ extension DatabaseExt on PostgresDb {
     return await Migration.fromRaw(row.toColumnMap());
   }
 
-  Future<void> migrate({bool skipPreparation = false, Future<void> Function(Version version)? onMigrate}) async {
+  Future<void> migrate({bool prepare = true, Future<void> Function(Version version)? onMigrate}) async {
     String semver;
     try {
       final migration = await getMigration();
@@ -107,7 +107,7 @@ extension DatabaseExt on PostgresDb {
       }
       await connection.execute("UPDATE migration SET semver = '${migrationRange.last.key.toString()}';");
     }
-    if (!skipPreparation) await _prepare();
+    if (prepare) await _prepare();
   }
 
   static Future<List<MapEntry<Version, FileSystemEntity>>> readMigrationScripts({required String folderPath}) async {
@@ -128,25 +128,24 @@ extension DatabaseExt on PostgresDb {
 
   Future<void> restorePrepopulated() async {
     await restore(prepopulatedDatabasePath);
-    await _prepare();
   }
 
   Future<void> reset() async {
     await restore(definitionDatabasePath);
-    await _prepare();
   }
 
-  Future<void> restore(String dumpPath) async {
+  Future<void> restore(String dumpPath, {bool prepare = true}) async {
     await clear();
     await executeSqlFile(dumpPath);
+    if (prepare) await _prepare();
   }
 
-  Future<void> restoreFromString(String sqlString) async {
+  Future<void> restoreFromString(String sqlString, {bool prepare = true}) async {
     final File file = File(
       '${Directory.systemTemp.path}/${sqlString.hashCode.toUnsigned(20).toRadixString(16).padLeft(5, '0')}.sql',
     );
     await file.writeAsString(sqlString);
-    await restore(file.path);
+    await restore(file.path, prepare: prepare);
   }
 
   Future<void> executeSqlFile(String sqlFilePath) async {

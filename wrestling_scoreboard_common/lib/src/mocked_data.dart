@@ -257,8 +257,9 @@ class MockedData {
     r: boutState2R,
     b: boutState2B,
     organization: organization,
-    result: BoutResult.vca,
-    winnerRole: BoutRole.blue,
+    // Purposely assign no result, to not trigger calculation of team match properties.
+    result: null,
+    winnerRole: null,
     duration: Duration(seconds: 180),
   );
   late final boutAction1 = BoutAction(
