@@ -97,7 +97,13 @@ class BoutListItem extends ConsumerWidget {
                       child: Column(
                         children: [
                           if (ageCategory != null)
-                            Center(child: ScaledText(ageCategory!.name, minFontSize: 8, fontWeight: FontWeight.bold)),
+                            Center(
+                              child: FittedText(
+                                ageCategory!.name,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                softWrap: false,
+                              ),
+                            ),
                           if (weightClass != null)
                             Expanded(
                               child: Center(
