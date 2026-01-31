@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "wrestling_scoreboard_client" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "wrestling_scoreboard_client" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 dev.oberhauser. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 dev.oberhauser. All rights reserved." "\0"
             VALUE "OriginalFilename", "wrestling_scoreboard_client.exe" "\0"
             VALUE "ProductName", "wrestling_scoreboard_client" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
