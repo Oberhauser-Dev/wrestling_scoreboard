@@ -545,13 +545,13 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             team: await _getSingleBySyncId<Team>(
               (competitionJson['homeTeamName'] as String).sanitizedName,
             ), // teamId is not unique across all IDs
-            classificationPoints: int.tryParse(values['homePoints']),
+            classificationPoints: int.tryParse(values['validatedHomePoints'] ?? values['homePoints']),
           );
           final guest = TeamLineup(
             team: await _getSingleBySyncId<Team>(
               (competitionJson['opponentTeamName'] as String).sanitizedName,
             ), // teamId is not unique across all IDs
-            classificationPoints: int.tryParse(values['opponentPoints']),
+            classificationPoints: int.tryParse(values['validatedOpponentPoints'] ?? values['opponentPoints']),
           );
           if (decisionRole != TeamMatch.getResultRole(home: home, guest: guest)) {
             _logger.warning(
