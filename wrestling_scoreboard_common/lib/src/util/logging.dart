@@ -6,7 +6,7 @@ extension LogRecordExtension on LogRecord {
     if (error != null) {
       text += '\nError: $error';
       if (stackTrace != null) {
-        text += 'StackTrace: $stackTrace';
+        text += '\nStackTrace: $stackTrace';
       }
     }
     text = switch (level) {
