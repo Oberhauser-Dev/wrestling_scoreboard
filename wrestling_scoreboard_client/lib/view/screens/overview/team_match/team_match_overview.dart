@@ -138,7 +138,7 @@ class TeamMatchOverview extends ConsumerWidget {
                             builder: (context, guestLineup) {
                               return ContentItem.icon(
                                 title:
-                                    '${match.resultRole?.localize(context) ?? '-'} (${homeLineup.classificationPoints ?? '-'} : ${guestLineup.classificationPoints ?? '-'})',
+                                    '${TeamMatch.getResultRole(home: homeLineup, guest: guestLineup)?.localize(context) ?? '-'} (${homeLineup.classificationPoints ?? '-'} : ${guestLineup.classificationPoints ?? '-'})',
                                 subtitle: localizations.winner,
                                 iconData: Icons.emoji_events,
                               );

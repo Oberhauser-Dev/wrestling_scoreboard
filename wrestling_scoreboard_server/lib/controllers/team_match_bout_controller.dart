@@ -48,15 +48,12 @@ class TeamMatchBoutController extends ShelfController<TeamMatchBout>
       );
       if (teamMatchBouts.every((tmb) => tmb.bout.result != null)) {
         var teamMatch = await TeamMatchController().getSingle(teamMatchBout.teamMatch.id!, obfuscate: obfuscate);
-        if (teamMatch.resultRole == null ||
-            teamMatch.home.classificationPoints == null ||
-            teamMatch.guest.classificationPoints == null) {
+        if (teamMatch.home.classificationPoints == null || teamMatch.guest.classificationPoints == null) {
           final homeClassificationPoints = TeamMatch.getClassificationPoints(teamMatchBouts.map((e) => e.bout.r));
           final guestClassificationPoints = TeamMatch.getClassificationPoints(teamMatchBouts.map((e) => e.bout.b));
           if (homeClassificationPoints > 0 || guestClassificationPoints > 0) {
             final home = teamMatch.home.copyWith(classificationPoints: homeClassificationPoints);
             final guest = teamMatch.guest.copyWith(classificationPoints: guestClassificationPoints);
-            final resultRole = MatchResultRole.fromDiff(homeClassificationPoints - guestClassificationPoints);
             final endDate = teamMatch.endDate ?? MockableDateTime.now().toUtc();
             await TeamLineupController().updateSingle(home);
             broadcastUpdateSingle(
@@ -70,7 +67,7 @@ class TeamMatchBoutController extends ShelfController<TeamMatchBout>
                       ? (await TeamLineupController().getSingle(teamMatch.guest.id!, obfuscate: obfuscate))
                       : guest,
             );
-            teamMatch = teamMatch.copyWith(resultRole: resultRole, home: home, guest: guest, endDate: endDate);
+            teamMatch = teamMatch.copyWith(home: home, guest: guest, endDate: endDate);
             await TeamMatchController().updateSingle(teamMatch);
             broadcastUpdateSingle(
               (obfuscate) async =>

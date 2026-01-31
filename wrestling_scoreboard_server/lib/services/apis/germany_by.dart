@@ -535,26 +535,33 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             '${values['boutDate']} ${values['scaleTime']}',
           ).fromLocation(timeZoneLocation);
           final decision = competitionJson['decision'] as String?;
+          final decisionRole = switch (decision) {
+            'home' => MatchResultRole.home,
+            'guest' || 'opponent' => MatchResultRole.guest,
+            'tie' => MatchResultRole.tie,
+            _ => null,
+          };
+          final home = TeamLineup(
+            team: await _getSingleBySyncId<Team>(
+              (competitionJson['homeTeamName'] as String).sanitizedName,
+            ), // teamId is not unique across all IDs
+            classificationPoints: int.tryParse(values['homePoints']),
+          );
+          final guest = TeamLineup(
+            team: await _getSingleBySyncId<Team>(
+              (competitionJson['opponentTeamName'] as String).sanitizedName,
+            ), // teamId is not unique across all IDs
+            classificationPoints: int.tryParse(values['opponentPoints']),
+          );
+          if (decisionRole != TeamMatch.getResultRole(home: home, guest: guest)) {
+            _logger.warning(
+              'Decision / ResultRole (${decisionRole?.name}) and Classifications points (${home.classificationPoints} : ${guest.classificationPoints}) do not match. Bout:\n$values',
+            );
+          }
           return MapEntry(
             TeamMatch(
-              home: TeamLineup(
-                team: await _getSingleBySyncId<Team>(
-                  (competitionJson['homeTeamName'] as String).sanitizedName,
-                ), // teamId is not unique across all IDs
-                classificationPoints: int.tryParse(values['homePoints']),
-              ),
-              guest: TeamLineup(
-                team: await _getSingleBySyncId<Team>(
-                  (competitionJson['opponentTeamName'] as String).sanitizedName,
-                ), // teamId is not unique across all IDs
-                classificationPoints: int.tryParse(values['opponentPoints']),
-              ),
-              resultRole: switch (decision) {
-                'home' => MatchResultRole.home,
-                'guest' || 'opponent' => MatchResultRole.guest,
-                'tie' => MatchResultRole.tie,
-                _ => null,
-              },
+              home: home,
+              guest: guest,
               date: matchDateTime.toUtc(),
               visitorsCount: int.tryParse(values['audience']),
               location: values['location'],

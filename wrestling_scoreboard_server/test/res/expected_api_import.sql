@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 8cAE6u9dOsqomnLi6wudbwNiIWJlihGR0S8ut4uzztaLbyvBfTQxSrDc1MJ7QqF
+\restrict o7E643d92jRn8Fqcm2FtSLP2JypCEjgZdO71kEWLT6NYFVWsNuYT2wXabyLm1RL
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -134,19 +134,6 @@ CREATE TYPE public.gender AS ENUM (
 
 
 ALTER TYPE public.gender OWNER TO wrestling;
-
---
--- Name: match_result_role; Type: TYPE; Schema: public; Owner: wrestling
---
-
-CREATE TYPE public.match_result_role AS ENUM (
-    'home',
-    'guest',
-    'tie'
-);
-
-
-ALTER TYPE public.match_result_role OWNER TO wrestling;
 
 --
 -- Name: person_role; Type: TYPE; Schema: public; Owner: wrestling
@@ -1352,8 +1339,7 @@ CREATE TABLE public.team_match (
     home_id integer,
     guest_id integer,
     league_id integer,
-    season_partition integer,
-    result_role public.match_result_role
+    season_partition integer
 )
 INHERITS (public.wrestling_event);
 
@@ -1782,9 +1768,9 @@ COPY public.age_category (id, org_sync_id, organization_id, name, min_age, max_a
 --
 
 COPY public.api_metadata (entity_id, entity_type, last_import) FROM stdin;
-2	organization	2026-01-26 22:27:57.043402+00
-11	league	2026-01-26 22:27:57.205956+00
-2	team_match	2026-01-26 22:27:57.484574+00
+2	organization	2026-01-31 19:13:43.759109+00
+11	league	2026-01-31 19:13:43.91093+00
+2	team_match	2026-01-31 19:13:44.251333+00
 \.
 
 
@@ -1940,7 +1926,7 @@ COPY public.club (id, no, name, organization_id, org_sync_id, image_uri) FROM st
 -- Data for Name: competition; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, name, bout_config_id, mat_count, max_ranking, end_date) FROM stdin;
+COPY public.competition (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, name, bout_config_id, mat_count, max_ranking) FROM stdin;
 \.
 
 
@@ -2408,9 +2394,9 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, home_id, guest_id, league_id, season_partition, end_date, result_role) FROM stdin;
-2	2023-10-28 17:00:00+00	Verbandsschulturnhalle, Passauerstr. 47, 94107 Untergriesbach	295	Verspäteter Beginn aufgrund Vorkämpfe	005029c	2	005029c	5	6	11	1	\N	home
-3	2023-10-21 17:00:00+00	Kongresshaus Berchtesgaden, Maximilianstr. 9, 83471 Berchtesgaden	813	TSV BGD 57kg übergewicht	029013c	2	029013c	7	8	11	0	\N	home
+COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, home_id, guest_id, league_id, season_partition) FROM stdin;
+2	2023-10-28 17:00:00+00	Verbandsschulturnhalle, Passauerstr. 47, 94107 Untergriesbach	295	Verspäteter Beginn aufgrund Vorkämpfe	005029c	2	005029c	\N	5	6	11	1
+3	2023-10-21 17:00:00+00	Kongresshaus Berchtesgaden, Maximilianstr. 9, 83471 Berchtesgaden	813	TSV BGD 57kg übergewicht	029013c	2	029013c	\N	7	8	11	0
 \.
 
 
@@ -3905,5 +3891,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 8cAE6u9dOsqomnLi6wudbwNiIWJlihGR0S8ut4uzztaLbyvBfTQxSrDc1MJ7QqF
+\unrestrict o7E643d92jRn8Fqcm2FtSLP2JypCEjgZdO71kEWLT6NYFVWsNuYT2wXabyLm1RL
 
