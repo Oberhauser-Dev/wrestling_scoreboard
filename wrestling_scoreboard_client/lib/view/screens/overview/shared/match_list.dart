@@ -78,6 +78,10 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
                                     )
                                     : null,
                           ),
+                          if (match.home.classificationPoints != null && match.guest.classificationPoints != null)
+                            TextSpan(
+                              text: '\t| ${match.home.classificationPoints} : ${match.guest.classificationPoints}',
+                            ),
                         ],
                       ),
                     ),
