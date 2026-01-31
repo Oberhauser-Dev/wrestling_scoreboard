@@ -124,12 +124,13 @@ void main() {
             actionType: BoutActionType.points,
             bout: teamMatchBouts.first.bout,
             duration: Duration.zero,
+            pointCount: 1,
             role: BoutRole.red,
           ),
         );
         await BoutActionController().createSingle(
           BoutAction(
-            actionType: BoutActionType.points,
+            actionType: BoutActionType.verbal,
             bout: teamMatchBouts.first.bout,
             duration: Duration.zero,
             role: BoutRole.blue,

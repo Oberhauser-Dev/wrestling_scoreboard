@@ -223,7 +223,7 @@ return $default(_that.id,_that.actionType,_that.bout,_that.duration,_that.role,_
 @JsonSerializable()
 
 class _BoutAction extends BoutAction {
-  const _BoutAction({this.id, required this.actionType, required this.bout, required this.duration, required this.role, this.pointCount}): super._();
+  const _BoutAction({this.id, required this.actionType, required this.bout, required this.duration, required this.role, this.pointCount}): assert(actionType != BoutActionType.points || pointCount != null, 'BoutAction($id): pointCount must be set for BoutActionType.points'),super._();
   factory _BoutAction.fromJson(Map<String, dynamic> json) => _$BoutActionFromJson(json);
 
 @override final  int? id;
