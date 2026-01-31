@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../common.dart';
 
 part 'bout_action.freezed.dart';
+
 part 'bout_action.g.dart';
 
 /// An action and its value that is fulfilled by the participant during a bout, e.g. points or caution
@@ -10,6 +11,10 @@ part 'bout_action.g.dart';
 abstract class BoutAction with _$BoutAction implements DataObject {
   const BoutAction._();
 
+  @Assert(
+    'actionType != BoutActionType.points || pointCount != null',
+    r'BoutAction($id): pointCount must be set for BoutActionType.points',
+  )
   const factory BoutAction({
     int? id,
     required BoutActionType actionType,
