@@ -22,7 +22,7 @@ import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_main_
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/technical_points.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_display.dart';
-import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/shared/bout.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
