@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict HQEriQaMxaoWorttwoJhDgdTeQQI2CVZdO4MEuXezjw6UrypFa6TWnA7LcLZW5L
+\restrict SUUMJ8VVC4DepjRHeEbiG0PoaUCOnfYhQSHWmnF4HgdaXdIrVMoXXGibqYsuy5f
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -134,19 +134,6 @@ CREATE TYPE public.gender AS ENUM (
 
 
 ALTER TYPE public.gender OWNER TO wrestling;
-
---
--- Name: match_result_role; Type: TYPE; Schema: public; Owner: wrestling
---
-
-CREATE TYPE public.match_result_role AS ENUM (
-    'home',
-    'guest',
-    'tie'
-);
-
-
-ALTER TYPE public.match_result_role OWNER TO wrestling;
 
 --
 -- Name: person_role; Type: TYPE; Schema: public; Owner: wrestling
@@ -1352,8 +1339,7 @@ CREATE TABLE public.team_match (
     home_id integer,
     guest_id integer,
     league_id integer,
-    season_partition integer,
-    result_role public.match_result_role
+    season_partition integer
 )
 INHERITS (public.wrestling_event);
 
@@ -2015,7 +2001,7 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, home_id, guest_id, league_id, season_partition, result_role) FROM stdin;
+COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, home_id, guest_id, league_id, season_partition) FROM stdin;
 \.
 
 
@@ -3287,5 +3273,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict HQEriQaMxaoWorttwoJhDgdTeQQI2CVZdO4MEuXezjw6UrypFa6TWnA7LcLZW5L
+\unrestrict SUUMJ8VVC4DepjRHeEbiG0PoaUCOnfYhQSHWmnF4HgdaXdIrVMoXXGibqYsuy5f
 

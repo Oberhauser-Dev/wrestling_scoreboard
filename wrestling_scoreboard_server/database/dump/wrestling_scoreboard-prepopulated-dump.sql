@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict bjhJCmNPQSMUkFy1Jvm5LZhUjxdy6QcMBdpDvQfs22azTIoEgz97GPWCSofvJ1q
+\restrict yZlsNzAeql3dRGrB1xhymLvkzGeepilSk6lNZvVFERlft0rRsaHPTY4jPan5G6e
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -134,19 +134,6 @@ CREATE TYPE public.gender AS ENUM (
 
 
 ALTER TYPE public.gender OWNER TO wrestling;
-
---
--- Name: match_result_role; Type: TYPE; Schema: public; Owner: wrestling
---
-
-CREATE TYPE public.match_result_role AS ENUM (
-    'home',
-    'guest',
-    'tie'
-);
-
-
-ALTER TYPE public.match_result_role OWNER TO wrestling;
 
 --
 -- Name: person_role; Type: TYPE; Schema: public; Owner: wrestling
@@ -1352,8 +1339,7 @@ CREATE TABLE public.team_match (
     home_id integer,
     guest_id integer,
     league_id integer,
-    season_partition integer,
-    result_role public.match_result_role
+    season_partition integer
 )
 INHERITS (public.wrestling_event);
 
@@ -2213,8 +2199,8 @@ COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_clas
 -- Data for Name: team_match; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, home_id, guest_id, league_id, season_partition, result_role) FROM stdin;
-1	2021-07-10 00:00:00+00	Springfield	\N	\N		1	\N	\N	1	2	1	1	\N
+COPY public.team_match (id, date, location, visitors_count, comment, no, organization_id, org_sync_id, end_date, home_id, guest_id, league_id, season_partition) FROM stdin;
+1	2021-07-10 00:00:00+00	Springfield	\N	\N		1	\N	\N	1	2	1	1
 \.
 
 
@@ -3535,5 +3521,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict bjhJCmNPQSMUkFy1Jvm5LZhUjxdy6QcMBdpDvQfs22azTIoEgz97GPWCSofvJ1q
+\unrestrict yZlsNzAeql3dRGrB1xhymLvkzGeepilSk6lNZvVFERlft0rRsaHPTY4jPan5G6e
 

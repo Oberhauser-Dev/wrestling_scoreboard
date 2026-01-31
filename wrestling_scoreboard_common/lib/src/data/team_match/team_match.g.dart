@@ -13,7 +13,6 @@ _TeamMatch _$TeamMatchFromJson(Map<String, dynamic> json) => _TeamMatch(
       json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
   home: TeamLineup.fromJson(json['home'] as Map<String, dynamic>),
   guest: TeamLineup.fromJson(json['guest'] as Map<String, dynamic>),
-  resultRole: $enumDecodeNullable(_$MatchResultRoleEnumMap, json['resultRole']),
   league: json['league'] == null ? null : League.fromJson(json['league'] as Map<String, dynamic>),
   seasonPartition: (json['seasonPartition'] as num?)?.toInt(),
   no: json['no'] as String?,
@@ -30,7 +29,6 @@ Map<String, dynamic> _$TeamMatchToJson(_TeamMatch instance) => <String, dynamic>
   'organization': instance.organization?.toJson(),
   'home': instance.home.toJson(),
   'guest': instance.guest.toJson(),
-  'resultRole': _$MatchResultRoleEnumMap[instance.resultRole],
   'league': instance.league?.toJson(),
   'seasonPartition': instance.seasonPartition,
   'no': instance.no,
@@ -39,10 +37,4 @@ Map<String, dynamic> _$TeamMatchToJson(_TeamMatch instance) => <String, dynamic>
   'endDate': instance.endDate?.toIso8601String(),
   'visitorsCount': instance.visitorsCount,
   'comment': instance.comment,
-};
-
-const _$MatchResultRoleEnumMap = {
-  MatchResultRole.home: 'home',
-  MatchResultRole.guest: 'guest',
-  MatchResultRole.tie: 'tie',
 };
