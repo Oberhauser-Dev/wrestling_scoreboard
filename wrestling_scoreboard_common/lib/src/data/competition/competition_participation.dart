@@ -18,8 +18,8 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
     required CompetitionLineup lineup,
     CompetitionWeightCategory? weightCategory,
     double? weight,
-    int? poolGroup,
-    int? poolDrawNumber,
+    @Default([]) List<int> poolGroups,
+    @Default([]) List<int> poolDrawNumbers,
     ContestantStatus? contestantStatus,
   }) = _CompetitionParticipation;
 
@@ -52,17 +52,31 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
       lineup: lineup,
       membership: membership,
       weight: weight,
-      poolGroup: e['pool_group'] as int?,
-      poolDrawNumber: e['pool_draw_number'] as int?,
+      poolGroups: (e['pool_groups'] as List<int?>).nonNulls.toList(),
+      poolDrawNumbers: (e['pool_draw_numbers'] as List<int?>).nonNulls.toList(),
       contestantStatus: contestantStatus == null ? null : ContestantStatus.values.byName(contestantStatus),
     );
   }
 
   String get name => '${membership.person.fullName} | ${lineup.club.name}';
 
-  int? get displayPoolDrawNumber => poolDrawNumber != null ? (poolDrawNumber! + 1) : null;
+  int? displayPoolDrawNumber(CompetitionSystemPhase phase) {
+    final tmpDrawNumber = drawNumber(phase);
+    return tmpDrawNumber != null ? (tmpDrawNumber + 1) : null;
+  }
 
-  String get displayPoolId => '${poolGroup?.toLetter() ?? ''}${displayPoolDrawNumber?.toString() ?? '-'}';
+  /// Returns the existing pool id of the most recent phase.
+  String displayPoolId({required List<CompetitionSystemPhase> phases, required int phasePos}) {
+    for (; phasePos >= 0; phasePos--) {
+      if (poolGroups.length <= phasePos) {
+        continue;
+      }
+      final drawNumber = displayPoolDrawNumber(phases[phasePos]);
+      if (drawNumber == null) continue;
+      return '${poolGroups[phasePos].toLetter()}$drawNumber';
+    }
+    return '-';
+  }
 
   // (PoolDrawNr, PoolGroup) => DisplayPoolId => drawNumber
   // (0, 0) => A1 => 0
@@ -71,13 +85,15 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
   // (1, 0) => A2 => 3
   // (1, 1) => B2 => 4
   // (1, 2) => C2 => 5
-  int? get drawNumber =>
-      poolDrawNumber == null || weightCategory == null
+  int? drawNumber(CompetitionSystemPhase phase) =>
+      poolDrawNumbers.length <= phase.pos ||
+              poolGroups.length <= phase.pos ||
+              weightCategory?.competitionSystemAffiliation == null
           ? null
-          : ((poolGroup ?? 0) + (poolDrawNumber! * weightCategory!.poolGroupCount));
+          : (poolGroups[phase.pos] + (poolDrawNumbers[phase.pos] * phase.poolGroupCount));
 
-  int? get displayDrawNumber {
-    final drawN = drawNumber;
+  int? displayDrawNumber(CompetitionSystemPhase phase) {
+    final drawN = drawNumber(phase);
     return drawN == null ? null : (drawN + 1);
   }
 
@@ -99,8 +115,8 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
       'competition_lineup_id': lineup.id!,
       'membership_id': membership.id!,
       'weight': weight,
-      'pool_group': poolGroup,
-      'pool_draw_number': poolDrawNumber,
+      'pool_groups': poolGroups,
+      'pool_draw_numbers': poolDrawNumbers,
       'contestant_status': contestantStatus?.name,
     };
   }

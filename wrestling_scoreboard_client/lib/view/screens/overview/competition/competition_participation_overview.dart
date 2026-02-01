@@ -82,15 +82,21 @@ class CompetitionParticipationOverview extends ConsumerWidget {
               iconData: Icons.fitness_center,
             ),
             ContentItem.icon(
-              title: competitionParticipation.poolGroup?.toString() ?? '-',
+              title: competitionParticipation.poolGroups.join(', '),
               subtitle: localizations.pool,
               iconData: Icons.pool,
             ),
-            ContentItem.icon(
-              title: competitionParticipation.displayPoolDrawNumber?.toString() ?? '-',
-              subtitle: localizations.numberAbbreviation,
-              iconData: Icons.numbers,
-            ),
+            if (competitionParticipation.weightCategory != null)
+              ManyConsumer<CompetitionSystemPhase, CompetitionSystemAffiliation>(
+                filterObject: competitionParticipation.weightCategory?.competitionSystemAffiliation,
+                builder: (context, phases) {
+                  return ContentItem.icon(
+                    title: phases.map((phase) => competitionParticipation.displayPoolDrawNumber(phase)).join(', '),
+                    subtitle: localizations.numberAbbreviation,
+                    iconData: Icons.numbers,
+                  );
+                },
+              ),
             ContentItem.icon(
               title: competitionParticipation.contestantStatus?.localize(context) ?? '-',
               subtitle: localizations.contestantStatus,

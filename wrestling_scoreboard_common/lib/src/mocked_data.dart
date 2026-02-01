@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import '../common.dart';
 
 class MockedData {
@@ -9,22 +11,16 @@ class MockedData {
     parent: organization,
   );
 
-  final boutConfig = BoutConfig(id: 1);
+  final leagueBoutConfig = TeamMatch.defaultBoutConfig.copyWith(id: 1);
 
-  late final boutResultRule = BoutResultRule(
-    id: 1,
-    boutConfig: boutConfig,
-    boutResult: BoutResult.vin,
-    winnerClassificationPoints: 4,
-    loserClassificationPoints: 0,
-  );
+  final competitionBoutConfig = Competition.defaultBoutConfig.copyWith(id: 2);
 
   late final adultDivision = Division(
     id: 1,
     name: 'Adult',
     startDate: DateTime.utc(2021),
     endDate: DateTime.utc(2022),
-    boutConfig: boutConfig,
+    boutConfig: leagueBoutConfig,
     seasonPartitions: 2,
     organization: organization,
   );
@@ -34,7 +30,7 @@ class MockedData {
     name: 'Junior',
     startDate: DateTime.utc(2021),
     endDate: DateTime.utc(2022),
-    boutConfig: boutConfig,
+    boutConfig: leagueBoutConfig,
     seasonPartitions: 2,
     organization: organization,
   );
@@ -308,7 +304,7 @@ class MockedData {
     id: 1,
     no: 'abc',
     name: 'Wittelsbacher-Land-Turnier',
-    boutConfig: boutConfig,
+    boutConfig: competitionBoutConfig,
     date: DateTime.utc(2025, 03, 29),
     organization: organization,
     comment: 'This is a comment',
@@ -324,17 +320,78 @@ class MockedData {
     role: PersonRole.timeKeeper,
   );
 
-  late final competitionSystemAffiliationNordic = CompetitionSystemAffiliation(
+  late final competitionSystemAffiliationBestOfThree = CompetitionSystemAffiliation(
     id: 1,
-    competitionSystem: CompetitionSystem.nordic,
+    maxContestants: 2,
     competition: competition,
-    maxContestants: 6,
   );
-  late final competitionSystemAffiliationTwoPools = CompetitionSystemAffiliation(
+  late final competitionSystemPhaseBestOfThree = CompetitionSystemPhase(
+    id: 1,
+    pos: 0,
+    competitionSystemAffiliation: competitionSystemAffiliationBestOfThree,
+    competitionSystem: CompetitionSystem.bestOfThree,
+    poolGroupCount: 1,
+    maxRank: 1,
+  );
+
+  late final competitionSystemAffiliationNordic = CompetitionSystemAffiliation(
     id: 2,
-    competitionSystem: CompetitionSystem.doubleElimination,
-    poolGroupCount: 2,
     competition: competition,
+    maxContestants: 5,
+  );
+  late final competitionSystemPhaseNordic = CompetitionSystemPhase(
+    id: 2,
+    pos: 0,
+    competitionSystemAffiliation: competitionSystemAffiliationNordic,
+    competitionSystem: CompetitionSystem.nordic,
+    maxRank: 3,
+    poolGroupCount: 1,
+  );
+
+  late final competitionSystemAffiliationNordicTwoPools = CompetitionSystemAffiliation(
+    id: 3,
+    competition: competition,
+    maxContestants: 7,
+  );
+  late final competitionSystemPhaseNordicTwoPools1 = CompetitionSystemPhase(
+    id: 3,
+    pos: 0,
+    competitionSystemAffiliation: competitionSystemAffiliationNordicTwoPools,
+    competitionSystem: CompetitionSystem.nordic,
+    maxRank: 2,
+    poolGroupCount: 2,
+  );
+  late final competitionSystemPhaseNordicTwoPools2 = CompetitionSystemPhase(
+    id: 4,
+    pos: 1,
+    competitionSystemAffiliation: competitionSystemAffiliationNordicTwoPools,
+    competitionSystem: CompetitionSystem.finals,
+    maxRank: 3,
+    isCrossOver: true,
+    poolGroupCount: 1,
+  );
+
+  late final competitionSystemAffiliationNordicDoubleEliminationTwoPools = CompetitionSystemAffiliation(
+    id: 4,
+    competition: competition,
+    maxContestants: null,
+  );
+  late final competitionSystemPhaseNordicDoubleEliminationTwoPools1 = CompetitionSystemPhase(
+    id: 5,
+    pos: 0,
+    competitionSystemAffiliation: competitionSystemAffiliationNordicDoubleEliminationTwoPools,
+    competitionSystem: CompetitionSystem.nordicDoubleElimination,
+    poolGroupCount: 2,
+    maxRank: 2,
+  );
+  late final competitionSystemPhaseNordicDoubleEliminationTwoPools2 = CompetitionSystemPhase(
+    id: 6,
+    pos: 1,
+    competitionSystemAffiliation: competitionSystemAffiliationNordicDoubleEliminationTwoPools,
+    competitionSystem: CompetitionSystem.finals,
+    maxRank: 3,
+    isCrossOver: false,
+    poolGroupCount: 1,
   );
 
   // https://www.ringen.de/wp-content/uploads/2016/01/Jugendsportordnung-01012015.pdf
@@ -383,8 +440,8 @@ class MockedData {
 
   late final competitionParticipation1 = CompetitionParticipation(
     id: 1,
-    poolDrawNumber: 1,
-    poolGroup: 0,
+    poolDrawNumbers: [0],
+    poolGroups: [0],
     membership: r1,
     lineup: competitionLineup1,
     weightCategory: competitionWeightCategory,
@@ -393,8 +450,8 @@ class MockedData {
 
   late final competitionParticipation2 = CompetitionParticipation(
     id: 2,
-    poolDrawNumber: 2,
-    poolGroup: 0,
+    poolDrawNumbers: [1],
+    poolGroups: [0],
     membership: b1,
     lineup: competitionLineup2,
     weightCategory: competitionWeightCategory,
@@ -403,8 +460,8 @@ class MockedData {
 
   late final competitionParticipation3 = CompetitionParticipation(
     id: 3,
-    poolDrawNumber: 3,
-    poolGroup: 0,
+    poolDrawNumbers: [2],
+    poolGroups: [0],
     membership: r2,
     lineup: competitionLineup2,
     weightCategory: competitionWeightCategory,
@@ -414,8 +471,8 @@ class MockedData {
 
   late final competitionParticipation4 = CompetitionParticipation(
     id: 4,
-    poolDrawNumber: 4,
-    poolGroup: 0,
+    poolDrawNumbers: [3],
+    poolGroups: [0],
     membership: b2,
     lineup: competitionLineup2,
     weightCategory: competitionWeightCategory,
@@ -424,8 +481,8 @@ class MockedData {
 
   late final competitionParticipation5 = CompetitionParticipation(
     id: 10,
-    poolDrawNumber: 0,
-    poolGroup: 1,
+    poolDrawNumbers: [0],
+    poolGroups: [1],
     membership: r3,
     lineup: competitionLineup1,
     weightCategory: competitionWeightCategory,
@@ -434,8 +491,8 @@ class MockedData {
 
   late final competitionParticipation6 = CompetitionParticipation(
     id: 11,
-    poolDrawNumber: 1,
-    poolGroup: 1,
+    poolDrawNumbers: [1],
+    poolGroups: [1],
     membership: b3,
     lineup: competitionLineup2,
     weightCategory: competitionWeightCategory,
@@ -444,8 +501,8 @@ class MockedData {
 
   late final competitionParticipation7 = CompetitionParticipation(
     id: 12,
-    poolDrawNumber: 2,
-    poolGroup: 1,
+    poolDrawNumbers: [2],
+    poolGroups: [1],
     membership: r4,
     lineup: competitionLineup2,
     weightCategory: competitionWeightCategory,
@@ -454,8 +511,8 @@ class MockedData {
 
   late final competitionParticipation8 = CompetitionParticipation(
     id: 13,
-    poolDrawNumber: 3,
-    poolGroup: 1,
+    poolDrawNumbers: [3],
+    poolGroups: [1],
     membership: b4,
     lineup: competitionLineup2,
     weightCategory: competitionWeightCategory,
@@ -521,6 +578,8 @@ class MockedData {
     bout: boutForCompetition1,
     round: 0,
     weightCategory: competitionWeightCategory,
+    roundType: RoundType.elimination,
+    phasePos: 0,
   );
 
   late final competitionBout2 = CompetitionBout(
@@ -531,6 +590,8 @@ class MockedData {
     bout: boutForCompetition2,
     round: 0,
     weightCategory: competitionWeightCategory,
+    roundType: RoundType.elimination,
+    phasePos: 0,
   );
 
   late final competitionBout3 = CompetitionBout(
@@ -540,6 +601,8 @@ class MockedData {
     bout: boutForCompetition3,
     round: 1,
     weightCategory: competitionWeightCategory,
+    roundType: RoundType.elimination,
+    phasePos: 0,
   );
 
   late final competitionBout4 = CompetitionBout(
@@ -549,6 +612,8 @@ class MockedData {
     bout: boutForCompetition4,
     round: 1,
     weightCategory: competitionWeightCategory,
+    roundType: RoundType.elimination,
+    phasePos: 0,
   );
 
   late final competitionBoutFinal1 = CompetitionBout(
@@ -559,6 +624,7 @@ class MockedData {
     round: 2,
     roundType: RoundType.finals,
     weightCategory: competitionWeightCategory,
+    phasePos: 0,
   );
 
   late final boutActionForCompetition1 = BoutAction(
@@ -653,8 +719,12 @@ class MockedData {
   ];
 
   late final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
-  late final List<BoutConfig> _boutConfigs = [boutConfig];
-  late final List<BoutResultRule> _boutResultRules = [boutResultRule];
+  late final List<BoutConfig> _boutConfigs = [leagueBoutConfig, competitionBoutConfig];
+  late final List<BoutResultRule> _boutResultRules =
+      [
+        ...TeamMatch.defaultBoutResultRules.map((rr) => rr.copyWith(boutConfig: leagueBoutConfig)),
+        ...Competition.defaultBoutResultRules.map((rr) => rr.copyWith(boutConfig: competitionBoutConfig)),
+      ].mapIndexed((index, rr) => rr.copyWithId(index + 1)).toList();
 
   late final List<TeamMatch> _teamMatches = [menRPWMatch, jnRPWMatch];
   late final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];
@@ -663,9 +733,20 @@ class MockedData {
 
   late final List<Competition> _competitions = [competition];
   late final List<CompetitionSystemAffiliation> _competitionSystemAffiliations = [
+    competitionSystemAffiliationBestOfThree,
     competitionSystemAffiliationNordic,
-    competitionSystemAffiliationTwoPools,
+    competitionSystemAffiliationNordicTwoPools,
+    competitionSystemAffiliationNordicDoubleEliminationTwoPools,
   ];
+  late final List<CompetitionSystemPhase> _competitionSystemPhases = [
+    competitionSystemPhaseBestOfThree,
+    competitionSystemPhaseNordic,
+    competitionSystemPhaseNordicTwoPools1,
+    competitionSystemPhaseNordicTwoPools2,
+    competitionSystemPhaseNordicDoubleEliminationTwoPools1,
+    competitionSystemPhaseNordicDoubleEliminationTwoPools2,
+  ];
+
   late final List<CompetitionPerson> _competitionPersons = [competitionPerson];
   late final List<CompetitionBout> _competitionBouts = [
     competitionBout1,
@@ -743,6 +824,8 @@ class MockedData {
 
   List<CompetitionSystemAffiliation> getCompetitionSystemAffiliations() => _competitionSystemAffiliations;
 
+  List<CompetitionSystemPhase> getCompetitionSystemPhases() => _competitionSystemPhases;
+
   List<CompetitionPerson> getCompetitionPersons() => _competitionPersons;
 
   List<CompetitionBout> getCompetitionBouts() => _competitionBouts;
@@ -766,6 +849,7 @@ class MockedData {
       const (CompetitionBout) => getCompetitionBouts(),
       const (CompetitionLineup) => getCompetitionLineups(),
       const (CompetitionSystemAffiliation) => getCompetitionSystemAffiliations(),
+      const (CompetitionSystemPhase) => getCompetitionSystemPhases(),
       const (CompetitionAgeCategory) => getCompetitionAgeCategories(),
       const (CompetitionWeightCategory) => getCompetitionWeightCategories(),
       const (CompetitionParticipation) => getCompetitionParticipations(),

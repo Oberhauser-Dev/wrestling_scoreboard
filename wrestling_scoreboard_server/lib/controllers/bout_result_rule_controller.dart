@@ -11,6 +11,14 @@ class BoutResultRuleController extends ShelfController<BoutResultRule> {
 
   BoutResultRuleController._internal() : super();
 
+  Future<List<BoutResultRule>> getByBoutConfigId({required int configId, required bool obfuscate}) async {
+    return await getMany(
+      conditions: ['bout_config_id = @configId'],
+      substitutionValues: {'configId': configId},
+      obfuscate: obfuscate,
+    );
+  }
+
   @override
   Map<String, psql.Type?> getPostgresDataTypes() {
     return {

@@ -39,6 +39,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get scoreboard => 'Anzeigetafel';
 
   @override
+  String get enabled => 'Aktiviert';
+
+  @override
+  String get disabled => 'Deaktiviert';
+
+  @override
   String get systemSetting => 'Systemeinstellung';
 
   @override
@@ -517,6 +523,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get roundType => 'Rundentyp';
 
   @override
+  String get phase => 'Phase';
+
+  @override
+  String get phases => 'Phasen';
+
+  @override
   String get qualification => 'Qualifikation';
 
   @override
@@ -698,6 +710,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get competitionSystems => 'Wettkampfsysteme';
+
+  @override
+  String get crossOver => 'Überkreuz';
 
   @override
   String get boutDay => 'Kampftag';

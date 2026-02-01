@@ -1,5 +1,11 @@
 /// See: https://en.wikipedia.org/wiki/Tournament#Knockout
 enum CompetitionSystem {
+  /// Most wins out of 3 for two contestants
+  bestOfThree,
+
+  /// Pair finals, either by cross-over (with semi-finals) or directly.
+  finals,
+
   /// https://en.wikipedia.org/wiki/Single-elimination_tournament
   singleElimination,
 

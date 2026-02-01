@@ -152,6 +152,18 @@ abstract class AppLocalizations {
   /// **'Scoreboard'**
   String get scoreboard;
 
+  /// No description provided for @enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get enabled;
+
+  /// No description provided for @disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
+
   /// No description provided for @systemSetting.
   ///
   /// In en, this message translates to:
@@ -1052,6 +1064,18 @@ abstract class AppLocalizations {
   /// **'Round Type'**
   String get roundType;
 
+  /// No description provided for @phase.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase'**
+  String get phase;
+
+  /// No description provided for @phases.
+  ///
+  /// In en, this message translates to:
+  /// **'Phases'**
+  String get phases;
+
   /// No description provided for @qualification.
   ///
   /// In en, this message translates to:
@@ -1417,6 +1441,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Competition Systems'**
   String get competitionSystems;
+
+  /// No description provided for @crossOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Überkreuz'**
+  String get crossOver;
 
   /// No description provided for @boutDay.
   ///

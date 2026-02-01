@@ -31,6 +31,7 @@ final dataTypes = [
   Person,
   League,
   Division,
+  CompetitionSystemPhase,
   CompetitionSystemAffiliation,
   CompetitionAgeCategory,
   Competition,
@@ -51,6 +52,7 @@ String getTableNameFromType(Type t) {
     const (Competition) => Competition.cTableName,
     const (CompetitionAgeCategory) => CompetitionAgeCategory.cTableName,
     const (CompetitionSystemAffiliation) => CompetitionSystemAffiliation.cTableName,
+    const (CompetitionSystemPhase) => CompetitionSystemPhase.cTableName,
     const (Division) => Division.cTableName,
     const (League) => League.cTableName,
     const (Person) => Person.cTableName,
@@ -92,6 +94,7 @@ Type getTypeFromTableName(String tableName) {
     Competition.cTableName => Competition,
     CompetitionAgeCategory.cTableName => CompetitionAgeCategory,
     CompetitionSystemAffiliation.cTableName => CompetitionSystemAffiliation,
+    CompetitionSystemPhase.cTableName => CompetitionSystemPhase,
     Division.cTableName => Division,
     League.cTableName => League,
     Person.cTableName => Person,
@@ -182,6 +185,13 @@ Future<int?> handleGenericJson(
       handleManyRaw: handleManyRaw,
     ),
     const (CompetitionSystemAffiliation) => handleJson<CompetitionSystemAffiliation>(
+      json,
+      handleSingle: handleSingle,
+      handleMany: handleMany,
+      handleSingleRaw: handleSingleRaw,
+      handleManyRaw: handleManyRaw,
+    ),
+    const (CompetitionSystemPhase) => handleJson<CompetitionSystemPhase>(
       json,
       handleSingle: handleSingle,
       handleMany: handleMany,
@@ -385,6 +395,7 @@ extension DataObjectParser on DataObject {
       const (Competition) => Competition.fromJson(json) as T,
       const (CompetitionAgeCategory) => CompetitionAgeCategory.fromJson(json) as T,
       const (CompetitionSystemAffiliation) => CompetitionSystemAffiliation.fromJson(json) as T,
+      const (CompetitionSystemPhase) => CompetitionSystemPhase.fromJson(json) as T,
       const (Division) => Division.fromJson(json) as T,
       const (League) => League.fromJson(json) as T,
       const (Person) => Person.fromJson(json) as T,
@@ -425,6 +436,7 @@ extension DataObjectParser on DataObject {
       const (Competition) => (await Competition.fromRaw(raw, getSingle)) as T,
       const (CompetitionAgeCategory) => (await CompetitionAgeCategory.fromRaw(raw, getSingle)) as T,
       const (CompetitionSystemAffiliation) => (await CompetitionSystemAffiliation.fromRaw(raw, getSingle)) as T,
+      const (CompetitionSystemPhase) => (await CompetitionSystemPhase.fromRaw(raw, getSingle)) as T,
       const (Division) => (await Division.fromRaw(raw, getSingle)) as T,
       const (League) => (await League.fromRaw(raw, getSingle)) as T,
       const (Person) => (await Person.fromRaw(raw, getSingle)) as T,
@@ -475,6 +487,8 @@ Iterable<R> mapDirectDataObjectRelations<T extends DataObject, R>(
       return [callback(single.competition), callback(single.ageCategory)];
     case final CompetitionSystemAffiliation single:
       return [callback(single.competition)];
+    case final CompetitionSystemPhase single:
+      return [callback(single.competitionSystemAffiliation)];
     case final Division single:
       return [callback(single.organization), callback(single.boutConfig), callback(single.parent)];
     case final League single:
@@ -511,7 +525,12 @@ Iterable<R> mapDirectDataObjectRelations<T extends DataObject, R>(
       return [callback(single.person)];
 
     case final CompetitionWeightCategory single:
-      return [callback(single.weightClass), callback(single.competitionAgeCategory), callback(single.competition)];
+      return [
+        callback(single.weightClass),
+        callback(single.competitionAgeCategory),
+        callback(single.competition),
+        callback(single.competitionSystemAffiliation),
+      ];
     case final CompetitionBout single:
       return [callback(single.competition), callback(single.bout), callback(single.weightCategory)];
     case final CompetitionParticipation single:

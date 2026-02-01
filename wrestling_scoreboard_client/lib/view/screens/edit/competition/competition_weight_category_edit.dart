@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/weight_class_edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
@@ -21,17 +22,16 @@ class CompetitionWeightCategoryEdit extends WeightClassEdit {
 
 class CompetitionWeightCategoryEditState extends WeightClassEditState<CompetitionWeightCategoryEdit> {
   Iterable<CompetitionAgeCategory>? _availableCompetitionAgeCategories;
+  Iterable<CompetitionSystemAffiliation>? _availableCompetitionSystemAffiliations;
   CompetitionAgeCategory? _competitionAgeCategory;
-  CompetitionSystem? _competitionSystem;
-  int? _poolGroupCount;
+  CompetitionSystemAffiliation? _competitionSystemAffiliation;
   int _pos = 0;
 
   @override
   void initState() {
     super.initState();
     _competitionAgeCategory = widget.competitionWeightCategory?.competitionAgeCategory;
-    _competitionSystem = widget.competitionWeightCategory?.competitionSystem;
-    _poolGroupCount = widget.competitionWeightCategory?.poolGroupCount;
+    _competitionSystemAffiliation = widget.competitionWeightCategory?.competitionSystemAffiliation;
   }
 
   @override
@@ -71,27 +71,21 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
           ),
         ),
         ListTile(
-          leading: const Icon(Icons.label),
-          title: ButtonTheme(
-            alignedDropdown: true,
-            child: SimpleDropdown<CompetitionSystem>(
-              label: localizations.competitionSystem,
-              isNullable: true,
-              selected: _competitionSystem,
-              options: CompetitionSystem.values.map(
-                (system) => MapEntry(system, Tooltip(message: system.name, child: Text(system.name))),
-              ),
-              onSaved: (newValue) => _competitionSystem = newValue,
-            ),
+          title: SearchableDropdown<CompetitionSystemAffiliation>(
+            icon: const Icon(Icons.account_tree),
+            selectedItem: _competitionSystemAffiliation,
+            label: localizations.competitionSystem,
+            context: context,
+            onSaved: (value) => setState(() => _competitionSystemAffiliation = value),
+            allowEmpty: true,
+            itemAsString: (u) => u.localize(context),
+            asyncItems: (String filter) async {
+              _availableCompetitionSystemAffiliations ??= (await (await ref.read(
+                dataManagerProvider,
+              )).readMany<CompetitionSystemAffiliation, Competition>(filterObject: widget.initialCompetition));
+              return _availableCompetitionSystemAffiliations!.toList();
+            },
           ),
-        ),
-        NumericalInput(
-          iconData: Icons.pool,
-          initialValue: _poolGroupCount,
-          label: localizations.poolGroupCount,
-          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
-          isMandatory: false,
-          onSaved: (int? value) => _poolGroupCount = value,
         ),
       ],
     );
@@ -104,8 +98,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
       weightClass: weightClass,
       competition: widget.competitionWeightCategory?.competition ?? widget.initialCompetition,
       competitionAgeCategory: _competitionAgeCategory!,
-      poolGroupCount: _poolGroupCount ?? 1,
-      competitionSystem: _competitionSystem,
+      competitionSystemAffiliation: _competitionSystemAffiliation,
       pos: _pos,
     );
     competitionWeightCategory = competitionWeightCategory.copyWithId(

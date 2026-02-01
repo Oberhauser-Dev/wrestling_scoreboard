@@ -397,6 +397,8 @@ class MockDataManager extends DataManager {
         return mockedData.getCompetitions().cast<T>();
       case const (CompetitionSystemAffiliation):
         return mockedData.getCompetitionSystemAffiliations().cast<T>();
+      case const (CompetitionSystemPhase):
+        return mockedData.getCompetitionSystemPhases().cast<T>();
       case const (CompetitionBout):
         return mockedData.getCompetitionBouts().cast<T>();
       case const (CompetitionLineup):

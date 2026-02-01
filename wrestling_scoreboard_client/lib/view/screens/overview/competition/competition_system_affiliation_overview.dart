@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_affiliation_edit.dart';
+import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_system_phase_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_phase_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
@@ -51,28 +54,35 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
               onTap: () => CompetitionOverview.navigateTo(context, competitionSystemAffiliation.competition),
             ),
             ContentItem.icon(
-              title: competitionSystemAffiliation.competitionSystem.name,
-              subtitle: localizations.competitionSystem,
-              iconData: Icons.label,
-            ),
-            ContentItem.icon(
-              title: competitionSystemAffiliation.poolGroupCount.toString(),
-              subtitle: localizations.poolGroupCount,
-              iconData: Icons.pool,
-            ),
-            ContentItem.icon(
-              title: competitionSystemAffiliation.maxContestants?.toString() ?? 'unset',
+              title: competitionSystemAffiliation.maxContestants?.toString() ?? '∞',
               subtitle: '${localizations.participations} (${localizations.maximum})',
-              iconData: Icons.numbers,
+              iconData: Icons.vertical_align_top,
             ),
           ],
         );
         return FavoriteScaffold<CompetitionSystemAffiliation>(
           dataObject: competitionSystemAffiliation,
           label: localizations.competitionSystem,
-          details: competitionSystemAffiliation.competitionSystem.name,
-          tabs: [Tab(child: HeadingText(localizations.info))],
-          body: TabGroup(items: [description]),
+          details: competitionSystemAffiliation.localize(context),
+          tabs: [Tab(child: HeadingText(localizations.info)), Tab(child: HeadingText(localizations.phases))],
+          body: TabGroup(
+            items: [
+              description,
+              FilterableManyConsumer<CompetitionSystemPhase, CompetitionSystemAffiliation>.add(
+                context: context,
+                filterObject: competitionSystemAffiliation,
+                addPageBuilder:
+                    (context) =>
+                        CompetitionSystemPhaseEdit(initialCompetitionSystemAffiliation: competitionSystemAffiliation),
+                itemBuilder:
+                    (context, item) => ContentItem(
+                      title: item.competitionSystem.name,
+                      icon: Icon(Icons.view_timeline),
+                      onTap: () => CompetitionSystemPhaseOverview.navigateTo(context, item),
+                    ),
+              ),
+            ],
+          ),
         );
       },
     );

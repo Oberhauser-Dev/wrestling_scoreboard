@@ -67,7 +67,7 @@ void main() {
     test('Migrate data to match prepopulated database', () async {
       await db.restore('./database/migration/v0.0.0_Setup-DB.sql', prepare: false);
 
-      final dataMigratonMap = Map.fromEntries(
+      final dataMigrationMap = Map.fromEntries(
         await DatabaseExt.readMigrationScripts(folderPath: './test/res/migration'),
       );
       await db.executeSqlFile('./test/res/migration/v0.0.0_Setup-DB.sql');
@@ -77,8 +77,8 @@ void main() {
       await db.migrate(
         prepare: false,
         onMigrate: (version) async {
-          if (dataMigratonMap.containsKey(version)) {
-            await db.executeSqlFile(dataMigratonMap[version]!.path);
+          if (dataMigrationMap.containsKey(version)) {
+            await db.executeSqlFile(dataMigrationMap[version]!.path);
           }
         },
       );

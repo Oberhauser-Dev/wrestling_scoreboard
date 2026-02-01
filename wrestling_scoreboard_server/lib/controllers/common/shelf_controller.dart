@@ -20,6 +20,7 @@ import 'package:wrestling_scoreboard_server/controllers/competition_lineup_contr
 import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_system_affiliation_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_system_phase_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_weight_category_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/division_weight_class_controller.dart';
@@ -167,6 +168,8 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return CompetitionLineupController();
       case const (CompetitionSystemAffiliation):
         return CompetitionSystemAffiliationController();
+      case const (CompetitionSystemPhase):
+        return CompetitionSystemPhaseController();
       case const (CompetitionAgeCategory):
         return CompetitionAgeCategoryController();
       case const (CompetitionWeightCategory):

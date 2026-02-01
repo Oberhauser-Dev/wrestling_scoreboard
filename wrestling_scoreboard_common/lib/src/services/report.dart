@@ -31,7 +31,7 @@ abstract class WrestlingReporter {
     required Competition competition,
     required Map<CompetitionBout, List<BoutAction>> boutMap,
     required Iterable<CompetitionLineup> competitionLineups,
-    required Iterable<CompetitionSystemAffiliation> competitionSystems,
+    required Map<CompetitionSystemAffiliation, List<CompetitionSystemPhase>> competitionSystems,
     required Map<CompetitionWeightCategory, Iterable<CompetitionParticipation>> competitionWeightCategoryMap,
     required Iterable<CompetitionAgeCategory> competitionAgeCategories,
     required Iterable<BoutResultRule> boutResultRules,

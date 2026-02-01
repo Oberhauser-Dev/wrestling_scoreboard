@@ -104,6 +104,9 @@ const Map<Type, Map<Type, List<String>>> directDataObjectRelations = {
   CompetitionSystemAffiliation: {
     Competition: ['competition_id'],
   },
+  CompetitionSystemPhase: {
+    CompetitionSystemAffiliation: ['competition_system_affiliation_id'],
+  },
   DivisionWeightClass: {
     Division: ['division_id'],
   },
