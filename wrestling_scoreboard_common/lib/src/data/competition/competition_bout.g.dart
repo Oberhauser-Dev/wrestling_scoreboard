@@ -14,7 +14,8 @@ _CompetitionBout _$CompetitionBoutFromJson(Map<String, dynamic> json) => _Compet
   mat: (json['mat'] as num?)?.toInt(),
   round: (json['round'] as num?)?.toInt(),
   rank: (json['rank'] as num?)?.toInt(),
-  roundType: $enumDecodeNullable(_$RoundTypeEnumMap, json['roundType']) ?? RoundType.elimination,
+  roundType: $enumDecode(_$RoundTypeEnumMap, json['roundType']),
+  phasePos: (json['phasePos'] as num).toInt(),
   weightCategory:
       json['weightCategory'] == null
           ? null
@@ -30,11 +31,11 @@ Map<String, dynamic> _$CompetitionBoutToJson(_CompetitionBout instance) => <Stri
   'round': instance.round,
   'rank': instance.rank,
   'roundType': _$RoundTypeEnumMap[instance.roundType]!,
+  'phasePos': instance.phasePos,
   'weightCategory': instance.weightCategory?.toJson(),
 };
 
 const _$RoundTypeEnumMap = {
-  RoundType.qualification: 'qualification',
   RoundType.elimination: 'elimination',
   RoundType.repechage: 'repechage',
   RoundType.semiFinals: 'semiFinals',

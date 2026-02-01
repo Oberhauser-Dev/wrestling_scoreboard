@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
@@ -12,11 +14,36 @@ extension RoundTypeLocalization on RoundType {
   String localize(BuildContext context) {
     final localizations = context.l10n;
     return switch (this) {
-      RoundType.qualification => localizations.round,
       RoundType.elimination => localizations.elimination,
       RoundType.repechage => localizations.repechage,
       RoundType.semiFinals => localizations.semiFinals,
       RoundType.finals => localizations.finals,
+    };
+  }
+
+  String short(BuildContext context) {
+    final l = localize(context);
+    return l.substring(0, math.min(l.length, 4));
+  }
+}
+
+extension CompetitionSystemPhaseLocalization on CompetitionSystemPhase {
+  String localize(BuildContext context, {required int phasesCount}) {
+    final localizations = context.l10n;
+    return switch (phasesCount - pos) {
+      3 => localizations.qualification,
+      2 => localizations.pool,
+      1 => localizations.finals,
+      int() => '?',
+    };
+  }
+
+  String abbreviation(BuildContext context, {required int phasesCount}) {
+    return switch (phasesCount - pos) {
+      3 => 'Qual',
+      2 => 'Pool',
+      1 => 'Final',
+      int() => '?',
     };
   }
 }
@@ -81,5 +108,12 @@ extension CompetitionLocalization on Competition {
 
     if (missingAttr.isEmpty) return null;
     return '${lineup.club.name} (${missingAttr.join(', ')})';
+  }
+}
+
+extension CompetitionSystemAffiliationLocalization on CompetitionSystemAffiliation {
+  String localize(BuildContext context) {
+    final localizations = context.l10n;
+    return '${localizations.participations} (${localizations.maximum}): ${maxContestants ?? '∞'}';
   }
 }

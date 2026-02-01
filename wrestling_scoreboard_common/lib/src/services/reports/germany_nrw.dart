@@ -242,7 +242,7 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
     required Competition competition,
     required Map<CompetitionBout, List<BoutAction>> boutMap,
     required Iterable<CompetitionLineup> competitionLineups,
-    required Iterable<CompetitionSystemAffiliation> competitionSystems,
+    required Map<CompetitionSystemAffiliation, List<CompetitionSystemPhase>> competitionSystems,
     required Map<CompetitionWeightCategory, Iterable<CompetitionParticipation>> competitionWeightCategoryMap,
     required Iterable<CompetitionAgeCategory> competitionAgeCategories,
     required Iterable<BoutResultRule> boutResultRules,
@@ -286,37 +286,38 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
     for (final competitionWeightCategoryEntry in competitionWeightCategoryMap.entries) {
       final competitionWeightCategory = competitionWeightCategoryEntry.key;
       final weightCategoryParticipants = competitionWeightCategoryEntry.value;
-      // Map.where alternative
-      final weightCategoryBoutsWithActions = {
-        for (final cBout in boutMap.keys)
-          if (cBout.weightCategory?.id == competitionWeightCategory.id) cBout: boutMap[cBout]!,
-      };
-      competitionWeightCategory.rankingBuilder(
+      final weightCategoryBoutsWithActions = boutMap.entries.where(
+        (cBout) => cBout.key.weightCategory?.id == competitionWeightCategory.id,
+      );
+      final competitionSystemAffiliation = competitionSystems.entries.firstWhere(
+        (entry) => entry.key.id == competitionWeightCategory.competitionSystemAffiliation?.id,
+      );
+      final phases = competitionSystemAffiliation.value;
+      final rankings = CompetitionWeightCategory.ranking(
         weightCategoryParticipants: weightCategoryParticipants,
         weightCategoryBoutsWithActions: weightCategoryBoutsWithActions,
-        poolGroupBuilder: (poolGroup) {},
-        poolGroupParticipantBuilder: (
-          CompetitionParticipation cp,
-          int? ranking,
-          int? poolRanking,
-          RankingMetric? rankingMetric,
-        ) {
-          tblTeilnehmer.add([
-            cp.membership.id ?? '',
-            cp.weightCategory?.id ?? '',
-            cp.id ?? '',
-            cp.id ?? '',
-            cp.id ?? '',
-            cp.poolGroup ?? '',
-            cp.displayDrawNumber ?? '',
-            ranking ?? '',
-            poolRanking ?? '',
-            cp.isExcluded,
-            cp.id ?? '',
-            cp.weight ?? '',
-          ]);
-        },
+        phases: phases,
       );
+      rankings.forEach((cp, rankingsOfContestant) {
+        if (rankingsOfContestant.isEmpty) return;
+        assert(rankingsOfContestant.length == phases.length);
+        final poolCompetitionPhaseIndex = phases.length - 2;
+        tblTeilnehmer.add([
+          cp.membership.id ?? '', // NameID
+          cp.weightCategory?.id ?? '', // KlasseID
+          cp.id ?? '', // LosNr
+          cp.id ?? '', // LosNrOriginal
+          cp.id ?? '', // LosNrVerein
+          cp.poolGroups, // PoolID
+          cp.displayDrawNumber(phases.length > 1 ? phases[poolCompetitionPhaseIndex] : phases.last) ?? '', // PoolNr
+          // PoolPlatz
+          (phases.length > 1 ? rankingsOfContestant[poolCompetitionPhaseIndex] : rankingsOfContestant.last)?.rank ?? '',
+          rankingsOfContestant.last?.rank ?? '', // Platz
+          cp.isExcluded, // Ausgeschieden
+          cp.id ?? '', // MeldungID
+          cp.weight ?? '', // Gewicht
+        ]);
+      });
     }
 
     final tblKaempfe = [
@@ -572,7 +573,12 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
         boutConfig.injuryDuration?.inSeconds ?? '', // Verletzungszeit
         boutConfig.periodCount, // Runden
         false.toGerman, // LOAnzeigen
-        competitionSystems.firstWhereOrNull((cs) => cs.competitionSystem == CompetitionSystem.nordic)?.maxContestants ??
+        competitionSystems.entries
+                .firstWhereOrNull(
+                  (entry) => entry.value.any((csp) => csp.competitionSystem == CompetitionSystem.nordic),
+                )
+                ?.key
+                .maxContestants ??
             '', // AnzTeilnehmerNordisch
         false.toGerman, // RundenEingeben
       ],

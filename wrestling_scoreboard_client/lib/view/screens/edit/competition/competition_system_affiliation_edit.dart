@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
@@ -24,15 +23,11 @@ class CompetitionSystemAffiliationEdit extends ConsumerStatefulWidget {
 
 class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSystemAffiliationEdit> {
   final _formKey = GlobalKey<FormState>();
-  late CompetitionSystem _competitionSystem;
-  late int _poolGroupCount;
   int? _maxContestants;
 
   @override
   void initState() {
     super.initState();
-    _competitionSystem = widget.competitionSystemAffiliation?.competitionSystem ?? CompetitionSystem.nordic;
-    _poolGroupCount = widget.competitionSystemAffiliation?.poolGroupCount ?? 1;
     _maxContestants = widget.competitionSystemAffiliation?.maxContestants;
   }
 
@@ -42,35 +37,10 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
     final navigator = Navigator.of(context);
 
     final items = [
-      ListTile(
-        leading: const Icon(Icons.label),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<CompetitionSystem>(
-            label: localizations.result,
-            isNullable: false,
-            selected: _competitionSystem,
-            options: CompetitionSystem.values.map(
-              (system) => MapEntry(system, Tooltip(message: system.name, child: Text(system.name))),
-            ),
-            onSaved: (newValue) {
-              if (newValue != null) _competitionSystem = newValue;
-            },
-          ),
-        ),
-      ),
-      NumericalInput(
-        iconData: Icons.pool,
-        initialValue: _poolGroupCount,
-        label: localizations.poolGroupCount,
-        inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
-        isMandatory: true,
-        onSaved: (int? value) => _poolGroupCount = value ?? 1,
-      ),
       NumericalInput(
         iconData: Icons.vertical_align_top,
         initialValue: _maxContestants,
-        label: localizations.maximum,
+        label: '${localizations.participations} (${localizations.maximum})',
         inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
         isMandatory: false,
         onSaved: (int? value) => _maxContestants = value,
@@ -94,9 +64,7 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
       final CompetitionSystemAffiliation csa = CompetitionSystemAffiliation(
         id: widget.competitionSystemAffiliation?.id,
         competition: widget.competitionSystemAffiliation?.competition ?? widget.initialCompetition,
-        competitionSystem: _competitionSystem,
         maxContestants: _maxContestants,
-        poolGroupCount: _poolGroupCount,
       );
       await (await ref.read(dataManagerProvider)).createOrUpdateSingle(csa);
       navigator.pop();

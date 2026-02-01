@@ -181,7 +181,7 @@ class ApiRoute {
     );
     router.restrictedPostOne(
       '/${TeamMatch.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate',
-      matchController.generateBouts,
+      matchController.generateInitialBouts,
     );
     router.restrictedGetOne('/${TeamMatch.cTableName}/<id|[0-9]+>/${Bout.cTableName}s', matchController.requestBouts);
 
@@ -199,7 +199,7 @@ class ApiRoute {
     final competitionWeightCategoryController = CompetitionWeightCategoryController();
     router.restrictedPostOne(
       '/${CompetitionWeightCategory.cTableName}/<id|[0-9]+>/${Bout.cTableName}s/generate',
-      competitionWeightCategoryController.generateBouts,
+      competitionWeightCategoryController.postGenerateBouts,
     );
 
     // This nested catch-all, will only catch /api/.* when mounted above.

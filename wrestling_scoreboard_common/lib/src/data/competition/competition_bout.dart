@@ -15,14 +15,24 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject, Pos
     required Bout bout,
     required int pos,
     int? mat,
+
+    /// The round within the bout takes place:
+    /// - null: No round assigned
+    /// - 0: First round
+    /// - 1: Second round ...
     int? round,
 
     /// The rank the bout is fought for. Rank is described as x * 2 + 1 (+1)
-    /// 0: 1+2
-    /// 1: 3+4
-    /// 2: 5+6 ...
+    /// - 0: 1+2
+    /// - 1: 3+4
+    /// - 2: 5+6 ...
     int? rank,
-    @Default(RoundType.elimination) RoundType roundType,
+
+    /// The type of round for in a phase. E.g. there can be semiFinals and finals to determine the ranking within the pool phase.
+    required RoundType roundType,
+
+    /// The phase of the competition (0: first phase, n-th: finals).
+    required int phasePos,
     CompetitionWeightCategory? weightCategory,
   }) = _CompetitionBout;
 
@@ -32,6 +42,7 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject, Pos
     final competition = await getSingle<Competition>(e['competition_id'] as int);
     final bout = await getSingle<Bout>(e['bout_id'] as int);
     final weightCategoryId = e['weight_category_id'] as int?;
+    final phase = e['phase_pos'] as int;
 
     return CompetitionBout(
       id: e['id'] as int?,
@@ -43,6 +54,7 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject, Pos
       round: e['round'] as int?,
       rank: e['rank'] as int?,
       roundType: RoundType.values.byName(e['round_type']),
+      phasePos: phase,
     );
   }
 
@@ -58,6 +70,7 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject, Pos
       'mat': mat,
       'round': round,
       'round_type': roundType.name,
+      'phase_pos': phasePos,
       'rank': rank,
       'competition_id': competition.id!,
       'bout_id': bout.id!,

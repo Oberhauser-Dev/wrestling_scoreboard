@@ -175,8 +175,8 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
         weightCategory: _weightCategory,
         weight: _weight,
         contestantStatus: _contestantStatus,
-        poolDrawNumber: widget.competitionParticipation?.poolDrawNumber,
-        poolGroup: widget.competitionParticipation?.poolDrawNumber,
+        poolDrawNumbers: widget.competitionParticipation?.poolDrawNumbers ?? [],
+        poolGroups: widget.competitionParticipation?.poolGroups ?? [],
       );
       await (await ref.read(dataManagerProvider)).createOrUpdateSingle(cParticipation);
       navigator.pop();

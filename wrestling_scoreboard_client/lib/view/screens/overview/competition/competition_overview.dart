@@ -200,8 +200,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 filterObject: competition,
                 itemBuilder: (context, competitionSystemAffiliation) {
                   return ContentItem.icon(
-                    title:
-                        '${competitionSystemAffiliation.poolGroupCount} × ${competitionSystemAffiliation.competitionSystem.name}',
+                    title: competitionSystemAffiliation.localize(context),
                     iconData: Icons.account_tree,
                     onTap:
                         () async =>
@@ -305,6 +304,25 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                       if (!continueExport) return;
                     }
 
+                    final competitionSystemAffiliations = await ref.readAsync(
+                      manyDataStreamProvider(
+                        ManyProviderData<CompetitionSystemAffiliation, Competition>(filterObject: competition),
+                      ).future,
+                    );
+
+                    final competitionSystems = await Future.wait(
+                      competitionSystemAffiliations.map((affiliation) async {
+                        final phases = await ref.readAsync(
+                          manyDataStreamProvider(
+                            ManyProviderData<CompetitionSystemPhase, CompetitionSystemAffiliation>(
+                              filterObject: affiliation,
+                            ),
+                          ).future,
+                        );
+                        return MapEntry(affiliation, phases);
+                      }),
+                    );
+
                     final reportStr = reporter.exportCompetitionReport(
                       competition: competition,
                       boutMap: boutMap,
@@ -314,11 +332,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                         ).future,
                       ),
                       competitionLineups: lineups,
-                      competitionSystems: await ref.readAsync(
-                        manyDataStreamProvider(
-                          ManyProviderData<CompetitionSystemAffiliation, Competition>(filterObject: competition),
-                        ).future,
-                      ),
+                      competitionSystems: Map.fromEntries(competitionSystems),
                       competitionAgeCategories: await ref.readAsync(
                         manyDataStreamProvider(
                           ManyProviderData<CompetitionAgeCategory, Competition>(filterObject: competition),

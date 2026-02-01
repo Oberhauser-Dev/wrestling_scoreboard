@@ -11,11 +11,11 @@ class CompetitionParticipationController extends ShelfController<CompetitionPart
 
   CompetitionParticipationController._internal() : super();
 
-  Future<List<CompetitionParticipation>> getByWeightCategory(bool obfuscate, int id) async {
+  Future<List<CompetitionParticipation>> getByWeightCategory(int id, {required bool obfuscate}) async {
     return await getMany(
       conditions: ['weight_category_id = @id'],
       substitutionValues: {'id': id},
-      orderBy: ['pool_group', 'pool_draw_number'],
+      orderBy: ['pool_groups', 'pool_draw_numbers'],
       obfuscate: obfuscate,
     );
   }
@@ -24,8 +24,8 @@ class CompetitionParticipationController extends ShelfController<CompetitionPart
   Map<String, psql.Type?> getPostgresDataTypes() {
     return {
       'weight': psql.Type.numeric,
-      'pool_group': psql.Type.smallInteger,
-      'pool_draw_number': psql.Type.smallInteger,
+      'pool_groups': psql.Type.smallIntegerArray,
+      'pool_draw_numbers': psql.Type.smallIntegerArray,
     };
   }
 }

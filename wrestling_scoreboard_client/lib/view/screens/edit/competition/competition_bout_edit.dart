@@ -1,6 +1,8 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
@@ -25,9 +27,13 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
   int _pos = 0;
   int? _mat;
   int? _round;
+  int? _phasePos;
+  RoundType? _roundType;
+  int? _rank;
   CompetitionWeightCategory? _weightCategory;
 
   Iterable<Membership>? _memberships;
+  List<CompetitionSystemPhase>? _availablePhases;
 
   @override
   void initState() {
@@ -35,6 +41,9 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
     _weightCategory = widget.competitionBout?.weightCategory;
     _mat = widget.competitionBout?.mat;
     _round = widget.competitionBout?.round;
+    _phasePos = widget.competitionBout?.phasePos;
+    _roundType = widget.competitionBout?.roundType;
+    _rank = widget.competitionBout?.rank;
   }
 
   Future<Iterable<Membership>> _getMemberships() async {
@@ -82,20 +91,13 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
           onSaved: (int? value) => _pos = value ?? 0,
         ),
         NumericalInput(
-          iconData: Icons.adjust, // Replace with square_dot
+          iconData: Icons.adjust,
+          // Replace with square_dot
           initialValue: _mat,
           label: localizations.mat,
           inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
           isMandatory: false,
           onSaved: (int? value) => _mat = value,
-        ),
-        NumericalInput(
-          iconData: Icons.restart_alt,
-          initialValue: _round,
-          label: localizations.round,
-          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
-          isMandatory: false,
-          onSaved: (int? value) => _round = value,
         ),
         ListTile(
           title: SearchableDropdown<CompetitionWeightCategory>(
@@ -108,6 +110,60 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
             asyncItems: (String filter) async {
               final boutWeightClasses = await availableWeightCategories;
               return boutWeightClasses.toList();
+            },
+          ),
+        ),
+        NumericalInput(
+          iconData: Icons.restart_alt,
+          initialValue: _round,
+          label: localizations.round,
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+          isMandatory: false,
+          onSaved: (int? value) => _round = value,
+        ),
+        ListTile(
+          leading: const Icon(Icons.restart_alt),
+          title: ButtonTheme(
+            alignedDropdown: true,
+            child: SimpleDropdown<RoundType>(
+              label: localizations.roundType,
+              isNullable: false,
+              selected: _roundType,
+              options: RoundType.values.map((rType) => MapEntry(rType, Text(rType.localize(context)))),
+              onSaved: (newValue) {
+                if (newValue != null) _roundType = newValue;
+              },
+            ),
+          ),
+        ),
+        NumericalInput(
+          iconData: Icons.leaderboard,
+          initialValue: _rank,
+          label: '${localizations.rank} (2x+1(+1))',
+          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+          isMandatory: false,
+          onSaved: (int? value) => _rank = value,
+        ),
+
+        ListTile(
+          title: SearchableDropdown<int>(
+            allowEmpty: false,
+            icon: const Icon(Icons.stairs),
+            selectedItem: _phasePos,
+            label: localizations.phase,
+            context: context,
+            onSaved: (value) => setState(() {
+              _phasePos = value;
+            }),
+            itemAsString: (pos) =>
+                _availablePhases?.firstWhereOrNull((phase) => phase.pos == pos)?.competitionSystem.name ?? '-',
+            asyncItems: (String filter) async {
+              _availablePhases ??= await (await ref.read(
+                dataManagerProvider,
+              )).readMany<CompetitionSystemPhase, CompetitionSystemAffiliation>(
+                filterObject: widget.competitionBout?.weightCategory?.competitionSystemAffiliation,
+              );
+              return _availablePhases!.map((e) => e.pos).toList();
             },
           ),
         ),
@@ -125,6 +181,9 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
       weightCategory: _weightCategory,
       mat: _mat,
       round: _round,
+      phasePos: _phasePos!,
+      roundType: _roundType!,
+      rank: _rank,
     );
     competitionBout = competitionBout.copyWithId(
       await (await ref.read(dataManagerProvider)).createOrUpdateSingle(competitionBout),

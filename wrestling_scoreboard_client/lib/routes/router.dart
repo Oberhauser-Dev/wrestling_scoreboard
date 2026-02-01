@@ -32,6 +32,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/competition/co
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_participation_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_affiliation_overview.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_system_phase_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_weight_category_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/membership_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/organization_overview.dart';
@@ -226,6 +227,13 @@ GoRouter getRouter() {
           (context, state) => CompetitionSystemAffiliationOverview(
             id: int.parse(state.pathParameters['competition_system_affiliation_id']!),
           ),
+    ),
+    GoRoute(
+      path: '${CompetitionSystemPhaseOverview.route}/:competition_system_phase_id',
+      parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
+      builder:
+          (context, state) =>
+              CompetitionSystemPhaseOverview(id: int.parse(state.pathParameters['competition_system_phase_id']!)),
     ),
     GoRoute(
       path: '${CompetitionWeightCategoryOverview.route}/:competition_weight_category_id',

@@ -15,8 +15,8 @@ _CompetitionParticipation _$CompetitionParticipationFromJson(Map<String, dynamic
           ? null
           : CompetitionWeightCategory.fromJson(json['weightCategory'] as Map<String, dynamic>),
   weight: (json['weight'] as num?)?.toDouble(),
-  poolGroup: (json['poolGroup'] as num?)?.toInt(),
-  poolDrawNumber: (json['poolDrawNumber'] as num?)?.toInt(),
+  poolGroups: (json['poolGroups'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ?? const [],
+  poolDrawNumbers: (json['poolDrawNumbers'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ?? const [],
   contestantStatus: $enumDecodeNullable(_$ContestantStatusEnumMap, json['contestantStatus']),
 );
 
@@ -26,8 +26,8 @@ Map<String, dynamic> _$CompetitionParticipationToJson(_CompetitionParticipation 
   'lineup': instance.lineup.toJson(),
   'weightCategory': instance.weightCategory?.toJson(),
   'weight': instance.weight,
-  'poolGroup': instance.poolGroup,
-  'poolDrawNumber': instance.poolDrawNumber,
+  'poolGroups': instance.poolGroups,
+  'poolDrawNumbers': instance.poolDrawNumbers,
   'contestantStatus': _$ContestantStatusEnumMap[instance.contestantStatus],
 };
 

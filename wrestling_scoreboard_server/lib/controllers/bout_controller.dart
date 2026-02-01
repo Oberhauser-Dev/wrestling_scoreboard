@@ -40,21 +40,23 @@ class BoutController extends ShelfController<Bout> with OrganizationalController
   Future<Response> handlePostRequestSingle(Map<String, Object?> json) async {
     final res = await super.handlePostRequestSingle(json);
     final updatedBout = parseSingleJson<Bout>(json);
+    await processOnResult(updatedBout);
+    return res;
+  }
+
+  Future<void> processOnResult(Bout updatedBout) async {
     final obfuscate = false;
     if (updatedBout.id != null && updatedBout.result != null) {
       // Take action after a bout has finished
-
       final teamMatchBouts = await TeamMatchBoutController().getByBout(updatedBout.id!, obfuscate: obfuscate);
       if (teamMatchBouts.isNotEmpty) {
         await TeamMatchBoutController().processOnResult(teamMatchBouts.first);
       } else {
         final competitionBouts = await CompetitionBoutController().getByBout(updatedBout.id!, obfuscate: obfuscate);
-
         if (competitionBouts.isNotEmpty) {
           await CompetitionBoutController().processOnResult(competitionBouts.first);
         }
       }
     }
-    return res;
   }
 }

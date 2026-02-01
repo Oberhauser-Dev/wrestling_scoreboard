@@ -5,12 +5,14 @@ class ScaledContainer extends StatelessWidget {
   final double? width;
   final double? height;
   final Color? color;
+  final AlignmentGeometry? alignment;
 
-  const ScaledContainer({this.child, this.width, this.height, this.color, super.key});
+  const ScaledContainer({this.child, this.width, this.height, this.color, this.alignment, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: alignment,
       color: color,
       width: width == null ? null : (width! * MediaQuery.of(context).size.width),
       height: height == null ? null : (height! * MediaQuery.of(context).size.height),

@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict yZlsNzAeql3dRGrB1xhymLvkzGeepilSk6lNZvVFERlft0rRsaHPTY4jPan5G6e
+\restrict 4vO6GsddD8k2TzMekqU6ZwKR6B7bnUdxUWIf3gQRbhStvmq94LIed09W6GOPv5N
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -103,7 +103,9 @@ CREATE TYPE public.competition_system AS ENUM (
     'doubleElimination',
     'nordic',
     'twoPools',
-    'nordicDoubleElimination'
+    'nordicDoubleElimination',
+    'bestOfThree',
+    'finals'
 );
 
 
@@ -570,7 +572,8 @@ CREATE TABLE public.competition_bout (
     round smallint,
     weight_category_id integer,
     round_type public.round_type DEFAULT 'qualification'::public.round_type NOT NULL,
-    rank smallint
+    rank smallint,
+    phase_pos integer DEFAULT 0 NOT NULL
 );
 
 
@@ -667,9 +670,9 @@ CREATE TABLE public.competition_participation (
     membership_id integer NOT NULL,
     weight_category_id integer,
     weight numeric(5,2),
-    pool_group smallint,
-    pool_draw_number smallint,
-    contestant_status public.contestant_status
+    contestant_status public.contestant_status,
+    pool_groups smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL,
+    pool_draw_numbers smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL
 );
 
 
@@ -718,9 +721,7 @@ ALTER TABLE public.competition_person OWNER TO wrestling;
 CREATE TABLE public.competition_system_affiliation (
     id integer NOT NULL,
     competition_id integer NOT NULL,
-    competition_system public.competition_system NOT NULL,
-    max_contestants integer,
-    pool_group_count smallint DEFAULT 1 NOT NULL
+    max_contestants integer
 );
 
 
@@ -749,6 +750,45 @@ ALTER SEQUENCE public.competition_system_affiliation_id_seq OWNED BY public.comp
 
 
 --
+-- Name: competition_system_phase; Type: TABLE; Schema: public; Owner: wrestling
+--
+
+CREATE TABLE public.competition_system_phase (
+    id integer NOT NULL,
+    competition_system_affiliation_id integer NOT NULL,
+    competition_system public.competition_system NOT NULL,
+    pool_group_count smallint DEFAULT 1 NOT NULL,
+    cross_over boolean DEFAULT false NOT NULL,
+    max_rank integer DEFAULT 3 NOT NULL,
+    pos integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.competition_system_phase OWNER TO wrestling;
+
+--
+-- Name: competition_system_phase_id_seq; Type: SEQUENCE; Schema: public; Owner: wrestling
+--
+
+CREATE SEQUENCE public.competition_system_phase_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.competition_system_phase_id_seq OWNER TO wrestling;
+
+--
+-- Name: competition_system_phase_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: wrestling
+--
+
+ALTER SEQUENCE public.competition_system_phase_id_seq OWNED BY public.competition_system_phase.id;
+
+
+--
 -- Name: competition_weight_category; Type: TABLE; Schema: public; Owner: wrestling
 --
 
@@ -758,12 +798,11 @@ CREATE TABLE public.competition_weight_category (
     organization_id integer,
     weight_class_id integer NOT NULL,
     competition_id integer NOT NULL,
-    paired_round smallint,
-    competition_system public.competition_system,
-    pool_group_count smallint DEFAULT 1 NOT NULL,
     pos integer DEFAULT 0 NOT NULL,
     skipped_cycles smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL,
-    competition_age_category_id integer NOT NULL
+    competition_age_category_id integer NOT NULL,
+    competition_system_affiliation_id integer,
+    paired_round_by_phase smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL
 );
 
 
@@ -1623,6 +1662,13 @@ ALTER TABLE ONLY public.competition_system_affiliation ALTER COLUMN id SET DEFAU
 
 
 --
+-- Name: competition_system_phase id; Type: DEFAULT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_system_phase ALTER COLUMN id SET DEFAULT nextval('public.competition_system_phase_id_seq'::regclass);
+
+
+--
 -- Name: competition_weight_category id; Type: DEFAULT; Schema: public; Owner: wrestling
 --
 
@@ -1905,7 +1951,7 @@ COPY public.competition_age_category (id, age_category_id, competition_id, pos, 
 -- Data for Name: competition_bout; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_bout (id, competition_id, bout_id, pos, mat, round, weight_category_id, round_type, rank) FROM stdin;
+COPY public.competition_bout (id, competition_id, bout_id, pos, mat, round, weight_category_id, round_type, rank, phase_pos) FROM stdin;
 \.
 
 
@@ -1923,7 +1969,7 @@ COPY public.competition_lineup (id, competition_id, club_id, leader_id, coach_id
 -- Data for Name: competition_participation; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_participation (id, competition_lineup_id, membership_id, weight_category_id, weight, pool_group, pool_draw_number, contestant_status) FROM stdin;
+COPY public.competition_participation (id, competition_lineup_id, membership_id, weight_category_id, weight, contestant_status, pool_groups, pool_draw_numbers) FROM stdin;
 \.
 
 
@@ -1942,9 +1988,17 @@ COPY public.competition_person (id, competition_id, person_id, person_role) FROM
 -- Data for Name: competition_system_affiliation; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_system_affiliation (id, competition_id, competition_system, max_contestants, pool_group_count) FROM stdin;
-1	1	nordic	6	1
-2	1	nordicDoubleElimination	\N	2
+COPY public.competition_system_affiliation (id, competition_id, max_contestants) FROM stdin;
+1	1	6
+2	1	\N
+\.
+
+
+--
+-- Data for Name: competition_system_phase; Type: TABLE DATA; Schema: public; Owner: wrestling
+--
+
+COPY public.competition_system_phase (id, competition_system_affiliation_id, competition_system, pool_group_count, cross_over, max_rank, pos) FROM stdin;
 \.
 
 
@@ -1952,10 +2006,10 @@ COPY public.competition_system_affiliation (id, competition_id, competition_syst
 -- Data for Name: competition_weight_category; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_weight_category (id, org_sync_id, organization_id, weight_class_id, competition_id, paired_round, competition_system, pool_group_count, pos, skipped_cycles, competition_age_category_id) FROM stdin;
-3	\N	\N	35	1	\N	\N	1	0	{}	3
-1	\N	\N	33	1	\N	\N	1	1	{}	2
-2	\N	\N	34	1	\N	\N	1	2	{}	2
+COPY public.competition_weight_category (id, org_sync_id, organization_id, weight_class_id, competition_id, pos, skipped_cycles, competition_age_category_id, competition_system_affiliation_id, paired_round_by_phase) FROM stdin;
+3	\N	\N	35	1	0	{}	3	\N	{}
+1	\N	\N	33	1	1	{}	2	\N	{}
+2	\N	\N	34	1	2	{}	2	\N	{}
 \.
 
 
@@ -2073,7 +2127,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.10-pre.1	0.3.10
+0.3.10-pre.2	0.3.10
 \.
 
 
@@ -2370,6 +2424,13 @@ SELECT pg_catalog.setval('public.competition_system_affiliation_id_seq', 2, true
 
 
 --
+-- Name: competition_system_phase_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
+--
+
+SELECT pg_catalog.setval('public.competition_system_phase_id_seq', 1, false);
+
+
+--
 -- Name: competition_weight_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
@@ -2650,6 +2711,14 @@ ALTER TABLE ONLY public.competition
 
 ALTER TABLE ONLY public.competition_system_affiliation
     ADD CONSTRAINT competition_system_affiliation_pk PRIMARY KEY (id);
+
+
+--
+-- Name: competition_system_phase competition_system_phase_pk; Type: CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_system_phase
+    ADD CONSTRAINT competition_system_phase_pk PRIMARY KEY (id);
 
 
 --
@@ -3167,6 +3236,14 @@ ALTER TABLE ONLY public.competition_system_affiliation
 
 
 --
+-- Name: competition_system_phase competition_system_phase_affiliation_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_system_phase
+    ADD CONSTRAINT competition_system_phase_affiliation_id_fk FOREIGN KEY (competition_system_affiliation_id) REFERENCES public.competition_system_affiliation(id);
+
+
+--
 -- Name: competition_weight_category competition_weight_category_competition_age_category_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
 --
 
@@ -3180,6 +3257,14 @@ ALTER TABLE ONLY public.competition_weight_category
 
 ALTER TABLE ONLY public.competition_weight_category
     ADD CONSTRAINT competition_weight_category_competition_id_fk FOREIGN KEY (competition_id) REFERENCES public.competition(id) ON DELETE CASCADE;
+
+
+--
+-- Name: competition_weight_category competition_weight_category_cs_affiliation_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: wrestling
+--
+
+ALTER TABLE ONLY public.competition_weight_category
+    ADD CONSTRAINT competition_weight_category_cs_affiliation_id_fk FOREIGN KEY (competition_system_affiliation_id) REFERENCES public.competition_system_affiliation(id);
 
 
 --
@@ -3521,5 +3606,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict yZlsNzAeql3dRGrB1xhymLvkzGeepilSk6lNZvVFERlft0rRsaHPTY4jPan5G6e
+\unrestrict 4vO6GsddD8k2TzMekqU6ZwKR6B7bnUdxUWIf3gQRbhStvmq94LIed09W6GOPv5N
 
