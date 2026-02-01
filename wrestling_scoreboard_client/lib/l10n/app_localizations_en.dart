@@ -125,6 +125,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get warningMissingReporter => 'Please provide a Report Provider for this organization.';
 
   @override
+  String get warningMissingAttributes => 'Attention! Information is missing:\n';
+
+  @override
   String get report => 'Report';
 
   @override

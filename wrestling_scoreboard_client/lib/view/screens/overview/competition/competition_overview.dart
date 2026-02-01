@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/person_role.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
@@ -29,6 +30,7 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/scratch_bout_o
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/actions.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/shared/competition_bout_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/grouped_list.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
@@ -284,6 +286,25 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                         ),
                       ),
                     );
+                    final lineups = await ref.readAsync(
+                      manyDataStreamProvider(
+                        ManyProviderData<CompetitionLineup, Competition>(filterObject: competition),
+                      ).future,
+                    );
+
+                    final officials = await _getOfficials(ref, competition: competition);
+
+                    if (!context.mounted) return;
+                    final missingAttributes = competition.missingAttributes(context, lineups, boutMap.keys, officials);
+                    if (missingAttributes != null) {
+                      final continueExport = await showOkCancelDialog(
+                        title: Icon(Icons.warning),
+                        context: context,
+                        child: Text(context.l10n.warningMissingAttributes + missingAttributes),
+                      );
+                      if (!continueExport) return;
+                    }
+
                     final reportStr = reporter.exportCompetitionReport(
                       competition: competition,
                       boutMap: boutMap,
@@ -292,11 +313,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                           ManyProviderData<BoutResultRule, BoutConfig>(filterObject: competition.boutConfig),
                         ).future,
                       ),
-                      competitionLineups: await ref.readAsync(
-                        manyDataStreamProvider(
-                          ManyProviderData<CompetitionLineup, Competition>(filterObject: competition),
-                        ).future,
-                      ),
+                      competitionLineups: lineups,
                       competitionSystems: await ref.readAsync(
                         manyDataStreamProvider(
                           ManyProviderData<CompetitionSystemAffiliation, Competition>(filterObject: competition),
@@ -326,6 +343,16 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
         );
       },
     );
+  }
+
+  static Future<Map<Person, PersonRole>> _getOfficials(WidgetRef ref, {required Competition competition}) async {
+    final officials = await ref.readAsync(
+      manyDataStreamProvider<CompetitionPerson, Competition>(
+        ManyProviderData<CompetitionPerson, Competition>(filterObject: competition),
+      ).future,
+    );
+
+    return Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role)));
   }
 
   Future<List<CompetitionBout>> _getBouts(WidgetRef ref, {required Competition competition}) async {

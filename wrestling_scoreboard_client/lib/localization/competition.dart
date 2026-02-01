@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -17,5 +18,68 @@ extension RoundTypeLocalization on RoundType {
       RoundType.semiFinals => localizations.semiFinals,
       RoundType.finals => localizations.finals,
     };
+  }
+}
+
+extension CompetitionLocalization on Competition {
+  String? missingAttributes(
+    BuildContext context,
+    Iterable<CompetitionLineup> lineups,
+    Iterable<CompetitionBout> competitionBouts,
+    Map<Person, PersonRole> personsWithRoles,
+  ) {
+    final missingAttr = <String>[];
+    final localizations = context.l10n;
+    for (final lineup in lineups) {
+      final missingLineupAttributes = _missingLineupAttributes(localizations, lineup);
+      if (missingLineupAttributes != null) missingAttr.add(missingLineupAttributes);
+    }
+
+    final roles = personsWithRoles.values;
+    if (!roles.any((role) => role == PersonRole.referee)) {
+      missingAttr.add(localizations.referee);
+    }
+    if (!roles.any((role) => role == PersonRole.steward)) {
+      missingAttr.add(localizations.steward);
+    }
+    if (!roles.any((role) => role == PersonRole.transcriptWriter)) {
+      missingAttr.add(localizations.transcriptionWriter);
+    }
+    if (endDate == null) {
+      missingAttr.add(localizations.endDate);
+    }
+    if (location == null) {
+      missingAttr.add(localizations.place);
+    }
+    if (visitorsCount == null) {
+      missingAttr.add(localizations.visitors);
+    }
+    if (no == null) {
+      missingAttr.add(localizations.competitionNumber);
+    }
+    if (competitionBouts.isEmpty) {
+      missingAttr.add('${localizations.bouts} (${localizations.noItems})');
+    }
+    if (competitionBouts.any((cb) => cb.bout.result == null)) {
+      missingAttr.add(
+        '${localizations.boutResult} (${competitionBouts.where((cb) => cb.bout.result == null).map((cb) => cb.id).join(', ')})',
+      );
+    }
+
+    if (missingAttr.isEmpty) return null;
+    return missingAttr.map((e) => '• $e').join('\n');
+  }
+
+  String? _missingLineupAttributes(AppLocalizations localizations, CompetitionLineup lineup) {
+    final missingAttr = <String>[];
+    if (lineup.coach == null) {
+      missingAttr.add(localizations.coach);
+    }
+    if (lineup.leader == null) {
+      missingAttr.add(localizations.leader);
+    }
+
+    if (missingAttr.isEmpty) return null;
+    return '${lineup.club.name} (${missingAttr.join(', ')})';
   }
 }

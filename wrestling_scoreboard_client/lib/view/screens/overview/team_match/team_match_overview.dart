@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/match_result_role.dart';
 import 'package:wrestling_scoreboard_client/localization/person_role.dart';
 import 'package:wrestling_scoreboard_client/localization/season.dart';
+import 'package:wrestling_scoreboard_client/localization/team_match.dart';
 import 'package:wrestling_scoreboard_client/models/organization_import_type.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
@@ -301,12 +302,23 @@ class TeamMatchOverview extends ConsumerWidget {
                         );
 
                         final officials = await _getOfficials(ref, match: match);
+
+                        if (!context.mounted) return;
+                        final missingAttributes = match.missingAttributes(context, officials, teamMatchBouts);
+                        if (missingAttributes != null) {
+                          final continueExport = await showOkCancelDialog(
+                            title: Icon(Icons.warning),
+                            context: context,
+                            child: Text(context.l10n.warningMissingAttributes + missingAttributes),
+                          );
+                          if (!continueExport) return;
+                        }
+
                         final reportStr = reporter.exportTeamMatchReport(
                           teamMatch: match,
                           boutMap: boutMap,
                           officials: officials,
                         );
-
                         await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
                       },
                     ),
@@ -461,20 +473,30 @@ class TeamMatchOverview extends ConsumerWidget {
 
     final officials = await _getOfficials(ref, match: match);
 
-    if (context.mounted) {
-      final bytes =
-          await TeamMatchTranscript(
-            teamMatchBoutActions: teamMatchBoutActions,
-            buildContext: context,
-            teamMatch: match,
-            officials: officials,
-            boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-            isTimeCountDown: isTimeCountDown,
-            guestParticipations: guestParticipations,
-            homeParticipations: homeParticipations,
-          ).buildPdf();
-      await Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
+    if (!context.mounted) return;
+    final missingAttributes = match.missingAttributes(context, officials, teamMatchBouts);
+    if (missingAttributes != null) {
+      final continueExport = await showOkCancelDialog(
+        title: Icon(Icons.warning),
+        context: context,
+        child: Text(context.l10n.warningMissingAttributes + missingAttributes),
+      );
+      if (!continueExport) return;
     }
+
+    if (!context.mounted) return;
+    final bytes =
+        await TeamMatchTranscript(
+          teamMatchBoutActions: teamMatchBoutActions,
+          buildContext: context,
+          teamMatch: match,
+          officials: officials,
+          boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+          isTimeCountDown: isTimeCountDown,
+          guestParticipations: guestParticipations,
+          homeParticipations: homeParticipations,
+        ).buildPdf();
+    await Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
   }
 
   void handleSelectedLineup(
