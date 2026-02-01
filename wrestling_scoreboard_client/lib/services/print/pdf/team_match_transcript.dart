@@ -46,14 +46,7 @@ class TeamMatchTranscript extends PdfSheet {
     final doc = Document();
 
     _logo = await rootBundle.loadString('assets/images/icons/launcher.svg');
-    final homePoints = TeamMatch.getHomePoints(teamMatchBoutActions.keys);
-    final guestPoints = TeamMatch.getGuestPoints(teamMatchBoutActions.keys);
-    final winner =
-        homePoints > guestPoints
-            ? teamMatch.home.team.name
-            : homePoints < guestPoints
-            ? teamMatch.guest.team.name
-            : '';
+    final winner = TeamMatch.getResultRole(home: teamMatch.home, guest: teamMatch.guest);
 
     // Add page to the PDF
     doc.addPage(
@@ -81,7 +74,12 @@ class TeamMatchTranscript extends PdfSheet {
                     children: [
                       buildFormCell(
                         title: localizations.winner,
-                        content: winner,
+                        content: switch (winner) {
+                          MatchResultRole.home => '${teamMatch.home.team.name} (${localizations.home})',
+                          MatchResultRole.guest => '${teamMatch.guest.team.name} (${localizations.guest})',
+                          MatchResultRole.tie => localizations.tie,
+                          _ => '',
+                        },
                         height: 30.0,
                         color: PdfColors.grey100,
                       ),
@@ -483,7 +481,7 @@ class TeamMatchTranscript extends PdfSheet {
             ...buildTeamFooter(BoutRole.red),
             Container(color: BoutRole.red.pdfColor, height: cellHeight),
             buildTextCell(
-              TeamMatch.getHomePoints(teamMatchBoutActions.keys).toString(),
+              teamMatch.home.classificationPoints?.toString() ?? '',
               borderColor: BoutRole.red.pdfColor,
               height: cellHeight,
               fontSize: cellFontSize,
@@ -492,7 +490,7 @@ class TeamMatchTranscript extends PdfSheet {
             Container(height: cellHeight),
             Container(height: cellHeight),
             buildTextCell(
-              TeamMatch.getGuestPoints(teamMatchBoutActions.keys).toString(),
+              teamMatch.guest.classificationPoints?.toString() ?? '',
               borderColor: BoutRole.blue.pdfColor,
               height: cellHeight,
               fontSize: cellFontSize,

@@ -302,6 +302,12 @@ abstract class AppLocalizations {
   /// **'Please provide a Report Provider for this organization.'**
   String get warningMissingReporter;
 
+  /// No description provided for @warningMissingAttributes.
+  ///
+  /// In en, this message translates to:
+  /// **'Attention! Information is missing:\n'**
+  String get warningMissingAttributes;
+
   /// No description provided for @report.
   ///
   /// In en, this message translates to:

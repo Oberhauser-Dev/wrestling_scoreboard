@@ -46,6 +46,7 @@
   "appDataDirectory": "Ordner für App-Daten",
   "reportProvider": "Report-Anbieter",
   "warningMissingReporter": "Bitte gib einen Report-Anbieter für diese Organisation an.",
+  "warningMissingAttributes": "Vorsicht! Es fehlen Informationen:\n",
   "report": "Report",
   "print": "Drucken",
   "database": "Datenbank",

@@ -49,6 +49,7 @@
   "appDataDirectory": "App Data Directory",
   "reportProvider": "Report Provider",
   "warningMissingReporter": "Please provide a Report Provider for this organization.",
+  "warningMissingAttributes": "Attention! Information is missing:\n",
   "report": "Report",
   "print": "Print",
   "database": "Database",

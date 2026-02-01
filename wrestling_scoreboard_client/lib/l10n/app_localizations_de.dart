@@ -126,6 +126,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get warningMissingReporter => 'Bitte gib einen Report-Anbieter für diese Organisation an.';
 
   @override
+  String get warningMissingAttributes => 'Vorsicht! Es fehlen Informationen:\n';
+
+  @override
   String get report => 'Report';
 
   @override

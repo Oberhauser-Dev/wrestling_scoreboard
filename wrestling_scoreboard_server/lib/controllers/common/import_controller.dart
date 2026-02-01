@@ -3,6 +3,7 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:shelf/shelf.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/common/exceptions.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/league_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
@@ -57,7 +58,7 @@ DO UPDATE SET last_import = EXCLUDED.last_import;
     }
     final apiProvider = await OrganizationController().initApiProvider(message: message, organization: organization);
     if (apiProvider == null) {
-      throw Exception('No API provider selected for the organization $organization.');
+      throw InvalidParameterException('No API provider selected for the organization $organization.');
     }
     return Response.ok((await apiProvider.checkCredentials()).toString());
   }
@@ -93,7 +94,7 @@ DO UPDATE SET last_import = EXCLUDED.last_import;
 
       final apiProvider = await OrganizationController().initApiProvider(message: message, organization: organization);
       if (apiProvider == null) {
-        throw Exception('No API provider selected for the organization $organization.');
+        throw InvalidParameterException('No API provider selected for the organization $organization.');
       }
 
       final totalSteps = 2;

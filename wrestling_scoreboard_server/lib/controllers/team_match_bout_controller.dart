@@ -49,8 +49,8 @@ class TeamMatchBoutController extends ShelfController<TeamMatchBout>
       if (teamMatchBouts.every((tmb) => tmb.bout.result != null)) {
         var teamMatch = await TeamMatchController().getSingle(teamMatchBout.teamMatch.id!, obfuscate: obfuscate);
         if (teamMatch.home.classificationPoints == null || teamMatch.guest.classificationPoints == null) {
-          final homeClassificationPoints = TeamMatch.getClassificationPoints(teamMatchBouts.map((e) => e.bout.r));
-          final guestClassificationPoints = TeamMatch.getClassificationPoints(teamMatchBouts.map((e) => e.bout.b));
+          final homeClassificationPoints = TeamMatch.getHomePoints(teamMatchBouts);
+          final guestClassificationPoints = TeamMatch.getGuestPoints(teamMatchBouts);
           if (homeClassificationPoints > 0 || guestClassificationPoints > 0) {
             final home = teamMatch.home.copyWith(classificationPoints: homeClassificationPoints);
             final guest = teamMatch.guest.copyWith(classificationPoints: guestClassificationPoints);
