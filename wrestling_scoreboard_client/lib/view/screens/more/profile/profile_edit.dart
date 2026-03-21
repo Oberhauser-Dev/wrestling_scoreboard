@@ -51,8 +51,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                   isMandatory: true,
                   iconData: Icons.short_text,
                   initialValue: _username,
-                  validator:
-                      (v) => (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
+                  validator: (v) =>
+                      (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
                 ),
                 LoadingBuilder(
                   future: ref.watch(remoteConfigProvider.future),
@@ -67,17 +67,18 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ElevatedButton(
-                    onPressed:
-                        () => catchAsync(context, () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            await ref
-                                .read(userProvider.notifier)
-                                .updateUser(user: widget.user.copyWith(username: _username, email: _email));
+                    onPressed: () => catchAsync(context, () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        await ref
+                            .read(userProvider.notifier)
+                            .updateUser(
+                              user: widget.user.copyWith(username: _username, email: _email),
+                            );
 
-                            if (context.mounted) Navigator.of(context).pop();
-                          }
-                        }),
+                        if (context.mounted) Navigator.of(context).pop();
+                      }
+                    }),
                     child: Text(localizations.save),
                   ),
                 ),

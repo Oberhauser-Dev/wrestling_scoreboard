@@ -101,10 +101,9 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
           selectedItem: _parent,
           label: localizations.umbrellaOrganization,
           context: context,
-          onSaved:
-              (Organization? value) => setState(() {
-                _parent = value;
-              }),
+          onSaved: (Organization? value) => setState(() {
+            _parent = value;
+          }),
           allowEmpty: true,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {

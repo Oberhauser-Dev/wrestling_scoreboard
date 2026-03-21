@@ -51,7 +51,7 @@ Map<String, dynamic> manyToJson(
     'isMany': true,
     'isRaw': isRaw,
     'filterType': filterType == null ? null : getTableNameFromType(filterType),
-    if (filterId != null) 'filterId': filterId,
+    'filterId': ?filterId,
     'tableName': getTableNameFromType(type),
     'data': many, // Is converted automatically with jsonEncode
   };
@@ -81,10 +81,9 @@ ManyDataObject<Map<String, dynamic>> parseManyRawJson(Map<String, dynamic> json)
   final filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
   final int? filterId = json['filterId'];
   return ManyDataObject<Map<String, dynamic>>(
-    data:
-        data.map((e) {
-          return e as Map<String, dynamic>;
-        }).toList(),
+    data: data.map((e) {
+      return e as Map<String, dynamic>;
+    }).toList(),
     filterType: filterType,
     filterId: filterId,
   );
@@ -95,10 +94,9 @@ ManyDataObject<T> parseManyJson<T extends DataObject>(Map<String, dynamic> json)
   final filterType = json['filterType'] == null ? null : getTypeFromTableName(json['filterType']);
   final int? filterId = json['filterId'];
   return ManyDataObject<T>(
-    data:
-        data.map((e) {
-          return DataObjectParser.fromJson<T>(e as Map<String, dynamic>);
-        }).toList(),
+    data: data.map((e) {
+      return DataObjectParser.fromJson<T>(e as Map<String, dynamic>);
+    }).toList(),
     filterType: filterType,
     filterId: filterId,
   );

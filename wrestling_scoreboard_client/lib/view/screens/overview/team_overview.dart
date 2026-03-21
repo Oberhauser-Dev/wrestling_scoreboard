@@ -74,39 +74,35 @@ class TeamOverview<T extends DataObject> extends ConsumerWidget {
                 context: context,
                 filterObject: team,
                 addPageBuilder: (context) => TeamClubAffiliationEdit(initialTeam: team),
-                createPageBuilder:
-                    (context) => ClubEdit(
-                      initialOrganization: team.organization,
-                      onCreated: (club) async {
-                        await (await ref.read(
-                          dataManagerProvider,
-                        )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
-                      },
-                    ),
-                itemBuilder:
-                    (context, club) => ContentItem(
-                      title: club.name,
-                      icon: club.imageUri == null ? Icon(Icons.foundation) : CircularImage(imageUri: club.imageUri!),
-                      onTap: () => ClubOverview.navigateTo(context, club),
-                    ),
+                createPageBuilder: (context) => ClubEdit(
+                  initialOrganization: team.organization,
+                  onCreated: (club) async {
+                    await (await ref.read(
+                      dataManagerProvider,
+                    )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
+                  },
+                ),
+                itemBuilder: (context, club) => ContentItem(
+                  title: club.name,
+                  icon: club.imageUri == null ? Icon(Icons.foundation) : CircularImage(imageUri: club.imageUri!),
+                  onTap: () => ClubOverview.navigateTo(context, club),
+                ),
               ),
               FilterableManyConsumer<LeagueTeamParticipation, Team>.add(
                 context: context,
                 addPageBuilder: (context) => LeagueTeamParticipationEdit(initialTeam: team),
                 filterObject: team,
-                mapData:
-                    (teamParticipations) =>
-                        teamParticipations..sort((a, b) {
-                          final dateComp = b.league.startDate.compareTo(a.league.startDate);
-                          if (dateComp != 0) return dateComp;
-                          return a.league.fullname.compareTo(b.league.fullname);
-                        }),
-                itemBuilder:
-                    (context, item) => ContentItem.icon(
-                      title: '${item.league.fullname}, ${item.league.startDate.year}',
-                      iconData: Icons.emoji_events,
-                      onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
-                    ),
+                mapData: (teamParticipations) => teamParticipations
+                  ..sort((a, b) {
+                    final dateComp = b.league.startDate.compareTo(a.league.startDate);
+                    if (dateComp != 0) return dateComp;
+                    return a.league.fullname.compareTo(b.league.fullname);
+                  }),
+                itemBuilder: (context, item) => ContentItem.icon(
+                  title: '${item.league.fullname}, ${item.league.startDate.year}',
+                  iconData: Icons.emoji_events,
+                  onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
+                ),
               ),
             ],
           ),

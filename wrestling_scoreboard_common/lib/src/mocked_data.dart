@@ -720,11 +720,10 @@ class MockedData {
 
   late final List<WeightClass> _weightClasses = [wc57, wc130, wc61, wc98, wc66, wc86, wc71, wc80, wc75A, wc75B];
   late final List<BoutConfig> _boutConfigs = [leagueBoutConfig, competitionBoutConfig];
-  late final List<BoutResultRule> _boutResultRules =
-      [
-        ...TeamMatch.defaultBoutResultRules.map((rr) => rr.copyWith(boutConfig: leagueBoutConfig)),
-        ...Competition.defaultBoutResultRules.map((rr) => rr.copyWith(boutConfig: competitionBoutConfig)),
-      ].mapIndexed((index, rr) => rr.copyWithId(index + 1)).toList();
+  late final List<BoutResultRule> _boutResultRules = [
+    ...TeamMatch.defaultBoutResultRules.map((rr) => rr.copyWith(boutConfig: leagueBoutConfig)),
+    ...Competition.defaultBoutResultRules.map((rr) => rr.copyWith(boutConfig: competitionBoutConfig)),
+  ].mapIndexed((index, rr) => rr.copyWithId(index + 1)).toList();
 
   late final List<TeamMatch> _teamMatches = [menRPWMatch, jnRPWMatch];
   late final List<TeamMatchBout> _teamMatchBouts = [tmb1, tmb2];

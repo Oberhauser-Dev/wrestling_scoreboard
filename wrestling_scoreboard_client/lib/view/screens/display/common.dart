@@ -21,10 +21,10 @@ class ClassificationPointsDisplay extends ConsumerWidget {
         return participationState == null
             ? null
             : ref.watch(
-              singleDataStreamProvider<AthleteBoutState>(
-                SingleProviderData<AthleteBoutState>(initialData: participationState, id: participationState.id!),
-              ).future,
-            );
+                singleDataStreamProvider<AthleteBoutState>(
+                  SingleProviderData<AthleteBoutState>(initialData: participationState, id: participationState.id!),
+                ).future,
+              );
       }),
     );
     return ThemedContainer(
@@ -62,12 +62,11 @@ class CommonElements {
           children: [
             ManyConsumer<Club, Team>(
               filterObject: home,
-              builder:
-                  (context, data) => OverlappingCircularImage(
-                    imageUris: data.map((e) => e.imageUri).toList(),
-                    size: width / 30,
-                    borderWidth: 1,
-                  ),
+              builder: (context, data) => OverlappingCircularImage(
+                imageUris: data.map((e) => e.imageUri).toList(),
+                size: width / 30,
+                borderWidth: 1,
+              ),
             ),
             Expanded(child: Center(child: ScaledText(home.name, fontSize: 28, minFontSize: 16))),
           ],
@@ -97,12 +96,11 @@ class CommonElements {
             Expanded(child: Center(child: ScaledText(guest.name, fontSize: 28, minFontSize: 16))),
             ManyConsumer<Club, Team>(
               filterObject: guest,
-              builder:
-                  (context, data) => OverlappingCircularImage(
-                    imageUris: data.map((e) => e.imageUri).toList(),
-                    size: width / 30,
-                    borderWidth: 1,
-                  ),
+              builder: (context, data) => OverlappingCircularImage(
+                imageUris: data.map((e) => e.imageUri).toList(),
+                size: width / 30,
+                borderWidth: 1,
+              ),
             ),
           ],
         ),

@@ -165,7 +165,8 @@ class SecuredUserController extends ShelfController<SecuredUser> {
     await sendMail(
       recipient: securedUser.email!,
       subject: 'Welcome to Wrestling Scoreboard',
-      body: '''
+      body:
+          '''
 <p>Dear <strong>${securedUser.username}</strong>,</p>
 <p>Welcome aboard! We're excited to have you using <strong>Wrestling Scoreboard</strong>.</p>
 <p>Please confirm your email address in your application.
@@ -182,7 +183,8 @@ class SecuredUserController extends ShelfController<SecuredUser> {
     await sendMail(
       recipient: securedUser.email!,
       subject: 'Email verification code for Wrestling Scoreboard',
-      body: '''
+      body:
+          '''
 <p>Dear <strong>${securedUser.username}</strong>,</p>
 <p>We received a request to generate a verification for your <strong>Wrestling Scoreboard</strong> account.</p>
 <p>Please login with your username and verification code:</p>
@@ -197,7 +199,8 @@ class SecuredUserController extends ShelfController<SecuredUser> {
     await sendMail(
       recipient: securedUser.email!,
       subject: 'Account deleted for Wrestling Scoreboard',
-      body: '''
+      body:
+          '''
 <p>Dear <strong>${securedUser.username}</strong>,</p>
 <p>Your account for <strong>Wrestling Scoreboard</strong> was deleted.</p>
 <p>This cannot be undone. Please create a new account if you want to rejoin.</p>

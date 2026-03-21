@@ -21,8 +21,9 @@ final bout = Bout(id: 0, r: athleteBoutState0, b: athleteBoutState1);
 final weightClassFree = WeightClass(id: 0, weight: 0, style: WrestlingStyle.free);
 final weightClassGreco = WeightClass(id: 1, weight: 0, style: WrestlingStyle.greco);
 final boutConfig = Competition.defaultBoutConfig.copyWithId(0);
-final boutResultRules =
-    Competition.defaultBoutResultRules.indexed.map((e) => e.$2.copyWith(id: e.$1, boutConfig: boutConfig)).toList();
+final boutResultRules = Competition.defaultBoutResultRules.indexed
+    .map((e) => e.$2.copyWith(id: e.$1, boutConfig: boutConfig))
+    .toList();
 final scratchBout = ScratchBout(id: 0, bout: bout, boutConfig: boutConfig, weightClass: weightClassFree);
 
 /// Stores the information given to the local preferences.

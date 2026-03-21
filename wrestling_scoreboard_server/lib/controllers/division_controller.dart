@@ -16,7 +16,8 @@ class DivisionController extends ShelfController<Division> with OrganizationalCo
 
   DivisionController._internal() : super();
 
-  static String _weightClassesQuery(bool filterBySeasonPartition) => '''
+  static String _weightClassesQuery(bool filterBySeasonPartition) =>
+      '''
         SELECT wc.* 
         FROM weight_class as wc
         JOIN division_weight_class AS dwc ON dwc.weight_class_id = wc.id
@@ -39,7 +40,7 @@ class DivisionController extends ShelfController<Division> with OrganizationalCo
   }) {
     return DivisionWeightClassController().getMany(
       conditions: ['division_id = @id', if (seasonPartition != null) 'season_partition = @season_partition'],
-      substitutionValues: {'id': id, if (seasonPartition != null) 'season_partition': seasonPartition},
+      substitutionValues: {'id': id, 'season_partition': ?seasonPartition},
       orderBy: ['season_partition', 'pos'],
       obfuscate: obfuscate,
     );

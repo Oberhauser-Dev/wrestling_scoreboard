@@ -87,10 +87,10 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
   // (1, 2) => C2 => 5
   int? drawNumber(CompetitionSystemPhase phase) =>
       poolDrawNumbers.length <= phase.pos ||
-              poolGroups.length <= phase.pos ||
-              weightCategory?.competitionSystemAffiliation == null
-          ? null
-          : (poolGroups[phase.pos] + (poolDrawNumbers[phase.pos] * phase.poolGroupCount));
+          poolGroups.length <= phase.pos ||
+          weightCategory?.competitionSystemAffiliation == null
+      ? null
+      : (poolGroups[phase.pos] + (poolDrawNumbers[phase.pos] * phase.poolGroupCount));
 
   int? displayDrawNumber(CompetitionSystemPhase phase) {
     final drawN = drawNumber(phase);

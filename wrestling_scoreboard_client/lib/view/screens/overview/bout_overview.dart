@@ -54,19 +54,17 @@ mixin BoutOverview<T extends DataObject> implements AbstractOverview<Bout, T> {
             ContentItem(
               title: bout.r?.fullName(context) ?? localizations.participantVacant,
               subtitle: localizations.red,
-              icon:
-                  bout.r?.membership.person.imageUri == null
-                      ? Icon(Icons.person)
-                      : CircularImage(imageUri: bout.r!.membership.person.imageUri!),
+              icon: bout.r?.membership.person.imageUri == null
+                  ? Icon(Icons.person)
+                  : CircularImage(imageUri: bout.r!.membership.person.imageUri!),
               onTap: bout.r == null ? null : () => MembershipOverview.navigateTo(context, bout.r!.membership),
             ),
             ContentItem(
               title: bout.b?.fullName(context) ?? localizations.participantVacant,
               subtitle: localizations.blue,
-              icon:
-                  bout.b?.membership.person.imageUri == null
-                      ? Icon(Icons.person)
-                      : CircularImage(imageUri: bout.b!.membership.person.imageUri!),
+              icon: bout.b?.membership.person.imageUri == null
+                  ? Icon(Icons.person)
+                  : CircularImage(imageUri: bout.b!.membership.person.imageUri!),
               onTap: bout.b == null ? null : () => MembershipOverview.navigateTo(context, bout.b!.membership),
             ),
             ContentItem.icon(
@@ -89,10 +87,9 @@ mixin BoutOverview<T extends DataObject> implements AbstractOverview<Bout, T> {
               future: ref.watch(timeCountDownProvider),
               builder: (context, isTimeCountDown) {
                 return ContentItem.icon(
-                  title:
-                      bout.duration
-                          .invertIf(isTimeCountDown, max: boutConfig!.totalPeriodDuration)
-                          .formatMinutesAndSeconds(),
+                  title: bout.duration
+                      .invertIf(isTimeCountDown, max: boutConfig!.totalPeriodDuration)
+                      .formatMinutesAndSeconds(),
                   subtitle: localizations.duration,
                   iconData: Icons.timer,
                 );
@@ -106,7 +103,10 @@ mixin BoutOverview<T extends DataObject> implements AbstractOverview<Bout, T> {
           dataObject: subClassData,
           label: classLocale,
           details: details ?? bout.title(context),
-          tabs: [Tab(child: HeadingText(localizations.info)), ...relations.keys],
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            ...relations.keys,
+          ],
           actions: actions,
           body: TabGroup(items: [description, ...relations.values]),
         );

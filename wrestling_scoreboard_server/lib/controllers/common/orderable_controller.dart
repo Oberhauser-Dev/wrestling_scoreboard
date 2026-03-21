@@ -28,8 +28,9 @@ mixin OrderableController<T extends PosOrderable> on ShelfController<T> {
     }
 
     final indexedFilter = Iterable<int>.generate(filterTypes.length);
-    final conditions =
-        indexedFilter.map((i) => '${directDataObjectRelations[T]![filterTypes[i]]!.first} = @fid$i').toList();
+    final conditions = indexedFilter
+        .map((i) => '${directDataObjectRelations[T]![filterTypes[i]]!.first} = @fid$i')
+        .toList();
     await _reorder(
       conditions: conditions,
       id: id,
@@ -61,7 +62,8 @@ mixin OrderableController<T extends PosOrderable> on ShelfController<T> {
     String? orderByStmt,
   }) async {
     final orderTable = getTableNameFromType(orderType);
-    final query = '''
+    final query =
+        '''
 WITH renumbered AS (
   SELECT
     t.id,
@@ -102,7 +104,8 @@ WHERE tgt.id = rn.id;
       return;
     }
 
-    final queryPosOthers = '''
+    final queryPosOthers =
+        '''
 WITH item AS (
   SELECT pos AS old_pos
   FROM $tableName
@@ -125,7 +128,8 @@ WHERE id <> @id
 ''';
 
     // Finally, set our row to its new position
-    final queryPosSelf = '''
+    final queryPosSelf =
+        '''
 UPDATE $tableName
 SET pos = @newPos
 WHERE id = @id;

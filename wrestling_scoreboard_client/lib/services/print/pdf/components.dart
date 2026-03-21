@@ -14,7 +14,12 @@ Container buildCheckBox({
   width: size,
   foregroundDecoration: BoxDecoration(border: Border.all(color: PdfColors.grey, width: .5)),
   alignment: Alignment.center,
-  child: isChecked ? Text('×', style: TextStyle(fontSize: size, color: pencilColor)) : null,
+  child: isChecked
+      ? Text(
+          '×',
+          style: TextStyle(fontSize: size, color: pencilColor),
+        )
+      : null,
 );
 
 Widget buildTextCell(
@@ -30,7 +35,10 @@ Widget buildTextCell(
   Alignment alignment = Alignment.centerLeft,
 }) {
   return buildTableCellWidget(
-    child: Text(title, style: TextStyle(fontSize: fontSize, color: textColor ?? PdfColors.black)),
+    child: Text(
+      title,
+      style: TextStyle(fontSize: fontSize, color: textColor ?? PdfColors.black),
+    ),
     margin: margin,
     height: height,
     alignment: alignment,
@@ -57,10 +65,11 @@ Widget buildTableCellWidget({
     margin: margin,
     padding: const EdgeInsets.all(2),
     alignment: alignment,
-    foregroundDecoration:
-        borderWidth <= 0
-            ? null
-            : BoxDecoration(border: Border.all(color: borderColor ?? PdfColors.grey, width: borderWidth)),
+    foregroundDecoration: borderWidth <= 0
+        ? null
+        : BoxDecoration(
+            border: Border.all(color: borderColor ?? PdfColors.grey, width: borderWidth),
+          ),
     height: height,
     width: width,
     child: child,
@@ -116,7 +125,9 @@ Widget buildFormCellWidget({
           ),
         content == null
             ? SizedBox.expand()
-            : Expanded(child: Container(padding: contentPadding, alignment: contentAlignment, child: content)),
+            : Expanded(
+                child: Container(padding: contentPadding, alignment: contentAlignment, child: content),
+              ),
       ],
     ),
   );

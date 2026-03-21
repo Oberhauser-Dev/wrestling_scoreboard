@@ -72,10 +72,9 @@ Iterable<(int, int)> generateByeDoubleEliminationRound(List<int> remaining, Iter
       for (int j = i + 1; j < singles.length; j++) {
         final pair = {singles[i], singles[j]};
         if (!{...oldPairs, ...newPairs}.any((s) => s.containsAll(pair))) {
-          final List<int> recursiveSingles =
-              List.from(singles)
-                ..remove(singles[i])
-                ..remove(singles[j]);
+          final List<int> recursiveSingles = List.from(singles)
+            ..remove(singles[i])
+            ..remove(singles[j]);
           final Iterable<Set<int>> recursivePairs = Set.from(newPairs)..add(pair);
           final result = pairWithThreshold(recursiveSingles, oldPairs, recursivePairs, threshold);
           if (result != null) return result;

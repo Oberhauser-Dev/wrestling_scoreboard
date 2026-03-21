@@ -61,59 +61,58 @@ class ScoreSheet extends PdfSheet {
         pageTheme: await buildTheme(),
         header: _buildHeader,
         footer: buildFooter,
-        build:
-            (context) => [
-              Container(height: PdfSheet.verticalGap),
-              buildInfo(context, event),
-              Container(height: PdfSheet.verticalGap),
-              _buildInfoHeader2(context),
-              Container(height: PdfSheet.verticalGap),
-              _buildParticipantsHeader(context),
-              Container(height: PdfSheet.verticalGap),
-              _buildPointsBody(context, actions),
-              Container(height: PdfSheet.verticalGap),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: buildFormCell(
-                      title: localizations.winner,
-                      content: bout.winnerRole?.localize(buildContext).toUpperCase(),
-                    ),
-                  ),
-                  Expanded(child: buildFormCell(title: localizations.comment, content: bout.comment)),
-                  buildFormCell(
-                    title: localizations.duration,
-                    content:
-                        bout.duration
-                            .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
-                            .formatMinutesAndSeconds(),
-                    width: 100,
-                  ),
-                ],
+        build: (context) => [
+          Container(height: PdfSheet.verticalGap),
+          buildInfo(context, event),
+          Container(height: PdfSheet.verticalGap),
+          _buildInfoHeader2(context),
+          Container(height: PdfSheet.verticalGap),
+          _buildParticipantsHeader(context),
+          Container(height: PdfSheet.verticalGap),
+          _buildPointsBody(context, actions),
+          Container(height: PdfSheet.verticalGap),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: buildFormCell(
+                  title: localizations.winner,
+                  content: bout.winnerRole?.localize(buildContext).toUpperCase(),
+                ),
               ),
-              Container(height: PdfSheet.verticalGap),
-              _buildClassificationPointsTable(context),
-              Container(height: PdfSheet.verticalGap),
-              // Alternatively create a table with row which are spread equally.
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                    buildOfficials(
-                      order: [
-                        PersonRole.referee,
-                        PersonRole.matChairman,
-                        PersonRole.judge,
-                        PersonRole.timeKeeper,
-                        PersonRole.transcriptWriter,
-                      ],
-                      context,
-                      event,
-                      groupedOfficials: groupedOfficials,
-                    ).map((e) => Expanded(child: e)).toList(),
-                mainAxisSize: MainAxisSize.max,
+              Expanded(
+                child: buildFormCell(title: localizations.comment, content: bout.comment),
+              ),
+              buildFormCell(
+                title: localizations.duration,
+                content: bout.duration
+                    .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                    .formatMinutesAndSeconds(),
+                width: 100,
               ),
             ],
+          ),
+          Container(height: PdfSheet.verticalGap),
+          _buildClassificationPointsTable(context),
+          Container(height: PdfSheet.verticalGap),
+          // Alternatively create a table with row which are spread equally.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: buildOfficials(
+              order: [
+                PersonRole.referee,
+                PersonRole.matChairman,
+                PersonRole.judge,
+                PersonRole.timeKeeper,
+                PersonRole.transcriptWriter,
+              ],
+              context,
+              event,
+              groupedOfficials: groupedOfficials,
+            ).map((e) => Expanded(child: e)).toList(),
+            mainAxisSize: MainAxisSize.max,
+          ),
+        ],
       ),
     );
 
@@ -279,7 +278,12 @@ class ScoreSheet extends PdfSheet {
         child: Table(
           columnWidths: {0: FlexColumnWidth(isLeft ? 1 : 4), 1: FlexColumnWidth(isLeft ? 4 : 1)},
           children: [
-            TableRow(children: [Container(height: 8, color: borderColor), Container(height: 8, color: borderColor)]),
+            TableRow(
+              children: [
+                Container(height: 8, color: borderColor),
+                Container(height: 8, color: borderColor),
+              ],
+            ),
             TableRow(children: content),
           ],
         ),
@@ -315,26 +319,24 @@ class ScoreSheet extends PdfSheet {
     }
 
     const numColumns = 2;
-    final boutResultRuleGroupsList =
-        boutRules.groupListsBy((element) {
-          return (element.boutResult, element.winnerClassificationPoints, element.loserClassificationPoints);
-        }).entries;
+    final boutResultRuleGroupsList = boutRules.groupListsBy((element) {
+      return (element.boutResult, element.winnerClassificationPoints, element.loserClassificationPoints);
+    }).entries;
 
     return Row(
-      children:
-          boutResultRuleGroupsList
-              .slices((boutResultRuleGroupsList.length / numColumns).ceil())
-              .map<Widget>(
-                (boutResultRuleGroupSection) => Expanded(
-                  child: _buildClassificationPointsTableSection(
-                    context,
-                    Map.fromEntries(boutResultRuleGroupSection),
-                    resultRule,
-                  ),
-                ),
-              )
-              .intersperse(Container(width: PdfSheet.horizontalGap))
-              .toList(),
+      children: boutResultRuleGroupsList
+          .slices((boutResultRuleGroupsList.length / numColumns).ceil())
+          .map<Widget>(
+            (boutResultRuleGroupSection) => Expanded(
+              child: _buildClassificationPointsTableSection(
+                context,
+                Map.fromEntries(boutResultRuleGroupSection),
+                resultRule,
+              ),
+            ),
+          )
+          .intersperse(Container(width: PdfSheet.horizontalGap))
+          .toList(),
     );
   }
 
@@ -346,56 +348,55 @@ class ScoreSheet extends PdfSheet {
     const cellHeight = 20.0;
     return Table(
       columnWidths: {0: const FixedColumnWidth(35), 1: const FixedColumnWidth(30), 2: const FlexColumnWidth(1)},
-      children:
-          boutResultRuleGroups.entries.map((entry) {
-            final (res, winnerClassificationPoints, loserClassificationPoints) = entry.key;
-            final rules = entry.value;
-            var description = res.description(buildContext);
-            final isResultRuleApplied = rules.contains(resultRule);
-            for (final rule in rules) {
-              if (rule.style != null ||
-                  rule.winnerTechnicalPoints != null ||
-                  rule.loserTechnicalPoints != null ||
-                  rule.technicalPointsDifference != null) {
-                description += ' ';
-                if (rule.style != null) {
-                  description += rule.style!.localize(buildContext).toUpperCase();
-                }
-                if (rule.winnerTechnicalPoints != null) {
-                  description += '• Winner has ${rule.winnerTechnicalPoints} technical point(s)';
-                }
-                if (rule.loserTechnicalPoints != null) {
-                  description += '• Loser has ${rule.loserTechnicalPoints} technical point(s)';
-                }
-                if (rule.technicalPointsDifference != null) {
-                  description += '• A difference of at least ${rule.technicalPointsDifference} point(s)';
-                }
-                description += '\n';
-              }
+      children: boutResultRuleGroups.entries.map((entry) {
+        final (res, winnerClassificationPoints, loserClassificationPoints) = entry.key;
+        final rules = entry.value;
+        var description = res.description(buildContext);
+        final isResultRuleApplied = rules.contains(resultRule);
+        for (final rule in rules) {
+          if (rule.style != null ||
+              rule.winnerTechnicalPoints != null ||
+              rule.loserTechnicalPoints != null ||
+              rule.technicalPointsDifference != null) {
+            description += ' ';
+            if (rule.style != null) {
+              description += rule.style!.localize(buildContext).toUpperCase();
             }
+            if (rule.winnerTechnicalPoints != null) {
+              description += '• Winner has ${rule.winnerTechnicalPoints} technical point(s)';
+            }
+            if (rule.loserTechnicalPoints != null) {
+              description += '• Loser has ${rule.loserTechnicalPoints} technical point(s)';
+            }
+            if (rule.technicalPointsDifference != null) {
+              description += '• A difference of at least ${rule.technicalPointsDifference} point(s)';
+            }
+            description += '\n';
+          }
+        }
 
-            return TableRow(
-              children: [
-                buildTextCell(
-                  res.abbreviation(buildContext),
-                  width: 40,
-                  height: cellHeight,
-                  alignment: Alignment.center,
-                  borderColor: isResultRuleApplied ? PdfSheet.pencilColor : null,
-                  borderWidth: isResultRuleApplied ? 2 : null,
-                ),
-                buildTextCell(
-                  '$winnerClassificationPoints:$loserClassificationPoints',
-                  width: 40,
-                  height: cellHeight,
-                  alignment: Alignment.center,
-                  borderColor: isResultRuleApplied ? PdfSheet.pencilColor : null,
-                  borderWidth: isResultRuleApplied ? 2 : null,
-                ),
-                buildTextCell(description, fontSize: 7, height: cellHeight),
-              ],
-            );
-          }).toList(),
+        return TableRow(
+          children: [
+            buildTextCell(
+              res.abbreviation(buildContext),
+              width: 40,
+              height: cellHeight,
+              alignment: Alignment.center,
+              borderColor: isResultRuleApplied ? PdfSheet.pencilColor : null,
+              borderWidth: isResultRuleApplied ? 2 : null,
+            ),
+            buildTextCell(
+              '$winnerClassificationPoints:$loserClassificationPoints',
+              width: 40,
+              height: cellHeight,
+              alignment: Alignment.center,
+              borderColor: isResultRuleApplied ? PdfSheet.pencilColor : null,
+              borderWidth: isResultRuleApplied ? 2 : null,
+            ),
+            buildTextCell(description, fontSize: 7, height: cellHeight),
+          ],
+        );
+      }).toList(),
     );
   }
 
@@ -452,18 +453,16 @@ class ScoreSheet extends PdfSheet {
           content: RichText(
             text: TextSpan(
               style: const TextStyle(color: PdfSheet.pencilColor),
-              children:
-                  actions
-                      .map(
-                        (e) => TextSpan(
-                          text: actions.last == e ? e.actionValue : '${e.actionValue}, ',
-                          style:
-                              periodActions.lastWhereOrNull((e) => e.actionType == BoutActionType.points) == e
-                                  ? const TextStyle(decoration: TextDecoration.underline)
-                                  : null,
-                        ),
-                      )
-                      .toList(),
+              children: actions
+                  .map(
+                    (e) => TextSpan(
+                      text: actions.last == e ? e.actionValue : '${e.actionValue}, ',
+                      style: periodActions.lastWhereOrNull((e) => e.actionType == BoutActionType.points) == e
+                          ? const TextStyle(decoration: TextDecoration.underline)
+                          : null,
+                    ),
+                  )
+                  .toList(),
             ),
           ),
           borderColor: role.pdfColor,
@@ -540,7 +539,10 @@ class ScoreSheet extends PdfSheet {
           Container(
             width: roundCellHeight * 2,
             height: roundCellHeight * 2,
-            foregroundDecoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: color, width: 2)),
+            foregroundDecoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: color, width: 2),
+            ),
             child: Center(
               child: Text(points?.toString() ?? '', style: const TextStyle(color: PdfSheet.pencilColor, fontSize: 20)),
             ),

@@ -23,7 +23,8 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
 
   LeagueController._internal() : super();
 
-  static String _weightClassesQuery(bool filterBySeasonPartition) => '''
+  static String _weightClassesQuery(bool filterBySeasonPartition) =>
+      '''
         SELECT wc.* 
         FROM ${WeightClass.cTableName} as wc
         JOIN ${LeagueWeightClass.cTableName} AS dwc ON dwc.weight_class_id = wc.id
@@ -42,7 +43,7 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
   Future<List<WeightClass>> getWeightClasses(String id, {int? seasonPartition, required bool obfuscate}) {
     return WeightClassController().getManyFromQuery(
       _weightClassesQuery(seasonPartition != null),
-      substitutionValues: {'id': id, if (seasonPartition != null) 'season_partition': seasonPartition},
+      substitutionValues: {'id': id, 'season_partition': ?seasonPartition},
       obfuscate: obfuscate,
     );
   }
@@ -50,7 +51,7 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
   Future<List<LeagueWeightClass>> getLeagueWeightClasses(String id, {int? seasonPartition, required bool obfuscate}) {
     return LeagueWeightClassController().getMany(
       conditions: ['league_id = @id', if (seasonPartition != null) 'season_partition = @season_partition'],
-      substitutionValues: {'id': id, if (seasonPartition != null) 'season_partition': seasonPartition},
+      substitutionValues: {'id': id, 'season_partition': ?seasonPartition},
       orderBy: ['season_partition', 'pos'],
       obfuscate: obfuscate,
     );

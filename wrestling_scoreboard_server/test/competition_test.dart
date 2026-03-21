@@ -204,15 +204,14 @@ void main() {
           int count,
           CompetitionWeightCategory weightCategory,
         ) async {
-          final participants =
-              mockedData
-                  .getCompetitionParticipations()
-                  .where((cp) => cp.weightCategory == weightCategory)
-                  .toList()
-                  .sublist(0, count)
-                  // Remove all additional information, which is set on initial generation
-                  .map((e) => e.copyWith(poolDrawNumbers: [], poolGroups: [], contestantStatus: null))
-                  .toList();
+          final participants = mockedData
+              .getCompetitionParticipations()
+              .where((cp) => cp.weightCategory == weightCategory)
+              .toList()
+              .sublist(0, count)
+              // Remove all additional information, which is set on initial generation
+              .map((e) => e.copyWith(poolDrawNumbers: [], poolGroups: [], contestantStatus: null))
+              .toList();
           await CompetitionParticipationController().createMany(participants);
           return participants;
         }

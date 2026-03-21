@@ -192,14 +192,13 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                                       ),
                                     ),
                                     Column(
-                                      children:
-                                          competitionInfos
-                                              .map(
-                                                (e) => Center(
-                                                  child: ScaledText(e, softWrap: false, fontSize: 10, minFontSize: 8),
-                                                ),
-                                              )
-                                              .toList(),
+                                      children: competitionInfos
+                                          .map(
+                                            (e) => Center(
+                                              child: ScaledText(e, softWrap: false, fontSize: 10, minFontSize: 8),
+                                            ),
+                                          )
+                                          .toList(),
                                     ),
                                   ],
                                 ),
@@ -231,24 +230,23 @@ class CompetitionWeightCategoryDisplay extends ConsumerWidget {
                                         final boutResults = Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment: CrossAxisAlignment.center,
-                                          children:
-                                              nonEmptyRounds.map((round) {
-                                                return Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    ScaledContainer(
-                                                      width: CompetitionParticipationItem.roundRelativeWidth,
-                                                      child: ScaledText(
-                                                        '${localizations.round} ${round + 1}',
-                                                        fontSize: 10,
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                    ),
-                                                    VerticalDivider(width: 1),
-                                                  ],
-                                                );
-                                              }).toList(),
+                                          children: nonEmptyRounds.map((round) {
+                                            return Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                ScaledContainer(
+                                                  width: CompetitionParticipationItem.roundRelativeWidth,
+                                                  child: ScaledText(
+                                                    '${localizations.round} ${round + 1}',
+                                                    fontSize: 10,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                VerticalDivider(width: 1),
+                                              ],
+                                            );
+                                          }).toList(),
                                         );
                                         final pointWidgets = Row(
                                           mainAxisAlignment: MainAxisAlignment.center,

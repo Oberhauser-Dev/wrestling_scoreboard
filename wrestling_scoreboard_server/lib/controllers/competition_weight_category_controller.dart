@@ -119,14 +119,13 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
       obfuscate: false,
     );
     // Reset elimination
-    participations =
-        participations
-            .map(
-              (e) => e.copyWith(
-                contestantStatus: e.contestantStatus == ContestantStatus.eliminated ? null : e.contestantStatus,
-              ),
-            )
-            .toList();
+    participations = participations
+        .map(
+          (e) => e.copyWith(
+            contestantStatus: e.contestantStatus == ContestantStatus.eliminated ? null : e.contestantStatus,
+          ),
+        )
+        .toList();
 
     participations.removeWhere((element) => element.isExcluded);
     if (participations.isEmpty) {
@@ -175,8 +174,9 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     await _generateInitialBoutsOfPhase(
       phase: phases.first,
       competitionWeightCategory: competitionWeightCategory,
-      contestantsByPoolGroup:
-          participations.slices((participations.length / phases.first.poolGroupCount).ceil()).toList(),
+      contestantsByPoolGroup: participations
+          .slices((participations.length / phases.first.poolGroupCount).ceil())
+          .toList(),
     );
   }
 
@@ -356,8 +356,9 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           await _generateInitialBoutsOfPhase(
             competitionWeightCategory: weightCategory,
             // List of ranked contestants
-            contestantsByPoolGroup:
-                rankingByPool.map((e) => e.keys.toList().sublist(0, (phase.maxRank ?? 0) + 1)).toList(),
+            contestantsByPoolGroup: rankingByPool
+                .map((e) => e.keys.toList().sublist(0, (phase.maxRank ?? 0) + 1))
+                .toList(),
             phase: phases[nextPhasePos],
           );
         } else if (nextPhasePos == phases.length) {

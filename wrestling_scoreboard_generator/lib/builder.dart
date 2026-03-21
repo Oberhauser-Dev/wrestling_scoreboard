@@ -1,4 +1,4 @@
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:glob/glob.dart';
 import 'package:graphs/graphs.dart';
@@ -7,21 +7,21 @@ import 'package:source_gen/source_gen.dart';
 
 Builder genericDataObjectBuilder(BuilderOptions options) => GenericDataObjectBuilder();
 
-extension on ClassElement2 {
+extension on ClassElement {
   bool get isDataObject {
-    return !(name3?.startsWith('_') ?? false) &&
+    return !(name?.startsWith('_') ?? false) &&
         mixins.isNotEmpty &&
-        allSupertypes.map((i) => i.element3.name3).any((name) => name == 'DataObject');
+        allSupertypes.map((i) => i.element.name).any((name) => name == 'DataObject');
   }
 
-  bool hasGettersOfClass(ClassElement2 cElement) {
+  bool hasGettersOfClass(ClassElement cElement) {
     if (mixins.isEmpty) {
       return false;
     }
     // Avoid cyclic dependencies for its own class:
     if (thisType == cElement.thisType) return false;
     return mixins.first.getters.any((getter) {
-      return getter.returnType.element3?.name3 == cElement.name3;
+      return getter.returnType.element?.name == cElement.name;
     });
   }
 
@@ -30,8 +30,8 @@ extension on ClassElement2 {
       return [];
     }
     return mixins.first.getters.where((getter) {
-      final e = getter.returnType.element3;
-      return (e is ClassElement2) && e.isDataObject;
+      final e = getter.returnType.element;
+      return (e is ClassElement) && e.isDataObject;
     });
   }
 }
@@ -43,7 +43,7 @@ class GenericDataObjectBuilder implements Builder {
 
   @override
   Future<void> build(BuildStep buildStep) async {
-    final classes = <ClassElement2>[];
+    final classes = <ClassElement>[];
 
     final assetsStream = buildStep.findAssets(Glob(r'**.dart'));
     await for (final input in assetsStream) {
@@ -54,7 +54,7 @@ class GenericDataObjectBuilder implements Builder {
       final classesInLibrary = LibraryReader(library).classes;
       classes.addAll(classesInLibrary.where((c) => c.isDataObject));
     }
-    final sorted = topologicalSort<ClassElement2>(
+    final sorted = topologicalSort<ClassElement>(
       classes,
       // for each “dependency” node, list all the nodes that depend on it:
       (node) {
@@ -62,27 +62,28 @@ class GenericDataObjectBuilder implements Builder {
         // print('${node.name}: ${cl.map((c) => c.name).join(', ')}');
         return cl;
       },
-      equals: (p0, p1) => p0.name3 == p1.name3,
+      equals: (p0, p1) => p0.name == p1.name,
       secondarySort: (a, b) {
-        if (a.name3 == null) return -1;
-        if (b.name3 == null) return 1;
-        return a.name3!.compareTo(b.name3!);
+        if (a.name == null) return -1;
+        if (b.name == null) return 1;
+        return a.name!.compareTo(b.name!);
       },
     );
 
-    final output = '''
+    final output =
+        '''
 // ignore: prefer_relative_imports
 import 'package:wrestling_scoreboard_common/common.dart';
 /// This file is generated, DO NOT CHANGE BY HAND.
 
 /// Topo-Hierarchically ordered data types (most to least dependent on others).
 final dataTypes = [
-  ${sorted.reversed.map((c) => c.name3).join(',\n  ')}
+  ${sorted.reversed.map((c) => c.name).join(',\n  ')}
 ];
 
 String getTableNameFromType(Type t) {
   return switch (t) {
-    ${sorted.map((c) => 'const (${c.name3}) => ${c.name3}.cTableName,').join('\n    ')}
+    ${sorted.map((c) => 'const (${c.name}) => ${c.name}.cTableName,').join('\n    ')}
     const (BasicAuthService) => BasicAuthService.cTableName, // Only used for type encoding
     _ => throw UnimplementedError('ClassName for "\${t.toString()}" not found.'),
   };
@@ -90,7 +91,7 @@ String getTableNameFromType(Type t) {
 
 Type getTypeFromTableName(String tableName) {
   return switch (tableName) {
-    ${sorted.map((c) => '${c.name3}.cTableName => ${c.name3},').join('\n    ')}
+    ${sorted.map((c) => '${c.name}.cTableName => ${c.name},').join('\n    ')}
     BasicAuthService.cTableName => BasicAuthService, // Only used for type decoding
     _ => throw UnimplementedError('Type for "\${tableName.toString()}" not found.'),
   };
@@ -105,7 +106,7 @@ Future<int?> handleGenericJson(
 }) {
   final type = getTypeFromTableName(json['tableName'] as String);
   return switch (type) {
-    ${sorted.map((c) => 'const (${c.name3}) => handleJson<${c.name3}>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),').join('\n    ')}
+    ${sorted.map((c) => 'const (${c.name}) => handleJson<${c.name}>(json, handleSingle: handleSingle, handleMany: handleMany, handleSingleRaw: handleSingleRaw, handleManyRaw: handleManyRaw),').join('\n    ')}
     _ => throw UnimplementedError('Cannot handle Json for type "\${type.toString()}".'),
   };
 }
@@ -113,14 +114,14 @@ Future<int?> handleGenericJson(
 extension DataObjectParser on DataObject {
   static T fromJson<T extends DataObject>(Map<String, dynamic> json) {
     return switch (T) {
-      ${sorted.map((c) => 'const (${c.name3}) => ${c.name3}.fromJson(json) as T,').join('\n      ')}
+      ${sorted.map((c) => 'const (${c.name}) => ${c.name}.fromJson(json) as T,').join('\n      ')}
       _ => throw UnimplementedError('Json conversation for "\$T" not found.'),
     };
   }
 
   static Future<T> fromRaw<T extends DataObject>(Map<String, dynamic> raw, GetSingleOfTypeCallback getSingle) async {
     return switch (T) {
-      ${sorted.map((c) => 'const (${c.name3}) => (await ${c.name3}.fromRaw(raw, getSingle)) as T,').join('\n      ')}
+      ${sorted.map((c) => 'const (${c.name}) => (await ${c.name}.fromRaw(raw, getSingle)) as T,').join('\n      ')}
       _ => throw UnimplementedError('Raw conversation for "\$T" not found.'),
     };
   }
@@ -132,10 +133,10 @@ Iterable<R> mapDirectDataObjectRelations<T extends DataObject, R>(
 ) {
   switch (single) {
     ${sorted.map((c) {
-      final properties = c.getDataObjectGetters();
-      if (properties.isEmpty) return '';
-      return 'case final ${c.name3} single:\nreturn [${properties.map((property) => 'callback(single.${property.name3})').join(',')}];';
-    }).join('\n')}
+          final properties = c.getDataObjectGetters();
+          if (properties.isEmpty) return '';
+          return 'case final ${c.name} single:\nreturn [${properties.map((property) => 'callback(single.${property.name})').join(',')}];';
+        }).join('\n')}
   }
   return [];
 }

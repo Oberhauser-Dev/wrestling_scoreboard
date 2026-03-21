@@ -9,8 +9,9 @@ part of 'bout.dart';
 _Bout _$BoutFromJson(Map<String, dynamic> json) => _Bout(
   id: (json['id'] as num?)?.toInt(),
   orgSyncId: json['orgSyncId'] as String?,
-  organization:
-      json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+  organization: json['organization'] == null
+      ? null
+      : Organization.fromJson(json['organization'] as Map<String, dynamic>),
   r: json['r'] == null ? null : AthleteBoutState.fromJson(json['r'] as Map<String, dynamic>),
   b: json['b'] == null ? null : AthleteBoutState.fromJson(json['b'] as Map<String, dynamic>),
   winnerRole: $enumDecodeNullable(_$BoutRoleEnumMap, json['winnerRole']),

@@ -43,16 +43,14 @@ class ResponsiveTechnicalPoints extends StatelessWidget {
     );
     return Expanded(
       flex: 33,
-      child:
-          isHorizontal
-              ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [technicalPoints, boutActionControls])
-              : Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children:
-                    role == BoutRole.red
-                        ? [Expanded(child: technicalPoints), boutActionControls]
-                        : [boutActionControls, Expanded(child: technicalPoints)],
-              ),
+      child: isHorizontal
+          ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [technicalPoints, boutActionControls])
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: role == BoutRole.red
+                  ? [Expanded(child: technicalPoints), boutActionControls]
+                  : [boutActionControls, Expanded(child: technicalPoints)],
+            ),
     );
   }
 }

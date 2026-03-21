@@ -97,10 +97,9 @@ class DivisionEditState extends ConsumerState<DivisionEdit> {
           selectedItem: _organization,
           label: localizations.organization,
           context: context,
-          onSaved:
-              (Organization? value) => setState(() {
-                _organization = value;
-              }),
+          onSaved: (Organization? value) => setState(() {
+            _organization = value;
+          }),
           allowEmpty: false,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
@@ -115,10 +114,9 @@ class DivisionEditState extends ConsumerState<DivisionEdit> {
           selectedItem: _parentDivision,
           label: localizations.division,
           context: context,
-          onSaved:
-              (Division? value) => setState(() {
-                _parentDivision = value;
-              }),
+          onSaved: (Division? value) => setState(() {
+            _parentDivision = value;
+          }),
           itemAsString: (u) => u.fullname,
           asyncItems: (String filter) async {
             _availableDivisions ??= await (await ref.read(dataManagerProvider)).readMany<Division, Null>();

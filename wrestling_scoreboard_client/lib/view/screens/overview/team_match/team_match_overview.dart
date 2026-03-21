@@ -179,38 +179,34 @@ class TeamMatchOverview extends ConsumerWidget {
                     LoadingBuilder<User?>(
                       future: ref.watch(userProvider),
                       builder: (context, user) {
-                        final items =
-                            [match.home, match.guest].map((lineup) {
-                              return SingleConsumer<TeamLineup>(
-                                id: lineup.id!,
-                                initialData: lineup,
-                                builder: (context, lineup) {
-                                  return ManyConsumer<Club, Team>(
-                                    filterObject: lineup.team,
-                                    builder: (context, clubs) {
-                                      return ContentItem(
-                                        title: lineup.team.name,
-                                        // Do not wrap the loading animation in the icon, which leads to stuttering.
-                                        icon:
-                                            clubs.firstOrNull?.imageUri == null
-                                                ? Icon(Icons.view_list)
-                                                : CircularImage(imageUri: clubs.first.imageUri!),
-                                        onTap:
-                                            (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
-                                                ? null
-                                                : () async =>
-                                                    handleSelectedLineup(context, ref, lineup, match, navigator),
-                                        trailing: IconButton(
-                                          tooltip: localizations.print,
-                                          icon: const Icon(Icons.print),
-                                          onPressed: () => shareTeamMatchWeightList(context, ref, match, lineup),
-                                        ),
-                                      );
-                                    },
+                        final items = [match.home, match.guest].map((lineup) {
+                          return SingleConsumer<TeamLineup>(
+                            id: lineup.id!,
+                            initialData: lineup,
+                            builder: (context, lineup) {
+                              return ManyConsumer<Club, Team>(
+                                filterObject: lineup.team,
+                                builder: (context, clubs) {
+                                  return ContentItem(
+                                    title: lineup.team.name,
+                                    // Do not wrap the loading animation in the icon, which leads to stuttering.
+                                    icon: clubs.firstOrNull?.imageUri == null
+                                        ? Icon(Icons.view_list)
+                                        : CircularImage(imageUri: clubs.first.imageUri!),
+                                    onTap: (user?.privilege ?? UserPrivilege.none) < UserPrivilege.write
+                                        ? null
+                                        : () async => handleSelectedLineup(context, ref, lineup, match, navigator),
+                                    trailing: IconButton(
+                                      tooltip: localizations.print,
+                                      icon: const Icon(Icons.print),
+                                      onPressed: () => shareTeamMatchWeightList(context, ref, match, lineup),
+                                    ),
                                   );
                                 },
                               );
-                            }).toList();
+                            },
+                          );
+                        }).toList();
                         return GroupedList(
                           header: HeadingItem(
                             trailing: Restricted(
@@ -248,27 +244,24 @@ class TeamMatchOverview extends ConsumerWidget {
                   TeamMatchBoutList(filterObject: match),
                   FilterableManyConsumer<TeamMatchPerson, TeamMatch>.addOrCreate(
                     context: context,
-                    addPageBuilder:
-                        (context) =>
-                            TeamMatchPersonEdit(initialTeamMatch: match, initialOrganization: match.organization!),
-                    createPageBuilder:
-                        (context) => PersonEdit(
-                          initialOrganization: match.organization!,
-                          onCreated: (person) async {
-                            // TODO: ability to change role inside another implementation of PersonEdit.
-                            await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
-                              TeamMatchPerson(teamMatch: match, person: person, role: PersonRole.steward),
-                            );
-                          },
-                        ),
+                    addPageBuilder: (context) =>
+                        TeamMatchPersonEdit(initialTeamMatch: match, initialOrganization: match.organization!),
+                    createPageBuilder: (context) => PersonEdit(
+                      initialOrganization: match.organization!,
+                      onCreated: (person) async {
+                        // TODO: ability to change role inside another implementation of PersonEdit.
+                        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
+                          TeamMatchPerson(teamMatch: match, person: person, role: PersonRole.steward),
+                        );
+                      },
+                    ),
                     filterObject: match,
                     itemBuilder: (context, teamMatchPerson) {
                       return ContentItem(
                         title: '${teamMatchPerson.role.localize(context)} | ${teamMatchPerson.person.fullName}',
-                        icon:
-                            teamMatchPerson.person.imageUri == null
-                                ? Icon(teamMatchPerson.role.icon)
-                                : CircularImage(imageUri: teamMatchPerson.person.imageUri!),
+                        icon: teamMatchPerson.person.imageUri == null
+                            ? Icon(teamMatchPerson.role.icon)
+                            : CircularImage(imageUri: teamMatchPerson.person.imageUri!),
                         onTap: () async => TeamMatchPersonOverview.navigateTo(context, teamMatchPerson),
                       );
                     },
@@ -280,16 +273,15 @@ class TeamMatchOverview extends ConsumerWidget {
                   details: '${match.home.team.name} - ${match.guest.team.name}',
                   actions: [
                     DefaultResponsiveScaffoldActionItem(
-                      onTap:
-                          () async => ScratchBoutOverview.navigateTo(
-                            context,
-                            ref,
-                            boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                          ),
+                      onTap: () async => ScratchBoutOverview.navigateTo(
+                        context,
+                        ref,
+                        boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                      ),
                       icon: const Icon(Icons.rocket_launch),
                       label: localizations.launchScratchBout,
                     ),
-                    if (importAction != null) importAction,
+                    ?importAction,
                     OrganizationReportActionItem(
                       context: context,
                       organization: organization,
@@ -377,20 +369,18 @@ class TeamMatchOverview extends ConsumerWidget {
   }
 
   static Future<List<WeightClass>> _getWeightClasses(WidgetRef ref, TeamMatch match) async {
-    final leagueWeightClasses =
-        (await ref.readAsync(
-          manyDataStreamProvider<LeagueWeightClass, League>(
-            ManyProviderData<LeagueWeightClass, League>(filterObject: match.league),
-          ).future,
-        )).where((element) => element.seasonPartition == match.seasonPartition).toList();
+    final leagueWeightClasses = (await ref.readAsync(
+      manyDataStreamProvider<LeagueWeightClass, League>(
+        ManyProviderData<LeagueWeightClass, League>(filterObject: match.league),
+      ).future,
+    )).where((element) => element.seasonPartition == match.seasonPartition).toList();
     var weightClasses = leagueWeightClasses.map((e) => e.weightClass).toList();
     if (weightClasses.isEmpty) {
-      final divisionWeightClasses =
-          (await ref.readAsync(
-            manyDataStreamProvider<DivisionWeightClass, Division>(
-              ManyProviderData<DivisionWeightClass, Division>(filterObject: match.league!.division),
-            ).future,
-          )).where((element) => element.seasonPartition == match.seasonPartition).toList();
+      final divisionWeightClasses = (await ref.readAsync(
+        manyDataStreamProvider<DivisionWeightClass, Division>(
+          ManyProviderData<DivisionWeightClass, Division>(filterObject: match.league!.division),
+        ).future,
+      )).where((element) => element.seasonPartition == match.seasonPartition).toList();
       weightClasses = divisionWeightClasses.map((e) => e.weightClass).toList();
     }
     return weightClasses;
@@ -413,15 +403,14 @@ class TeamMatchOverview extends ConsumerWidget {
     final officials = await _getOfficials(ref, match: match);
 
     if (context.mounted) {
-      final bytes =
-          await TeamMatchWeightList(
-            weightClasses: weightClasses,
-            buildContext: context,
-            teamMatch: match,
-            officials: officials,
-            participations: participations,
-            lineup: lineup,
-          ).buildPdf();
+      final bytes = await TeamMatchWeightList(
+        weightClasses: weightClasses,
+        buildContext: context,
+        teamMatch: match,
+        officials: officials,
+        participations: participations,
+        lineup: lineup,
+      ).buildPdf();
       await Printing.sharePdf(bytes: bytes, filename: '${match.lineupFileBaseName(lineup)}.pdf');
     }
   }
@@ -485,17 +474,16 @@ class TeamMatchOverview extends ConsumerWidget {
     }
 
     if (!context.mounted) return;
-    final bytes =
-        await TeamMatchTranscript(
-          teamMatchBoutActions: teamMatchBoutActions,
-          buildContext: context,
-          teamMatch: match,
-          officials: officials,
-          boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-          isTimeCountDown: isTimeCountDown,
-          guestParticipations: guestParticipations,
-          homeParticipations: homeParticipations,
-        ).buildPdf();
+    final bytes = await TeamMatchTranscript(
+      teamMatchBoutActions: teamMatchBoutActions,
+      buildContext: context,
+      teamMatch: match,
+      officials: officials,
+      boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+      isTimeCountDown: isTimeCountDown,
+      guestParticipations: guestParticipations,
+      homeParticipations: homeParticipations,
+    ).buildPdf();
     await Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
   }
 
@@ -521,8 +509,9 @@ class TeamMatchOverview extends ConsumerWidget {
           ManyProviderData<TeamMatch, League>(filterObject: match.league),
         ).future,
       );
-      matches =
-          matches.where((match) => match.date.isBefore(DateTime.now().subtract(const Duration(hours: 24)))).toList();
+      matches = matches
+          .where((match) => match.date.isBefore(DateTime.now().subtract(const Duration(hours: 24))))
+          .toList();
       matches.sort((a, b) => a.date.compareTo(b.date));
       final resolvedMatch = matches.lastWhereOrNull(
         (match) => match.home.team == lineup.team || match.guest.team == lineup.team,

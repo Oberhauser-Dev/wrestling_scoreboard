@@ -9,8 +9,9 @@ part of 'team_match_bout.dart';
 _TeamMatchBout _$TeamMatchBoutFromJson(Map<String, dynamic> json) => _TeamMatchBout(
   id: (json['id'] as num?)?.toInt(),
   orgSyncId: json['orgSyncId'] as String?,
-  organization:
-      json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+  organization: json['organization'] == null
+      ? null
+      : Organization.fromJson(json['organization'] as Map<String, dynamic>),
   pos: (json['pos'] as num).toInt(),
   teamMatch: TeamMatch.fromJson(json['teamMatch'] as Map<String, dynamic>),
   bout: Bout.fromJson(json['bout'] as Map<String, dynamic>),

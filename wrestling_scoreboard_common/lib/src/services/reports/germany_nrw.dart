@@ -166,8 +166,10 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
     required Map<Person, PersonRole> officials,
   }) {
     final bouts = boutMap.keys;
-    final referee =
-        officials.entries.where((official) => official.value == PersonRole.referee).map((e) => e.key).singleOrNull;
+    final referee = officials.entries
+        .where((official) => official.value == PersonRole.referee)
+        .map((e) => e.key)
+        .singleOrNull;
     final teamMatchInfos = <Object>[
       'rdbi',
       '2.0.0',
@@ -355,28 +357,25 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
         final boutActions = boutMap.value;
         final techPointsRed = AthleteBoutState.getTechnicalPoints(boutActions, BoutRole.red);
         final techPointsBlue = AthleteBoutState.getTechnicalPoints(boutActions, BoutRole.blue);
-        final resultRuleWinnerId =
-            (cBout.bout.result == null || cBout.weightCategory == null)
-                ? null
-                : BoutConfig.resultRule(
-                  result: cBout.bout.result!,
-                  rules: boutResultRules,
-                  style: cBout.weightCategory!.weightClass.style,
-                  technicalPointsWinner: cBout.bout.winnerRole == BoutRole.red ? techPointsRed : techPointsBlue,
-                  technicalPointsLoser: cBout.bout.winnerRole == BoutRole.red ? techPointsBlue : techPointsRed,
-                )?.id;
-        final resultRuleIdRed =
-            resultRuleWinnerId == null
-                ? null
-                : cBout.bout.winnerRole == BoutRole.red
-                ? resultRuleWinnerId // Winner result id
-                : (maxIdOfBoutResultRules + resultRuleWinnerId); // Loser result id
-        final resultRuleIdBlue =
-            resultRuleWinnerId == null
-                ? null
-                : cBout.bout.winnerRole == BoutRole.red
-                ? (maxIdOfBoutResultRules + resultRuleWinnerId) // Loser result id
-                : resultRuleWinnerId; // Winner result id
+        final resultRuleWinnerId = (cBout.bout.result == null || cBout.weightCategory == null)
+            ? null
+            : BoutConfig.resultRule(
+                result: cBout.bout.result!,
+                rules: boutResultRules,
+                style: cBout.weightCategory!.weightClass.style,
+                technicalPointsWinner: cBout.bout.winnerRole == BoutRole.red ? techPointsRed : techPointsBlue,
+                technicalPointsLoser: cBout.bout.winnerRole == BoutRole.red ? techPointsBlue : techPointsRed,
+              )?.id;
+        final resultRuleIdRed = resultRuleWinnerId == null
+            ? null
+            : cBout.bout.winnerRole == BoutRole.red
+            ? resultRuleWinnerId // Winner result id
+            : (maxIdOfBoutResultRules + resultRuleWinnerId); // Loser result id
+        final resultRuleIdBlue = resultRuleWinnerId == null
+            ? null
+            : cBout.bout.winnerRole == BoutRole.red
+            ? (maxIdOfBoutResultRules + resultRuleWinnerId) // Loser result id
+            : resultRuleWinnerId; // Winner result id
         return <Object>[
           cBout.id ?? '',
           0,

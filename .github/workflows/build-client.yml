@@ -9,8 +9,7 @@ on:
         type: choice
         options:
           - 'any'
-          - '3.27.x'
-          - '3.24.x'
+          - '3.41.x'
       enable_android:
         description: 'Build Android'
         required: false
@@ -50,7 +49,7 @@ on:
     inputs:
       flutter_version:
         required: false
-        default: '3.38.5'
+        default: '3.41.5'
         type: string
       enable_android:
         required: false
@@ -119,7 +118,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           # Remove checks when arm is supported on stable: https://github.com/flutter/flutter/issues/164431
-          flutter-version: ${{ matrix.os == 'windows-11-arm' && '1c6c6f4' || inputs.flutter_version }}
+          flutter-version: ${{ matrix.os == 'windows-11-arm' && '056fb36' || '3.41.5' }}
           channel: ${{ endsWith(matrix.os, '-arm') && 'master' || 'stable' }}
       # doctor is needed to download the arm master artifacts:
       - run: flutter doctor

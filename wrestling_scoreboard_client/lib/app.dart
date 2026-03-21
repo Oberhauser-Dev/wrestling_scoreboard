@@ -149,12 +149,11 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
     final dir = Directory(dirPath);
     if (!(await dir.exists())) return [];
     return (await dir.list().map((fsEntity) {
-          final dateStr = fsEntity.uri.pathSegments.last.split('_')[0];
-          final date = FileNameDateTimeParser.tryParse(dateStr);
-          if (date == null) return null;
-          return MapEntry(date, fsEntity);
-        }).toList())
-        .nonNulls;
+      final dateStr = fsEntity.uri.pathSegments.last.split('_')[0];
+      final date = FileNameDateTimeParser.tryParse(dateStr);
+      if (date == null) return null;
+      return MapEntry(date, fsEntity);
+    }).toList()).nonNulls;
   }
 
   @override
@@ -212,8 +211,9 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
           final validFiles = groupedFiles[false];
           if (outdatedFiles != null) await Future.wait(outdatedFiles.map((entry) => entry.value.delete()));
           final lastUpdateDate = validFiles?.map((e) => e.key).sorted().last;
-          final nextBackupIn =
-              lastUpdateDate == null ? Duration.zero : (backupRule.period - now.difference(lastUpdateDate));
+          final nextBackupIn = lastUpdateDate == null
+              ? Duration.zero
+              : (backupRule.period - now.difference(lastUpdateDate));
 
           runBackup(Timer timer) async {
             // Wait the initial duration, then start the backup.
@@ -334,10 +334,9 @@ class _ConnectionWidgetState extends ConsumerState<ConnectionWidget> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
             final localizations = context.l10n;
-            final compatibilityWarning =
-                clientTooOld
-                    ? localizations.compatibleClientPhrase(migration.minClientVersion)
-                    : localizations.compatibleServerPhrase(minSupportedServerVersion.canonicalizedVersion);
+            final compatibilityWarning = clientTooOld
+                ? localizations.compatibleClientPhrase(migration.minClientVersion)
+                : localizations.compatibleServerPhrase(minSupportedServerVersion.canonicalizedVersion);
             showOkDialog(
               context: context,
               child: MarkdownBody(

@@ -66,10 +66,9 @@ class AgeCategoryEditState extends ConsumerState<AgeCategoryEdit> {
           selectedItem: _organization,
           label: localizations.organization,
           context: context,
-          onSaved:
-              (Organization? value) => setState(() {
-                _organization = value;
-              }),
+          onSaved: (Organization? value) => setState(() {
+            _organization = value;
+          }),
           allowEmpty: false,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {

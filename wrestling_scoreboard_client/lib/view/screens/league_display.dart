@@ -72,8 +72,9 @@ class LeagueDisplay extends ConsumerWidget {
                           final tmpResultRole = resultRole ?? MatchResultRole.fromDiff(homeCPoints - guestCPoints);
                           if (tmpResultRole == MatchResultRole.tie) {
                             // If the match has not yet started at all (means no team has made classification points), do not count it as tie (yet).
-                            final matchStartedValue =
-                                resultRole == null && homeCPoints == 0 && guestCPoints == 0 ? 0 : 1;
+                            final matchStartedValue = resultRole == null && homeCPoints == 0 && guestCPoints == 0
+                                ? 0
+                                : 1;
                             final homePoints = LeagueTeamPoints(
                               teamPoints: matchStartedValue,
                               teamLossPoints: matchStartedValue,
@@ -125,42 +126,41 @@ class LeagueDisplay extends ConsumerWidget {
                           );
                         }),
                       );
-                      final pointsPerTeam =
-                          leagueTeamParticipations.map((ltp) {
-                            final pointsTuplePerMatch = teamMatchBoutsMap
-                                .where((tmbm) {
-                                  return tmbm.key.home.team == ltp.team || tmbm.key.guest.team == ltp.team;
-                                })
-                                .map((tmbm) {
-                                  if (tmbm.key.home.team == ltp.team) {
-                                    return tmbm.value.$1;
-                                  }
-                                  return tmbm.value.$2;
-                                });
-                            final pointsPerTeam = pointsTuplePerMatch.fold(
-                              LeagueTeamPoints(
-                                classificationPoints: 0,
-                                classificationLossPoints: 0,
-                                teamPoints: 0,
-                                teamLossPoints: 0,
-                                wins: 0,
-                                losses: 0,
-                                ties: 0,
-                                matchCount: 0,
-                              ),
-                              (p, n) => LeagueTeamPoints(
-                                classificationPoints: p.classificationPoints + n.classificationPoints,
-                                classificationLossPoints: p.classificationLossPoints + n.classificationLossPoints,
-                                teamPoints: p.teamPoints + n.teamPoints,
-                                teamLossPoints: p.teamLossPoints + n.teamLossPoints,
-                                wins: p.wins + n.wins,
-                                losses: p.losses + n.losses,
-                                ties: p.ties + n.ties,
-                                matchCount: p.matchCount + n.matchCount,
-                              ),
-                            );
-                            return MapEntry(ltp.team, pointsPerTeam);
-                          }).toList();
+                      final pointsPerTeam = leagueTeamParticipations.map((ltp) {
+                        final pointsTuplePerMatch = teamMatchBoutsMap
+                            .where((tmbm) {
+                              return tmbm.key.home.team == ltp.team || tmbm.key.guest.team == ltp.team;
+                            })
+                            .map((tmbm) {
+                              if (tmbm.key.home.team == ltp.team) {
+                                return tmbm.value.$1;
+                              }
+                              return tmbm.value.$2;
+                            });
+                        final pointsPerTeam = pointsTuplePerMatch.fold(
+                          LeagueTeamPoints(
+                            classificationPoints: 0,
+                            classificationLossPoints: 0,
+                            teamPoints: 0,
+                            teamLossPoints: 0,
+                            wins: 0,
+                            losses: 0,
+                            ties: 0,
+                            matchCount: 0,
+                          ),
+                          (p, n) => LeagueTeamPoints(
+                            classificationPoints: p.classificationPoints + n.classificationPoints,
+                            classificationLossPoints: p.classificationLossPoints + n.classificationLossPoints,
+                            teamPoints: p.teamPoints + n.teamPoints,
+                            teamLossPoints: p.teamLossPoints + n.teamLossPoints,
+                            wins: p.wins + n.wins,
+                            losses: p.losses + n.losses,
+                            ties: p.ties + n.ties,
+                            matchCount: p.matchCount + n.matchCount,
+                          ),
+                        );
+                        return MapEntry(ltp.team, pointsPerTeam);
+                      }).toList();
                       pointsPerTeam.sort((b, a) => a.value.compareTo(b.value));
                       return pointsPerTeam;
                     }
@@ -192,15 +192,14 @@ class LeagueDisplay extends ConsumerWidget {
                         IntrinsicHeight(
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children:
-                                headerItems
-                                    .mapIndexed(
-                                      (index, element) => Expanded(
-                                        flex: LeagueDisplay.flexWidths[index],
-                                        child: Padding(padding: EdgeInsets.all(padding), child: element),
-                                      ),
-                                    )
-                                    .toList(),
+                            children: headerItems
+                                .mapIndexed(
+                                  (index, element) => Expanded(
+                                    flex: LeagueDisplay.flexWidths[index],
+                                    child: Padding(padding: EdgeInsets.all(padding), child: element),
+                                  ),
+                                )
+                                .toList(),
                           ),
                         ),
                         Expanded(
@@ -229,12 +228,11 @@ class LeagueDisplay extends ConsumerWidget {
                                                             Center(child: ScaledText('${index + 1}.', minFontSize: 10)),
                                                             ManyConsumer<Club, Team>(
                                                               filterObject: team,
-                                                              builder:
-                                                                  (context, data) => OverlappingCircularImage(
-                                                                    imageUris: data.map((e) => e.imageUri).toList(),
-                                                                    size: width / 50,
-                                                                    borderWidth: 0.5,
-                                                                  ),
+                                                              builder: (context, data) => OverlappingCircularImage(
+                                                                imageUris: data.map((e) => e.imageUri).toList(),
+                                                                size: width / 50,
+                                                                borderWidth: 0.5,
+                                                              ),
                                                             ),
                                                             ScaledText(
                                                               team.name,

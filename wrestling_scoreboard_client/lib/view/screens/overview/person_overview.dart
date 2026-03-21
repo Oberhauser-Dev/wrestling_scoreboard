@@ -91,10 +91,9 @@ mixin AbstractPersonOverview<T extends DataObject> implements AbstractOverview<P
               iconData: Icons.description,
             ),
             ContentItem.icon(
-              title:
-                  person.nationality == null
-                      ? '-'
-                      : '${person.nationality?.nationality} (${person.nationality?.isoShortName})',
+              title: person.nationality == null
+                  ? '-'
+                  : '${person.nationality?.nationality} (${person.nationality?.isoShortName})',
               subtitle: localizations.nationality,
               iconData: Icons.location_on,
             ),
@@ -105,7 +104,10 @@ mixin AbstractPersonOverview<T extends DataObject> implements AbstractOverview<P
           dataObject: subClassData,
           label: classLocale,
           details: details ?? person.fullName,
-          tabs: [Tab(child: HeadingText(localizations.info)), ...relations.keys],
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            ...relations.keys,
+          ],
           actions: actions,
           body: TabGroup(items: [description, ...relations.values]),
         );
@@ -144,44 +146,39 @@ class PersonOverview extends ConsumerWidget with AbstractPersonOverview<Person> 
           editPage: PersonEdit(person: person, initialOrganization: person.organization ?? initialOrganization),
           // Already covered in parent
           onDelete: null,
-          buildRelations:
-              (Person person) => {
-                Tab(child: HeadingText(localizations.memberships)): FilterableManyConsumer<Membership, Person>.add(
-                  context: context,
-                  addPageBuilder:
-                      (context) => MembershipEdit(initialOrganization: person.organization!, initialPerson: person),
-                  filterObject: person,
-                  itemBuilder:
-                      (context, membership) => ContentItem(
-                        title: '${membership.info},\t${membership.person.gender?.localize(context)}',
-                        icon: person.imageUri == null ? Icon(Icons.person) : CircularImage(imageUri: person.imageUri!),
-                        onTap: () => MembershipOverview.navigateTo(context, membership),
-                      ),
-                ),
-                Tab(
-                  child: HeadingText('${localizations.officials} (${localizations.competition})'),
-                ): FilterableManyConsumer<CompetitionPerson, Person>(
-                  filterObject: person,
-                  itemBuilder:
-                      (context, competitionPerson) => ContentItem.icon(
-                        title: '${competitionPerson.competition.name} | ${competitionPerson.role.localize(context)}',
-                        iconData: competitionPerson.role.icon,
-                        onTap: () => CompetitionPersonOverview.navigateTo(context, competitionPerson),
-                      ),
-                ),
-                Tab(
-                  child: HeadingText('${localizations.officials} (${localizations.match})'),
-                ): FilterableManyConsumer<TeamMatchPerson, Person>(
-                  filterObject: person,
-                  itemBuilder:
-                      (context, teamMatchPerson) => ContentItem.icon(
-                        title:
-                            '${teamMatchPerson.teamMatch.localize(context)} | ${teamMatchPerson.role.localize(context)}',
-                        iconData: teamMatchPerson.role.icon,
-                        onTap: () => TeamMatchPersonOverview.navigateTo(context, teamMatchPerson),
-                      ),
-                ),
-              },
+          buildRelations: (Person person) => {
+            Tab(child: HeadingText(localizations.memberships)): FilterableManyConsumer<Membership, Person>.add(
+              context: context,
+              addPageBuilder: (context) =>
+                  MembershipEdit(initialOrganization: person.organization!, initialPerson: person),
+              filterObject: person,
+              itemBuilder: (context, membership) => ContentItem(
+                title: '${membership.info},\t${membership.person.gender?.localize(context)}',
+                icon: person.imageUri == null ? Icon(Icons.person) : CircularImage(imageUri: person.imageUri!),
+                onTap: () => MembershipOverview.navigateTo(context, membership),
+              ),
+            ),
+            Tab(
+              child: HeadingText('${localizations.officials} (${localizations.competition})'),
+            ): FilterableManyConsumer<CompetitionPerson, Person>(
+              filterObject: person,
+              itemBuilder: (context, competitionPerson) => ContentItem.icon(
+                title: '${competitionPerson.competition.name} | ${competitionPerson.role.localize(context)}',
+                iconData: competitionPerson.role.icon,
+                onTap: () => CompetitionPersonOverview.navigateTo(context, competitionPerson),
+              ),
+            ),
+            Tab(
+              child: HeadingText('${localizations.officials} (${localizations.match})'),
+            ): FilterableManyConsumer<TeamMatchPerson, Person>(
+              filterObject: person,
+              itemBuilder: (context, teamMatchPerson) => ContentItem.icon(
+                title: '${teamMatchPerson.teamMatch.localize(context)} | ${teamMatchPerson.role.localize(context)}',
+                iconData: teamMatchPerson.role.icon,
+                onTap: () => TeamMatchPersonOverview.navigateTo(context, teamMatchPerson),
+              ),
+            ),
+          },
         );
       },
     );
@@ -258,17 +255,16 @@ class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
 
   @override
   void initState() {
-    _availablePersonsFuture =
-        (() async {
-          final availablePersons = await (await ref.read(
-            dataManagerProvider,
-          )).readMany<Person, Organization>(filterObject: widget.organization);
-          availablePersons.remove(widget.pivotPerson);
-          setState(() {
-            _mergePerson ??= availablePersons.where((ap) => ap.fullName == widget.pivotPerson.fullName).firstOrNull;
-          });
-          return availablePersons;
-        })();
+    _availablePersonsFuture = (() async {
+      final availablePersons = await (await ref.read(
+        dataManagerProvider,
+      )).readMany<Person, Organization>(filterObject: widget.organization);
+      availablePersons.remove(widget.pivotPerson);
+      setState(() {
+        _mergePerson ??= availablePersons.where((ap) => ap.fullName == widget.pivotPerson.fullName).firstOrNull;
+      });
+      return availablePersons;
+    })();
     super.initState();
   }
 
@@ -289,10 +285,9 @@ class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
                 selectedItem: _mergePerson,
                 label: localizations.person,
                 context: context,
-                onChanged:
-                    (Person? value) => setState(() {
-                      _mergePerson = value;
-                    }),
+                onChanged: (Person? value) => setState(() {
+                  _mergePerson = value;
+                }),
                 itemAsString: (u) => '${u.fullName}, ${u.birthDate?.toDateString(context)}',
                 asyncItems: (String filter) async {
                   return data;
@@ -372,22 +367,21 @@ class _ReorderablePersonExpansionTileState extends ConsumerState<ReorderablePers
       children: [
         ReorderableListView(
           shrinkWrap: true,
-          children:
-              persons
-                  .map(
-                    (person) => ListTile(
-                      key: ValueKey(person.id),
-                      title: Text(
-                        '${person.fullName}, '
-                        '${person.birthDate?.toDateString(context)}, '
-                        '${person.gender?.localize(context)}, '
-                        '(ID: ${person.id}, '
-                        'orgID: ${person.orgSyncId})',
-                      ),
-                      onTap: () => PersonOverview.navigateTo(context, person),
-                    ),
-                  )
-                  .toList(),
+          children: persons
+              .map(
+                (person) => ListTile(
+                  key: ValueKey(person.id),
+                  title: Text(
+                    '${person.fullName}, '
+                    '${person.birthDate?.toDateString(context)}, '
+                    '${person.gender?.localize(context)}, '
+                    '(ID: ${person.id}, '
+                    'orgID: ${person.orgSyncId})',
+                  ),
+                  onTap: () => PersonOverview.navigateTo(context, person),
+                ),
+              )
+              .toList(),
           onReorder: (oldIndex, newIndex) {
             if (oldIndex < newIndex) {
               newIndex -= 1;

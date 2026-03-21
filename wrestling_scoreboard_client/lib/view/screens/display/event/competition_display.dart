@@ -88,12 +88,9 @@ class CompetitionDisplay extends StatelessWidget {
                     Row(
                       children: [
                         Column(
-                          children:
-                              competitionInfos
-                                  .map(
-                                    (e) => Center(child: ScaledText(e, softWrap: false, fontSize: 10, minFontSize: 8)),
-                                  )
-                                  .toList(),
+                          children: competitionInfos
+                              .map((e) => Center(child: ScaledText(e, softWrap: false, fontSize: 10, minFontSize: 8)))
+                              .toList(),
                         ),
                         Expanded(
                           child: Center(
@@ -108,72 +105,70 @@ class CompetitionDisplay extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         spacing: 12,
-                        children:
-                            Iterable.generate(competition.matCount, (index) {
-                              // Either get the last bout of this mat, which has no bout result, or get the first bout which has a result.
-                              final matCompetitionBouts = competitionBouts.where((element) => element.mat == index);
-                              CompetitionBout? matCompetitionBout =
-                                  matCompetitionBouts.where((element) => element.bout.result == null).firstOrNull;
-                              matCompetitionBout ??=
-                                  matCompetitionBouts.where((element) => element.bout.result != null).lastOrNull;
-                              Widget matDisplay;
-                              if (matCompetitionBout != null) {
-                                matDisplay = InkWell(
-                                  onTap: () => CompetitionBoutDisplay.navigateTo(context, matCompetitionBout!),
-                                  child: SingleConsumer<Bout>(
-                                    id: matCompetitionBout.bout.id,
-                                    initialData: matCompetitionBout.bout,
-                                    builder: (context, bout) {
-                                      Widget column = Column(
-                                        children: [
-                                          Center(
-                                            child: ScaledText(
-                                              matCompetitionBout!.weightCategory?.name ?? '---',
-                                              fontSize: 12,
-                                              minFontSize: 10,
-                                            ),
-                                          ),
-                                          displayParticipant(bout.r, BoutRole.red),
-                                          SizedBox(
-                                            height: width / 30,
-                                            child: SmallBoutStateDisplay(
-                                              bout: bout,
-                                              boutConfig: competition.boutConfig,
-                                            ),
-                                          ),
-                                          displayParticipant(bout.b, BoutRole.blue),
-                                        ],
-                                      );
+                        children: Iterable.generate(competition.matCount, (index) {
+                          // Either get the last bout of this mat, which has no bout result, or get the first bout which has a result.
+                          final matCompetitionBouts = competitionBouts.where((element) => element.mat == index);
+                          CompetitionBout? matCompetitionBout = matCompetitionBouts
+                              .where((element) => element.bout.result == null)
+                              .firstOrNull;
+                          matCompetitionBout ??= matCompetitionBouts
+                              .where((element) => element.bout.result != null)
+                              .lastOrNull;
+                          Widget matDisplay;
+                          if (matCompetitionBout != null) {
+                            matDisplay = InkWell(
+                              onTap: () => CompetitionBoutDisplay.navigateTo(context, matCompetitionBout!),
+                              child: SingleConsumer<Bout>(
+                                id: matCompetitionBout.bout.id,
+                                initialData: matCompetitionBout.bout,
+                                builder: (context, bout) {
+                                  Widget column = Column(
+                                    children: [
+                                      Center(
+                                        child: ScaledText(
+                                          matCompetitionBout!.weightCategory?.name ?? '---',
+                                          fontSize: 12,
+                                          minFontSize: 10,
+                                        ),
+                                      ),
+                                      displayParticipant(bout.r, BoutRole.red),
+                                      SizedBox(
+                                        height: width / 30,
+                                        child: SmallBoutStateDisplay(bout: bout, boutConfig: competition.boutConfig),
+                                      ),
+                                      displayParticipant(bout.b, BoutRole.blue),
+                                    ],
+                                  );
 
-                                      if (bout.result != null) {
-                                        column = Stack(
-                                          fit: StackFit.expand,
-                                          children: [
-                                            column,
-                                            Container(
-                                              color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5),
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                      return column;
-                                    },
-                                  ),
-                                );
-                              } else {
-                                matDisplay = Center(child: ScaledText('No bout'));
-                              }
-                              return Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
-                                    Expanded(child: matDisplay),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
+                                  if (bout.result != null) {
+                                    column = Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        column,
+                                        Container(
+                                          color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return column;
+                                },
+                              ),
+                            );
+                          } else {
+                            matDisplay = Center(child: ScaledText('No bout'));
+                          }
+                          return Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Center(child: ScaledText('${localizations.mat}: ${index + 1}')),
+                                Expanded(child: matDisplay),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                     Divider(height: 1),

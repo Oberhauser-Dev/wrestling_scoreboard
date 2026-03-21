@@ -23,7 +23,8 @@ class CompetitionBoutController extends ShelfController<CompetitionBout> with Or
     return super.deleteSingle(id);
   }
 
-  static String get _currentCompetitionBoutOfMatQuery => '''
+  static String get _currentCompetitionBoutOfMatQuery =>
+      '''
         SELECT cb.* 
         FROM ${CompetitionBout.cTableName} as cb
         JOIN ${Bout.cTableName} AS b ON cb.bout_id = b.id

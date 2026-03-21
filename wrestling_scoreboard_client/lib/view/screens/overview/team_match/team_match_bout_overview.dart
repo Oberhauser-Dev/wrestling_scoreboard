@@ -49,16 +49,15 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
           icon: const Icon(Icons.print),
           onTap: () async {
             final actions = await getActions();
-            final boutRules =
-                teamMatchBout.teamMatch.league == null
-                    ? TeamMatch.defaultBoutResultRules
-                    : await ref.readAsync(
-                      manyDataStreamProvider<BoutResultRule, BoutConfig>(
-                        ManyProviderData<BoutResultRule, BoutConfig>(
-                          filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
-                        ),
-                      ).future,
-                    );
+            final boutRules = teamMatchBout.teamMatch.league == null
+                ? TeamMatch.defaultBoutResultRules
+                : await ref.readAsync(
+                    manyDataStreamProvider<BoutResultRule, BoutConfig>(
+                      ManyProviderData<BoutResultRule, BoutConfig>(
+                        filterObject: teamMatchBout.teamMatch.league!.division.boutConfig,
+                      ),
+                    ).future,
+                  );
 
             final isTimeCountDown = await ref.read(timeCountDownProvider);
 
@@ -69,18 +68,17 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
             );
 
             if (context.mounted) {
-              final bytes =
-                  await ScoreSheet(
-                    bout: bout,
-                    boutActions: actions,
-                    buildContext: context,
-                    wrestlingEvent: teamMatchBout.teamMatch,
-                    officials: Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role))),
-                    boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                    boutRules: boutRules,
-                    isTimeCountDown: isTimeCountDown,
-                    weightClass: teamMatchBout.weightClass,
-                  ).buildPdf();
+              final bytes = await ScoreSheet(
+                bout: bout,
+                boutActions: actions,
+                buildContext: context,
+                wrestlingEvent: teamMatchBout.teamMatch,
+                officials: Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role))),
+                boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                boutRules: boutRules,
+                isTimeCountDown: isTimeCountDown,
+                weightClass: teamMatchBout.weightClass,
+              ).buildPdf();
               await Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(teamMatchBout.teamMatch)}.pdf');
             }
           },

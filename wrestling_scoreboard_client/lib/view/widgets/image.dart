@@ -46,15 +46,14 @@ class OverlappingCircularImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children:
-          imageUris.nonNulls
-              .map(
-                (e) => Align(
-                  widthFactor: 0.7,
-                  child: CircularImage(size: size, imageUri: e, borderWidth: borderWidth, borderColor: borderColor),
-                ),
-              )
-              .toList(),
+      children: imageUris.nonNulls
+          .map(
+            (e) => Align(
+              widthFactor: 0.7,
+              child: CircularImage(size: size, imageUri: e, borderWidth: borderWidth, borderColor: borderColor),
+            ),
+          )
+          .toList(),
     );
   }
 }

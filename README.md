@@ -61,31 +61,25 @@ Wrestling Scoreboard is a monorepo.
 Therefor it uses [Melos](https://github.com/invertase/melos) to manage the project and dependencies.
 All the commands can be found in the [melos.yaml](melos.yaml) file.
 
-To install Melos, run the following command from your terminal:
-
-```bash
-flutter pub global activate melos
-```
-
 Next, at the root of your locally cloned repository bootstrap the projects dependencies:
 
 ```bash
-melos bs
+dart run melos bs
 ```
 
 To format your code, call:
 ```bash
-melos format
+dart run melos format
 ```
 
 To create a new version of all packages, call:
 ```bash
-melos version --all --prerelease --preid=beta --diff=v0.0.1-beta.11
+dart run melos version --all --prerelease --preid=beta --diff=v0.0.1-beta.11
 ```
 
 Pin to a specific version:
 ```bash
- melos version -a --no-git-tag-version -V wrestling_scoreboard_client:0.3.5 -V wrestling_scoreboard_common:0.3.5 -V wrestling_scoreboard_server:0.3.5
+dart run melos version -a --no-git-tag-version -V wrestling_scoreboard_client:0.3.5 -V wrestling_scoreboard_common:0.3.5 -V wrestling_scoreboard_server:0.3.5
 ```
 
 Please read the documentation for setting up the according components:

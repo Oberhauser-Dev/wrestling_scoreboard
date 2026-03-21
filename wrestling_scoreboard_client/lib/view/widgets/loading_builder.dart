@@ -34,17 +34,11 @@ class LoadingBuilder<T> extends ConsumerWidget {
     Widget Function(BuildContext context)? onLoad,
     required Widget Function(BuildContext context, T data) builder,
   }) => LoadingBuilder(
-    onException:
-        (context, exception, {stackTrace}) => IconButton(
-          onPressed:
-              () => showExceptionDialog(
-                context: context,
-                exception: exception ?? '',
-                stackTrace: stackTrace,
-                onRetry: onRetry,
-              ),
-          icon: const Icon(Icons.warning),
-        ),
+    onException: (context, exception, {stackTrace}) => IconButton(
+      onPressed: () =>
+          showExceptionDialog(context: context, exception: exception ?? '', stackTrace: stackTrace, onRetry: onRetry),
+      icon: const Icon(Icons.warning),
+    ),
     future: future,
     builder: builder,
     initialData: initialData,
@@ -60,9 +54,8 @@ class LoadingBuilder<T> extends ConsumerWidget {
           .then(
             (timeout) => future.timeout(
               timeout,
-              onTimeout:
-                  () =>
-                      throw TimeoutException('LoadingBuilder could not load $T and initialData $initialData', timeout),
+              onTimeout: () =>
+                  throw TimeoutException('LoadingBuilder could not load $T and initialData $initialData', timeout),
             ),
           ),
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {

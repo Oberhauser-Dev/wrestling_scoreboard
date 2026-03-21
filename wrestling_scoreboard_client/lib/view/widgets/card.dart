@@ -31,6 +31,8 @@ class IconCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PaddedCard(child: ListTile(leading: icon, title: child));
+    return PaddedCard(
+      child: ListTile(leading: icon, title: child),
+    );
   }
 }

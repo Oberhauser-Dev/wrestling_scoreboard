@@ -44,10 +44,9 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
           selectedItem: _team,
           label: localizations.team,
           context: context,
-          onSaved:
-              (Team? value) => setState(() {
-                _team = value;
-              }),
+          onSaved: (Team? value) => setState(() {
+            _team = value;
+          }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableTeams ??= await (await ref.read(dataManagerProvider)).readMany<Team, Null>();
@@ -61,10 +60,9 @@ class TeamEditState extends ConsumerState<LeagueTeamParticipationEdit> {
           selectedItem: _league,
           label: localizations.league,
           context: context,
-          onSaved:
-              (League? value) => setState(() {
-                _league = value;
-              }),
+          onSaved: (League? value) => setState(() {
+            _league = value;
+          }),
           itemAsString: (l) => '${l.fullname}, ${l.startDate.year}',
           asyncItems: (String filter) async {
             _availableLeagues ??= await (await ref.read(dataManagerProvider)).readMany<League, Null>();

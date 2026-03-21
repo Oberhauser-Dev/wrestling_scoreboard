@@ -69,36 +69,32 @@ class ClubOverview extends ConsumerWidget {
                 context: context,
                 filterObject: club,
                 addPageBuilder: (context) => TeamClubAffiliationEdit(initialClub: club),
-                createPageBuilder:
-                    (context) => TeamEdit(
-                      initialOrganization: club.organization,
-                      onCreated: (team) async {
-                        await (await ref.read(
-                          dataManagerProvider,
-                        )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
-                      },
-                    ),
-                itemBuilder:
-                    (context, item) => ContentItem(
-                      title: item.name,
-                      icon: club.imageUri == null ? Icon(Icons.group) : CircularImage(imageUri: club.imageUri!),
-                      onTap: () => TeamOverview.navigateTo(context, item),
-                    ),
+                createPageBuilder: (context) => TeamEdit(
+                  initialOrganization: club.organization,
+                  onCreated: (team) async {
+                    await (await ref.read(
+                      dataManagerProvider,
+                    )).createOrUpdateSingle(TeamClubAffiliation(team: team, club: club));
+                  },
+                ),
+                itemBuilder: (context, item) => ContentItem(
+                  title: item.name,
+                  icon: club.imageUri == null ? Icon(Icons.group) : CircularImage(imageUri: club.imageUri!),
+                  onTap: () => TeamOverview.navigateTo(context, item),
+                ),
               ),
               FilterableManyConsumer<Membership, Club>.addOrCreate(
                 context: context,
                 filterObject: club,
                 addPageBuilder: (context) => MembershipEdit(initialOrganization: club.organization, initialClub: club),
                 createPageBuilder: (context) => MembershipPersonEdit(initialClub: club),
-                itemBuilder:
-                    (context, item) => ContentItem(
-                      title: '${item.info},\t${item.person.gender?.localize(context)}',
-                      icon:
-                          item.person.imageUri == null
-                              ? Icon(Icons.person)
-                              : CircularImage(imageUri: item.person.imageUri!),
-                      onTap: () => MembershipOverview.navigateTo(context, item),
-                    ),
+                itemBuilder: (context, item) => ContentItem(
+                  title: '${item.info},\t${item.person.gender?.localize(context)}',
+                  icon: item.person.imageUri == null
+                      ? Icon(Icons.person)
+                      : CircularImage(imageUri: item.person.imageUri!),
+                  onTap: () => MembershipOverview.navigateTo(context, item),
+                ),
               ),
             ],
           ),

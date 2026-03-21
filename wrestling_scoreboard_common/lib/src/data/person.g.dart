@@ -9,8 +9,9 @@ part of 'person.dart';
 _Person _$PersonFromJson(Map<String, dynamic> json) => _Person(
   id: (json['id'] as num?)?.toInt(),
   orgSyncId: json['orgSyncId'] as String?,
-  organization:
-      json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+  organization: json['organization'] == null
+      ? null
+      : Organization.fromJson(json['organization'] as Map<String, dynamic>),
   prename: json['prename'] as String,
   surname: json['surname'] as String,
   gender: $enumDecodeNullable(_$GenderEnumMap, json['gender']),

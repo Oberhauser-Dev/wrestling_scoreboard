@@ -22,78 +22,66 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
         final firstFutureMatchIndex = matches.indexWhere((match) => match.date.compareTo(today) >= 0);
         return SearchableGroupedList(
           trailing: RestrictedAddButton(
-            onPressed:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      if (filterObject is Team) {
-                        final team = filterObject as Team;
-                        return TeamMatchEdit(
-                          initialHomeTeam: team,
-                          initialGuestTeam: team,
-                          initialOrganization: team.organization!,
-                        );
-                      } else if (filterObject is League) {
-                        final league = filterObject as League;
-                        return TeamMatchEdit(initialLeague: league, initialOrganization: league.organization!);
-                      } else {
-                        return TeamMatchEdit();
-                      }
-                    },
-                  ),
-                ),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  if (filterObject is Team) {
+                    final team = filterObject as Team;
+                    return TeamMatchEdit(
+                      initialHomeTeam: team,
+                      initialGuestTeam: team,
+                      initialOrganization: team.organization!,
+                    );
+                  } else if (filterObject is League) {
+                    final league = filterObject as League;
+                    return TeamMatchEdit(initialLeague: league, initialOrganization: league.organization!);
+                  } else {
+                    return TeamMatchEdit();
+                  }
+                },
+              ),
+            ),
           ),
           initialItemIndex: firstFutureMatchIndex,
           items: matches,
-          itemBuilder:
-              (context, match) => SingleConsumer<TeamMatch>(
-                id: match.id!,
-                initialData: match,
-                builder: (context, match) {
-                  return ListTile(
-                    title: Text.rich(
-                      style: match.date.isBefore(today) ? TextStyle(color: Theme.of(context).disabledColor) : null,
+          itemBuilder: (context, match) => SingleConsumer<TeamMatch>(
+            id: match.id!,
+            initialData: match,
+            builder: (context, match) {
+              return ListTile(
+                title: Text.rich(
+                  style: match.date.isBefore(today) ? TextStyle(color: Theme.of(context).disabledColor) : null,
+                  TextSpan(
+                    text: '${match.date.toDateString(context)} | ',
+                    children: [
                       TextSpan(
-                        text: '${match.date.toDateString(context)} | ',
-                        children: [
-                          TextSpan(
-                            text: match.home.team.name,
-                            style:
-                                filterObject is! Team || match.home.team == filterObject
-                                    ? TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: filterObject is! Team ? null : FontWeight.bold,
-                                    )
-                                    : null,
-                          ),
-                          const TextSpan(text: ' - '),
-                          TextSpan(
-                            text: match.guest.team.name,
-                            style:
-                                filterObject is! Team || match.guest.team == filterObject
-                                    ? TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: filterObject is! Team ? null : FontWeight.bold,
-                                    )
-                                    : null,
-                          ),
-                          if (match.home.classificationPoints != null && match.guest.classificationPoints != null)
-                            TextSpan(
-                              text: '\t| ${match.home.classificationPoints} : ${match.guest.classificationPoints}',
-                            ),
-                        ],
+                        text: match.home.team.name,
+                        style: filterObject is! Team || match.home.team == filterObject
+                            ? TextStyle(color: Colors.red, fontWeight: filterObject is! Team ? null : FontWeight.bold)
+                            : null,
                       ),
-                    ),
-                    leading: const Icon(Icons.event),
-                    onTap: () => TeamMatchOverview.navigateTo(context, match),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.tv),
-                      onPressed: () => MatchDisplay.navigateTo(context, match),
-                    ),
-                  );
-                },
-              ),
+                      const TextSpan(text: ' - '),
+                      TextSpan(
+                        text: match.guest.team.name,
+                        style: filterObject is! Team || match.guest.team == filterObject
+                            ? TextStyle(color: Colors.blue, fontWeight: filterObject is! Team ? null : FontWeight.bold)
+                            : null,
+                      ),
+                      if (match.home.classificationPoints != null && match.guest.classificationPoints != null)
+                        TextSpan(text: '\t| ${match.home.classificationPoints} : ${match.guest.classificationPoints}'),
+                    ],
+                  ),
+                ),
+                leading: const Icon(Icons.event),
+                onTap: () => TeamMatchOverview.navigateTo(context, match),
+                trailing: IconButton(
+                  icon: const Icon(Icons.tv),
+                  onPressed: () => MatchDisplay.navigateTo(context, match),
+                ),
+              );
+            },
+          ),
         );
       },
     );

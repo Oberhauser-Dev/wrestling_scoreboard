@@ -44,14 +44,13 @@ class TeamMatchWeightList extends PdfSheet {
         pageTheme: await buildTheme(pageFormat: pageFormat ?? PdfSheet.a4Cross),
         header: _buildHeader,
         footer: buildFooter,
-        build:
-            (context) => [
-              buildInfo(context, event),
-              Container(height: PdfSheet.verticalGap),
-              _buildBoutTable(context),
-              Container(height: PdfSheet.verticalGap),
-              _buildPersons(context),
-            ],
+        build: (context) => [
+          buildInfo(context, event),
+          Container(height: PdfSheet.verticalGap),
+          _buildBoutTable(context),
+          Container(height: PdfSheet.verticalGap),
+          _buildPersons(context),
+        ],
       ),
     );
 
@@ -91,17 +90,16 @@ class TeamMatchWeightList extends PdfSheet {
       defaultColumnWidth: const FlexColumnWidth(1),
       children: [
         TableRow(
-          children:
-              [
-                ...signaturePersons.map(
-                  (p) => Column(
-                    children: [
-                      p,
-                      buildFormCell(title: localizations.signature, height: 25.0, color: PdfColors.grey100),
-                    ],
-                  ),
-                ),
-              ].map((child) => Container(padding: const EdgeInsets.symmetric(horizontal: 2), child: child)).toList(),
+          children: [
+            ...signaturePersons.map(
+              (p) => Column(
+                children: [
+                  p,
+                  buildFormCell(title: localizations.signature, height: 25.0, color: PdfColors.grey100),
+                ],
+              ),
+            ),
+          ].map((child) => Container(padding: const EdgeInsets.symmetric(horizontal: 2), child: child)).toList(),
         ),
       ],
     );
@@ -199,14 +197,13 @@ class TeamMatchWeightList extends PdfSheet {
     }
 
     return Table(
-      columnWidths:
-          [
-            const FlexColumnWidth(0.5), // No
-            const FlexColumnWidth(0.8), // Weightclass
-            const FlexColumnWidth(0.3), // Style
-            ...participantStateColumnWidths(),
-            const FlexColumnWidth(1.5), // Comment
-          ].asMap(),
+      columnWidths: [
+        const FlexColumnWidth(0.5), // No
+        const FlexColumnWidth(0.8), // Weightclass
+        const FlexColumnWidth(0.3), // Style
+        ...participantStateColumnWidths(),
+        const FlexColumnWidth(1.5), // Comment
+      ].asMap(),
       children: [
         TableRow(
           children: [

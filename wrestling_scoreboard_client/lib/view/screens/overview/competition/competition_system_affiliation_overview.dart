@@ -41,10 +41,9 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
             competitionSystemAffiliation: competitionSystemAffiliation,
             initialCompetition: competitionSystemAffiliation.competition,
           ),
-          onDelete:
-              () async => (await ref.read(
-                dataManagerProvider,
-              )).deleteSingle<CompetitionSystemAffiliation>(competitionSystemAffiliation),
+          onDelete: () async => (await ref.read(
+            dataManagerProvider,
+          )).deleteSingle<CompetitionSystemAffiliation>(competitionSystemAffiliation),
           classLocale: localizations.competitionSystem,
           children: [
             ContentItem.icon(
@@ -64,22 +63,23 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
           dataObject: competitionSystemAffiliation,
           label: localizations.competitionSystem,
           details: competitionSystemAffiliation.localize(context),
-          tabs: [Tab(child: HeadingText(localizations.info)), Tab(child: HeadingText(localizations.phases))],
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            Tab(child: HeadingText(localizations.phases)),
+          ],
           body: TabGroup(
             items: [
               description,
               FilterableManyConsumer<CompetitionSystemPhase, CompetitionSystemAffiliation>.add(
                 context: context,
                 filterObject: competitionSystemAffiliation,
-                addPageBuilder:
-                    (context) =>
-                        CompetitionSystemPhaseEdit(initialCompetitionSystemAffiliation: competitionSystemAffiliation),
-                itemBuilder:
-                    (context, item) => ContentItem(
-                      title: item.competitionSystem.name,
-                      icon: Icon(Icons.view_timeline),
-                      onTap: () => CompetitionSystemPhaseOverview.navigateTo(context, item),
-                    ),
+                addPageBuilder: (context) =>
+                    CompetitionSystemPhaseEdit(initialCompetitionSystemAffiliation: competitionSystemAffiliation),
+                itemBuilder: (context, item) => ContentItem(
+                  title: item.competitionSystem.name,
+                  icon: Icon(Icons.view_timeline),
+                  onTap: () => CompetitionSystemPhaseOverview.navigateTo(context, item),
+                ),
               ),
             ],
           ),

@@ -55,7 +55,10 @@ class CancelDialog extends StatelessWidget {
 }
 
 Future<void> showOkDialog({required BuildContext context, required Widget child}) async {
-  await showDialog(context: context, builder: (context) => OkDialog(child: child));
+  await showDialog(
+    context: context,
+    builder: (context) => OkDialog(child: child),
+  );
 }
 
 class OkCancelDialog<T extends Object?> extends StatelessWidget {
@@ -105,14 +108,13 @@ Future<bool> showOkCancelDialog({
 }) async {
   return (await showDialog<bool>(
         context: context,
-        builder:
-            (context) => OkCancelDialog<bool>(
-              getResult: () => true,
-              title: title,
-              cancelText: cancelText,
-              okText: okText,
-              child: child,
-            ),
+        builder: (context) => OkCancelDialog<bool>(
+          getResult: () => true,
+          title: title,
+          cancelText: cancelText,
+          okText: okText,
+          child: child,
+        ),
       )) ??
       false;
 }
@@ -124,19 +126,21 @@ Future<void> showExceptionDialog({
   void Function()? onRetry,
 }) async {
   if (onRetry == null) {
-    return await showOkDialog(context: context, child: ExceptionInfo(exception, stackTrace: stackTrace));
+    return await showOkDialog(
+      context: context,
+      child: ExceptionInfo(exception, stackTrace: stackTrace),
+    );
   }
   await showDialog(
     context: context,
-    builder:
-        (context) => OkCancelDialog<bool>(
-          getResult: () {
-            onRetry();
-            return true;
-          },
-          okText: context.l10n.retry,
-          child: ExceptionInfo(exception, stackTrace: stackTrace),
-        ),
+    builder: (context) => OkCancelDialog<bool>(
+      getResult: () {
+        onRetry();
+        return true;
+      },
+      okText: context.l10n.retry,
+      child: ExceptionInfo(exception, stackTrace: stackTrace),
+    ),
   );
 }
 
@@ -152,18 +156,20 @@ Future<void> showLoadingDialog({
     useRootNavigator: false, // Pop from outside of this dialog.
     context: context,
     barrierDismissible: false,
-    builder:
-        (context) => ResponsiveContainer(
-          child: CancelDialog(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (label != null) Text(label),
-                const Padding(padding: EdgeInsets.all(8), child: Center(child: CircularProgressIndicator())),
-              ],
+    builder: (context) => ResponsiveContainer(
+      child: CancelDialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (label != null) Text(label),
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: Center(child: CircularProgressIndicator()),
             ),
-          ),
+          ],
         ),
+      ),
+    ),
   );
   try {
     await runAsync();

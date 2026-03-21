@@ -43,10 +43,9 @@ class MatchDisplay extends ConsumerWidget {
             final chronologicalSortAction = DefaultResponsiveScaffoldActionItem(
               label: sortChronologically ? localizations.sortedChronologically : localizations.sortedByWeightClass,
               icon: Icon(sortChronologically ? Icons.timeline : Icons.format_list_numbered),
-              onTap:
-                  () => ref
-                      .read(teamMatchChronologicalSortProvider.notifier)
-                      .setState(sortChronologically = !sortChronologically),
+              onTap: () => ref
+                  .read(teamMatchChronologicalSortProvider.notifier)
+                  .setState(sortChronologically = !sortChronologically),
             );
             final infoAction = DefaultResponsiveScaffoldActionItem(
               label: localizations.info,
@@ -92,15 +91,13 @@ class MatchDisplay extends ConsumerWidget {
                             IntrinsicHeight(
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children:
-                                    headerItems
-                                        .asMap()
-                                        .entries
-                                        .map(
-                                          (entry) =>
-                                              Expanded(flex: BoutListItem.flexWidths[entry.key], child: entry.value),
-                                        )
-                                        .toList(),
+                                children: headerItems
+                                    .asMap()
+                                    .entries
+                                    .map(
+                                      (entry) => Expanded(flex: BoutListItem.flexWidths[entry.key], child: entry.value),
+                                    )
+                                    .toList(),
                               ),
                             ),
                             Expanded(
@@ -135,22 +132,21 @@ class MatchDisplay extends ConsumerWidget {
                               ),
                             ),
                             Row(
-                              children:
-                                  officials
-                                      .where(
-                                        (official) =>
-                                            official.role == PersonRole.referee ||
-                                            official.role == PersonRole.matChairman ||
-                                            official.role == PersonRole.judge,
-                                      )
-                                      .map(
-                                        (tmp) => Expanded(
-                                          child: Center(
-                                            child: Text('${tmp.role.localize(context)}: ${tmp.person.fullName}'),
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
+                              children: officials
+                                  .where(
+                                    (official) =>
+                                        official.role == PersonRole.referee ||
+                                        official.role == PersonRole.matChairman ||
+                                        official.role == PersonRole.judge,
+                                  )
+                                  .map(
+                                    (tmp) => Expanded(
+                                      child: Center(
+                                        child: Text('${tmp.role.localize(context)}: ${tmp.person.fullName}'),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                           ],
                         );

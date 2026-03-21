@@ -47,8 +47,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   onSaved: (String? value) => _username = value,
                   label: localizations.username,
                   isMandatory: true,
-                  validator:
-                      (v) => (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
+                  validator: (v) =>
+                      (v != null && User.isValidUsername(v)) ? null : localizations.usernameRequirementsWarning,
                 ),
                 LoadingBuilder(
                   future: ref.watch(remoteConfigProvider.future),
@@ -70,35 +70,34 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ElevatedButton(
-                    onPressed:
-                        () => catchAsync(context, () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            if (_password != _passwordAgain) {
-                              throw Exception('Passwords must match!');
-                            }
-                            final navigator = Navigator.of(context);
-                            await ref
-                                .read(userProvider.notifier)
-                                .signUp(
-                                  User(
-                                    email: _email,
-                                    username: _username!,
-                                    password: _password!,
-                                    createdAt: DateTime.now(),
-                                    // TODO: may add ability to connect person to account
-                                  ),
-                                );
-                            if ((await ref.readAsync(remoteConfigProvider.future)).hasEmailVerification &&
-                                context.mounted) {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => UserVerificationScreen(username: _username!)),
-                              );
-                            }
-                            navigator.pop();
-                          }
-                        }),
+                    onPressed: () => catchAsync(context, () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        if (_password != _passwordAgain) {
+                          throw Exception('Passwords must match!');
+                        }
+                        final navigator = Navigator.of(context);
+                        await ref
+                            .read(userProvider.notifier)
+                            .signUp(
+                              User(
+                                email: _email,
+                                username: _username!,
+                                password: _password!,
+                                createdAt: DateTime.now(),
+                                // TODO: may add ability to connect person to account
+                              ),
+                            );
+                        if ((await ref.readAsync(remoteConfigProvider.future)).hasEmailVerification &&
+                            context.mounted) {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => UserVerificationScreen(username: _username!)),
+                          );
+                        }
+                        navigator.pop();
+                      }
+                    }),
                     child: Text(localizations.auth_signUp),
                   ),
                 ),

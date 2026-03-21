@@ -40,10 +40,9 @@ _SecuredUser _$SecuredUserFromJson(Map<String, dynamic> json) => _SecuredUser(
   email: json['email'] as String?,
   isEmailVerified: json['isEmailVerified'] as bool? ?? false,
   emailVerificationCode: json['emailVerificationCode'] as String?,
-  emailVerificationCodeExpirationDate:
-      json['emailVerificationCodeExpirationDate'] == null
-          ? null
-          : DateTime.parse(json['emailVerificationCodeExpirationDate'] as String),
+  emailVerificationCodeExpirationDate: json['emailVerificationCodeExpirationDate'] == null
+      ? null
+      : DateTime.parse(json['emailVerificationCodeExpirationDate'] as String),
   username: json['username'] as String,
   passwordHash: (json['passwordHash'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList(),
   salt: json['salt'] as String?,

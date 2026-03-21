@@ -76,8 +76,8 @@ class Home extends ConsumerWidget {
             }
           },
           iconBuilder: (context, user) => Icon(user == null ? Icons.login : Icons.account_circle),
-          labelBuilder:
-              (user) => user == null ? localizations.auth_signIn : '${localizations.profile}: ${user.username}',
+          labelBuilder: (user) =>
+              user == null ? localizations.auth_signIn : '${localizations.profile}: ${user.username}',
         ),
       ],
       body: ResponsiveContainer(child: _HomeSearch()),
@@ -118,23 +118,24 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
           entities: _searchResults!.map(
             (key, resultsOfType) => MapEntry(key, Map.fromEntries(resultsOfType.map((r) => MapEntry(r.id!, r)))),
           ),
-          onHandleException: <T extends DataObject>({
-            required BuildContext context,
-            required int id,
-            Object? exception,
-            StackTrace? stackTrace,
-          }) async {
-            final localizations = context.l10n;
-            await showOkDialog(
-              context: context,
-              child: Column(
-                children: [
-                  Text('There was a problem with the object of type "$T" and id "$id" in search.'),
-                  ExceptionInfo(exception ?? localizations.errorOccurred, stackTrace: stackTrace),
-                ],
-              ),
-            );
-          },
+          onHandleException:
+              <T extends DataObject>({
+                required BuildContext context,
+                required int id,
+                Object? exception,
+                StackTrace? stackTrace,
+              }) async {
+                final localizations = context.l10n;
+                await showOkDialog(
+                  context: context,
+                  child: Column(
+                    children: [
+                      Text('There was a problem with the object of type "$T" and id "$id" in search.'),
+                      ExceptionInfo(exception ?? localizations.errorOccurred, stackTrace: stackTrace),
+                    ],
+                  ),
+                );
+              },
         );
       }
     } else {
@@ -173,28 +174,29 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
                 ),
               ];
             },
-            onHandleException: <T extends DataObject>({
-              required BuildContext context,
-              required int id,
-              Object? exception,
-              StackTrace? stackTrace,
-            }) async {
-              final localizations = context.l10n;
-              final removeItem = await showOkCancelDialog(
-                okText: localizations.remove,
-                context: context,
-                child: Column(
-                  children: [
-                    Text('There was a problem with the object of type "$T" and id "$id" in favorites.'),
-                    ExceptionInfo(exception ?? localizations.errorOccurred, stackTrace: stackTrace),
-                  ],
-                ),
-              );
-              if (removeItem) {
-                final notifier = ref.read(favoritesProvider.notifier);
-                notifier.removeFavorite(getTableNameFromType(T), id);
-              }
-            },
+            onHandleException:
+                <T extends DataObject>({
+                  required BuildContext context,
+                  required int id,
+                  Object? exception,
+                  StackTrace? stackTrace,
+                }) async {
+                  final localizations = context.l10n;
+                  final removeItem = await showOkCancelDialog(
+                    okText: localizations.remove,
+                    context: context,
+                    child: Column(
+                      children: [
+                        Text('There was a problem with the object of type "$T" and id "$id" in favorites.'),
+                        ExceptionInfo(exception ?? localizations.errorOccurred, stackTrace: stackTrace),
+                      ],
+                    ),
+                  );
+                  if (removeItem) {
+                    final notifier = ref.read(favoritesProvider.notifier);
+                    notifier.removeFavorite(getTableNameFromType(T), id);
+                  }
+                },
           );
         },
       );
@@ -211,10 +213,9 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
             leading: const Icon(Icons.search),
             trailing: [
               IconButton(
-                onPressed:
-                    () => setState(() {
-                      _showFilterOptions = !_showFilterOptions;
-                    }),
+                onPressed: () => setState(() {
+                  _showFilterOptions = !_showFilterOptions;
+                }),
                 icon: Icon(_showFilterOptions ? Icons.tune_outlined : Icons.tune),
               ),
             ],
@@ -299,11 +300,10 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
                       isExpanded: false,
                     );
                   },
-                  onException:
-                      (context, exception, {stackTrace}) => SizedBox(
-                        width: 250,
-                        child: ExceptionInfo(context.l10n.notFoundException, stackTrace: stackTrace),
-                      ),
+                  onException: (context, exception, {stackTrace}) => SizedBox(
+                    width: 250,
+                    child: ExceptionInfo(context.l10n.notFoundException, stackTrace: stackTrace),
+                  ),
                 ),
               ),
             ],
@@ -441,12 +441,11 @@ class _EntityGrid extends ConsumerWidget {
           (d) => d.bout.title(context),
           context: context,
         ),
-        _ =>
-          (() {
-            final notifier = ref.read(favoritesProvider.notifier);
-            ids.forEach((id, value) => notifier.removeFavorite(tableName, id));
-            throw UnimplementedError('Data type $tableName not supported for favorites, please contact the developer.');
-          })(),
+        _ => (() {
+          final notifier = ref.read(favoritesProvider.notifier);
+          ids.forEach((id, value) => notifier.removeFavorite(tableName, id));
+          throw UnimplementedError('Data type $tableName not supported for favorites, please contact the developer.');
+        })(),
       };
     });
     return LayoutBuilder(
@@ -455,15 +454,14 @@ class _EntityGrid extends ConsumerWidget {
         return Wrap(
           alignment: WrapAlignment.start,
           crossAxisAlignment: WrapCrossAlignment.start,
-          children:
-              children
-                  .map(
-                    (e) => ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: constraints.maxWidth / columnCount),
-                      child: e,
-                    ),
-                  )
-                  .toList(),
+          children: children
+              .map(
+                (e) => ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: constraints.maxWidth / columnCount),
+                  child: e,
+                ),
+              )
+              .toList(),
         );
       },
     );
@@ -485,10 +483,9 @@ class _EntityGrid extends ConsumerWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           maxCrossAxisExtent: cardMaxWidth,
-          children:
-              ids.entries
-                  .map((entry) => _createItem<T>(entry.key, entry.value, route, getTitle, context: context))
-                  .toList(),
+          children: ids.entries
+              .map((entry) => _createItem<T>(entry.key, entry.value, route, getTitle, context: context))
+              .toList(),
         ),
       ],
     );
@@ -502,16 +499,15 @@ class _EntityGrid extends ConsumerWidget {
     required BuildContext context,
   }) {
     return SingleConsumer<T>(
-      onException:
-          (context, exception, {stackTrace}) => Card(
-            child: Center(
-              child: IconButton(
-                onPressed:
-                    () => onHandleException<T>(id: id, context: context, exception: exception, stackTrace: stackTrace),
-                icon: const Icon(Icons.warning),
-              ),
-            ),
+      onException: (context, exception, {stackTrace}) => Card(
+        child: Center(
+          child: IconButton(
+            onPressed: () =>
+                onHandleException<T>(id: id, context: context, exception: exception, stackTrace: stackTrace),
+            icon: const Icon(Icons.warning),
           ),
+        ),
+      ),
       id: id,
       initialData: initialData,
       builder: (context, data) {
@@ -586,8 +582,9 @@ class _CardBackgroundImage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image:
-              imageUri != null ? getImageProviderFromString(imageUri!) : AssetImage('assets/images/icons/launcher.png'),
+          image: imageUri != null
+              ? getImageProviderFromString(imageUri!)
+              : AssetImage('assets/images/icons/launcher.png'),
           fit: BoxFit.cover,
           alignment: Alignment.topCenter,
         ),

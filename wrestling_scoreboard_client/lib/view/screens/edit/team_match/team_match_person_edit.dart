@@ -56,10 +56,9 @@ class TeamMatchPersonEditState extends ConsumerState<TeamMatchPersonEdit> {
           label: localizations.person,
           context: context,
           allowEmpty: false,
-          onSaved:
-              (Person? value) => setState(() {
-                _person = value;
-              }),
+          onSaved: (Person? value) => setState(() {
+            _person = value;
+          }),
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(
@@ -76,10 +75,9 @@ class TeamMatchPersonEditState extends ConsumerState<TeamMatchPersonEdit> {
           label: localizations.match,
           context: context,
           allowEmpty: false,
-          onSaved:
-              (TeamMatch? value) => setState(() {
-                _teamMatch = value;
-              }),
+          onSaved: (TeamMatch? value) => setState(() {
+            _teamMatch = value;
+          }),
           itemAsString: (u) => u.localize(context),
           asyncItems: (String filter) async {
             _availableTeamMatchs ??= await (await ref.read(

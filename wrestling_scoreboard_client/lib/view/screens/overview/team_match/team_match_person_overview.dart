@@ -48,10 +48,9 @@ class TeamMatchPersonOverview extends ConsumerWidget {
             ContentItem(
               title: teamMatchPerson.person.fullName,
               subtitle: localizations.person,
-              icon:
-                  teamMatchPerson.person.imageUri == null
-                      ? Icon(Icons.person)
-                      : CircularImage(imageUri: teamMatchPerson.person.imageUri!),
+              icon: teamMatchPerson.person.imageUri == null
+                  ? Icon(Icons.person)
+                  : CircularImage(imageUri: teamMatchPerson.person.imageUri!),
               onTap: () => PersonOverview.navigateTo(context, teamMatchPerson.person),
             ),
             ContentItem.icon(

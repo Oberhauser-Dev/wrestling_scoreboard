@@ -202,9 +202,8 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                   return ContentItem.icon(
                     title: competitionSystemAffiliation.localize(context),
                     iconData: Icons.account_tree,
-                    onTap:
-                        () async =>
-                            CompetitionSystemAffiliationOverview.navigateTo(context, competitionSystemAffiliation),
+                    onTap: () async =>
+                        CompetitionSystemAffiliationOverview.navigateTo(context, competitionSystemAffiliation),
                   );
                 },
               ),
@@ -213,29 +212,26 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 child: HeadingText(localizations.officials),
               ): FilterableManyConsumer<CompetitionPerson, Competition>.addOrCreate(
                 context: context,
-                addPageBuilder:
-                    (context) => CompetitionPersonEdit(
-                      initialCompetition: competition,
-                      initialOrganization: competition.organization!,
-                    ),
-                createPageBuilder:
-                    (context) => PersonEdit(
-                      initialOrganization: competition.organization!,
-                      onCreated: (person) async {
-                        // TODO: ability to change role inside another implementation of PersonEdit.
-                        await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
-                          CompetitionPerson(competition: competition, person: person, role: PersonRole.steward),
-                        );
-                      },
-                    ),
+                addPageBuilder: (context) => CompetitionPersonEdit(
+                  initialCompetition: competition,
+                  initialOrganization: competition.organization!,
+                ),
+                createPageBuilder: (context) => PersonEdit(
+                  initialOrganization: competition.organization!,
+                  onCreated: (person) async {
+                    // TODO: ability to change role inside another implementation of PersonEdit.
+                    await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
+                      CompetitionPerson(competition: competition, person: person, role: PersonRole.steward),
+                    );
+                  },
+                ),
                 filterObject: competition,
                 itemBuilder: (context, competitionPerson) {
                   return ContentItem(
                     title: '${competitionPerson.role.localize(context)} | ${competitionPerson.person.fullName}',
-                    icon:
-                        competitionPerson.person.imageUri == null
-                            ? Icon(competitionPerson.role.icon)
-                            : CircularImage(imageUri: competitionPerson.person.imageUri!),
+                    icon: competitionPerson.person.imageUri == null
+                        ? Icon(competitionPerson.role.icon)
+                        : CircularImage(imageUri: competitionPerson.person.imageUri!),
                     onTap: () async => CompetitionPersonOverview.navigateTo(context, competitionPerson),
                   );
                 },
@@ -245,7 +241,11 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
               dataObject: competition,
               label: localizations.competition,
               details: competition.name,
-              tabs: [Tab(child: HeadingText(localizations.info)), ...tabItems.keys, boutConfigTab],
+              tabs: [
+                Tab(child: HeadingText(localizations.info)),
+                ...tabItems.keys,
+                boutConfigTab,
+              ],
               body: TabGroup(items: [description, ...tabItems.values, boutConfigTabContent]),
               actions: [
                 DefaultResponsiveScaffoldActionItem(

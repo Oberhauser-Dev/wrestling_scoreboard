@@ -50,10 +50,9 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
           selectedItem: _division,
           label: localizations.division,
           context: context,
-          onSaved:
-              (Division? value) => setState(() {
-                _division = value;
-              }),
+          onSaved: (Division? value) => setState(() {
+            _division = value;
+          }),
           itemAsString: (u) => u.fullname,
           allowEmpty: false,
           asyncItems: (String filter) async {

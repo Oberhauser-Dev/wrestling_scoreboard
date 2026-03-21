@@ -123,13 +123,12 @@ class RestDataManager extends DataManager {
     S? filterObject,
   }) async {
     final uri = Uri.parse('$_apiUrl${_getPathFromType(T)}/$id/reorder').replace(
-      queryParameters:
-          filterObject != null
-              ? {
-                'filterTypes': jsonEncode([getTableNameFromType(S)]),
-                'filterIds': jsonEncode([filterObject.id]),
-              }
-              : null,
+      queryParameters: filterObject != null
+          ? {
+              'filterTypes': jsonEncode([getTableNameFromType(S)]),
+              'filterIds': jsonEncode([filterObject.id]),
+            }
+          : null,
     );
     final response = await http.post(uri, body: newIndex.toString(), headers: _headers);
     await _handleResponse(response, errorMessage: 'Failed to reorder ${T.toString()}');
@@ -270,8 +269,9 @@ class RestDataManager extends DataManager {
         if (includeApiProviderResults) 'use_provider': includeApiProviderResults.toString(),
       },
     );
-    final response =
-        body == null ? await http.get(uri, headers: _headers) : await http.post(uri, body: body, headers: _headers);
+    final response = body == null
+        ? await http.get(uri, headers: _headers)
+        : await http.post(uri, body: body, headers: _headers);
 
     await _handleResponse(response, errorMessage: 'Failed to search $type with term "$searchTerm"');
 

@@ -59,22 +59,21 @@ mixin class BoutConfigOverviewTab implements AbstractOverviewTab<BoutConfig> {
               shrinkWrap: true,
               addPageBuilder: (context) => BoutResultRuleEdit(initialBoutConfig: boutConfig),
               filterObject: boutConfig,
-              itemBuilder:
-                  (context, item) => ContentItem.icon(
-                    title: item.localize(context),
-                    iconData: Icons.rule,
-                    onTap: () {
-                      if (GoRouterState.of(context).isScratchBoutRoute) {
-                        // Ensure the provider scope is available
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => BoutResultRuleOverview(id: item.id!)),
-                        );
-                      } else {
-                        BoutResultRuleOverview.navigateTo(context, item);
-                      }
-                    },
-                  ),
+              itemBuilder: (context, item) => ContentItem.icon(
+                title: item.localize(context),
+                iconData: Icons.rule,
+                onTap: () {
+                  if (GoRouterState.of(context).isScratchBoutRoute) {
+                    // Ensure the provider scope is available
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BoutResultRuleOverview(id: item.id!)),
+                    );
+                  } else {
+                    BoutResultRuleOverview.navigateTo(context, item);
+                  }
+                },
+              ),
             ),
           ],
         );

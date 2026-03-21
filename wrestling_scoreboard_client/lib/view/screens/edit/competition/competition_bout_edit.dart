@@ -158,11 +158,10 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
             itemAsString: (pos) =>
                 _availablePhases?.firstWhereOrNull((phase) => phase.pos == pos)?.competitionSystem.name ?? '-',
             asyncItems: (String filter) async {
-              _availablePhases ??= await (await ref.read(
-                dataManagerProvider,
-              )).readMany<CompetitionSystemPhase, CompetitionSystemAffiliation>(
-                filterObject: widget.competitionBout?.weightCategory?.competitionSystemAffiliation,
-              );
+              _availablePhases ??= await (await ref.read(dataManagerProvider))
+                  .readMany<CompetitionSystemPhase, CompetitionSystemAffiliation>(
+                    filterObject: widget.competitionBout?.weightCategory?.competitionSystemAffiliation,
+                  );
               return _availablePhases!.map((e) => e.pos).toList();
             },
           ),

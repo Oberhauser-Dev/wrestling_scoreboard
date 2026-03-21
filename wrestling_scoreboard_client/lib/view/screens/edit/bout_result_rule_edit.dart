@@ -134,10 +134,9 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
           selectedItem: _boutConfig,
           label: localizations.boutConfig,
           context: context,
-          onSaved:
-              (BoutConfig? value) => setState(() {
-                _boutConfig = value;
-              }),
+          onSaved: (BoutConfig? value) => setState(() {
+            _boutConfig = value;
+          }),
           allowEmpty: false,
           itemAsString: (u) => u.localize(context),
           asyncItems: (String filter) async {

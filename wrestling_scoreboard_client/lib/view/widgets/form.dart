@@ -131,18 +131,17 @@ class NumericalInput<T extends num> extends StatelessWidget {
         keyboardType: TextInputType.number,
         decoration: CustomInputDecoration(isMandatory: isMandatory, label: label, localizations: localizations),
         inputFormatters: <TextInputFormatter>[inputFormatter],
-        onSaved:
-            onSaved == null
-                ? null
-                : (String? value) {
-                  if (T == int) {
-                    onSaved!(int.tryParse(value ?? '') as T?);
-                  } else if (T == double) {
-                    onSaved!(double.tryParse(value ?? '') as T?);
-                  } else {
-                    onSaved!(num.tryParse(value ?? '') as T?);
-                  }
-                },
+        onSaved: onSaved == null
+            ? null
+            : (String? value) {
+                if (T == int) {
+                  onSaved!(int.tryParse(value ?? '') as T?);
+                } else if (T == double) {
+                  onSaved!(double.tryParse(value ?? '') as T?);
+                } else {
+                  onSaved!(num.tryParse(value ?? '') as T?);
+                }
+              },
         validator:
             validator ??
             (value) {
@@ -359,12 +358,11 @@ class CustomInputDecoration extends InputDecoration {
     super.suffixIcon,
   }) : super(
          border: const UnderlineInputBorder(),
-         labelText:
-             label == null
-                 ? null
-                 : isMandatory
-                 ? '$label*'
-                 : label,
+         labelText: label == null
+             ? null
+             : isMandatory
+             ? '$label*'
+             : label,
          hintText: isMandatory ? null : localizations.optional,
        );
 }

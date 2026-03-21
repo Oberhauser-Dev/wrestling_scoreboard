@@ -24,10 +24,9 @@ class PostgresDb {
 
   psql.Connection? _connection;
 
-  psql.Connection get connection =>
-      _connection != null
-          ? _connection!
-          : throw Exception('Database connection has not yet been initialized. Plz call `open()` first.');
+  psql.Connection get connection => _connection != null
+      ? _connection!
+      : throw Exception('Database connection has not yet been initialized. Plz call `open()` first.');
 
   factory PostgresDb() {
     return _singleton;
@@ -113,11 +112,10 @@ extension DatabaseExt on PostgresDb {
   static Future<List<MapEntry<Version, FileSystemEntity>>> readMigrationScripts({required String folderPath}) async {
     final dir = Directory(folderPath);
     final List<FileSystemEntity> entities = await dir.list().toList();
-    final migrationMap =
-        entities.map((entity) {
-          final migrationVersion = entity.uri.pathSegments.last.split('_')[0];
-          return MapEntry(Version.parse(migrationVersion.replaceFirst('v', '')), entity);
-        }).toList();
+    final migrationMap = entities.map((entity) {
+      final migrationVersion = entity.uri.pathSegments.last.split('_')[0];
+      return MapEntry(Version.parse(migrationVersion.replaceFirst('v', '')), entity);
+    }).toList();
     migrationMap.sort((a, b) => a.key.compareTo(b.key));
     return migrationMap;
   }

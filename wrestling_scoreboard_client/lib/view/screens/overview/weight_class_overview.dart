@@ -71,7 +71,10 @@ mixin WeightClassOverview<T extends DataObject> implements AbstractOverview<Weig
           dataObject: subClassData,
           label: classLocale,
           details: details ?? weightClass.abbreviation(context),
-          tabs: [Tab(child: HeadingText(localizations.info)), ...relations.keys],
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            ...relations.keys,
+          ],
           actions: actions,
           body: TabGroup(items: [description, ...relations.values]),
         );

@@ -2,7 +2,7 @@ name: wrestling_scoreboard
 repository: https://github.com/Oberhauser-dev/wrestling_scoreboard
 publish_to: none
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.11.0
 workspace:
   - wrestling_scoreboard_client
   - wrestling_scoreboard_server
@@ -10,7 +10,7 @@ workspace:
   - wrestling_scoreboard_generator
 
 dev_dependencies:
-  melos: ^7.1.0
+  melos: ^7.4.1
 
 melos:
   command:
@@ -24,7 +24,7 @@ melos:
 
     bootstrap:
       environment:
-        sdk: ^3.7.0
+        sdk: ^3.11.0
 
   scripts:
     lint:all:

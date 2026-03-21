@@ -49,16 +49,14 @@ class OrganizationController extends ShelfController<Organization> with ImportCo
 
     return organization.apiProvider?.getApi(
       organization,
-      getSingleOfOrg:
-          <T extends Organizational>(orgSyncId, {required int orgId}) =>
-              OrganizationalController.getSingleFromDataTypeOfOrg(orgSyncId, orgId: orgId, obfuscate: false),
-      getMany:
-          <T extends DataObject>({conditions, substitutionValues}) async =>
-              await EntityController.getManyFromDataType<T>(
-                conditions: conditions,
-                substitutionValues: substitutionValues,
-                obfuscate: false,
-              ),
+      getSingleOfOrg: <T extends Organizational>(orgSyncId, {required int orgId}) =>
+          OrganizationalController.getSingleFromDataTypeOfOrg(orgSyncId, orgId: orgId, obfuscate: false),
+      getMany: <T extends DataObject>({conditions, substitutionValues}) async =>
+          await EntityController.getManyFromDataType<T>(
+            conditions: conditions,
+            substitutionValues: substitutionValues,
+            obfuscate: false,
+          ),
       authService: authService,
     );
   }
