@@ -40,86 +40,85 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
     });
     final isBigScreen = context.isMediumScreenOrLarger;
     final buttonControls = Row(
-      children:
-          [
-            widget.boutState.widget.bouts.first.id == widget.boutState.bout.id
-                ? IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    widget.callback(const BoutScreenActionIntent.quit());
-                  },
-                )
-                : DelayedTooltip(
-                  message: '${localizations.previous} (←)',
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      widget.callback(const BoutScreenActionIntent.previousBout());
-                    },
-                  ),
-                ),
-            DelayedTooltip(
-              message: localizations.comment,
-              child: IconButton(
-                onPressed: () async {
-                  String text = '';
-                  final result = await showOkCancelDialog(
-                    context: context,
-                    child: CustomTextInput.icon(
-                      iconData: Icons.comment,
-                      isMultiline: true,
-                      label: localizations.comment,
-                      initialValue: widget.boutState.bout.comment,
-                      isMandatory: false,
-                      onChanged: (value) => text = value,
-                    ),
-                  );
-                  if (result) {
-                    widget.boutState.bout = widget.boutState.bout.copyWith(comment: text);
-                    await (await ref.read(dataManagerProvider)).createOrUpdateSingle(widget.boutState.bout);
-                  }
+      children: [
+        widget.boutState.widget.bouts.first.id == widget.boutState.bout.id
+            ? IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  widget.callback(const BoutScreenActionIntent.quit());
                 },
-                icon: const Icon(Icons.comment),
-              ),
-            ),
-            DelayedTooltip(
-              message: '${_isRunning ? localizations.pause : localizations.start} (Space)',
-              child: IconButton(
-                onPressed: () => widget.callback(const BoutScreenActionIntent.startStop()),
-                icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
-              ),
-            ),
-            DelayedTooltip(
-              message: '${localizations.deleteLatestAction} (⌫)',
-              child: IconButton(
-                onPressed: () => widget.callback(const BoutScreenActionIntent.undo()),
-                icon: Icon(Icons.undo),
-              ),
-            ),
-            DelayedTooltip(
-              message: localizations.bellSound,
-              child: IconButton(
-                onPressed: () => widget.callback(const BoutScreenActionIntent.horn()),
-                icon: const Icon(Icons.campaign),
-              ),
-            ),
-            widget.boutState.widget.bouts.last.id == widget.boutState.bout.id
-                ? IconButton(
-                  icon: const Icon(Icons.close),
+              )
+            : DelayedTooltip(
+                message: '${localizations.previous} (←)',
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back),
                   onPressed: () {
-                    widget.callback(const BoutScreenActionIntent.quit());
+                    widget.callback(const BoutScreenActionIntent.previousBout());
                   },
-                )
-                : DelayedTooltip(
-                  message: '${localizations.next} (→)',
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_forward),
-                    onPressed: () {
-                      widget.callback(const BoutScreenActionIntent.nextBout());
-                    },
-                  ),
                 ),
-          ].map((e) => Expanded(child: e)).toList(),
+              ),
+        DelayedTooltip(
+          message: localizations.comment,
+          child: IconButton(
+            onPressed: () async {
+              String text = '';
+              final result = await showOkCancelDialog(
+                context: context,
+                child: CustomTextInput.icon(
+                  iconData: Icons.comment,
+                  isMultiline: true,
+                  label: localizations.comment,
+                  initialValue: widget.boutState.bout.comment,
+                  isMandatory: false,
+                  onChanged: (value) => text = value,
+                ),
+              );
+              if (result) {
+                widget.boutState.bout = widget.boutState.bout.copyWith(comment: text);
+                await (await ref.read(dataManagerProvider)).createOrUpdateSingle(widget.boutState.bout);
+              }
+            },
+            icon: const Icon(Icons.comment),
+          ),
+        ),
+        DelayedTooltip(
+          message: '${_isRunning ? localizations.pause : localizations.start} (Space)',
+          child: IconButton(
+            onPressed: () => widget.callback(const BoutScreenActionIntent.startStop()),
+            icon: Icon(_isRunning ? Icons.pause : Icons.play_arrow),
+          ),
+        ),
+        DelayedTooltip(
+          message: '${localizations.deleteLatestAction} (⌫)',
+          child: IconButton(
+            onPressed: () => widget.callback(const BoutScreenActionIntent.undo()),
+            icon: Icon(Icons.undo),
+          ),
+        ),
+        DelayedTooltip(
+          message: localizations.bellSound,
+          child: IconButton(
+            onPressed: () => widget.callback(const BoutScreenActionIntent.horn()),
+            icon: const Icon(Icons.campaign),
+          ),
+        ),
+        widget.boutState.widget.bouts.last.id == widget.boutState.bout.id
+            ? IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  widget.callback(const BoutScreenActionIntent.quit());
+                },
+              )
+            : DelayedTooltip(
+                message: '${localizations.next} (→)',
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_forward),
+                  onPressed: () {
+                    widget.callback(const BoutScreenActionIntent.nextBout());
+                  },
+                ),
+              ),
+      ].map((e) => Expanded(child: e)).toList(),
     );
     final mainRow = Row(
       spacing: 8,
@@ -221,10 +220,9 @@ class _MainControlDropDown extends ConsumerWidget {
 
                 return CustomDropdown<BoutResult>(
                   isNullable: true,
-                  selected:
-                      pStatus != null && (role == bout.winnerRole || (bout.result?.affectsBoth() ?? false))
-                          ? bout.result
-                          : null,
+                  selected: pStatus != null && (role == bout.winnerRole || (bout.result?.affectsBoth() ?? false))
+                      ? bout.result
+                      : null,
                   options: boutResultOptions,
                   onChange: (BoutResult? val) async {
                     final dataManager = await ref.read(dataManagerProvider);

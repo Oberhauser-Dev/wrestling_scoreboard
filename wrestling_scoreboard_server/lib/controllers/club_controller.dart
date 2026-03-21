@@ -30,7 +30,8 @@ class ClubController extends ShelfController<Club> with OrganizationalController
     );
   }
 
-  static const teamsQuery = '''
+  static const teamsQuery =
+      '''
         SELECT t.*
         FROM ${Team.cTableName} AS t
         JOIN ${TeamClubAffiliation.cTableName} AS tca ON t.id = tca.team_id

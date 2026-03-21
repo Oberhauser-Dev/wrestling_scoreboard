@@ -36,11 +36,10 @@ class SingleDataStream<T extends DataObject> extends _$SingleDataStream<T> {
     void keepDependenciesAlive(T single) {
       if (!ref.mounted) return;
       final oldAliveDependencies = aliveDependencies;
-      aliveDependencies =
-          mapDirectDataObjectRelations<T, KeepAliveLink?>(
-            single,
-            <F extends DataObject>(F? filterObject) => _aliveLink(ref, filterObject),
-          ).nonNulls.toList(); // Purposely convert to List as to avoid lazy loading keep-alives.
+      aliveDependencies = mapDirectDataObjectRelations<T, KeepAliveLink?>(
+        single,
+        <F extends DataObject>(F? filterObject) => _aliveLink(ref, filterObject),
+      ).nonNulls.toList(); // Purposely convert to List as to avoid lazy loading keep-alives.
       // Close old keep-alives, after the new ones have been initialized.
       oldAliveDependencies?.forEach((element) => element.close());
     }
@@ -141,12 +140,11 @@ Stream<List<T>> manyDataStream<T extends DataObject, S extends DataObject?>(
   await for (final many in mergedStream) {
     if (ref.mounted) {
       final oldAliveItems = aliveItems;
-      aliveItems =
-          many.map((single) {
-            return ref
-                .read(singleDataStreamProvider<T>(SingleProviderData<T>(initialData: single, id: single.id!)).notifier)
-                .keepAlive();
-          }).toList(); // Purposely convert to List as to avoid lazy loading keep-alives.
+      aliveItems = many.map((single) {
+        return ref
+            .read(singleDataStreamProvider<T>(SingleProviderData<T>(initialData: single, id: single.id!)).notifier)
+            .keepAlive();
+      }).toList(); // Purposely convert to List as to avoid lazy loading keep-alives.
 
       // Close old keep-alives, after the new ones have been initialized.
       oldAliveItems?.forEach((element) => element.close());

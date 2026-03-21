@@ -53,10 +53,9 @@ class CompetitionParticipationItem extends ConsumerWidget {
                 onTap: () => CompetitionParticipationOverview.navigateTo(context, participation),
                 child: ScaledText(
                   participation.membership.person.fullName,
-                  decoration:
-                      participation.contestantStatus == ContestantStatus.disqualified
-                          ? TextDecoration.lineThrough
-                          : null,
+                  decoration: participation.contestantStatus == ContestantStatus.disqualified
+                      ? TextDecoration.lineThrough
+                      : null,
                 ),
               ),
             ),
@@ -65,8 +64,9 @@ class CompetitionParticipationItem extends ConsumerWidget {
               width: CompetitionParticipationItem.clubRelativeWidth,
               child: ScaledText(
                 participation.lineup.club.name,
-                decoration:
-                    participation.contestantStatus == ContestantStatus.disqualified ? TextDecoration.lineThrough : null,
+                decoration: participation.contestantStatus == ContestantStatus.disqualified
+                    ? TextDecoration.lineThrough
+                    : null,
               ),
             ),
             VerticalDivider(width: 1),
@@ -78,14 +78,13 @@ class CompetitionParticipationItem extends ConsumerWidget {
               while (competitionBoutsOfPhase[round] != null) {
                 final Widget item;
                 final competitionBoutsOfRound = competitionBoutsOfPhase[round]!;
-                final cBout =
-                    competitionBoutsOfRound.keys
-                        .where(
-                          (element) =>
-                              element.bout.r?.membership == participation.membership ||
-                              element.bout.b?.membership == participation.membership,
-                        )
-                        .zeroOrOne;
+                final cBout = competitionBoutsOfRound.keys
+                    .where(
+                      (element) =>
+                          element.bout.r?.membership == participation.membership ||
+                          element.bout.b?.membership == participation.membership,
+                    )
+                    .zeroOrOne;
 
                 if (cBout != null) {
                   final BoutRole role;
@@ -94,13 +93,15 @@ class CompetitionParticipationItem extends ConsumerWidget {
                   if (cBout.bout.r?.membership == participation.membership) {
                     role = BoutRole.red;
                     boutState = cBout.bout.r;
-                    opponentParticipation =
-                        participations.where((element) => element.membership == cBout.bout.b?.membership).zeroOrOne;
+                    opponentParticipation = participations
+                        .where((element) => element.membership == cBout.bout.b?.membership)
+                        .zeroOrOne;
                   } else {
                     role = BoutRole.blue;
                     boutState = cBout.bout.b;
-                    opponentParticipation =
-                        participations.where((element) => element.membership == cBout.bout.r?.membership).zeroOrOne;
+                    opponentParticipation = participations
+                        .where((element) => element.membership == cBout.bout.r?.membership)
+                        .zeroOrOne;
                   }
                   final technicalPoints = AthleteBoutState.getTechnicalPoints(competitionBoutsOfRound[cBout]!, role);
                   item = InkWell(
@@ -198,7 +199,10 @@ class CompetitionParticipationItem extends ConsumerWidget {
           ],
         );
         if (participation.isExcluded) {
-          return DefaultTextStyle.merge(child: row, style: TextStyle(color: Theme.of(context).disabledColor));
+          return DefaultTextStyle.merge(
+            child: row,
+            style: TextStyle(color: Theme.of(context).disabledColor),
+          );
         }
         return row;
       },

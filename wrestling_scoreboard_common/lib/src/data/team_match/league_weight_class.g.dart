@@ -9,8 +9,9 @@ part of 'league_weight_class.dart';
 _LeagueWeightClass _$LeagueWeightClassFromJson(Map<String, dynamic> json) => _LeagueWeightClass(
   id: (json['id'] as num?)?.toInt(),
   orgSyncId: json['orgSyncId'] as String?,
-  organization:
-      json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+  organization: json['organization'] == null
+      ? null
+      : Organization.fromJson(json['organization'] as Map<String, dynamic>),
   pos: (json['pos'] as num).toInt(),
   league: League.fromJson(json['league'] as Map<String, dynamic>),
   weightClass: WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),

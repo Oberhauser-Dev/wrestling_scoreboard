@@ -58,8 +58,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     this.apiUrl = 'https://www.brv-ringen.de/Api/dev/cs/',
     this.authService,
   }) {
-    _getSingleBySyncId =
-        <T extends Organizational>(String orgSyncId) => getSingleOfOrg<T>(orgSyncId, orgId: organization.id!);
+    _getSingleBySyncId = <T extends Organizational>(String orgSyncId) =>
+        getSingleOfOrg<T>(orgSyncId, orgId: organization.id!);
   }
 
   final totalRegionWildcard = 'Bayern';
@@ -300,8 +300,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     });
 
     // This is the weight class, which is the most common, so use it as default in division level.
-    final sortedWeightClassEntries =
-        groupedByWeightClassList.entries.toList()..sort((a, b) => a.value.length.compareTo(b.value.length));
+    final sortedWeightClassEntries = groupedByWeightClassList.entries.toList()
+      ..sort((a, b) => a.value.length.compareTo(b.value.length));
     final mostCommonWeightClasses = sortedWeightClassEntries.last.key;
 
     var divisionWeightClasses = groupedByWeightClassList[mostCommonWeightClasses]!.first.map(
@@ -399,13 +399,13 @@ class ByGermanyWrestlingApi extends WrestlingApi {
       divisions.keys.map((e) => importLeagues(division: e)),
     )).expand((element) => element);
     final teamClubAffiliations = await importTeamClubAffiliations();
-    final teamMatches = (await Future.wait(
-      leagues.map((e) => importTeamMatches(league: e)),
-    )).expand((element) => element.keys).where((teamMatch) {
-      return teamClubAffiliations.any(
-        (tca) => tca.team.orgSyncId == teamMatch.home.team.orgSyncId && tca.club.orgSyncId == club.orgSyncId,
-      );
-    });
+    final teamMatches = (await Future.wait(leagues.map((e) => importTeamMatches(league: e))))
+        .expand((element) => element.keys)
+        .where((teamMatch) {
+          return teamClubAffiliations.any(
+            (tca) => tca.team.orgSyncId == teamMatch.home.team.orgSyncId && tca.club.orgSyncId == club.orgSyncId,
+          );
+        });
     final memberships = (await Future.wait(
       teamMatches.map((teamMatch) async {
         final bouts = await importTeamMatchBouts(teamMatch: teamMatch);
@@ -441,10 +441,9 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           Person(
             prename: wrestlerJson['givenname'],
             surname: wrestlerJson['name'],
-            gender:
-                wrestlerJson['gender'] == 'm'
-                    ? Gender.male
-                    : (wrestlerJson['gender'] == 'w' ? Gender.female : Gender.other),
+            gender: wrestlerJson['gender'] == 'm'
+                ? Gender.male
+                : (wrestlerJson['gender'] == 'w' ? Gender.female : Gender.other),
             birthDate: DateTime.parse(wrestlerJson['birthday']).copyWith(isUtc: true),
             nationality: Countries.values.singleWhereOrNull(
               (element) => element.unofficialNames.contains(wrestlerJson['nationality']),
@@ -520,17 +519,15 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             }
           }
 
-          final competitionJson =
-              (await _getCompetition(
-                seasonId: league.startDate.year.toString(),
-                competitionId: entry.key,
-              ))['competition'];
+          final competitionJson = (await _getCompetition(
+            seasonId: league.startDate.year.toString(),
+            competitionId: entry.key,
+          ))['competition'];
           if (competitionJson == null) return null;
           final schemeIndex = (values['scheme'] as String?)?.toIndex();
-          final seasonPartition =
-              schemeIndex != null
-                  ? (schemeIndex - 1)
-                  : (double.parse(values['boutday']) / league.boutDays <= 0.5 ? 0 : 1);
+          final seasonPartition = schemeIndex != null
+              ? (schemeIndex - 1)
+              : (double.parse(values['boutday']) / league.boutDays <= 0.5 ? 0 : 1);
           final matchDateTime = DateTime.parse(
             '${values['boutDate']} ${values['scaleTime']}',
           ).fromLocation(timeZoneLocation);
@@ -572,7 +569,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               organization: organization,
               orgSyncId: entry.key,
             ),
-            {if (referee != null) referee: PersonRole.referee},
+            {?referee: PersonRole.referee},
           );
         }),
       );
@@ -583,11 +580,10 @@ class ByGermanyWrestlingApi extends WrestlingApi {
 
   @override
   Future<Map<TeamMatchBout, Iterable<BoutAction>>> importTeamMatchBouts({required TeamMatch teamMatch}) async {
-    final competitionJson =
-        (await _getCompetition(
-          seasonId: teamMatch.league!.startDate.year.toString(),
-          competitionId: teamMatch.orgSyncId!,
-        ))['competition'];
+    final competitionJson = (await _getCompetition(
+      seasonId: teamMatch.league!.startDate.year.toString(),
+      competitionId: teamMatch.orgSyncId!,
+    ))['competition'];
     if (competitionJson == null) return {};
     final List<dynamic> boutListJson = competitionJson['_boutList'];
     if (boutListJson.isEmpty) return {};
@@ -738,17 +734,12 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             duration: boutDuration,
             result: getBoutResult(boutJson['result']),
             winnerRole: winnerRole,
-            r:
-                homeMembership == null
-                    ? null
-                    : AthleteBoutState(classificationPoints: classificationPointsHome, membership: homeMembership),
-            b:
-                opponentMembership == null
-                    ? null
-                    : AthleteBoutState(
-                      classificationPoints: classificationPointsOpponent,
-                      membership: opponentMembership,
-                    ),
+            r: homeMembership == null
+                ? null
+                : AthleteBoutState(classificationPoints: classificationPointsHome, membership: homeMembership),
+            b: opponentMembership == null
+                ? null
+                : AthleteBoutState(classificationPoints: classificationPointsOpponent, membership: opponentMembership),
             comment: boutComment,
           );
 
@@ -809,15 +800,14 @@ class ByGermanyWrestlingApi extends WrestlingApi {
           }
 
           final String boutActionsJson = boutJson['annotation']?['1']?['points']?['value'] ?? '';
-          final Iterable<BoutAction> boutActions =
-              boutActionsJson.split(',').where((str) => str.isNotEmpty).map((str) {
-                try {
-                  return parseActionStr(str);
-                } catch (e, st) {
-                  _logger.severe('Invalid action string format: $str\n$boutJson', e, st);
-                  rethrow;
-                }
-              }).nonNulls;
+          final Iterable<BoutAction> boutActions = boutActionsJson.split(',').where((str) => str.isNotEmpty).map((str) {
+            try {
+              return parseActionStr(str);
+            } catch (e, st) {
+              _logger.severe('Invalid action string format: $str\n$boutJson', e, st);
+              rethrow;
+            }
+          }).nonNulls;
 
           // Duration is not available in the new RDB spec, so use the last action as duration.
           if (bout.duration == Duration.zero && boutActions.isNotEmpty) {
@@ -859,7 +849,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
               return await _getSingleBySyncId<Club>(clubId);
             },
           );
-          return [if (membership != null) membership];
+          return [?membership];
         } catch (_) {
           return [];
         }

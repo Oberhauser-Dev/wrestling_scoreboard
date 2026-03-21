@@ -66,10 +66,9 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           selectedItem: _lineup,
           label: localizations.lineup,
           context: context,
-          onSaved:
-              (value) => setState(() {
-                _lineup = value;
-              }),
+          onSaved: (value) => setState(() {
+            _lineup = value;
+          }),
           onChanged: (value) {
             _lineup = value;
             // Reset Memberships when club has changed.
@@ -94,10 +93,9 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           organization: widget.initialCompetition.organization,
           selectedItem: _membership,
           allowEmpty: false,
-          onSave:
-              (value) => setState(() {
-                _membership = value;
-              }),
+          onSave: (value) => setState(() {
+            _membership = value;
+          }),
         ),
       ),
       ListTile(
@@ -107,10 +105,9 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           selectedItem: _weightCategory,
           label: localizations.weightCategory,
           context: context,
-          onSaved:
-              (value) => setState(() {
-                _weightCategory = value;
-              }),
+          onSaved: (value) => setState(() {
+            _weightCategory = value;
+          }),
           itemAsString: (w) => w.name,
           asyncItems: (String filter) async {
             _availableWeightCategories ??= await (await ref.read(

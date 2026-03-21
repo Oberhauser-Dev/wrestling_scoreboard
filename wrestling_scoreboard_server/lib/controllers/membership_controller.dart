@@ -16,7 +16,8 @@ class MembershipController extends ShelfController<Membership> with Organization
 
   MembershipController._internal() : super();
 
-  static const _teamMatchBoutsQuery = '''
+  static const _teamMatchBoutsQuery =
+      '''
         SELECT tmb.* 
         FROM ${Bout.cTableName} as b
         JOIN ${AthleteBoutState.cTableName} AS pst ON b.red_id = pst.id OR b.blue_id = pst.id
@@ -36,7 +37,8 @@ class MembershipController extends ShelfController<Membership> with Organization
     );
   }
 
-  static const _competitionBoutsQuery = '''
+  static const _competitionBoutsQuery =
+      '''
         SELECT cb.* 
         FROM ${Bout.cTableName} as b
         JOIN ${AthleteBoutState.cTableName} AS pst ON b.red_id = pst.id OR b.blue_id = pst.id

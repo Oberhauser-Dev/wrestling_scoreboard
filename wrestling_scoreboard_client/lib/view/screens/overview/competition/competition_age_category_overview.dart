@@ -41,9 +41,8 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
             competitionAgeCategory: competitionAgeCategory,
             initialCompetition: competitionAgeCategory.competition,
           ),
-          onDelete:
-              () async =>
-                  (await ref.read(dataManagerProvider)).deleteSingle<CompetitionAgeCategory>(competitionAgeCategory),
+          onDelete: () async =>
+              (await ref.read(dataManagerProvider)).deleteSingle<CompetitionAgeCategory>(competitionAgeCategory),
           classLocale: localizations.ageCategory,
           children: [
             ContentItem.icon(
@@ -65,14 +64,17 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
           label: localizations.weightCategory,
           details: competitionAgeCategory.ageCategory.name,
           actions: [],
-          tabs: [Tab(child: HeadingText(localizations.info)), Tab(child: HeadingText(localizations.weightCategories))],
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            Tab(child: HeadingText(localizations.weightCategories)),
+          ],
           body: TabGroup(
             items: [
               description,
               FilterableManyConsumer<CompetitionWeightCategory, CompetitionAgeCategory>.add(
                 context: context,
-                addPageBuilder:
-                    (context) => CompetitionWeightCategoryEdit(initialCompetition: competitionAgeCategory.competition),
+                addPageBuilder: (context) =>
+                    CompetitionWeightCategoryEdit(initialCompetition: competitionAgeCategory.competition),
                 filterObject: competitionAgeCategory,
                 itemBuilder: (context, weightCategory) {
                   return ContentItem.icon(

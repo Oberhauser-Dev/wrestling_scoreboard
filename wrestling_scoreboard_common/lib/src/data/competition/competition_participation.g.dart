@@ -10,10 +10,9 @@ _CompetitionParticipation _$CompetitionParticipationFromJson(Map<String, dynamic
   id: (json['id'] as num?)?.toInt(),
   membership: Membership.fromJson(json['membership'] as Map<String, dynamic>),
   lineup: CompetitionLineup.fromJson(json['lineup'] as Map<String, dynamic>),
-  weightCategory:
-      json['weightCategory'] == null
-          ? null
-          : CompetitionWeightCategory.fromJson(json['weightCategory'] as Map<String, dynamic>),
+  weightCategory: json['weightCategory'] == null
+      ? null
+      : CompetitionWeightCategory.fromJson(json['weightCategory'] as Map<String, dynamic>),
   weight: (json['weight'] as num?)?.toDouble(),
   poolGroups: (json['poolGroups'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ?? const [],
   poolDrawNumbers: (json['poolDrawNumbers'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ?? const [],

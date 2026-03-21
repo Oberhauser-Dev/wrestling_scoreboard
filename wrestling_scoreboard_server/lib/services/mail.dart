@@ -46,12 +46,11 @@ Future<void> sendMail({required String recipient, required String subject, requi
     port: env.smtpPort ?? 587,
   );
 
-  final message =
-      Message()
-        ..from = Address(env.smtpFrom!, 'Wrestling Scoreboard')
-        ..recipients.add(recipient)
-        ..subject = subject
-        ..html = _getHtmlContent(body);
+  final message = Message()
+    ..from = Address(env.smtpFrom!, 'Wrestling Scoreboard')
+    ..recipients.add(recipient)
+    ..subject = subject
+    ..html = _getHtmlContent(body);
 
   try {
     final sendReport = await send(message, smtpServer);

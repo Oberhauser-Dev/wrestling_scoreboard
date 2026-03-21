@@ -39,20 +39,18 @@ class CompetitionSystemPhaseOverview extends ConsumerWidget {
             competitionSystemPhase: competitionSystemPhase,
             initialCompetitionSystemAffiliation: competitionSystemPhase.competitionSystemAffiliation,
           ),
-          onDelete:
-              () async =>
-                  (await ref.read(dataManagerProvider)).deleteSingle<CompetitionSystemPhase>(competitionSystemPhase),
+          onDelete: () async =>
+              (await ref.read(dataManagerProvider)).deleteSingle<CompetitionSystemPhase>(competitionSystemPhase),
           classLocale: localizations.competitionSystem,
           children: [
             ContentItem.icon(
               title: competitionSystemPhase.competitionSystemAffiliation.localize(context),
               subtitle: localizations.competition,
               iconData: Icons.leaderboard,
-              onTap:
-                  () => CompetitionSystemAffiliationOverview.navigateTo(
-                    context,
-                    competitionSystemPhase.competitionSystemAffiliation,
-                  ),
+              onTap: () => CompetitionSystemAffiliationOverview.navigateTo(
+                context,
+                competitionSystemPhase.competitionSystemAffiliation,
+              ),
             ),
             ContentItem.icon(
               title: competitionSystemPhase.competitionSystem.name,

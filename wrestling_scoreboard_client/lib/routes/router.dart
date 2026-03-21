@@ -122,21 +122,20 @@ GoRouter getRouter() {
     GoRoute(
       path: '${LeagueTeamParticipationOverview.route}/:participation_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) => LeagueTeamParticipationOverview(id: int.parse(state.pathParameters['participation_id']!)),
+      builder: (context, state) =>
+          LeagueTeamParticipationOverview(id: int.parse(state.pathParameters['participation_id']!)),
     ),
     GoRoute(
       path: '${DivisionWeightClassOverview.route}/:division_weight_class_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) =>
-              DivisionWeightClassOverview(id: int.parse(state.pathParameters['division_weight_class_id']!)),
+      builder: (context, state) =>
+          DivisionWeightClassOverview(id: int.parse(state.pathParameters['division_weight_class_id']!)),
     ),
     GoRoute(
       path: '${LeagueWeightClassOverview.route}/:league_weight_class_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) => LeagueWeightClassOverview(id: int.parse(state.pathParameters['league_weight_class_id']!)),
+      builder: (context, state) =>
+          LeagueWeightClassOverview(id: int.parse(state.pathParameters['league_weight_class_id']!)),
     ),
     GoRoute(
       path: '${TeamMatchBoutOverview.route}/:team_match_bout_id',
@@ -146,8 +145,8 @@ GoRouter getRouter() {
     GoRoute(
       path: '${TeamMatchPersonOverview.route}/:team_match_person_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) => TeamMatchPersonOverview(id: int.parse(state.pathParameters['team_match_person_id']!)),
+      builder: (context, state) =>
+          TeamMatchPersonOverview(id: int.parse(state.pathParameters['team_match_person_id']!)),
     ),
     GoRoute(
       path: '${MembershipOverview.route}/:membership_id',
@@ -196,77 +195,68 @@ GoRouter getRouter() {
         GoRoute(
           path: '${CompetitionWeightCategoryOverview.route}/:competition_weight_category_id',
           parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-          builder:
-              (context, state) => CompetitionWeightCategoryOverview(
-                id: int.parse(state.pathParameters['competition_weight_category_id']!),
-              ),
+          builder: (context, state) =>
+              CompetitionWeightCategoryOverview(id: int.parse(state.pathParameters['competition_weight_category_id']!)),
           routes: [
             GoRoute(
               path: CompetitionWeightCategoryDisplay.route,
               parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-              builder:
-                  (context, state) => CompetitionWeightCategoryDisplay(
-                    id: int.parse(state.pathParameters['competition_weight_category_id']!),
-                  ),
+              builder: (context, state) => CompetitionWeightCategoryDisplay(
+                id: int.parse(state.pathParameters['competition_weight_category_id']!),
+              ),
             ),
           ],
         ),
         GoRoute(
           path: '${CompetitionAgeCategoryOverview.route}/:competition_age_category_id',
           parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-          builder:
-              (context, state) =>
-                  CompetitionAgeCategoryOverview(id: int.parse(state.pathParameters['competition_age_category_id']!)),
+          builder: (context, state) =>
+              CompetitionAgeCategoryOverview(id: int.parse(state.pathParameters['competition_age_category_id']!)),
         ),
       ],
     ),
     GoRoute(
       path: '${CompetitionSystemAffiliationOverview.route}/:competition_system_affiliation_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) => CompetitionSystemAffiliationOverview(
-            id: int.parse(state.pathParameters['competition_system_affiliation_id']!),
-          ),
+      builder: (context, state) => CompetitionSystemAffiliationOverview(
+        id: int.parse(state.pathParameters['competition_system_affiliation_id']!),
+      ),
     ),
     GoRoute(
       path: '${CompetitionSystemPhaseOverview.route}/:competition_system_phase_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) =>
-              CompetitionSystemPhaseOverview(id: int.parse(state.pathParameters['competition_system_phase_id']!)),
+      builder: (context, state) =>
+          CompetitionSystemPhaseOverview(id: int.parse(state.pathParameters['competition_system_phase_id']!)),
     ),
     GoRoute(
       path: '${CompetitionWeightCategoryOverview.route}/:competition_weight_category_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) =>
-              CompetitionWeightCategoryOverview(id: int.parse(state.pathParameters['competition_weight_category_id']!)),
+      builder: (context, state) =>
+          CompetitionWeightCategoryOverview(id: int.parse(state.pathParameters['competition_weight_category_id']!)),
     ),
     GoRoute(
       path: '${CompetitionAgeCategoryOverview.route}/:competition_age_category_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) =>
-              CompetitionAgeCategoryOverview(id: int.parse(state.pathParameters['competition_age_category_id']!)),
+      builder: (context, state) =>
+          CompetitionAgeCategoryOverview(id: int.parse(state.pathParameters['competition_age_category_id']!)),
     ),
     GoRoute(
       path: '${CompetitionLineupOverview.route}/:competition_lineup_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) => CompetitionLineupOverview(id: int.parse(state.pathParameters['competition_lineup_id']!)),
+      builder: (context, state) =>
+          CompetitionLineupOverview(id: int.parse(state.pathParameters['competition_lineup_id']!)),
     ),
     GoRoute(
       path: '${CompetitionParticipationOverview.route}/:competition_participation_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) =>
-              CompetitionParticipationOverview(id: int.parse(state.pathParameters['competition_participation_id']!)),
+      builder: (context, state) =>
+          CompetitionParticipationOverview(id: int.parse(state.pathParameters['competition_participation_id']!)),
     ),
     GoRoute(
       path: '${CompetitionPersonOverview.route}/:competition_person_id',
       parentNavigatorKey: rootNavigatorKey, // Hide bottom navigation bar
-      builder:
-          (context, state) => CompetitionPersonOverview(id: int.parse(state.pathParameters['competition_person_id']!)),
+      builder: (context, state) =>
+          CompetitionPersonOverview(id: int.parse(state.pathParameters['competition_person_id']!)),
     ),
   ];
   return GoRouter(

@@ -69,10 +69,9 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
             ContentItem(
               title: division.organization.fullname,
               subtitle: localizations.organization,
-              icon:
-                  division.organization.imageUri == null
-                      ? Icon(Icons.corporate_fare)
-                      : CircularImage(imageUri: division.organization.imageUri!),
+              icon: division.organization.imageUri == null
+                  ? Icon(Icons.corporate_fare)
+                  : CircularImage(imageUri: division.organization.imageUri!),
               onTap: () => OrganizationOverview.navigateTo(context, division.organization),
             ),
             ContentItem.icon(
@@ -101,34 +100,31 @@ class DivisionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 context: context,
                 addPageBuilder: (context) => LeagueEdit(initialDivision: division),
                 filterObject: division,
-                itemBuilder:
-                    (context, item) => ContentItem.icon(
-                      title: '${item.fullname}, ${item.startDate.year}',
-                      iconData: Icons.emoji_events,
-                      onTap: () => LeagueOverview.navigateTo(context, item),
-                    ),
+                itemBuilder: (context, item) => ContentItem.icon(
+                  title: '${item.fullname}, ${item.startDate.year}',
+                  iconData: Icons.emoji_events,
+                  onTap: () => LeagueOverview.navigateTo(context, item),
+                ),
               ),
               FilterableManyConsumer<DivisionWeightClass, Division>.add(
                 context: context,
                 addPageBuilder: (context) => DivisionWeightClassEdit(initialDivision: division),
                 filterObject: division,
-                itemBuilder:
-                    (context, item) => ContentItem.icon(
-                      title: item.localize(context),
-                      iconData: Icons.fitness_center,
-                      onTap: () => DivisionWeightClassOverview.navigateTo(context, item),
-                    ),
+                itemBuilder: (context, item) => ContentItem.icon(
+                  title: item.localize(context),
+                  iconData: Icons.fitness_center,
+                  onTap: () => DivisionWeightClassOverview.navigateTo(context, item),
+                ),
               ),
               FilterableManyConsumer<Division, Division>.add(
                 context: context,
                 addPageBuilder: (context) => DivisionEdit(initialParent: division),
                 filterObject: division,
-                itemBuilder:
-                    (context, item) => ContentItem.icon(
-                      title: division.fullname,
-                      iconData: Icons.inventory,
-                      onTap: () => DivisionOverview.navigateTo(context, division),
-                    ),
+                itemBuilder: (context, item) => ContentItem.icon(
+                  title: division.fullname,
+                  iconData: Icons.inventory,
+                  onTap: () => DivisionOverview.navigateTo(context, division),
+                ),
               ),
               boutConfigTabContent,
             ],

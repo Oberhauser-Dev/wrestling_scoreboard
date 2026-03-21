@@ -105,10 +105,9 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
           selectedItem: _nationality,
           label: localizations.nationality,
           context: context,
-          onSaved:
-              (Country? value) => setState(() {
-                _nationality = value;
-              }),
+          onSaved: (Country? value) => setState(() {
+            _nationality = value;
+          }),
           itemAsString: (u) => '${u.nationality} (${u.isoShortName})',
           asyncItems: (String filter) async {
             return Countries.values;

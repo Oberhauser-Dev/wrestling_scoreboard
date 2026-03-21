@@ -141,17 +141,16 @@ class _DatePickerState extends State<DatePicker> {
       controller: _textEditingController,
       readOnly: true,
       decoration: (widget.decoration ?? InputDecoration()).copyWith(
-        suffixIcon:
-            widget.onChange == null
-                ? null
-                : IconButton(
-                  onPressed: () {
-                    _date = null;
-                    widget.onChange!(null);
-                    _textEditingController.text = '';
-                  },
-                  icon: const Icon(Icons.close),
-                ),
+        suffixIcon: widget.onChange == null
+            ? null
+            : IconButton(
+                onPressed: () {
+                  _date = null;
+                  widget.onChange!(null);
+                  _textEditingController.text = '';
+                },
+                icon: const Icon(Icons.close),
+              ),
       ),
       onTap: () async {
         final value = await showDatePicker(
@@ -208,17 +207,16 @@ class _TimePickerState extends State<TimePicker> {
       controller: _textEditingController,
       readOnly: true,
       decoration: (widget.decoration ?? InputDecoration()).copyWith(
-        suffixIcon:
-            widget.onChange == null
-                ? null
-                : IconButton(
-                  onPressed: () {
-                    _time = null;
-                    widget.onChange!(null);
-                    _textEditingController.text = '';
-                  },
-                  icon: Icon(Icons.close),
-                ),
+        suffixIcon: widget.onChange == null
+            ? null
+            : IconButton(
+                onPressed: () {
+                  _time = null;
+                  widget.onChange!(null);
+                  _textEditingController.text = '';
+                },
+                icon: Icon(Icons.close),
+              ),
       ),
       onTap: () async {
         final value = await showTimePicker(context: context, initialTime: _time ?? TimeOfDay.now());

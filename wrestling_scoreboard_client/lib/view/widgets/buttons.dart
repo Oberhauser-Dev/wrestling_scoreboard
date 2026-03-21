@@ -20,11 +20,10 @@ class _AsyncElevatedButtonState extends State<AsyncElevatedButton> {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       icon: isDisabled ? SizedBox.square(dimension: 18, child: CircularProgressIndicator()) : widget.icon,
-      onPressed:
-          isDisabled || widget.onTap == null
-              ? null
-              : (widget.onTap is Future<void> Function()
-                  ? () async {
+      onPressed: isDisabled || widget.onTap == null
+          ? null
+          : (widget.onTap is Future<void> Function()
+                ? () async {
                     setState(() {
                       isDisabled = true;
                     });
@@ -38,7 +37,7 @@ class _AsyncElevatedButtonState extends State<AsyncElevatedButton> {
                       }
                     }
                   }
-                  : widget.onTap),
+                : widget.onTap),
       label: widget.label,
     );
   }
@@ -63,11 +62,10 @@ class _AsyncIconButtonState extends State<AsyncIconButton> {
     return IconButton(
       tooltip: widget.tooltip,
       icon: isDisabled ? SizedBox.square(dimension: 24, child: CircularProgressIndicator()) : widget.icon,
-      onPressed:
-          isDisabled || widget.onTap == null
-              ? null
-              : (widget.onTap is Future<void> Function()
-                  ? () async {
+      onPressed: isDisabled || widget.onTap == null
+          ? null
+          : (widget.onTap is Future<void> Function()
+                ? () async {
                     setState(() {
                       isDisabled = true;
                     });
@@ -81,7 +79,7 @@ class _AsyncIconButtonState extends State<AsyncIconButton> {
                       }
                     }
                   }
-                  : widget.onTap),
+                : widget.onTap),
     );
   }
 }

@@ -83,7 +83,7 @@ class LeagueOverview extends ConsumerWidget {
               label: localizations.league,
               details: '${data.fullname}, ${data.startDate.year}',
               actions: [
-                if (importAction != null) importAction,
+                ?importAction,
                 DefaultResponsiveScaffoldActionItem(
                   icon: const Icon(Icons.tv),
                   onTap: () => LeagueDisplay.navigateTo(context, data),
@@ -105,25 +105,23 @@ class LeagueOverview extends ConsumerWidget {
                     context: context,
                     addPageBuilder: (context) => LeagueTeamParticipationEdit(initialLeague: data),
                     filterObject: data,
-                    mapData:
-                        (teamParticipations) => teamParticipations..sort((a, b) => a.team.name.compareTo(b.team.name)),
-                    itemBuilder:
-                        (context, item) => ContentItem.icon(
-                          title: item.team.name,
-                          iconData: Icons.group,
-                          onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
-                        ),
+                    mapData: (teamParticipations) =>
+                        teamParticipations..sort((a, b) => a.team.name.compareTo(b.team.name)),
+                    itemBuilder: (context, item) => ContentItem.icon(
+                      title: item.team.name,
+                      iconData: Icons.group,
+                      onTap: () => LeagueTeamParticipationOverview.navigateTo(context, item),
+                    ),
                   ),
                   FilterableManyConsumer<LeagueWeightClass, League>.add(
                     context: context,
                     addPageBuilder: (context) => LeagueWeightClassEdit(initialLeague: data),
                     filterObject: data,
-                    itemBuilder:
-                        (context, item) => ContentItem.icon(
-                          title: item.localize(context),
-                          iconData: Icons.fitness_center,
-                          onTap: () => LeagueWeightClassOverview.navigateTo(context, item),
-                        ),
+                    itemBuilder: (context, item) => ContentItem.icon(
+                      title: item.localize(context),
+                      iconData: Icons.fitness_center,
+                      onTap: () => LeagueWeightClassOverview.navigateTo(context, item),
+                    ),
                   ),
                 ],
               ),

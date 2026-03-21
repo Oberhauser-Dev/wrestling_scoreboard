@@ -114,10 +114,9 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _homeTeam,
           label: '${localizations.team} ${localizations.red}',
           context: context,
-          onSaved:
-              (Team? value) => setState(() {
-                _homeTeam = value;
-              }),
+          onSaved: (Team? value) => setState(() {
+            _homeTeam = value;
+          }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async => await _getTeams(),
         ),
@@ -128,10 +127,9 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _guestTeam,
           label: '${localizations.team} ${localizations.blue}',
           context: context,
-          onSaved:
-              (Team? value) => setState(() {
-                _guestTeam = value;
-              }),
+          onSaved: (Team? value) => setState(() {
+            _guestTeam = value;
+          }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async => await _getTeams(),
         ),
@@ -173,10 +171,9 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
           selectedItem: _league,
           label: localizations.league,
           context: context,
-          onSaved:
-              (League? value) => setState(() {
-                _league = value;
-              }),
+          onSaved: (League? value) => setState(() {
+            _league = value;
+          }),
           onChanged: (value) {
             _league = value;
             setState(() {
@@ -219,10 +216,9 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
 
   Future<List<Team>> _getTeams() async {
     if (_availableTeams == null && _league != null) {
-      _availableTeams =
-          (await ref.readAsync(
-            manyDataStreamProvider(ManyProviderData<LeagueTeamParticipation, League>(filterObject: _league)).future,
-          )).map((e) => e.team).toList();
+      _availableTeams = (await ref.readAsync(
+        manyDataStreamProvider(ManyProviderData<LeagueTeamParticipation, League>(filterObject: _league)).future,
+      )).map((e) => e.team).toList();
     }
     return _availableTeams ?? [];
   }

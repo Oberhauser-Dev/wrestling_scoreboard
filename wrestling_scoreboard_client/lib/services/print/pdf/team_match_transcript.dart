@@ -54,66 +54,64 @@ class TeamMatchTranscript extends PdfSheet {
         pageTheme: await buildTheme(pageFormat: pageFormat ?? PdfSheet.a4Cross),
         header: _buildHeader,
         footer: buildFooter,
-        build:
-            (context) => [
-              buildInfo(context, event),
-              Container(height: PdfSheet.verticalGap),
-              _buildBoutTable(context),
-              Container(height: PdfSheet.verticalGap),
-              Table(
-                columnWidths:
-                    [
-                      const FlexColumnWidth(1), // Winner
-                      const FlexColumnWidth(1), // Visitors count
-                      const FlexColumnWidth(0.5), // Begin
-                      const FlexColumnWidth(0.5), // End
-                      const FlexColumnWidth(4), // Comment
-                    ].asMap(),
+        build: (context) => [
+          buildInfo(context, event),
+          Container(height: PdfSheet.verticalGap),
+          _buildBoutTable(context),
+          Container(height: PdfSheet.verticalGap),
+          Table(
+            columnWidths: [
+              const FlexColumnWidth(1), // Winner
+              const FlexColumnWidth(1), // Visitors count
+              const FlexColumnWidth(0.5), // Begin
+              const FlexColumnWidth(0.5), // End
+              const FlexColumnWidth(4), // Comment
+            ].asMap(),
+            children: [
+              TableRow(
                 children: [
-                  TableRow(
-                    children: [
-                      buildFormCell(
-                        title: localizations.winner,
-                        content: switch (winner) {
-                          MatchResultRole.home => '${teamMatch.home.team.name} (${localizations.home})',
-                          MatchResultRole.guest => '${teamMatch.guest.team.name} (${localizations.guest})',
-                          MatchResultRole.tie => localizations.tie,
-                          _ => '',
-                        },
-                        height: 30.0,
-                        color: PdfColors.grey100,
-                      ),
-                      buildFormCell(
-                        title: localizations.visitors,
-                        content: teamMatch.visitorsCount?.toString() ?? '',
-                        height: 30.0,
-                        color: PdfColors.grey100,
-                      ),
-                      buildFormCell(
-                        title: localizations.startDate,
-                        content: teamMatch.date.toTimeStringFromLocaleName(localizations.localeName),
-                        color: PdfColors.grey100,
-                        height: 30,
-                      ),
-                      buildFormCell(
-                        title: localizations.endDate,
-                        content: teamMatch.endDate?.toTimeStringFromLocaleName(localizations.localeName),
-                        color: PdfColors.grey100,
-                        height: 30,
-                      ),
-                      buildFormCell(
-                        title: localizations.comment,
-                        content: teamMatch.comment ?? '',
-                        height: 30.0,
-                        color: PdfColors.grey100,
-                      ),
-                    ],
+                  buildFormCell(
+                    title: localizations.winner,
+                    content: switch (winner) {
+                      MatchResultRole.home => '${teamMatch.home.team.name} (${localizations.home})',
+                      MatchResultRole.guest => '${teamMatch.guest.team.name} (${localizations.guest})',
+                      MatchResultRole.tie => localizations.tie,
+                      _ => '',
+                    },
+                    height: 30.0,
+                    color: PdfColors.grey100,
+                  ),
+                  buildFormCell(
+                    title: localizations.visitors,
+                    content: teamMatch.visitorsCount?.toString() ?? '',
+                    height: 30.0,
+                    color: PdfColors.grey100,
+                  ),
+                  buildFormCell(
+                    title: localizations.startDate,
+                    content: teamMatch.date.toTimeStringFromLocaleName(localizations.localeName),
+                    color: PdfColors.grey100,
+                    height: 30,
+                  ),
+                  buildFormCell(
+                    title: localizations.endDate,
+                    content: teamMatch.endDate?.toTimeStringFromLocaleName(localizations.localeName),
+                    color: PdfColors.grey100,
+                    height: 30,
+                  ),
+                  buildFormCell(
+                    title: localizations.comment,
+                    content: teamMatch.comment ?? '',
+                    height: 30.0,
+                    color: PdfColors.grey100,
                   ),
                 ],
               ),
-              Container(height: PdfSheet.verticalGap),
-              _buildPersons(context),
             ],
+          ),
+          Container(height: PdfSheet.verticalGap),
+          _buildPersons(context),
+        ],
       ),
     );
 
@@ -171,19 +169,18 @@ class TeamMatchTranscript extends PdfSheet {
       defaultColumnWidth: const FlexColumnWidth(1),
       children: [
         TableRow(
-          children:
-              [
-                ...signaturePersons.map(
-                  (p) => Column(
-                    children: [
-                      p,
-                      buildFormCell(title: localizations.signature, height: 25.0, color: PdfColors.grey100),
-                    ],
-                  ),
-                ),
-                Column(children: staff),
-                Column(children: stewards),
-              ].map((child) => Container(padding: const EdgeInsets.symmetric(horizontal: 2), child: child)).toList(),
+          children: [
+            ...signaturePersons.map(
+              (p) => Column(
+                children: [
+                  p,
+                  buildFormCell(title: localizations.signature, height: 25.0, color: PdfColors.grey100),
+                ],
+              ),
+            ),
+            Column(children: staff),
+            Column(children: stewards),
+          ].map((child) => Container(padding: const EdgeInsets.symmetric(horizontal: 2), child: child)).toList(),
         ),
       ],
     );
@@ -303,21 +300,20 @@ class TeamMatchTranscript extends PdfSheet {
     }
 
     return Table(
-      columnWidths:
-          [
-            const FlexColumnWidth(0.5), // No
-            const FlexColumnWidth(0.8), // Weightclass
-            const FlexColumnWidth(0.3), // Style
-            ...participantStateColumnWidths(),
-            const FlexColumnWidth(0.5), // Technical points red
-            const FlexColumnWidth(0.5), // Classification points red
-            const FlexColumnWidth(0.7), // Result
-            const FlexColumnWidth(0.7), // Duration
-            const FlexColumnWidth(0.5), // Classification points blue
-            const FlexColumnWidth(0.5), // Technical points blue
-            ...participantStateColumnWidths(),
-            const FlexColumnWidth(1.5), // Comment
-          ].asMap(),
+      columnWidths: [
+        const FlexColumnWidth(0.5), // No
+        const FlexColumnWidth(0.8), // Weightclass
+        const FlexColumnWidth(0.3), // Style
+        ...participantStateColumnWidths(),
+        const FlexColumnWidth(0.5), // Technical points red
+        const FlexColumnWidth(0.5), // Classification points red
+        const FlexColumnWidth(0.7), // Result
+        const FlexColumnWidth(0.7), // Duration
+        const FlexColumnWidth(0.5), // Classification points blue
+        const FlexColumnWidth(0.5), // Technical points blue
+        ...participantStateColumnWidths(),
+        const FlexColumnWidth(1.5), // Comment
+      ].asMap(),
       children: [
         TableRow(
           children: [
@@ -449,8 +445,8 @@ class TeamMatchTranscript extends PdfSheet {
                 (bout.bout.duration == Duration.zero && bout.bout.result == null)
                     ? ''
                     : bout.bout.duration
-                        .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
-                        .formatMinutesAndSeconds(),
+                          .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                          .formatMinutesAndSeconds(),
                 height: cellHeight,
                 alignment: Alignment.center,
                 fontSize: cellFontSize,

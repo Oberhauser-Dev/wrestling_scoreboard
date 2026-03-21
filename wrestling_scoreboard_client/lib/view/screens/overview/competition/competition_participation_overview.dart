@@ -43,10 +43,8 @@ class CompetitionParticipationOverview extends ConsumerWidget {
             initialLineup: competitionParticipation.lineup,
             initialCompetition: competitionParticipation.lineup.competition,
           ),
-          onDelete:
-              () async => (await ref.read(
-                dataManagerProvider,
-              )).deleteSingle<CompetitionParticipation>(competitionParticipation),
+          onDelete: () async =>
+              (await ref.read(dataManagerProvider)).deleteSingle<CompetitionParticipation>(competitionParticipation),
           classLocale: localizations.participation,
           children: [
             ContentItem.icon(
@@ -58,23 +56,19 @@ class CompetitionParticipationOverview extends ConsumerWidget {
             ContentItem(
               title: competitionParticipation.membership.info,
               subtitle: localizations.membership,
-              icon:
-                  competitionParticipation.membership.person.imageUri == null
-                      ? Icon(Icons.person)
-                      : CircularImage(imageUri: competitionParticipation.membership.person.imageUri!),
+              icon: competitionParticipation.membership.person.imageUri == null
+                  ? Icon(Icons.person)
+                  : CircularImage(imageUri: competitionParticipation.membership.person.imageUri!),
               onTap: () => MembershipOverview.navigateTo(context, competitionParticipation.membership),
             ),
             ContentItem.icon(
               title: competitionParticipation.weightCategory?.name ?? '-',
               subtitle: localizations.weightCategory,
               iconData: Icons.category,
-              onTap:
-                  competitionParticipation.weightCategory == null
-                      ? null
-                      : () => CompetitionWeightCategoryOverview.navigateTo(
-                        context,
-                        competitionParticipation.weightCategory!,
-                      ),
+              onTap: competitionParticipation.weightCategory == null
+                  ? null
+                  : () =>
+                        CompetitionWeightCategoryOverview.navigateTo(context, competitionParticipation.weightCategory!),
             ),
             ContentItem.icon(
               title: competitionParticipation.weight?.toString() ?? '-',

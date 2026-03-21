@@ -35,7 +35,8 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
   TeamMatchController._internal() : super();
 
-  static const _boutsQuery = '''
+  static const _boutsQuery =
+      '''
         SELECT f.* 
         FROM ${Bout.cTableName} as f 
         JOIN ${TeamMatchBout.cTableName} AS tmf ON tmf.bout_id = f.id
@@ -58,24 +59,22 @@ class TeamMatchController extends ShelfController<TeamMatch>
     final isReset = (request.url.queryParameters['isReset'] ?? '').parseBool();
     final teamMatch = (await getSingle(int.parse(id), obfuscate: false));
     final oldTmBouts = (await TeamMatchBoutController().getByTeamMatch(teamMatch.id!, obfuscate: false));
-    final leagueWeightClasses =
-        teamMatch.league?.id == null
-            ? <LeagueWeightClass>[]
-            : (await LeagueController().getLeagueWeightClasses(
-              teamMatch.league!.id.toString(),
+    final leagueWeightClasses = teamMatch.league?.id == null
+        ? <LeagueWeightClass>[]
+        : (await LeagueController().getLeagueWeightClasses(
+            teamMatch.league!.id.toString(),
+            seasonPartition: teamMatch.seasonPartition,
+            obfuscate: false,
+          ));
+    List<WeightClass> weightClasses = leagueWeightClasses.map((lwc) => lwc.weightClass).toList();
+    if (weightClasses.isEmpty) {
+      final divisionWeightClasses = teamMatch.league?.division.id == null
+          ? <DivisionWeightClass>[]
+          : (await DivisionController().getDivisionWeightClasses(
+              teamMatch.league!.division.id.toString(),
               seasonPartition: teamMatch.seasonPartition,
               obfuscate: false,
             ));
-    List<WeightClass> weightClasses = leagueWeightClasses.map((lwc) => lwc.weightClass).toList();
-    if (weightClasses.isEmpty) {
-      final divisionWeightClasses =
-          teamMatch.league?.division.id == null
-              ? <DivisionWeightClass>[]
-              : (await DivisionController().getDivisionWeightClasses(
-                teamMatch.league!.division.id.toString(),
-                seasonPartition: teamMatch.seasonPartition,
-                obfuscate: false,
-              ));
       weightClasses = divisionWeightClasses.map((dwc) => dwc.weightClass).toList();
     }
 
@@ -279,21 +278,20 @@ class TeamMatchController extends ShelfController<TeamMatch>
     TeamLineup lineup,
     Map<WeightClass, AthleteBoutState?> participantsMap,
   ) async {
-    final updated =
-        participantsMap.entries
-            .map((entry) {
-              final weightClass = entry.key;
-              final athleteBoutState = entry.value;
-              if (athleteBoutState == null) return null;
-              return TeamLineupParticipation(
-                lineup: lineup,
-                membership: athleteBoutState.membership,
-                weight: null, // TODO: Weight not available in import (yet)
-                weightClass: weightClass,
-              );
-            })
-            .nonNulls
-            .toList();
+    final updated = participantsMap.entries
+        .map((entry) {
+          final weightClass = entry.key;
+          final athleteBoutState = entry.value;
+          if (athleteBoutState == null) return null;
+          return TeamLineupParticipation(
+            lineup: lineup,
+            membership: athleteBoutState.membership,
+            weight: null, // TODO: Weight not available in import (yet)
+            weightClass: weightClass,
+          );
+        })
+        .nonNulls
+        .toList();
     await TeamLineupParticipationController().updateOnDiffMany(
       updated,
       filterType: TeamLineup,

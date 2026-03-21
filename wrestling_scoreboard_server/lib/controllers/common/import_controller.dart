@@ -29,7 +29,8 @@ mixin ImportController<T extends DataObject> implements ShelfController<T> {
   }
 
   Future<void> updateLastImportUtcDateTime(int id) async {
-    final sqlQuery = '''
+    final sqlQuery =
+        '''
 INSERT INTO ${ApiMetadata.cTableName} (entity_id, entity_type, last_import)
 VALUES (@entityId, @entityType, @lastImport)
 ON CONFLICT (entity_id, entity_type)

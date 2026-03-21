@@ -13,8 +13,9 @@ _AthleteBoutState _$AthleteBoutStateFromJson(Map<String, dynamic> json) => _Athl
   activityTime: json['activityTime'] == null ? null : Duration(microseconds: (json['activityTime'] as num).toInt()),
   injuryTime: json['injuryTime'] == null ? null : Duration(microseconds: (json['injuryTime'] as num).toInt()),
   isInjuryTimeRunning: json['isInjuryTimeRunning'] as bool? ?? false,
-  bleedingInjuryTime:
-      json['bleedingInjuryTime'] == null ? null : Duration(microseconds: (json['bleedingInjuryTime'] as num).toInt()),
+  bleedingInjuryTime: json['bleedingInjuryTime'] == null
+      ? null
+      : Duration(microseconds: (json['bleedingInjuryTime'] as num).toInt()),
   isBleedingInjuryTimeRunning: json['isBleedingInjuryTimeRunning'] as bool? ?? false,
 );
 

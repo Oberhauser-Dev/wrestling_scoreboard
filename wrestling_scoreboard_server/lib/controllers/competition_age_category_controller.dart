@@ -40,7 +40,8 @@ class CompetitionAgeCategoryController extends ShelfController<CompetitionAgeCat
           updatedCompetitionAgeCategory.skippedCycles.toSet(),
         )) {
       final weightCategoryController = CompetitionWeightCategoryController();
-      final query = '''
+      final query =
+          '''
 UPDATE ${weightCategoryController.tableName}
 SET skipped_cycles = @skippedCycles
 WHERE competition_age_category_id = @cacId

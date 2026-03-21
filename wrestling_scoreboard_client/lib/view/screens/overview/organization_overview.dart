@@ -67,14 +67,12 @@ class OrganizationOverview extends ConsumerWidget {
             ContentItem(
               title: organization.parent?.name ?? '-',
               subtitle: localizations.umbrellaOrganization,
-              icon:
-                  organization.parent?.imageUri == null
-                      ? Icon(Icons.corporate_fare)
-                      : CircularImage(imageUri: organization.parent!.imageUri!),
-              onTap:
-                  organization.parent == null
-                      ? null
-                      : () => OrganizationOverview.navigateTo(context, organization.parent!),
+              icon: organization.parent?.imageUri == null
+                  ? Icon(Icons.corporate_fare)
+                  : CircularImage(imageUri: organization.parent!.imageUri!),
+              onTap: organization.parent == null
+                  ? null
+                  : () => OrganizationOverview.navigateTo(context, organization.parent!),
             ),
             ContentItem.icon(
               title: organization.apiProvider?.name ?? '-',
@@ -97,7 +95,7 @@ class OrganizationOverview extends ConsumerWidget {
               dataObject: organization,
               label: localizations.organization,
               details: organization.name,
-              actions: [if (importAction != null) importAction],
+              actions: [?importAction],
               tabs: [
                 Tab(child: HeadingText(localizations.info)),
                 Tab(child: HeadingText(localizations.divisions)),
@@ -115,61 +113,55 @@ class OrganizationOverview extends ConsumerWidget {
                     filterObject: organization,
                     addPageBuilder: (context) => DivisionEdit(initialOrganization: organization),
                     getInitialIndex: (data) => data.indexWhere((division) => division.endDate.compareTo(today) >= 0),
-                    itemBuilder:
-                        (context, item) => ContentItem.icon(
-                          title: '${item.fullname}, ${item.startDate.year}',
-                          iconData: Icons.inventory,
-                          isDisabled: item.endDate.isBefore(today),
-                          onTap: () => DivisionOverview.navigateTo(context, item),
-                        ),
+                    itemBuilder: (context, item) => ContentItem.icon(
+                      title: '${item.fullname}, ${item.startDate.year}',
+                      iconData: Icons.inventory,
+                      isDisabled: item.endDate.isBefore(today),
+                      onTap: () => DivisionOverview.navigateTo(context, item),
+                    ),
                   ),
                   FilterableManyConsumer<Club, Organization>.add(
                     context: context,
                     filterObject: organization,
                     addPageBuilder: (context) => ClubEdit(initialOrganization: organization),
-                    itemBuilder:
-                        (context, item) => ContentItem(
-                          title: item.name,
-                          icon:
-                              item.imageUri == null ? Icon(Icons.foundation) : CircularImage(imageUri: item.imageUri!),
-                          onTap: () => ClubOverview.navigateTo(context, item),
-                        ),
+                    itemBuilder: (context, item) => ContentItem(
+                      title: item.name,
+                      icon: item.imageUri == null ? Icon(Icons.foundation) : CircularImage(imageUri: item.imageUri!),
+                      onTap: () => ClubOverview.navigateTo(context, item),
+                    ),
                   ),
                   FilterableManyConsumer<Competition, Organization>.add(
                     context: context,
                     filterObject: organization,
                     addPageBuilder: (context) => CompetitionEdit(initialOrganization: organization),
                     getInitialIndex: (data) => data.indexWhere((competition) => competition.date.compareTo(today) >= 0),
-                    itemBuilder:
-                        (context, item) => ContentItem.icon(
-                          title: item.name,
-                          iconData: Icons.leaderboard,
-                          isDisabled: item.date.isBefore(today),
-                          onTap: () => CompetitionOverview.navigateTo(context, item),
-                        ),
+                    itemBuilder: (context, item) => ContentItem.icon(
+                      title: item.name,
+                      iconData: Icons.leaderboard,
+                      isDisabled: item.date.isBefore(today),
+                      onTap: () => CompetitionOverview.navigateTo(context, item),
+                    ),
                   ),
                   FilterableManyConsumer<AgeCategory, Organization>.add(
                     context: context,
                     filterObject: organization,
                     addPageBuilder: (context) => AgeCategoryEdit(initialOrganization: organization),
-                    itemBuilder:
-                        (context, item) => ContentItem.icon(
-                          title: '${item.name} (${item.minAge} - ${item.maxAge})',
-                          iconData: Icons.school,
-                          onTap: () => AgeCategoryOverview.navigateTo(context, item),
-                        ),
+                    itemBuilder: (context, item) => ContentItem.icon(
+                      title: '${item.name} (${item.minAge} - ${item.maxAge})',
+                      iconData: Icons.school,
+                      onTap: () => AgeCategoryOverview.navigateTo(context, item),
+                    ),
                   ),
                   FilterableManyConsumer<Person, Organization>.add(
                     context: context,
                     filterObject: organization,
                     addPageBuilder: (context) => PersonEdit(initialOrganization: organization),
                     prependBuilder: (context, persons) {
-                      final duplicatePersons =
-                          persons
-                              .groupListsBy((element) => element.fullName)
-                              .entries
-                              .where((entry) => entry.value.length > 1)
-                              .toList();
+                      final duplicatePersons = persons
+                          .groupListsBy((element) => element.fullName)
+                          .entries
+                          .where((entry) => entry.value.length > 1)
+                          .toList();
                       // Remove entries which all have a different birthdate.
                       duplicatePersons.removeWhere(
                         // nonNulls: ensures that persons with `null` birthdate can be merged
@@ -178,26 +170,23 @@ class OrganizationOverview extends ConsumerWidget {
                       );
                       return duplicatePersons.isEmpty ? null : PersonsMergeCard(duplicatePersonsMap: duplicatePersons);
                     },
-                    itemBuilder:
-                        (context, item) => ContentItem(
-                          title: item.fullName,
-                          icon: item.imageUri == null ? Icon(Icons.person) : CircularImage(imageUri: item.imageUri!),
-                          onTap: () => PersonOverview.navigateTo(context, item),
-                        ),
+                    itemBuilder: (context, item) => ContentItem(
+                      title: item.fullName,
+                      icon: item.imageUri == null ? Icon(Icons.person) : CircularImage(imageUri: item.imageUri!),
+                      onTap: () => PersonOverview.navigateTo(context, item),
+                    ),
                   ),
                   FilterableManyConsumer<Organization, Organization>.add(
                     context: context,
                     addPageBuilder: (context) => OrganizationEdit(initialParent: organization),
                     filterObject: organization,
-                    itemBuilder:
-                        (context, item) => ContentItem(
-                          title: item.fullname,
-                          icon:
-                              item.imageUri == null
-                                  ? Icon(Icons.corporate_fare)
-                                  : CircularImage(imageUri: item.imageUri!),
-                          onTap: () => OrganizationOverview.navigateTo(context, item),
-                        ),
+                    itemBuilder: (context, item) => ContentItem(
+                      title: item.fullname,
+                      icon: item.imageUri == null
+                          ? Icon(Icons.corporate_fare)
+                          : CircularImage(imageUri: item.imageUri!),
+                      onTap: () => OrganizationOverview.navigateTo(context, item),
+                    ),
                   ),
                 ],
               ),

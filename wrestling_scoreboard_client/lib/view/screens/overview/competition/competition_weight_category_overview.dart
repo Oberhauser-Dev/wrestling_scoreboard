@@ -48,10 +48,8 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
             competitionWeightCategory: competitionWeightCategory,
             initialCompetition: competitionWeightCategory.competition,
           ),
-          onDelete:
-              () async => (await ref.read(
-                dataManagerProvider,
-              )).deleteSingle<CompetitionWeightCategory>(competitionWeightCategory),
+          onDelete: () async =>
+              (await ref.read(dataManagerProvider)).deleteSingle<CompetitionWeightCategory>(competitionWeightCategory),
           classLocale: localizations.weightCategory,
           children: [
             ContentItem.icon(
@@ -64,11 +62,8 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
               title: competitionWeightCategory.competitionAgeCategory.ageCategory.name,
               subtitle: localizations.ageCategory,
               iconData: Icons.school,
-              onTap:
-                  () => CompetitionAgeCategoryOverview.navigateTo(
-                    context,
-                    competitionWeightCategory.competitionAgeCategory,
-                  ),
+              onTap: () =>
+                  CompetitionAgeCategoryOverview.navigateTo(context, competitionWeightCategory.competitionAgeCategory),
             ),
             ContentItem.icon(
               title: competitionWeightCategory.weightClass.localize(context),
@@ -115,28 +110,28 @@ class CompetitionWeightCategoryOverview extends ConsumerWidget {
               style: ResponsiveScaffoldActionItemStyle.elevatedIconAndText,
             ),
           ],
-          tabs: [Tab(child: HeadingText(localizations.info)), Tab(child: HeadingText(localizations.participations))],
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            Tab(child: HeadingText(localizations.participations)),
+          ],
           body: TabGroup(
             items: [
               description,
               FilterableManyConsumer<CompetitionParticipation, CompetitionWeightCategory>.add(
                 context: context,
                 filterObject: competitionWeightCategory,
-                addPageBuilder:
-                    (context) => CompetitionParticipationEdit(
-                      initialCompetition: competitionWeightCategory.competition,
-                      initialWeightCategory: competitionWeightCategory,
-                    ),
+                addPageBuilder: (context) => CompetitionParticipationEdit(
+                  initialCompetition: competitionWeightCategory.competition,
+                  initialWeightCategory: competitionWeightCategory,
+                ),
                 mapData: (participations) => participations..sort((a, b) => a.name.compareTo(b.name)),
-                itemBuilder:
-                    (context, item) => ContentItem(
-                      title: item.name,
-                      icon:
-                          item.membership.person.imageUri == null
-                              ? Icon(Icons.person)
-                              : CircularImage(imageUri: item.membership.person.imageUri!),
-                      onTap: () => CompetitionParticipationOverview.navigateTo(context, item),
-                    ),
+                itemBuilder: (context, item) => ContentItem(
+                  title: item.name,
+                  icon: item.membership.person.imageUri == null
+                      ? Icon(Icons.person)
+                      : CircularImage(imageUri: item.membership.person.imageUri!),
+                  onTap: () => CompetitionParticipationOverview.navigateTo(context, item),
+                ),
               ),
             ],
           ),

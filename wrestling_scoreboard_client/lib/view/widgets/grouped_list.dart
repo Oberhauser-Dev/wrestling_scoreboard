@@ -157,16 +157,15 @@ class FilterableManyConsumer<T extends DataObject, S extends DataObject?> extend
             child: Text(localizations.createAndAdd),
           ),
         ],
-        builder:
-            (context, controller, child) => RestrictedAddButton(
-              onPressed: () {
-                if (controller.isOpen) {
-                  controller.close();
-                } else {
-                  controller.open();
-                }
-              },
-            ),
+        builder: (context, controller, child) => RestrictedAddButton(
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+        ),
       ),
       shrinkWrap: shrinkWrap,
       getInitialIndex: getInitialIndex,
@@ -321,7 +320,9 @@ class GroupedList extends StatelessWidget {
         children: [
           header,
           if (itemCount <= 0)
-            ListTile(title: Center(child: Text(context.l10n.noItems, style: Theme.of(context).textTheme.bodySmall)))
+            ListTile(
+              title: Center(child: Text(context.l10n.noItems, style: Theme.of(context).textTheme.bodySmall)),
+            )
           else if (shrinkWrap)
             ScrollablePositionedList.builder(
               shrinkWrap: true,

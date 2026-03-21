@@ -30,7 +30,9 @@ class TeamMatchPdfCommon {
                 '${role == BoutRole.red ? localizations.home : localizations.guest}:',
                 style: style.copyWith(fontWeight: FontWeight.bold),
               ),
-              Expanded(child: Center(child: Text(team.name, style: style))),
+              Expanded(
+                child: Center(child: Text(team.name, style: style)),
+              ),
             ],
           ),
         ),

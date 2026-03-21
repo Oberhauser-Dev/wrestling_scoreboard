@@ -157,8 +157,8 @@ abstract class DataManager implements AuthManager {
 
   StreamController<ManyDataObject<T>>? getManyStreamController<T extends DataObject>({Type? filterType = Null}) {
     filterType ??= Null;
-    final Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType =
-        _manyStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<T>>>();
+    final Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType = _manyStreamControllers[T]
+        ?.cast<Type, StreamController<ManyDataObject<T>>>();
     return streamControllersOfType == null ? null : streamControllersOfType[filterType];
   }
 
@@ -176,8 +176,8 @@ abstract class DataManager implements AuthManager {
     var streamController = getManyStreamController<T>(filterType: filterType);
     if (streamController == null) {
       streamController = StreamController<ManyDataObject<T>>.broadcast();
-      Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType =
-          _manyStreamControllers[T]?.cast<Type, StreamController<ManyDataObject<T>>>();
+      Map<Type, StreamController<ManyDataObject<T>>>? streamControllersOfType = _manyStreamControllers[T]
+          ?.cast<Type, StreamController<ManyDataObject<T>>>();
       if (streamControllersOfType == null) {
         streamControllersOfType = <Type, StreamController<ManyDataObject<T>>>{};
         _manyStreamControllers[T] = streamControllersOfType;

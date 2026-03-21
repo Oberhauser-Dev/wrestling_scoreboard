@@ -18,7 +18,8 @@ class TeamController extends ShelfController<Team> with OrganizationalController
 
   TeamController._internal() : super();
 
-  static const teamMatchesQuery = '''
+  static const teamMatchesQuery =
+      '''
         SELECT tm.*
         FROM ${TeamMatch.cTableName} AS tm
         JOIN ${TeamLineup.cTableName} AS lu ON tm.home_id = lu.id OR tm.guest_id = lu.id
@@ -35,7 +36,8 @@ class TeamController extends ShelfController<Team> with OrganizationalController
     );
   }
 
-  static const clubsQuery = '''
+  static const clubsQuery =
+      '''
         SELECT c.*
         FROM ${Club.cTableName} AS c
         JOIN ${TeamClubAffiliation.cTableName} AS tca ON c.id = tca.club_id

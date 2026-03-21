@@ -53,10 +53,9 @@ class CompetitionAgeCategoryEditState extends ConsumerState<CompetitionAgeCatego
           selectedItem: _ageCategory,
           label: localizations.ageCategory,
           context: context,
-          onSaved:
-              (value) => setState(() {
-                _ageCategory = value;
-              }),
+          onSaved: (value) => setState(() {
+            _ageCategory = value;
+          }),
           allowEmpty: false,
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {

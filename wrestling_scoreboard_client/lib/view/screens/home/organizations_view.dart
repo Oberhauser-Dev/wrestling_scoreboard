@@ -18,12 +18,11 @@ class OrganizationsView extends StatelessWidget {
         context: context,
         addPageBuilder: (context) => const OrganizationEdit(),
         hintText: localizations.organizations,
-        itemBuilder:
-            (context, item) => ContentItem(
-              title: item.name,
-              icon: item.imageUri == null ? Icon(Icons.corporate_fare) : CircularImage(imageUri: item.imageUri!),
-              onTap: () => OrganizationOverview.navigateTo(context, item),
-            ),
+        itemBuilder: (context, item) => ContentItem(
+          title: item.name,
+          icon: item.imageUri == null ? Icon(Icons.corporate_fare) : CircularImage(imageUri: item.imageUri!),
+          onTap: () => OrganizationOverview.navigateTo(context, item),
+        ),
       ),
     );
   }

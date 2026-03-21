@@ -81,10 +81,9 @@ class MembershipDropdown extends ConsumerWidget {
     // If filter string is a number, search for membership no or at API provider, if present.
     filter = number.toString();
 
-    final filteredMemberships =
-        memberships
-            .where((item) => (item.orgSyncId?.contains(filter) ?? false) || (item.no?.contains(filter) ?? false))
-            .toList();
+    final filteredMemberships = memberships
+        .where((item) => (item.orgSyncId?.contains(filter) ?? false) || (item.no?.contains(filter) ?? false))
+        .toList();
 
     const enableApiProviderSearch = true;
     if (enableApiProviderSearch) {

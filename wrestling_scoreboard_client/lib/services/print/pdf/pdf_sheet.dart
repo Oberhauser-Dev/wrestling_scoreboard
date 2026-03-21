@@ -92,24 +92,23 @@ abstract class PdfSheet {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-            children:
-                Iterable.generate(seasonPartitions, (sp) {
-                  final fontSize = 20 / seasonPartitions;
-                  return Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(sp.asSeasonPartition(buildContext, seasonPartitions), style: TextStyle(fontSize: fontSize)),
-                      buildCheckBox(
-                        isChecked: wrestlingEvent.seasonPartition == sp,
-                        pencilColor: PdfSheet.pencilColor,
-                        checkBoxColor: PdfColors.white,
-                        size: fontSize,
-                      ),
-                    ],
-                  );
-                }).toList(),
+            children: Iterable.generate(seasonPartitions, (sp) {
+              final fontSize = 20 / seasonPartitions;
+              return Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(sp.asSeasonPartition(buildContext, seasonPartitions), style: TextStyle(fontSize: fontSize)),
+                  buildCheckBox(
+                    isChecked: wrestlingEvent.seasonPartition == sp,
+                    pencilColor: PdfSheet.pencilColor,
+                    checkBoxColor: PdfColors.white,
+                    size: fontSize,
+                  ),
+                ],
+              );
+            }).toList(),
           ),
           color: PdfColors.grey100,
           pencilColor: PdfSheet.pencilColor,
@@ -131,10 +130,9 @@ abstract class PdfSheet {
               columnSpan: wrestlingEvent is TeamMatch ? 1 : 3,
               child: buildFormCell(
                 title: '${localizations.event}-${localizations.name}',
-                content:
-                    wrestlingEvent is TeamMatch
-                        ? ('${wrestlingEvent.home.team.name} – ${wrestlingEvent.guest.team.name}')
-                        : (wrestlingEvent is Competition ? wrestlingEvent.name : ''),
+                content: wrestlingEvent is TeamMatch
+                    ? ('${wrestlingEvent.home.team.name} – ${wrestlingEvent.guest.team.name}')
+                    : (wrestlingEvent is Competition ? wrestlingEvent.name : ''),
                 color: PdfColors.grey100,
                 pencilColor: PdfSheet.pencilColor,
                 height: 40,

@@ -66,8 +66,9 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     if (widget.participations.isNotEmpty) {
       _participations = Map.fromEntries(
         widget.weightClasses.map((e) {
-          final participation =
-              widget.participations.where((participation) => participation.weightClass == e).zeroOrOne;
+          final participation = widget.participations
+              .where((participation) => participation.weightClass == e)
+              .zeroOrOne;
           return MapEntry(e, participation);
         }),
       );
@@ -75,8 +76,9 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
       // Copy participations from an old match.
       _participations = Map.fromEntries(
         widget.weightClasses.map((e) {
-          var participation =
-              widget.initialParticipations?.where((participation) => participation.weightClass == e).zeroOrOne;
+          var participation = widget.initialParticipations
+              ?.where((participation) => participation.weightClass == e)
+              .zeroOrOne;
           if (participation != null) {
             participation = participation.copyWith(id: null, lineup: widget.lineup);
           }
@@ -211,11 +213,8 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
               return ListTile(
                 title: HeadingText(widget.lineup.team.name),
                 trailing: AddOrCreateButton(
-                  addPageBuilder:
-                      (context) => MembershipEdit(
-                        initialOrganization: widget.lineup.team.organization!,
-                        initialClub: clubs.first,
-                      ),
+                  addPageBuilder: (context) =>
+                      MembershipEdit(initialOrganization: widget.lineup.team.organization!, initialClub: clubs.first),
                   createPageBuilder: (context) => MembershipPersonEdit(initialClub: clubs.first),
                 ),
               );
@@ -279,18 +278,17 @@ class AddOrCreateButton extends StatelessWidget {
           child: Text(localizations.createAndAdd),
         ),
       ],
-      builder:
-          (context, controller, child) => TextButton.icon(
-            icon: const Icon(Icons.add),
-            label: Text(localizations.membership),
-            onPressed: () {
-              if (controller.isOpen) {
-                controller.close();
-              } else {
-                controller.open();
-              }
-            },
-          ),
+      builder: (context, controller, child) => TextButton.icon(
+        icon: const Icon(Icons.add),
+        label: Text(localizations.membership),
+        onPressed: () {
+          if (controller.isOpen) {
+            controller.close();
+          } else {
+            controller.open();
+          }
+        },
+      ),
     );
   }
 }
@@ -410,13 +408,12 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
                   isMandatory: false,
                   label: localizations.weight,
                   localizations: localizations,
-                  suffixIcon:
-                      (_curWeight ?? 0) > widget.weightClass.weight
-                          ? Tooltip(
-                            message: localizations.warningOverweight,
-                            child: Icon(Icons.warning, color: Colors.yellow),
-                          )
-                          : null,
+                  suffixIcon: (_curWeight ?? 0) > widget.weightClass.weight
+                      ? Tooltip(
+                          message: localizations.warningOverweight,
+                          child: Icon(Icons.warning, color: Colors.yellow),
+                        )
+                      : null,
                 ),
                 inputFormatters: <TextInputFormatter>[NumericalRangeFormatter(min: 1, max: 1000)],
                 onChanged: (String? value) {

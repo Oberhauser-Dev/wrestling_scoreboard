@@ -16,10 +16,9 @@ _CompetitionBout _$CompetitionBoutFromJson(Map<String, dynamic> json) => _Compet
   rank: (json['rank'] as num?)?.toInt(),
   roundType: $enumDecode(_$RoundTypeEnumMap, json['roundType']),
   phasePos: (json['phasePos'] as num).toInt(),
-  weightCategory:
-      json['weightCategory'] == null
-          ? null
-          : CompetitionWeightCategory.fromJson(json['weightCategory'] as Map<String, dynamic>),
+  weightCategory: json['weightCategory'] == null
+      ? null
+      : CompetitionWeightCategory.fromJson(json['weightCategory'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$CompetitionBoutToJson(_CompetitionBout instance) => <String, dynamic>{

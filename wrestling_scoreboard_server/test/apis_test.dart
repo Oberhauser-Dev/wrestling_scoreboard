@@ -291,7 +291,9 @@ void main() {
             seasonPartitions: 2,
             organization: organizationNRW,
             orgSyncId: '2023_(S) Finalrunde',
-          ): boutResultRules(youthBoutConfig),
+          ): boutResultRules(
+            youthBoutConfig,
+          ),
           testDivisionBayernliga: boutResultRules(testDivisionBayernliga.boutConfig),
           Division(
             name: 'Gruppenoberliga',
@@ -301,7 +303,9 @@ void main() {
             seasonPartitions: 2,
             organization: organizationNRW,
             orgSyncId: '2023_Gruppenoberliga',
-          ): boutResultRules(adultBoutConfig),
+          ): boutResultRules(
+            adultBoutConfig,
+          ),
           Division(
             name: 'Landesliga',
             startDate: DateTime.utc(2023),
@@ -310,7 +314,9 @@ void main() {
             seasonPartitions: 2,
             organization: organizationNRW,
             orgSyncId: '2023_Landesliga',
-          ): boutResultRules(adultBoutConfig),
+          ): boutResultRules(
+            adultBoutConfig,
+          ),
           Division(
             name: 'Oberliga',
             startDate: DateTime.utc(2023),
@@ -319,7 +325,9 @@ void main() {
             seasonPartitions: 2,
             organization: organizationNRW,
             orgSyncId: '2023_Oberliga',
-          ): boutResultRules(adultBoutConfig),
+          ): boutResultRules(
+            adultBoutConfig,
+          ),
         });
       });
 
@@ -646,16 +654,15 @@ void main() {
             comment: 'TSV BGD 57kg übergewicht',
           ): {
             Person(
-                  id: null,
-                  orgSyncId: 'Fröhlich_Peter_null',
-                  organization: organizationNRW,
-                  prename: 'Fröhlich',
-                  surname: 'Peter',
-                  gender: null,
-                  birthDate: null,
-                  nationality: null,
-                ):
-                PersonRole.referee,
+              id: null,
+              orgSyncId: 'Fröhlich_Peter_null',
+              organization: organizationNRW,
+              prename: 'Fröhlich',
+              surname: 'Peter',
+              gender: null,
+              birthDate: null,
+              nationality: null,
+            ): PersonRole.referee,
           },
         });
       });

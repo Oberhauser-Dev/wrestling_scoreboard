@@ -47,17 +47,16 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: ElevatedButton(
-                    onPressed:
-                        () => catchAsync(context, () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => SignInPasswordScreen(username: _username!)),
-                            );
-                            if (context.mounted) context.pop();
-                          }
-                        }),
+                    onPressed: () => catchAsync(context, () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignInPasswordScreen(username: _username!)),
+                        );
+                        if (context.mounted) context.pop();
+                      }
+                    }),
                     child: Text(localizations.auth_signIn),
                   ),
                 ),
@@ -68,29 +67,24 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: InkWell(
-                        onTap:
-                            () => catchAsync(context, () async {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
-                                await (await ref.read(
-                                  dataManagerProvider,
-                                )).requestVerificationCode(username: _username!);
-                                if (!context.mounted) return;
-                                await showOkDialog(
-                                  context: context,
-                                  child: Text(localizations.auth_verificationCodeSend_confirmation),
-                                );
-                                if (context.mounted) {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => UserVerificationScreen(username: _username!),
-                                    ),
-                                  );
-                                  if (context.mounted) context.pop();
-                                }
-                              }
-                            }),
+                        onTap: () => catchAsync(context, () async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            await (await ref.read(dataManagerProvider)).requestVerificationCode(username: _username!);
+                            if (!context.mounted) return;
+                            await showOkDialog(
+                              context: context,
+                              child: Text(localizations.auth_verificationCodeSend_confirmation),
+                            );
+                            if (context.mounted) {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => UserVerificationScreen(username: _username!)),
+                              );
+                              if (context.mounted) context.pop();
+                            }
+                          }
+                        }),
                         child: Text(localizations.auth_forgotPassword),
                       ),
                     );

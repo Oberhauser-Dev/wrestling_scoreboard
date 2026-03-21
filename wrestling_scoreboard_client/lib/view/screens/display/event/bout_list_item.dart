@@ -38,13 +38,12 @@ class BoutListItem extends ConsumerWidget {
     required BuildContext context,
   }) {
     final double width = MediaQuery.of(context).size.width;
-    final avatar =
-        pStatus?.membership.person.imageUri == null
-            ? null
-            : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircularImage(imageUri: pStatus!.membership.person.imageUri!, size: width / 35, borderWidth: 1),
-            );
+    final avatar = pStatus?.membership.person.imageUri == null
+        ? null
+        : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircularImage(imageUri: pStatus!.membership.person.imageUri!, size: width / 35, borderWidth: 1),
+          );
     return ThemedContainer(
       color: role.color(),
       child: Row(
@@ -88,58 +87,57 @@ class BoutListItem extends ConsumerWidget {
       id: bout.id,
       builder: (context, bout) {
         return Row(
-          children:
-              [
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          if (ageCategory != null)
-                            Center(
-                              child: FittedText(
-                                ageCategory!.name,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                softWrap: false,
-                              ),
-                            ),
-                          if (weightClass != null)
-                            Expanded(
-                              child: Center(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ScaledText(
-                                      '${weightClass!.weight} ',
-                                      softWrap: false,
-                                      minFontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    ScaledText(weightUnit, softWrap: false, minFontSize: 10),
-                                  ],
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    if (weightClass != null)
-                      Expanded(
-                        child: Center(
-                          child: ScaledText(
-                            weightClass!.style.abbreviation(context),
-                            minFontSize: 12,
-                            fontWeight: FontWeight.bold,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      if (ageCategory != null)
+                        Center(
+                          child: FittedText(
+                            ageCategory!.name,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                            softWrap: false,
                           ),
                         ),
-                      ),
-                  ],
+                      if (weightClass != null)
+                        Expanded(
+                          child: Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ScaledText(
+                                  '${weightClass!.weight} ',
+                                  softWrap: false,
+                                  minFontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                ScaledText(weightUnit, softWrap: false, minFontSize: 10),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                displayName(pStatus: bout.r, role: BoutRole.red, context: context),
-                SmallBoutStateDisplay(bout: bout, boutConfig: boutConfig),
-                displayName(pStatus: bout.b, role: BoutRole.blue, context: context),
-              ].asMap().entries.map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value)).toList(),
+                if (weightClass != null)
+                  Expanded(
+                    child: Center(
+                      child: ScaledText(
+                        weightClass!.style.abbreviation(context),
+                        minFontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            displayName(pStatus: bout.r, role: BoutRole.red, context: context),
+            SmallBoutStateDisplay(bout: bout, boutConfig: boutConfig),
+            displayName(pStatus: bout.b, role: BoutRole.blue, context: context),
+          ].asMap().entries.map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value)).toList(),
         );
       },
     );
@@ -160,52 +158,50 @@ class SmallBoutStateDisplay extends ConsumerWidget {
       builder: (context, bout) {
         return ManyConsumer<BoutAction, Bout>(
           filterObject: bout,
-          builder:
-              (context, actions) => Row(
-                children: [
-                  Expanded(
-                    flex: 50,
-                    child: displayParticipantState(pState: bout.r, role: BoutRole.red, bout: bout, actions: actions),
-                  ),
-                  Expanded(
-                    flex: 100,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          flex: 70,
-                          child: ThemedContainer(
-                            color: bout.winnerRole?.color().shade800,
-                            child: Center(child: ScaledText(bout.result?.abbreviation(context) ?? '', fontSize: 12)),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 50,
-                          child: Center(
-                            child:
-                                bout.result != null || bout.duration > Duration.zero
-                                    ? LoadingBuilder<bool>(
-                                      future: ref.watch(timeCountDownProvider),
-                                      builder: (context, isTimeCountDown) {
-                                        return ScaledText(
-                                          bout.duration
-                                              .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
-                                              .formatMinutesAndSeconds(),
-                                          fontSize: 8,
-                                        );
-                                      },
-                                    )
-                                    : null,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 50,
-                    child: displayParticipantState(pState: bout.b, role: BoutRole.blue, bout: bout, actions: actions),
-                  ),
-                ],
+          builder: (context, actions) => Row(
+            children: [
+              Expanded(
+                flex: 50,
+                child: displayParticipantState(pState: bout.r, role: BoutRole.red, bout: bout, actions: actions),
               ),
+              Expanded(
+                flex: 100,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 70,
+                      child: ThemedContainer(
+                        color: bout.winnerRole?.color().shade800,
+                        child: Center(child: ScaledText(bout.result?.abbreviation(context) ?? '', fontSize: 12)),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 50,
+                      child: Center(
+                        child: bout.result != null || bout.duration > Duration.zero
+                            ? LoadingBuilder<bool>(
+                                future: ref.watch(timeCountDownProvider),
+                                builder: (context, isTimeCountDown) {
+                                  return ScaledText(
+                                    bout.duration
+                                        .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
+                                        .formatMinutesAndSeconds(),
+                                    fontSize: 8,
+                                  );
+                                },
+                              )
+                            : null,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 50,
+                child: displayParticipantState(pState: bout.b, role: BoutRole.blue, bout: bout, actions: actions),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -231,14 +227,13 @@ class SmallBoutStateDisplay extends ConsumerWidget {
               child: ThemedContainer(
                 color: color,
                 child: Center(
-                  child:
-                      bout.result != null
-                          ? ScaledText(
-                            pState?.classificationPoints?.toString() ?? '0',
-                            fontSize: 15,
-                            fontWeight: fontWeight,
-                          )
-                          : null,
+                  child: bout.result != null
+                      ? ScaledText(
+                          pState?.classificationPoints?.toString() ?? '0',
+                          fontSize: 15,
+                          fontWeight: fontWeight,
+                        )
+                      : null,
                 ),
               ),
             ),
@@ -249,11 +244,11 @@ class SmallBoutStateDisplay extends ConsumerWidget {
                 child: Center(
                   child:
                       bout.result != null ||
-                              technicalPoints > 0 ||
-                              bout.duration > Duration.zero ||
-                              pState?.classificationPoints != null
-                          ? ScaledText(technicalPoints.toString(), fontSize: 8)
-                          : null,
+                          technicalPoints > 0 ||
+                          bout.duration > Duration.zero ||
+                          pState?.classificationPoints != null
+                      ? ScaledText(technicalPoints.toString(), fontSize: 8)
+                      : null,
                 ),
               ),
             ),

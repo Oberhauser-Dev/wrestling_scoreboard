@@ -118,10 +118,9 @@ Future<void> checkProposeImport(
       await _showImportDialog(
         context,
         ref,
-        text:
-            lastUpdated == null
-                ? localizations.proposeFirstImportFromApiProvider
-                : localizations.proposeImportFromApiProvider(lastUpdated, lastUpdated),
+        text: lastUpdated == null
+            ? localizations.proposeFirstImportFromApiProvider
+            : localizations.proposeImportFromApiProvider(lastUpdated, lastUpdated),
         organization: organization,
         id: id,
         importType: importType,
@@ -216,10 +215,9 @@ class _IncludeSubjacentDialogState extends State<_IncludeSubjacentDialog> {
             child: CheckboxListTile(
               title: Text(localizations.importIncludeSubjacent),
               value: _includeSubjacent,
-              onChanged:
-                  (v) => setState(() {
-                    _includeSubjacent = v ?? false;
-                  }),
+              onChanged: (v) => setState(() {
+                _includeSubjacent = v ?? false;
+              }),
             ),
           ),
         ],
@@ -238,21 +236,20 @@ class OrganizationReportActionItem extends DefaultResponsiveScaffoldActionItem {
          // TODO: replace with file_save when https://github.com/flutter/flutter/issues/102560 is merged, also replace in settings.
          icon: const Icon(Icons.description),
          label: context.l10n.report,
-         onTap:
-             onTap == null
-                 ? null
-                 : () async {
-                   final reporter = organization.getReporter();
-                   if (reporter == null) {
-                     await showOkDialog(context: context, child: Text(context.l10n.warningMissingReporter));
-                     if (context.mounted) {
-                       await Navigator.of(
-                         context,
-                       ).push(MaterialPageRoute(builder: (context) => OrganizationEdit(organization: organization)));
-                     }
-                   } else {
-                     onTap(reporter);
+         onTap: onTap == null
+             ? null
+             : () async {
+                 final reporter = organization.getReporter();
+                 if (reporter == null) {
+                   await showOkDialog(context: context, child: Text(context.l10n.warningMissingReporter));
+                   if (context.mounted) {
+                     await Navigator.of(
+                       context,
+                     ).push(MaterialPageRoute(builder: (context) => OrganizationEdit(organization: organization)));
                    }
-                 },
+                 } else {
+                   onTap(reporter);
+                 }
+               },
        );
 }

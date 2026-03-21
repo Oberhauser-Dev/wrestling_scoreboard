@@ -56,38 +56,33 @@ class _UserVerificationScreenState extends ConsumerState<UserVerificationScreen>
                   textCapitalization: TextCapitalization.characters,
                 ),
                 ElevatedButton(
-                  onPressed:
-                      () => catchAsync(context, () async {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          await ref
-                              .read(userProvider.notifier)
-                              .signInVerificationCode(username: widget.username, verificationCode: _verificationCode!);
-                          if (!context.mounted) return;
-                          await showOkDialog(
-                            context: context,
-                            child: Text(localizations.auth_verification_confirmation),
-                          );
-                          if (context.mounted) {
-                            context.pop();
-                          }
-                        }
-                      }),
+                  onPressed: () => catchAsync(context, () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      await ref
+                          .read(userProvider.notifier)
+                          .signInVerificationCode(username: widget.username, verificationCode: _verificationCode!);
+                      if (!context.mounted) return;
+                      await showOkDialog(context: context, child: Text(localizations.auth_verification_confirmation));
+                      if (context.mounted) {
+                        context.pop();
+                      }
+                    }
+                  }),
                   child: Text(localizations.auth_verfication),
                 ),
                 InkWell(
-                  onTap:
-                      () => catchAsync(context, () async {
-                        final user = await ref.read(userProvider);
-                        if (user != null) {
-                          await (await ref.read(dataManagerProvider)).requestVerificationCode(username: user.username);
-                          if (!context.mounted) return;
-                          await showOkDialog(
-                            context: context,
-                            child: Text(localizations.auth_verificationCodeSend_confirmation),
-                          );
-                        }
-                      }),
+                  onTap: () => catchAsync(context, () async {
+                    final user = await ref.read(userProvider);
+                    if (user != null) {
+                      await (await ref.read(dataManagerProvider)).requestVerificationCode(username: user.username);
+                      if (!context.mounted) return;
+                      await showOkDialog(
+                        context: context,
+                        child: Text(localizations.auth_verificationCodeSend_confirmation),
+                      );
+                    }
+                  }),
                   child: Text(localizations.auth_verificationCodeSend),
                 ),
               ],

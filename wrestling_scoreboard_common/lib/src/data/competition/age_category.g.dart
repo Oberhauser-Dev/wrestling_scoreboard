@@ -9,8 +9,9 @@ part of 'age_category.dart';
 _AgeCategory _$AgeCategoryFromJson(Map<String, dynamic> json) => _AgeCategory(
   id: (json['id'] as num?)?.toInt(),
   orgSyncId: json['orgSyncId'] as String?,
-  organization:
-      json['organization'] == null ? null : Organization.fromJson(json['organization'] as Map<String, dynamic>),
+  organization: json['organization'] == null
+      ? null
+      : Organization.fromJson(json['organization'] as Map<String, dynamic>),
   name: json['name'] as String,
   minAge: (json['minAge'] as num).toInt(),
   maxAge: (json['maxAge'] as num).toInt(),

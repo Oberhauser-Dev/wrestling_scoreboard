@@ -84,10 +84,9 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
             selectedItem: _weightClass,
             label: context.l10n.weightClass,
             context: context,
-            onSaved:
-                (WeightClass? value) => setState(() {
-                  _weightClass = value;
-                }),
+            onSaved: (WeightClass? value) => setState(() {
+              _weightClass = value;
+            }),
             itemAsString: (u) => u.localize(context),
             asyncItems: (String filter) async {
               final boutWeightClasses = await availableWeightClasses;

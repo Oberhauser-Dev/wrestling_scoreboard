@@ -26,12 +26,11 @@ class AdminOverview extends ConsumerWidget {
           FilterableManyConsumer<SecuredUser, Null>.add(
             context: context,
             addPageBuilder: (context) => const UserEdit(),
-            itemBuilder:
-                (context, item) => ContentItem.icon(
-                  title: item.username,
-                  iconData: Icons.account_circle,
-                  onTap: () => UserOverview.navigateTo(item, context),
-                ),
+            itemBuilder: (context, item) => ContentItem.icon(
+              title: item.username,
+              iconData: Icons.account_circle,
+              onTap: () => UserOverview.navigateTo(item, context),
+            ),
           ),
         ],
       ),

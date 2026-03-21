@@ -14,7 +14,10 @@ class ResponsiveContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(alignment: alignment, child: SizedBox(width: _calculateContainerSize(context), child: child));
+    return Align(
+      alignment: alignment,
+      child: SizedBox(width: _calculateContainerSize(context), child: child),
+    );
   }
 
   double? _calculateContainerSize(BuildContext context) {
@@ -40,7 +43,9 @@ class ResponsiveColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveContainer(child: SingleChildScrollView(child: Column(children: children)));
+    return ResponsiveContainer(
+      child: SingleChildScrollView(child: Column(children: children)),
+    );
   }
 }
 
@@ -74,7 +79,10 @@ class DefaultResponsiveScaffoldActionItem extends ResponsiveScaffoldActionItemBu
 
   @override
   Widget buildForPopupMenu(BuildContext context) {
-    return MenuItemButton(onPressed: onTap, child: ListTile(leading: icon, title: Text(label)));
+    return MenuItemButton(
+      onPressed: onTap,
+      child: ListTile(leading: icon, title: Text(label)),
+    );
   }
 }
 
@@ -170,18 +178,17 @@ class DefaultPopupMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
-      builder:
-          (context, controller, child) => IconButton(
-            onPressed: () {
-              if (controller.isOpen) {
-                controller.close();
-              } else {
-                controller.open();
-              }
-            },
-            icon: const Icon(Icons.more_vert),
-            tooltip: MaterialLocalizations.of(context).popupMenuLabel,
-          ),
+      builder: (context, controller, child) => IconButton(
+        onPressed: () {
+          if (controller.isOpen) {
+            controller.close();
+          } else {
+            controller.open();
+          }
+        },
+        icon: const Icon(Icons.more_vert),
+        tooltip: MaterialLocalizations.of(context).popupMenuLabel,
+      ),
       menuChildren: actionContents.map((a) => a.buildForPopupMenu(context)).toList(),
     );
   }

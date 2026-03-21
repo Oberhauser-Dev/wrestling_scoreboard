@@ -43,10 +43,9 @@ class ScratchBoutEditState extends BoutEditState<ScratchBoutEdit> {
             selectedItem: _weightClass,
             label: context.l10n.weightClass,
             context: context,
-            onSaved:
-                (WeightClass? value) => setState(() {
-                  if (value != null) _weightClass = value;
-                }),
+            onSaved: (WeightClass? value) => setState(() {
+              if (value != null) _weightClass = value;
+            }),
             itemAsString: (u) => u.localize(context),
             asyncItems: (String filter) async {
               final boutWeightClasses = await availableWeightClasses;
@@ -55,10 +54,10 @@ class ScratchBoutEditState extends BoutEditState<ScratchBoutEdit> {
           ),
         ),
       ],
-      getRedMemberships:
-          () async => await ref.readAsync(manyDataStreamProvider<Membership, Null>(ManyProviderData()).future),
-      getBlueMemberships:
-          () async => await ref.readAsync(manyDataStreamProvider<Membership, Null>(ManyProviderData()).future),
+      getRedMemberships: () async =>
+          await ref.readAsync(manyDataStreamProvider<Membership, Null>(ManyProviderData()).future),
+      getBlueMemberships: () async =>
+          await ref.readAsync(manyDataStreamProvider<Membership, Null>(ManyProviderData()).future),
     );
   }
 

@@ -118,10 +118,11 @@ class CustomSettingsScreen extends ConsumerWidget {
                     title: Text(localizations.language + (isDisplayInternational() ? ' | Language' : '')),
                     subtitle: Text(getTranslationOfLocale(locale)),
                     onTap: () async {
-                      final List<MapEntry<Locale?, String>> languageSettingValues =
-                          Preferences.supportedLanguages.map((locale) {
-                            return MapEntry<Locale?, String>(locale, getTranslationOfLocale(locale));
-                          }).toList();
+                      final List<MapEntry<Locale?, String>> languageSettingValues = Preferences.supportedLanguages.map((
+                        locale,
+                      ) {
+                        return MapEntry<Locale?, String>(locale, getTranslationOfLocale(locale));
+                      }).toList();
                       languageSettingValues.insert(0, MapEntry(null, getTranslationOfLocale()));
                       await showRadioDialog<Locale?>(
                         context: context,
@@ -136,10 +137,9 @@ class CustomSettingsScreen extends ConsumerWidget {
                     title: Text(localizations.themeMode),
                     subtitle: Text(getTranslationOfThemeMode(themeMode)),
                     onTap: () async {
-                      final List<MapEntry<ThemeMode, String>> themeModeValues =
-                          ThemeMode.values
-                              .map((value) => MapEntry<ThemeMode, String>(value, getTranslationOfThemeMode(value)))
-                              .toList();
+                      final List<MapEntry<ThemeMode, String>> themeModeValues = ThemeMode.values
+                          .map((value) => MapEntry<ThemeMode, String>(value, getTranslationOfThemeMode(value)))
+                          .toList();
                       await showRadioDialog<ThemeMode>(
                         context: context,
                         initialValue: themeMode,
@@ -169,12 +169,11 @@ class CustomSettingsScreen extends ConsumerWidget {
                         itemCount: fontFamilies.length,
                         itemBuilder: (index) {
                           final fontFamily = fontFamilies[index];
-                          final fontStyle =
-                              fontFamily != null
-                                  ? GoogleFonts.getTextTheme(fontFamily, currentTextTheme).headlineMedium
-                                  : Theme.of(context).textTheme
-                                      .apply(fontFamily: Typography.material2021().white.headlineMedium?.fontFamily)
-                                      .headlineMedium;
+                          final fontStyle = fontFamily != null
+                              ? GoogleFonts.getTextTheme(fontFamily, currentTextTheme).headlineMedium
+                              : Theme.of(context).textTheme
+                                    .apply(fontFamily: Typography.material2021().white.headlineMedium?.fontFamily)
+                                    .headlineMedium;
                           return (
                             fontFamily,
                             Row(
@@ -182,14 +181,13 @@ class CustomSettingsScreen extends ConsumerWidget {
                               children: [
                                 Text(fontFamily ?? localizations.systemFont, style: fontStyle),
                                 IconButton(
-                                  onPressed:
-                                      () => showOkDialog(
-                                        context: context,
-                                        child: Text(
-                                          'ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
-                                          style: fontStyle,
-                                        ),
-                                      ),
+                                  onPressed: () => showOkDialog(
+                                    context: context,
+                                    child: Text(
+                                      'ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
+                                      style: fontStyle,
+                                    ),
+                                  ),
                                   icon: const Icon(Icons.abc),
                                 ),
                               ],
@@ -236,12 +234,11 @@ class CustomSettingsScreen extends ConsumerWidget {
                             onTap: () async {
                               final bellSoundPaths = await getAssetList(prefix: '', filetype: '.mp3');
                               // Convert to list of entries with <String, String>, e.g. <'AirHorn', '/assets/audio/AirHorn.mp3'>
-                              final List<MapEntry<String, String>> bellSoundValues =
-                                  bellSoundPaths
-                                      .asMap()
-                                      .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
-                                      .entries
-                                      .toList();
+                              final List<MapEntry<String, String>> bellSoundValues = bellSoundPaths
+                                  .asMap()
+                                  .map((key, value) => MapEntry<String, String>(value, getBellNameOfPath(value)))
+                                  .entries
+                                  .toList();
                               if (context.mounted) {
                                 await showRadioDialog<String>(
                                   context: context,
@@ -335,11 +332,11 @@ class CustomSettingsScreen extends ConsumerWidget {
                           trailing:
                               // Mobiles do not easily support opening "file" urls in File Manager
                               appDataDirectory == null || isMobile
-                                  ? null
-                                  : IconButton(
-                                    icon: Icon(Icons.folder_open),
-                                    onPressed: () => shareFileUri(Uri.parse('file:$appDataDirectory')),
-                                  ),
+                              ? null
+                              : IconButton(
+                                  icon: Icon(Icons.folder_open),
+                                  onPressed: () => shareFileUri(Uri.parse('file:$appDataDirectory')),
+                                ),
                         ),
                     ],
                   );
@@ -447,20 +444,18 @@ class CustomSettingsScreen extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Icons.cloud_download),
                   title: Text(localizations.exportDatabase),
-                  onTap:
-                      () => showLoadingDialog(
-                        context: context,
-                        showSuccess: false,
-                        runAsync: () async {
-                          final dataManager = await ref.read(dataManagerProvider);
-                          final sqlString = await dataManager.exportDatabase();
-                          await exportSQL(
-                            fileBaseName:
-                                '${MockableDateTime.now().toFileNameDateTimeFormat()}_wrestling_scoreboard-dump',
-                            sqlString: sqlString,
-                          );
-                        },
-                      ),
+                  onTap: () => showLoadingDialog(
+                    context: context,
+                    showSuccess: false,
+                    runAsync: () async {
+                      final dataManager = await ref.read(dataManagerProvider);
+                      final sqlString = await dataManager.exportDatabase();
+                      await exportSQL(
+                        fileBaseName: '${MockableDateTime.now().toFileNameDateTimeFormat()}_wrestling_scoreboard-dump',
+                        sqlString: sqlString,
+                      );
+                    },
+                  ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.cloud_upload),
@@ -560,8 +555,8 @@ class CustomSettingsScreen extends ConsumerWidget {
                                   onTap: () async {
                                     final newBackupRule = await showDialog<BackupRule>(
                                       context: context,
-                                      builder:
-                                          (BuildContext context) => BackupRuleEditDialog(initialBackupRule: backupRule),
+                                      builder: (BuildContext context) =>
+                                          BackupRuleEditDialog(initialBackupRule: backupRule),
                                     );
                                     if (newBackupRule != null) {
                                       await ref.read(backupRulesProvider.notifier).setState([
@@ -620,7 +615,11 @@ class SettingsSection extends StatelessWidget {
     return Column(
       children: [
         ListTile(title: Text(title), trailing: action),
-        Card(child: Column(children: ListTile.divideTiles(context: context, tiles: children).toList())),
+        Card(
+          child: Column(
+            children: ListTile.divideTiles(context: context, tiles: children).toList(),
+          ),
+        ),
       ],
     );
   }

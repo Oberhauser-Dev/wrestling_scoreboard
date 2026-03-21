@@ -211,12 +211,11 @@ void broadcastDependants<T extends DataObject>(T single) async {
         filterType: Bout,
         filterId: single.id,
       );
-      final competitionBout =
-          (await CompetitionBoutController().getMany(
-            conditions: ['bout_id = @id'],
-            substitutionValues: {'id': single.id},
-            obfuscate: false,
-          )).zeroOrOne;
+      final competitionBout = (await CompetitionBoutController().getMany(
+        conditions: ['bout_id = @id'],
+        substitutionValues: {'id': single.id},
+        obfuscate: false,
+      )).zeroOrOne;
       // Update the results in the according weight category
       if (competitionBout?.weightCategory != null) {
         broadcastUpdateMany(
@@ -240,23 +239,21 @@ void broadcastDependants<T extends DataObject>(T single) async {
     _broadcastUpdateManyInListOfFilter(single);
   } else if (single is TeamClubAffiliation) {
     broadcastUpdateMany<Team>(
-      (obfuscate) async =>
-          (await TeamClubAffiliationController().getMany(
-            conditions: ['club_id = @id'],
-            substitutionValues: {'id': single.club.id},
-            obfuscate: obfuscate,
-          )).map((tca) => tca.team).toList(),
+      (obfuscate) async => (await TeamClubAffiliationController().getMany(
+        conditions: ['club_id = @id'],
+        substitutionValues: {'id': single.club.id},
+        obfuscate: obfuscate,
+      )).map((tca) => tca.team).toList(),
       filterType: Club,
       filterId: single.club.id,
     );
 
     broadcastUpdateMany<Club>(
-      (obfuscate) async =>
-          (await TeamClubAffiliationController().getMany(
-            conditions: ['team_id = @id'],
-            substitutionValues: {'id': single.team.id},
-            obfuscate: obfuscate,
-          )).map((tca) => tca.club).toList(),
+      (obfuscate) async => (await TeamClubAffiliationController().getMany(
+        conditions: ['team_id = @id'],
+        substitutionValues: {'id': single.team.id},
+        obfuscate: obfuscate,
+      )).map((tca) => tca.club).toList(),
       filterType: Team,
       filterId: single.team.id,
     );
@@ -312,24 +309,22 @@ void broadcastDependantsRaw<T extends DataObject>(Map<String, dynamic> single) a
     );
   } else if (T == TeamClubAffiliation) {
     broadcastUpdateManyRaw(
-      (obfuscate) async =>
-          (await TeamClubAffiliationController().getMany(
-            conditions: ['club_id = @id'],
-            substitutionValues: {'id': single['club_id']},
-            obfuscate: obfuscate,
-          )).map((tca) => tca.team.toRaw()).toList(),
+      (obfuscate) async => (await TeamClubAffiliationController().getMany(
+        conditions: ['club_id = @id'],
+        substitutionValues: {'id': single['club_id']},
+        obfuscate: obfuscate,
+      )).map((tca) => tca.team.toRaw()).toList(),
       dataType: Team,
       filterType: Club,
       filterId: single['club_id'],
     );
 
     broadcastUpdateManyRaw(
-      (obfuscate) async =>
-          (await TeamClubAffiliationController().getMany(
-            conditions: ['team_id = @id'],
-            substitutionValues: {'id': single['team_id']},
-            obfuscate: obfuscate,
-          )).map((tca) => tca.club.toRaw()).toList(),
+      (obfuscate) async => (await TeamClubAffiliationController().getMany(
+        conditions: ['team_id = @id'],
+        substitutionValues: {'id': single['team_id']},
+        obfuscate: obfuscate,
+      )).map((tca) => tca.club.toRaw()).toList(),
       dataType: Club,
       filterType: Team,
       filterId: single['team_id'],
@@ -337,11 +332,10 @@ void broadcastDependantsRaw<T extends DataObject>(Map<String, dynamic> single) a
   } else if (T == TeamMatch) {
     final teamMatchController = TeamMatchController();
 
-    final homeTeamId =
-        (await EntityController.query(
-          await TeamLineupController.teamIdStmt,
-          substitutionValues: {'id': single['home_id']},
-        ))['team_id'];
+    final homeTeamId = (await EntityController.query(
+      await TeamLineupController.teamIdStmt,
+      substitutionValues: {'id': single['home_id']},
+    ))['team_id'];
     final homeMatches = await teamMatchController.getManyRawFromQuery(
       TeamController.teamMatchesQuery,
       substitutionValues: {'id': homeTeamId},
@@ -353,11 +347,10 @@ void broadcastDependantsRaw<T extends DataObject>(Map<String, dynamic> single) a
       filterId: homeTeamId,
     );
 
-    final guestTeamId =
-        (await EntityController.query(
-          await TeamLineupController.teamIdStmt,
-          substitutionValues: {'id': single['guest_id']},
-        ))['team_id'];
+    final guestTeamId = (await EntityController.query(
+      await TeamLineupController.teamIdStmt,
+      substitutionValues: {'id': single['guest_id']},
+    ))['team_id'];
     final guestMatches = await teamMatchController.getManyRawFromQuery(
       TeamController.teamMatchesQuery,
       substitutionValues: {'id': guestTeamId},
@@ -488,12 +481,10 @@ final websocketHandler = webSocketHandler((WebSocketChannel webSocket, String? s
       }
       await handleGenericJson(
         json,
-        handleSingle:
-            <T extends DataObject>({required CRUD operation, required T single}) async =>
-                handleSingle<T>(operation: operation, single: single, privilege: privilege),
-        handleMany:
-            <T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) async =>
-                handleMany<T>(operation: operation, many: many, privilege: privilege),
+        handleSingle: <T extends DataObject>({required CRUD operation, required T single}) async =>
+            handleSingle<T>(operation: operation, single: single, privilege: privilege),
+        handleMany: <T extends DataObject>({required CRUD operation, required ManyDataObject<T> many}) async =>
+            handleMany<T>(operation: operation, many: many, privilege: privilege),
         handleSingleRaw:
             <T extends DataObject>({required CRUD operation, required Map<String, dynamic> single}) async =>
                 handleSingleRaw<T>(operation: operation, single: single, privilege: privilege),

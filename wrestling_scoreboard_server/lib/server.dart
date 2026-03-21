@@ -38,35 +38,34 @@ Future<HttpServer> init() async {
   final webSocketLog = Logger('Websocket');
 
   // Router instance to handler requests.
-  final router =
-      shelf_router.Router()
-        ..mount('/api', ApiRoute().pipeline)
-        ..mount('/ws', (Request request) {
-          try {
-            return websocketHandler(request);
-          } on HijackException catch (error, _) {
-            // A HijackException should bypass the response-writing logic entirely.
-            webSocketLog.warning(
-              'Warning: HijackException thrown on WebsocketHandler.',
-              error,
-              // stackTrace: We do not log the stackTrace as it does not give any more value
-            );
-            // TODO hide stack trace or handle better
-            // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
-            rethrow;
-          } catch (error, stackTrace) {
-            webSocketLog.severe('Error thrown by Websocket Handler handler.', error, stackTrace);
-            return Response.internalServerError();
-          }
-        })
-        ..mount('/about', (Request request) async {
-          final pubspec = await parsePubspec();
-          return Response.ok('''
+  final router = shelf_router.Router()
+    ..mount('/api', ApiRoute().pipeline)
+    ..mount('/ws', (Request request) {
+      try {
+        return websocketHandler(request);
+      } on HijackException catch (error, _) {
+        // A HijackException should bypass the response-writing logic entirely.
+        webSocketLog.warning(
+          'Warning: HijackException thrown on WebsocketHandler.',
+          error,
+          // stackTrace: We do not log the stackTrace as it does not give any more value
+        );
+        // TODO hide stack trace or handle better
+        // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
+        rethrow;
+      } catch (error, stackTrace) {
+        webSocketLog.severe('Error thrown by Websocket Handler handler.', error, stackTrace);
+        return Response.internalServerError();
+      }
+    })
+    ..mount('/about', (Request request) async {
+      final pubspec = await parsePubspec();
+      return Response.ok('''
     Name: ${pubspec.name}
     Description: ${pubspec.description}
     Version: ${pubspec.version}
     ''');
-        });
+    });
 
   // Serve files from the file system.
   final staticHandler = shelf_static.createStaticHandler('public', defaultDocument: 'index.html');

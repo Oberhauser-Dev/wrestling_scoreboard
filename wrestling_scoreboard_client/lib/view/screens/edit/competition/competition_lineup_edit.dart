@@ -59,10 +59,9 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
           selectedItem: _club,
           label: localizations.club,
           context: context,
-          onSaved:
-              (Club? value) => setState(() {
-                _club = value;
-              }),
+          onSaved: (Club? value) => setState(() {
+            _club = value;
+          }),
           onChanged: (club) async {
             _club = club;
             setState(() {
@@ -85,10 +84,9 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
           getOrSetMemberships: () async => _getMemberships(),
           organization: widget.initialCompetition.organization,
           selectedItem: _leader,
-          onSave:
-              (value) => setState(() {
-                _leader = value;
-              }),
+          onSave: (value) => setState(() {
+            _leader = value;
+          }),
         ),
       ),
       ListTile(
@@ -97,10 +95,9 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
           getOrSetMemberships: () async => _getMemberships(),
           organization: widget.initialCompetition.organization,
           selectedItem: _coach,
-          onSave:
-              (value) => setState(() {
-                _coach = value;
-              }),
+          onSave: (value) => setState(() {
+            _coach = value;
+          }),
         ),
       ),
     ];

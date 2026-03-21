@@ -44,18 +44,17 @@ class _SignInPasswordScreenState extends ConsumerState<SignInPasswordScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: ElevatedButton(
-                    onPressed:
-                        () => catchAsync(context, () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            await ref
-                                .read(userProvider.notifier)
-                                .signInPassword(username: widget.username, password: _password!);
-                            if (context.mounted) {
-                              Navigator.of(context).pop();
-                            }
-                          }
-                        }),
+                    onPressed: () => catchAsync(context, () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        await ref
+                            .read(userProvider.notifier)
+                            .signInPassword(username: widget.username, password: _password!);
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      }
+                    }),
                     child: Text(localizations.auth_signIn),
                   ),
                 ),

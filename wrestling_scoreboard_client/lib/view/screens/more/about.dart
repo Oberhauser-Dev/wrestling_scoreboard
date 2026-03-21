@@ -58,37 +58,35 @@ class AboutScreen extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.list),
                   title: Text(localizations.about_Changelog),
-                  onTap:
-                      () => showOkDialog(
-                        context: context,
-                        child: LoadingBuilder(
-                          future: _loadChangelog(),
-                          builder: (context, data) {
-                            return SingleChildScrollView(
-                              child: MarkdownBody(
-                                listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
-                                shrinkWrap: true,
-                                selectable: true,
-                                data: data,
-                                onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                  onTap: () => showOkDialog(
+                    context: context,
+                    child: LoadingBuilder(
+                      future: _loadChangelog(),
+                      builder: (context, data) {
+                        return SingleChildScrollView(
+                          child: MarkdownBody(
+                            listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
+                            shrinkWrap: true,
+                            selectable: true,
+                            data: data,
+                            onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.api),
                   title: Text(localizations.about_Licenses),
-                  onTap:
-                      () => navigateTo(
-                        LicensePage(
-                          applicationName: localizations.appName,
-                          applicationIcon: Image.asset('assets/images/icons/launcher.png'),
-                          applicationVersion: '${packageInfo.version}+${packageInfo.buildNumber}',
-                        ),
-                      ),
+                  onTap: () => navigateTo(
+                    LicensePage(
+                      applicationName: localizations.appName,
+                      applicationIcon: Image.asset('assets/images/icons/launcher.png'),
+                      applicationVersion: '${packageInfo.version}+${packageInfo.buildNumber}',
+                    ),
+                  ),
                 ),
                 Divider(),
                 ListTile(

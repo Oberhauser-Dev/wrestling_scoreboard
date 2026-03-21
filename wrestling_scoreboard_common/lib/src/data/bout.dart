@@ -103,14 +103,14 @@ abstract class Bout with _$Bout implements DataObject, Organizational {
 
       return copyWith(
         r: r?.copyWith(
-          classificationPoints:
-              winnerRole == BoutRole.red ? resultRule.winnerClassificationPoints : resultRule.loserClassificationPoints,
+          classificationPoints: winnerRole == BoutRole.red
+              ? resultRule.winnerClassificationPoints
+              : resultRule.loserClassificationPoints,
         ),
         b: b?.copyWith(
-          classificationPoints:
-              winnerRole == BoutRole.blue
-                  ? resultRule.winnerClassificationPoints
-                  : resultRule.loserClassificationPoints,
+          classificationPoints: winnerRole == BoutRole.blue
+              ? resultRule.winnerClassificationPoints
+              : resultRule.loserClassificationPoints,
         ),
       );
     } else {

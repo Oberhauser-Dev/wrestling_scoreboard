@@ -39,14 +39,13 @@ class SearchController {
       searchTypes = {if (searchableAttr != null) querySearchType};
     } else {
       // All searchable types, but avoid expensive searches
-      searchTypes =
-          searchableDataTypes.keys.toSet()
-            ..remove(Bout)
-            ..remove(CompetitionBout)
-            ..remove(Membership)
-            ..remove(TeamMatch)
-            ..remove(TeamLineup)
-            ..remove(TeamMatchBout);
+      searchTypes = searchableDataTypes.keys.toSet()
+        ..remove(Bout)
+        ..remove(CompetitionBout)
+        ..remove(Membership)
+        ..remove(TeamMatch)
+        ..remove(TeamLineup)
+        ..remove(TeamMatchBout);
 
       if (searchOrganizationId != null) {
         // Remove non-organizational classes, but to do it dynamically we have to know, which Type does not not inherit (Organizational).

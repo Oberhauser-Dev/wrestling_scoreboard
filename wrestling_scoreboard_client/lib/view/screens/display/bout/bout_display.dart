@@ -456,8 +456,9 @@ class BoutState extends ConsumerState<BoutScreen> {
       case RoleScreenActionType.activityTime:
         final ParticipantStateModel psm = intent.role == BoutRole.red ? _r : _b;
         psm.activityStopwatch?.dispose();
-        psm.activityStopwatchNotifier.value =
-            psm.activityStopwatch == null ? ObservableStopwatch(limit: boutConfig.activityDuration) : null;
+        psm.activityStopwatchNotifier.value = psm.activityStopwatch == null
+            ? ObservableStopwatch(limit: boutConfig.activityDuration)
+            : null;
         if (psm.activityStopwatch != null && mainStopwatch.boutStopwatch.isRunning) psm.activityStopwatch!.start();
         psm.activityStopwatch?.onEnd.stream.listen((event) async {
           psm.activityStopwatch?.dispose();
@@ -627,7 +628,9 @@ class BoutState extends ConsumerState<BoutScreen> {
   }
 
   Widget row({required List<Widget> children}) {
-    return IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children));
+    return IntrinsicHeight(
+      child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
+    );
   }
 
   @override
@@ -656,18 +659,17 @@ class BoutState extends ConsumerState<BoutScreen> {
           manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
         );
         if (context.mounted) {
-          final bytes =
-              await ScoreSheet(
-                bout: bout,
-                buildContext: context,
-                boutActions: actions,
-                wrestlingEvent: widget.wrestlingEvent,
-                officials: widget.officials,
-                boutConfig: boutConfig,
-                boutRules: boutRules,
-                isTimeCountDown: isTimeCountDown,
-                weightClass: weightClass,
-              ).buildPdf();
+          final bytes = await ScoreSheet(
+            bout: bout,
+            buildContext: context,
+            boutActions: actions,
+            wrestlingEvent: widget.wrestlingEvent,
+            officials: widget.officials,
+            boutConfig: boutConfig,
+            boutRules: boutRules,
+            isTimeCountDown: isTimeCountDown,
+            weightClass: weightClass,
+          ).buildPdf();
           await Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(widget.wrestlingEvent)}.pdf');
         }
       },
@@ -725,12 +727,11 @@ class BoutState extends ConsumerState<BoutScreen> {
                   spacing: padding,
                   children: [
                     row(
-                      children:
-                          widget.headerItems
-                              .asMap()
-                              .entries
-                              .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
-                              .toList(),
+                      children: widget.headerItems
+                          .asMap()
+                          .entries
+                          .map((entry) => Expanded(flex: flexWidths[entry.key], child: entry.value))
+                          .toList(),
                     ),
                     row(
                       children: [
@@ -806,8 +807,8 @@ class BoutState extends ConsumerState<BoutScreen> {
                           actions,
                           boutConfig: boutConfig,
                           onDeleteAction: (action) async => (await ref.read(dataManagerProvider)).deleteSingle(action),
-                          onCreateOrUpdateAction:
-                              (action) async => (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
+                          onCreateOrUpdateAction: (action) async =>
+                              (await ref.read(dataManagerProvider)).createOrUpdateSingle(action),
                         );
                       },
                     ),
@@ -863,7 +864,9 @@ class _ParticipantDisplay extends StatelessWidget {
               initialData: athleteBoutState,
               builder: (context, pStatus) {
                 List<Widget> items = [
-                  Expanded(child: _NameDisplay(pStatus: pStatus, padding: padding, weight: weight)),
+                  Expanded(
+                    child: _NameDisplay(pStatus: pStatus, padding: padding, weight: weight),
+                  ),
                   ManyConsumer<BoutAction, Bout>(
                     filterObject: bout,
                     builder: (context, actions) {
@@ -886,10 +889,9 @@ class _ParticipantDisplay extends StatelessWidget {
                           }
 
                           // 3. Least amount of cautions
-                          predictedWinnerRole ??=
-                              _getRoleWithMostActions(
-                                actions.where((element) => element.actionType.isCaution),
-                              )?.opponent;
+                          predictedWinnerRole ??= _getRoleWithMostActions(
+                            actions.where((element) => element.actionType.isCaution),
+                          )?.opponent;
 
                           // 4.1 Greco roman with 1:1
                           if (predictedWinnerRole == null &&
@@ -911,8 +913,9 @@ class _ParticipantDisplay extends StatelessWidget {
                           }
 
                           // 4. Last technical point scored
-                          predictedWinnerRole ??=
-                              actions.lastWhereOrNull((e) => e.actionType == BoutActionType.points)?.role;
+                          predictedWinnerRole ??= actions
+                              .lastWhereOrNull((e) => e.actionType == BoutActionType.points)
+                              ?.role;
                         } else {
                           predictedWinnerRole = technicalPointsRed > technicalPointsBlue ? BoutRole.red : BoutRole.blue;
                         }
@@ -920,19 +923,23 @@ class _ParticipantDisplay extends StatelessWidget {
                         var predictedResultRule = BoutConfig.resultRule(
                           result: BoutResult.vsu,
                           style: wrestlingStyle ?? WrestlingStyle.free,
-                          technicalPointsWinner:
-                              predictedWinnerRole == BoutRole.red ? technicalPointsRed : technicalPointsBlue,
-                          technicalPointsLoser:
-                              predictedWinnerRole == BoutRole.red ? technicalPointsBlue : technicalPointsRed,
+                          technicalPointsWinner: predictedWinnerRole == BoutRole.red
+                              ? technicalPointsRed
+                              : technicalPointsBlue,
+                          technicalPointsLoser: predictedWinnerRole == BoutRole.red
+                              ? technicalPointsBlue
+                              : technicalPointsRed,
                           rules: rules,
                         );
                         predictedResultRule ??= BoutConfig.resultRule(
                           result: BoutResult.vpo,
                           style: wrestlingStyle ?? WrestlingStyle.free,
-                          technicalPointsWinner:
-                              predictedWinnerRole == BoutRole.red ? technicalPointsRed : technicalPointsBlue,
-                          technicalPointsLoser:
-                              predictedWinnerRole == BoutRole.red ? technicalPointsBlue : technicalPointsRed,
+                          technicalPointsWinner: predictedWinnerRole == BoutRole.red
+                              ? technicalPointsRed
+                              : technicalPointsBlue,
+                          technicalPointsLoser: predictedWinnerRole == BoutRole.red
+                              ? technicalPointsBlue
+                              : technicalPointsRed,
                           rules: rules,
                         );
                         if (predictedResultRule == null) return null;

@@ -87,26 +87,25 @@ class WindowStateScaffold extends ConsumerWidget {
               alignment: AlignmentDirectional.topStart,
               children: [
                 Scaffold(
-                  appBar:
-                      hideAppBar
-                          ? null
-                          : PreferredSizeImpl(
-                            preferredSize: const Size.fromHeight(kToolbarHeight),
-                            child: MouseRegion(
-                              onEnter: (event) async {
-                                if (data == WindowState.fullscreenAppbar) {
-                                  // Also call onEnter, to ensure AppBar is not disappearing when exiting and entering it again.
-                                  await ref.read(windowStateProvider.notifier).setFullscreenState(showAppbar: true);
-                                }
-                              },
-                              onExit: (event) async {
-                                if (data == WindowState.fullscreenAppbar) {
-                                  await ref.read(windowStateProvider.notifier).setFullscreenState(showAppbar: false);
-                                }
-                              },
-                              child: appBar,
-                            ),
+                  appBar: hideAppBar
+                      ? null
+                      : PreferredSizeImpl(
+                          preferredSize: const Size.fromHeight(kToolbarHeight),
+                          child: MouseRegion(
+                            onEnter: (event) async {
+                              if (data == WindowState.fullscreenAppbar) {
+                                // Also call onEnter, to ensure AppBar is not disappearing when exiting and entering it again.
+                                await ref.read(windowStateProvider.notifier).setFullscreenState(showAppbar: true);
+                              }
+                            },
+                            onExit: (event) async {
+                              if (data == WindowState.fullscreenAppbar) {
+                                await ref.read(windowStateProvider.notifier).setFullscreenState(showAppbar: false);
+                              }
+                            },
+                            child: appBar,
                           ),
+                        ),
                   body: body,
                 ),
                 if (hideAppBar)

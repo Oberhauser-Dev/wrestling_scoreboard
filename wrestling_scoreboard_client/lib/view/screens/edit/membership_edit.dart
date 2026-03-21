@@ -54,10 +54,9 @@ class MembershipEditState extends ConsumerState<MembershipEdit> {
           label: localizations.person,
           context: context,
           allowEmpty: false,
-          onSaved:
-              (Person? value) => setState(() {
-                _person = value;
-              }),
+          onSaved: (Person? value) => setState(() {
+            _person = value;
+          }),
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(
@@ -74,10 +73,9 @@ class MembershipEditState extends ConsumerState<MembershipEdit> {
           label: localizations.club,
           context: context,
           allowEmpty: false,
-          onSaved:
-              (Club? value) => setState(() {
-                _club = value;
-              }),
+          onSaved: (Club? value) => setState(() {
+            _club = value;
+          }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableClubs ??= await (await ref.read(
@@ -154,10 +152,9 @@ class MembershipPersonEditState extends AbstractPersonEditState<MembershipPerson
             selectedItem: _club,
             label: localizations.club,
             context: context,
-            onSaved:
-                (Club? value) => setState(() {
-                  _club = value;
-                }),
+            onSaved: (Club? value) => setState(() {
+              _club = value;
+            }),
             itemAsString: (u) => u.name,
             asyncItems: (String filter) async {
               _availableClubs ??= await (await ref.read(dataManagerProvider)).readMany<Club, Null>();

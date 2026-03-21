@@ -54,15 +54,14 @@ class MembershipOverview extends ConsumerWidget with AbstractPersonOverview<Memb
               onTap: () => ClubOverview.navigateTo(context, membership.club),
             ),
           ],
-          buildRelations:
-              (Person person) => {
-                Tab(child: HeadingText('${localizations.bouts} (${localizations.league})')): TeamMatchBoutList(
-                  filterObject: membership,
-                ),
-                Tab(child: HeadingText('${localizations.bouts} (${localizations.competition})')): CompetitionBoutList(
-                  filterObject: membership,
-                ),
-              },
+          buildRelations: (Person person) => {
+            Tab(child: HeadingText('${localizations.bouts} (${localizations.league})')): TeamMatchBoutList(
+              filterObject: membership,
+            ),
+            Tab(child: HeadingText('${localizations.bouts} (${localizations.competition})')): CompetitionBoutList(
+              filterObject: membership,
+            ),
+          },
         );
       },
     );

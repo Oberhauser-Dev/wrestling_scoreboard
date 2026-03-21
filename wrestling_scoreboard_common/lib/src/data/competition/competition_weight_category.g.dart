@@ -11,10 +11,9 @@ _CompetitionWeightCategory _$CompetitionWeightCategoryFromJson(Map<String, dynam
   weightClass: WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
   competitionAgeCategory: CompetitionAgeCategory.fromJson(json['competitionAgeCategory'] as Map<String, dynamic>),
   competition: Competition.fromJson(json['competition'] as Map<String, dynamic>),
-  competitionSystemAffiliation:
-      json['competitionSystemAffiliation'] == null
-          ? null
-          : CompetitionSystemAffiliation.fromJson(json['competitionSystemAffiliation'] as Map<String, dynamic>),
+  competitionSystemAffiliation: json['competitionSystemAffiliation'] == null
+      ? null
+      : CompetitionSystemAffiliation.fromJson(json['competitionSystemAffiliation'] as Map<String, dynamic>),
   pairedRoundByPhase:
       (json['pairedRoundByPhase'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ?? const [],
   pos: (json['pos'] as num?)?.toInt() ?? 0,

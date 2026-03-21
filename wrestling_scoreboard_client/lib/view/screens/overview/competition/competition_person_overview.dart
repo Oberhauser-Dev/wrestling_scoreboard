@@ -41,17 +41,16 @@ class CompetitionPersonOverview extends ConsumerWidget {
             initialOrganization: competitionPerson.competition.organization!,
             competitionPerson: competitionPerson,
           ),
-          onDelete:
-              () async => (await ref.read(dataManagerProvider)).deleteSingle<CompetitionPerson>(competitionPerson),
+          onDelete: () async =>
+              (await ref.read(dataManagerProvider)).deleteSingle<CompetitionPerson>(competitionPerson),
           classLocale: localizations.official,
           children: [
             ContentItem(
               title: competitionPerson.person.fullName,
               subtitle: localizations.person,
-              icon:
-                  competitionPerson.person.imageUri == null
-                      ? Icon(Icons.person)
-                      : CircularImage(imageUri: competitionPerson.person.imageUri!),
+              icon: competitionPerson.person.imageUri == null
+                  ? Icon(Icons.person)
+                  : CircularImage(imageUri: competitionPerson.person.imageUri!),
               onTap: () => PersonOverview.navigateTo(context, competitionPerson.person),
             ),
             ContentItem.icon(

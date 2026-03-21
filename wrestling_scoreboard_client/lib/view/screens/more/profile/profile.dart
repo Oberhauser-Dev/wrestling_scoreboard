@@ -108,29 +108,27 @@ class ProfileScreen extends ConsumerWidget {
                           child: Text(localizations.auth_change_password),
                         ),
                         ElevatedButton(
-                          onPressed:
-                              () => catchAsync(context, () async {
-                                await ref.read(userProvider.notifier).signOut();
-                                if (context.mounted) Navigator.of(context).pop();
-                              }),
+                          onPressed: () => catchAsync(context, () async {
+                            await ref.read(userProvider.notifier).signOut();
+                            if (context.mounted) Navigator.of(context).pop();
+                          }),
                           child: Text(localizations.auth_signOut),
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).colorScheme.errorContainer,
                           ),
-                          onPressed:
-                              () => catchAsync(context, () async {
-                                final result = await showOkCancelDialog(
-                                  title: Text(localizations.auth_delete),
-                                  context: context,
-                                  child: Text(localizations.auth_delete_confirmation),
-                                );
-                                if (result && context.mounted) {
-                                  await ref.read(userProvider.notifier).deleteUser();
-                                  if (context.mounted) Navigator.of(context).pop();
-                                }
-                              }),
+                          onPressed: () => catchAsync(context, () async {
+                            final result = await showOkCancelDialog(
+                              title: Text(localizations.auth_delete),
+                              context: context,
+                              child: Text(localizations.auth_delete_confirmation),
+                            );
+                            if (result && context.mounted) {
+                              await ref.read(userProvider.notifier).deleteUser();
+                              if (context.mounted) Navigator.of(context).pop();
+                            }
+                          }),
                           child: Text(localizations.auth_delete),
                         ),
                       ],

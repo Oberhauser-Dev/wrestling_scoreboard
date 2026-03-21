@@ -55,10 +55,9 @@ class CompetitionPersonEditState extends ConsumerState<CompetitionPersonEdit> {
           label: localizations.person,
           context: context,
           allowEmpty: false,
-          onSaved:
-              (Person? value) => setState(() {
-                _person = value;
-              }),
+          onSaved: (Person? value) => setState(() {
+            _person = value;
+          }),
           itemAsString: (u) => u.fullName,
           asyncItems: (String filter) async {
             _availablePersons ??= await (await ref.read(
@@ -75,10 +74,9 @@ class CompetitionPersonEditState extends ConsumerState<CompetitionPersonEdit> {
           label: localizations.competition,
           context: context,
           allowEmpty: false,
-          onSaved:
-              (Competition? value) => setState(() {
-                _competition = value;
-              }),
+          onSaved: (Competition? value) => setState(() {
+            _competition = value;
+          }),
           itemAsString: (u) => u.name,
           asyncItems: (String filter) async {
             _availableCompetitions ??= await (await ref.read(

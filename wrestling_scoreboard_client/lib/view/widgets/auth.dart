@@ -52,6 +52,9 @@ class RestrictedAddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Restricted(privilege: privilege, child: IconButton(icon: const Icon(Icons.add), onPressed: onPressed));
+    return Restricted(
+      privilege: privilege,
+      child: IconButton(icon: const Icon(Icons.add), onPressed: onPressed),
+    );
   }
 }

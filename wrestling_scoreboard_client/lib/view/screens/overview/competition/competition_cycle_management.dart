@@ -52,37 +52,35 @@ class _CompetitionCycleManagementState extends ConsumerState<CompetitionCycleMan
             return ReorderableListView(
               key: _ageCategoriesKey,
               shrinkWrap: true,
-              children:
-                  competitionAgeCategories.map((e) {
-                    final keyName = 'ac${e.id}';
-                    final controller = _addAndGet(keyName);
-                    return SingleConsumer<CompetitionAgeCategory>(
-                      key: Key(keyName),
-                      id: e.id,
-                      initialData: e,
-                      builder: (context, e) {
-                        return _CycleManagementListItem(
-                          label: e.ageCategory.name,
-                          controller: controller,
-                          cycleItemBuilder:
-                              (context, index) => Checkbox(
-                                value: !e.skippedCycles.contains(index),
-                                onChanged: (value) async {
-                                  final skippedCycles = e.skippedCycles.toSet();
-                                  if (value == false) {
-                                    skippedCycles.add(index);
-                                  } else {
-                                    skippedCycles.remove(index);
-                                  }
-                                  await (await ref.read(
-                                    dataManagerProvider,
-                                  )).createOrUpdateSingle(e.copyWith(skippedCycles: skippedCycles.toList()));
-                                },
-                              ),
-                        );
-                      },
+              children: competitionAgeCategories.map((e) {
+                final keyName = 'ac${e.id}';
+                final controller = _addAndGet(keyName);
+                return SingleConsumer<CompetitionAgeCategory>(
+                  key: Key(keyName),
+                  id: e.id,
+                  initialData: e,
+                  builder: (context, e) {
+                    return _CycleManagementListItem(
+                      label: e.ageCategory.name,
+                      controller: controller,
+                      cycleItemBuilder: (context, index) => Checkbox(
+                        value: !e.skippedCycles.contains(index),
+                        onChanged: (value) async {
+                          final skippedCycles = e.skippedCycles.toSet();
+                          if (value == false) {
+                            skippedCycles.add(index);
+                          } else {
+                            skippedCycles.remove(index);
+                          }
+                          await (await ref.read(
+                            dataManagerProvider,
+                          )).createOrUpdateSingle(e.copyWith(skippedCycles: skippedCycles.toList()));
+                        },
+                      ),
                     );
-                  }).toList(),
+                  },
+                );
+              }).toList(),
               onReorder: (oldIndex, newIndex) => _onReorder(oldIndex, newIndex, competitionAgeCategories),
             );
           },
@@ -94,37 +92,35 @@ class _CompetitionCycleManagementState extends ConsumerState<CompetitionCycleMan
             return ReorderableListView(
               key: _weightCategoriesKey,
               shrinkWrap: true,
-              children:
-                  competitionWeightCategories.map((e) {
-                    final keyName = 'wc${e.id}';
-                    final controller = _addAndGet(keyName);
-                    return SingleConsumer<CompetitionWeightCategory>(
-                      key: Key(keyName),
-                      id: e.id,
-                      initialData: e,
-                      builder: (context, e) {
-                        return _CycleManagementListItem(
-                          label: e.name,
-                          controller: controller,
-                          cycleItemBuilder:
-                              (context, index) => Checkbox(
-                                value: !e.skippedCycles.contains(index),
-                                onChanged: (value) async {
-                                  final skippedCycles = e.skippedCycles.toSet();
-                                  if (value == false) {
-                                    skippedCycles.add(index);
-                                  } else {
-                                    skippedCycles.remove(index);
-                                  }
-                                  await (await ref.read(
-                                    dataManagerProvider,
-                                  )).createOrUpdateSingle(e.copyWith(skippedCycles: skippedCycles.toList()));
-                                },
-                              ),
-                        );
-                      },
+              children: competitionWeightCategories.map((e) {
+                final keyName = 'wc${e.id}';
+                final controller = _addAndGet(keyName);
+                return SingleConsumer<CompetitionWeightCategory>(
+                  key: Key(keyName),
+                  id: e.id,
+                  initialData: e,
+                  builder: (context, e) {
+                    return _CycleManagementListItem(
+                      label: e.name,
+                      controller: controller,
+                      cycleItemBuilder: (context, index) => Checkbox(
+                        value: !e.skippedCycles.contains(index),
+                        onChanged: (value) async {
+                          final skippedCycles = e.skippedCycles.toSet();
+                          if (value == false) {
+                            skippedCycles.add(index);
+                          } else {
+                            skippedCycles.remove(index);
+                          }
+                          await (await ref.read(
+                            dataManagerProvider,
+                          )).createOrUpdateSingle(e.copyWith(skippedCycles: skippedCycles.toList()));
+                        },
+                      ),
                     );
-                  }).toList(),
+                  },
+                );
+              }).toList(),
               onReorder: (oldIndex, newIndex) => _onReorder(oldIndex, newIndex, competitionWeightCategories),
             );
           },

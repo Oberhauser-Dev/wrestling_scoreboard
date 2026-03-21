@@ -67,10 +67,9 @@ class PersonController extends ShelfController<Person> with OrganizationalContro
       for (final deletePerson in deletePersons) {
         final deleteMemberships = await getMemberships(user, deletePerson.id!);
         for (final deleteMembership in deleteMemberships) {
-          final replacingMembership =
-              keepMemberships
-                  .where((m) => m.club == deleteMembership.club && m.organization == deleteMembership.organization)
-                  .firstOrNull;
+          final replacingMembership = keepMemberships
+              .where((m) => m.club == deleteMembership.club && m.organization == deleteMembership.organization)
+              .firstOrNull;
           if (replacingMembership != null) {
             if (replacingMembership.no != null &&
                 deleteMembership.no != null &&

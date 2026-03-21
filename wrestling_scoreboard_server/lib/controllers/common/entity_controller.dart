@@ -47,8 +47,9 @@ abstract class EntityController<T extends DataObject> {
 
   static Future<void> initAll() async {
     // Reinit all prepared statements
-    final Iterable<ShelfController> entityControllers =
-        dataTypes.map((t) => ShelfController.getControllerFromDataType(t)).nonNulls;
+    final Iterable<ShelfController> entityControllers = dataTypes
+        .map((t) => ShelfController.getControllerFromDataType(t))
+        .nonNulls;
     await Future.forEach(entityControllers, (e) => e.init());
   }
 
@@ -92,7 +93,8 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<int> createSingleRaw(Map<String, dynamic> data) async {
-    final sql = '''
+    final sql =
+        '''
         INSERT INTO $tableName (${data.keys.join(',')}) 
         VALUES (${data.keys.map((key) => '@$key').join(', ')}) RETURNING $primaryKeyName;
         ''';
@@ -117,7 +119,8 @@ abstract class EntityController<T extends DataObject> {
   Future<List<int>> createManyRaw(List<Map<String, dynamic>> dataList) async {
     if (dataList.isEmpty) return [];
     final keys = dataList.first.keys;
-    final sql = '''
+    final sql =
+        '''
         INSERT INTO $tableName (${keys.join(',')}) 
         VALUES (${keys.map((key) => '@$key').join(', ')}) RETURNING $primaryKeyName;
         ''';
@@ -157,11 +160,12 @@ abstract class EntityController<T extends DataObject> {
   }
 
   Future<int> updateSingleRaw(Map<String, dynamic> data) async {
-    final sql = '''
+    final sql =
+        '''
         UPDATE $tableName 
         SET ${data.keys.map((key) {
-      return '$key = @$key';
-    }).join(',')} 
+          return '$key = @$key';
+        }).join(',')} 
         WHERE $primaryKeyName = ${data[primaryKeyName]} RETURNING $primaryKeyName;
         ''';
     try {
@@ -213,8 +217,10 @@ abstract class EntityController<T extends DataObject> {
     // Keep unchanged data objects to avoid conflicts with unique constraint
     final unchangedDataObjects = previous.where((p) => dataObjects.contains(p.copyWithId(null)));
     final deletingPrevDataObjects = previous.toSet().difference(unchangedDataObjects.toSet());
-    List<T> creatingDataObjects =
-        dataObjects.toSet().difference(unchangedDataObjects.map((e) => e.copyWithId(null)).toSet()).toList();
+    List<T> creatingDataObjects = dataObjects
+        .toSet()
+        .difference(unchangedDataObjects.map((e) => e.copyWithId(null)).toSet())
+        .toList();
 
     _logger.finer(
       'updateOnDiffMany: Update list of data objects <$T>: (updating: ${unchangedDataObjects.length}, creating: ${creatingDataObjects.length}, deleting: ${deletingPrevDataObjects.length})',

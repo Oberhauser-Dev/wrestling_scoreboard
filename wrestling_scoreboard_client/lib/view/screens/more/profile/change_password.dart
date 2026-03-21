@@ -43,22 +43,19 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ElevatedButton(
-                    onPressed:
-                        () => catchAsync(context, () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            if (_password != _passwordAgain) {
-                              throw Exception('Passwords must match!');
-                            }
-                            final user = await ref.read(userProvider);
-                            if (user != null) {
-                              await ref
-                                  .read(userProvider.notifier)
-                                  .updateUser(user: user.copyWith(password: _password));
-                            }
-                            if (context.mounted) Navigator.of(context).pop();
-                          }
-                        }),
+                    onPressed: () => catchAsync(context, () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        if (_password != _passwordAgain) {
+                          throw Exception('Passwords must match!');
+                        }
+                        final user = await ref.read(userProvider);
+                        if (user != null) {
+                          await ref.read(userProvider.notifier).updateUser(user: user.copyWith(password: _password));
+                        }
+                        if (context.mounted) Navigator.of(context).pop();
+                      }
+                    }),
                     child: Text(localizations.auth_password_save_phrase),
                   ),
                 ),

@@ -41,10 +41,9 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
       competition: await getSingle<Competition>(competitionId),
       weightClass: await getSingle<WeightClass>(weightClassId),
       pairedRoundByPhase: (e['paired_round_by_phase'] as List<int?>).nonNulls.toList(),
-      competitionSystemAffiliation:
-          competitionSystemAffiliationId == null
-              ? null
-              : await getSingle<CompetitionSystemAffiliation>(competitionSystemAffiliationId),
+      competitionSystemAffiliation: competitionSystemAffiliationId == null
+          ? null
+          : await getSingle<CompetitionSystemAffiliation>(competitionSystemAffiliationId),
       pos: e['pos'] as int,
       skippedCycles: (e['skipped_cycles'] as List<int?>).nonNulls.toList(),
     );
@@ -154,10 +153,9 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
       if (cBouts == null) break;
 
       for (int poolGroup = 0; poolGroup < phase.poolGroupCount; poolGroup++) {
-        final participationsOfPoolGroup =
-            weightCategoryParticipants
-                .where((p) => (p.poolGroups.length - 1) >= phase.pos && p.poolGroups[phase.pos] == poolGroup)
-                .toList();
+        final participationsOfPoolGroup = weightCategoryParticipants
+            .where((p) => (p.poolGroups.length - 1) >= phase.pos && p.poolGroups[phase.pos] == poolGroup)
+            .toList();
 
         final poolRanking = CompetitionWeightCategory.calculatePoolRanking(
           participationsOfPoolGroup,
@@ -262,12 +260,9 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
     Iterable<CompetitionParticipation> participations,
     Iterable<MapEntry<CompetitionBout, Iterable<BoutAction>>> pastCompetitionBouts,
   ) {
-    final notYetLoserParticipants =
-        participations
-            .where(
-              (element) => element.contestantStatus == null || element.contestantStatus == ContestantStatus.eliminated,
-            )
-            .toSet();
+    final notYetLoserParticipants = participations
+        .where((element) => element.contestantStatus == null || element.contestantStatus == ContestantStatus.eliminated)
+        .toSet();
     final possibleWinnerParticipants = <CompetitionParticipation>{};
     final filteredBouts = pastCompetitionBouts.where((e) => e.key.round != null);
     int round = 0;

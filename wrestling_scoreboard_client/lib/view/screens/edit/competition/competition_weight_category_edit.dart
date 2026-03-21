@@ -56,10 +56,9 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
             selectedItem: _competitionAgeCategory,
             label: localizations.ageCategory,
             context: context,
-            onSaved:
-                (value) => setState(() {
-                  _competitionAgeCategory = value;
-                }),
+            onSaved: (value) => setState(() {
+              _competitionAgeCategory = value;
+            }),
             allowEmpty: false,
             itemAsString: (u) => u.ageCategory.name,
             asyncItems: (String filter) async {

@@ -42,8 +42,8 @@ class CompetitionLineupOverview extends ConsumerWidget {
             competitionLineup: competitionLineup,
             initialCompetition: competitionLineup.competition,
           ),
-          onDelete:
-              () async => (await ref.read(dataManagerProvider)).deleteSingle<CompetitionLineup>(competitionLineup),
+          onDelete: () async =>
+              (await ref.read(dataManagerProvider)).deleteSingle<CompetitionLineup>(competitionLineup),
           classLocale: localizations.lineup,
           children: [
             ContentItem.icon(
@@ -64,28 +64,28 @@ class CompetitionLineupOverview extends ConsumerWidget {
           dataObject: competitionLineup,
           label: localizations.lineup,
           details: competitionLineup.club.name,
-          tabs: [Tab(child: HeadingText(localizations.info)), Tab(child: HeadingText(localizations.participations))],
+          tabs: [
+            Tab(child: HeadingText(localizations.info)),
+            Tab(child: HeadingText(localizations.participations)),
+          ],
           body: TabGroup(
             items: [
               description,
               FilterableManyConsumer<CompetitionParticipation, CompetitionLineup>.add(
                 context: context,
                 filterObject: competitionLineup,
-                addPageBuilder:
-                    (context) => CompetitionParticipationEdit(
-                      initialLineup: competitionLineup,
-                      initialCompetition: competitionLineup.competition,
-                    ),
+                addPageBuilder: (context) => CompetitionParticipationEdit(
+                  initialLineup: competitionLineup,
+                  initialCompetition: competitionLineup.competition,
+                ),
                 mapData: (participations) => participations..sort((a, b) => a.name.compareTo(b.name)),
-                itemBuilder:
-                    (context, item) => ContentItem(
-                      title: item.name,
-                      icon:
-                          item.membership.person.imageUri == null
-                              ? Icon(Icons.person)
-                              : CircularImage(imageUri: item.membership.person.imageUri!),
-                      onTap: () => CompetitionParticipationOverview.navigateTo(context, item),
-                    ),
+                itemBuilder: (context, item) => ContentItem(
+                  title: item.name,
+                  icon: item.membership.person.imageUri == null
+                      ? Icon(Icons.person)
+                      : CircularImage(imageUri: item.membership.person.imageUri!),
+                  onTap: () => CompetitionParticipationOverview.navigateTo(context, item),
+                ),
               ),
             ],
           ),
