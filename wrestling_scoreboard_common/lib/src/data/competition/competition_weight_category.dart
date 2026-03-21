@@ -97,12 +97,15 @@ abstract class CompetitionWeightCategory with _$CompetitionWeightCategory implem
     final groupByPools = rankings.entries.groupListsBy(
       (entry) => entry.key.poolGroups.elementAtOrNull(groupPoolsByPhase),
     );
-    for (int pool = 0; pool < phases[groupPoolsByPhase].poolGroupCount; pool++) {
-      final contestants = groupByPools[pool];
-      if (poolGroupBuilder != null && contestants != null) poolGroupBuilder(pool);
-      contestants?.forEach((contestant) {
-        poolGroupParticipantBuilder(contestant.key, contestant.value);
-      });
+    final phase = phases.elementAtOrNull(groupPoolsByPhase);
+    if (phase != null) {
+      for (int pool = 0; pool < phase.poolGroupCount; pool++) {
+        final contestants = groupByPools[pool];
+        if (poolGroupBuilder != null && contestants != null) poolGroupBuilder(pool);
+        contestants?.forEach((contestant) {
+          poolGroupParticipantBuilder(contestant.key, contestant.value);
+        });
+      }
     }
   }
 
