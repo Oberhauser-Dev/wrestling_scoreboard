@@ -517,7 +517,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String boutForRank(String rank) {
-    return 'Kampf um Platz $rank.';
+    return 'Kampf um Platz $rank';
   }
 
   @override
@@ -564,6 +564,21 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get semiFinals => 'Halbfinale';
+
+  @override
+  String get bestOfThree => 'Beste(r) aus drei Kämpfen';
+
+  @override
+  String get singleElimination => 'Einfach-K.-o.-System';
+
+  @override
+  String get doubleElimination => 'Doppel-K.-o.-System';
+
+  @override
+  String get nordic => 'Nordisch / Round Robin';
+
+  @override
+  String get nordicDoubleElimination => 'Pool-System (Nordisches Doppel-K.-o.-System)';
 
   @override
   String get mat => 'Matte';

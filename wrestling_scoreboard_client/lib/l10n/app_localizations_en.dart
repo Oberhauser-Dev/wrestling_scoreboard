@@ -513,7 +513,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String boutForRank(String rank) {
-    return 'Bout for rank $rank.';
+    return 'Bout for rank $rank';
   }
 
   @override
@@ -556,10 +556,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get repechage => 'Repechage';
 
   @override
-  String get finals => 'Final';
+  String get finals => 'Finals';
 
   @override
-  String get semiFinals => 'Semi-Final';
+  String get semiFinals => 'Semi-Finals';
+
+  @override
+  String get bestOfThree => 'Best of Three Bouts';
+
+  @override
+  String get singleElimination => 'Single Elimination';
+
+  @override
+  String get doubleElimination => 'Double Elimination';
+
+  @override
+  String get nordic => 'Nordic / Round Robin';
+
+  @override
+  String get nordicDoubleElimination => 'Pool-System (Nordic Double Elimination)';
 
   @override
   String get mat => 'Mat';
@@ -718,7 +733,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get competitionSystems => 'Competition Systems';
 
   @override
-  String get crossOver => 'Überkreuz';
+  String get crossOver => 'Cross-over';
 
   @override
   String get boutDay => 'Bout Day';

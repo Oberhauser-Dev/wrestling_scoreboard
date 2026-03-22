@@ -1049,7 +1049,7 @@ abstract class AppLocalizations {
   /// No description provided for @boutForRank.
   ///
   /// In en, this message translates to:
-  /// **'Bout for rank {rank}.'**
+  /// **'Bout for rank {rank}'**
   String boutForRank(String rank);
 
   /// No description provided for @cycle.
@@ -1133,14 +1133,44 @@ abstract class AppLocalizations {
   /// No description provided for @finals.
   ///
   /// In en, this message translates to:
-  /// **'Final'**
+  /// **'Finals'**
   String get finals;
 
   /// No description provided for @semiFinals.
   ///
   /// In en, this message translates to:
-  /// **'Semi-Final'**
+  /// **'Semi-Finals'**
   String get semiFinals;
+
+  /// No description provided for @bestOfThree.
+  ///
+  /// In en, this message translates to:
+  /// **'Best of Three Bouts'**
+  String get bestOfThree;
+
+  /// No description provided for @singleElimination.
+  ///
+  /// In en, this message translates to:
+  /// **'Single Elimination'**
+  String get singleElimination;
+
+  /// No description provided for @doubleElimination.
+  ///
+  /// In en, this message translates to:
+  /// **'Double Elimination'**
+  String get doubleElimination;
+
+  /// No description provided for @nordic.
+  ///
+  /// In en, this message translates to:
+  /// **'Nordic / Round Robin'**
+  String get nordic;
+
+  /// No description provided for @nordicDoubleElimination.
+  ///
+  /// In en, this message translates to:
+  /// **'Pool-System (Nordic Double Elimination)'**
+  String get nordicDoubleElimination;
 
   /// No description provided for @mat.
   ///
@@ -1457,7 +1487,7 @@ abstract class AppLocalizations {
   /// No description provided for @crossOver.
   ///
   /// In en, this message translates to:
-  /// **'Überkreuz'**
+  /// **'Cross-over'**
   String get crossOver;
 
   /// No description provided for @boutDay.

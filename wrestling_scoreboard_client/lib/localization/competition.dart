@@ -48,6 +48,25 @@ extension CompetitionSystemPhaseLocalization on CompetitionSystemPhase {
   }
 }
 
+extension CompetitionSystemLocalization on CompetitionSystem {
+  String localize(BuildContext context) {
+    final localizations = context.l10n;
+    return switch (this) {
+      CompetitionSystem.finals => localizations.finals,
+      CompetitionSystem.bestOfThree => localizations.bestOfThree,
+      CompetitionSystem.singleElimination => localizations.singleElimination,
+      CompetitionSystem.doubleElimination => localizations.doubleElimination,
+      CompetitionSystem.nordic => localizations.nordic,
+      CompetitionSystem.nordicDoubleElimination => localizations.nordicDoubleElimination,
+    };
+  }
+
+  String short(BuildContext context) {
+    final l = localize(context);
+    return l.substring(0, math.min(l.length, 4));
+  }
+}
+
 extension CompetitionLocalization on Competition {
   String? missingAttributes(
     BuildContext context,

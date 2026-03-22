@@ -76,7 +76,7 @@ class CompetitionSystemAffiliationOverview extends ConsumerWidget {
                 addPageBuilder: (context) =>
                     CompetitionSystemPhaseEdit(initialCompetitionSystemAffiliation: competitionSystemAffiliation),
                 itemBuilder: (context, item) => ContentItem(
-                  title: item.competitionSystem.name,
+                  title: '${item.pos + 1} | ${item.competitionSystem.localize(context)}',
                   icon: Icon(Icons.view_timeline),
                   onTap: () => CompetitionSystemPhaseOverview.navigateTo(context, item),
                 ),

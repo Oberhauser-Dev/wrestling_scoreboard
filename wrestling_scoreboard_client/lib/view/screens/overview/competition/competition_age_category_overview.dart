@@ -61,7 +61,7 @@ class CompetitionAgeCategoryOverview extends ConsumerWidget {
         );
         return FavoriteScaffold<CompetitionAgeCategory>(
           dataObject: competitionAgeCategory,
-          label: localizations.weightCategory,
+          label: '${localizations.ageCategory} (${localizations.competition})',
           details: competitionAgeCategory.ageCategory.name,
           actions: [],
           tabs: [
