@@ -6,7 +6,6 @@ import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
-import 'package:wrestling_scoreboard_client/view/widgets/toggle_buttons.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class CompetitionSystemPhaseEdit extends ConsumerStatefulWidget {
@@ -72,29 +71,30 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
         isMandatory: true,
         onSaved: (int? value) => _poolGroupCount = value ?? 1,
       ),
-      ListTile(
-        leading: const Icon(Icons.shuffle),
-        title: IndexedToggleButtons(
-          label: localizations.crossOver,
-          onPressed: (e) => setState(() => _isCrossOver = e == 0 ? false : true),
-          selected: _isCrossOver ? 1 : 0,
-          numOptions: 2,
-          getTitle: (e) => e == 0 ? 'false' : 'true',
-        ),
+      CheckboxListTile(
+        secondary: const Icon(Icons.shuffle),
+        title: Text(localizations.crossOver),
+        value: _isCrossOver,
+        onChanged: (e) => setState(() => _isCrossOver = e ?? false),
       ),
       NumericalInput(
         iconData: Icons.vertical_align_top,
         initialValue: _maxRank,
-        label: '${localizations.rank} (${localizations.maximum}) 2x+1(+1)',
-        inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+        label: '${localizations.rank} (${localizations.maximum})',
+        inputFormatter: NumericalRangeFormatter(min: 0, max: 1000),
         isMandatory: true,
         onSaved: (int? value) => _maxRank = value,
+        // Display implications of max rank.
+        onChanged: (int? value) => setState(() {
+          _maxRank = value;
+        }),
+        subtitle: Text(localizations.holdBoutsForRanks(CompetitionSystemPhase.displayMaxRanks(_maxRank))),
       ),
       NumericalInput(
         iconData: Icons.format_list_numbered,
         initialValue: _pos,
         label: localizations.position,
-        inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+        inputFormatter: NumericalRangeFormatter(min: 0, max: 1000),
         isMandatory: true,
         onSaved: (int? value) => _pos = value ?? 0,
       ),

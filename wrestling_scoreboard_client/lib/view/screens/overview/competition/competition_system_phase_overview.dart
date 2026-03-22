@@ -63,7 +63,9 @@ class CompetitionSystemPhaseOverview extends ConsumerWidget {
               iconData: Icons.pool,
             ),
             ContentItem.icon(
-              title: competitionSystemPhase.maxRank.toString(),
+              title: localizations.holdBoutsForRanks(
+                CompetitionSystemPhase.displayMaxRanks(competitionSystemPhase.maxRank),
+              ),
               subtitle: '${localizations.rank} (${localizations.maximum})',
               iconData: Icons.vertical_align_top,
             ),

@@ -356,9 +356,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           await _generateInitialBoutsOfPhase(
             competitionWeightCategory: weightCategory,
             // List of ranked contestants
-            contestantsByPoolGroup: rankingByPool
-                .map((e) => e.keys.toList().sublist(0, (phase.maxRank ?? 0) + 1))
-                .toList(),
+            contestantsByPoolGroup: rankingByPool.map((e) => e.keys.toList().sublist(0, phase.maxRank)).toList(),
             phase: phases[nextPhasePos],
           );
         } else if (nextPhasePos == phases.length) {
@@ -369,8 +367,6 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     }
   }
 
-  final _defaultMaxRankedFinalists = 3;
-
   Future<List<CompetitionBout>> _updateBoutsOfPhase({
     required CompetitionWeightCategory weightCategory,
     required List<CompetitionParticipation> poolParticipations,
@@ -379,7 +375,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     required CompetitionSystemPhase phase,
   }) async {
     final competitionSystem = phase.competitionSystem;
-    final maxRankedFinalists = phase.maxRank ?? _defaultMaxRankedFinalists;
+    final maxRankedFinalists = phase.maxRank;
 
     switch (competitionSystem) {
       case CompetitionSystem.finals:
@@ -546,7 +542,7 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           }
         }
 
-        if (nonEliminatedPoolParticipants.length < maxRankedFinalists) {
+        if (maxRankedFinalists == null || nonEliminatedPoolParticipants.length < maxRankedFinalists) {
           // At least $maxRankedFinalists participants need to be ranked.
           final ranking = CompetitionWeightCategory.calculateRankingByPoints(
             poolParticipations,
@@ -554,12 +550,12 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
           );
           final rankingList = ranking.entries.toList();
 
-          for (int i = 0; i < maxRankedFinalists && i < rankingList.length; i++) {
+          for (int i = 0; (maxRankedFinalists == null || i < maxRankedFinalists) && i < rankingList.length; i++) {
             nonEliminatedPoolParticipants.add(rankingList[i].key);
             eliminatedPoolParticipants.remove(rankingList[i].key);
           }
 
-          if (nonEliminatedPoolParticipants.length > maxRankedFinalists) {
+          if (maxRankedFinalists != null && nonEliminatedPoolParticipants.length > maxRankedFinalists) {
             throw Exception(
               'Something went wrong during the pool pairing! More than $maxRankedFinalists participants left. Please investigate!\n$poolParticipations',
             );
@@ -686,8 +682,10 @@ class CompetitionWeightCategoryController extends ShelfController<CompetitionWei
     required CompetitionSystemPhase phase,
   }) {
     final createdCompetitionBouts = <CompetitionBout>[];
-    final maxRankedFinalists = phase.maxRank ?? _defaultMaxRankedFinalists;
-    while (rank < rankingUpperBracket.length && rank < rankingLowerBracket.length && rank < maxRankedFinalists) {
+    final maxRankedPerBracketFinalists = phase.maxRankPerBracket;
+    while (rank < rankingUpperBracket.length &&
+        rank < rankingLowerBracket.length &&
+        (maxRankedPerBracketFinalists == null || rank < maxRankedPerBracketFinalists)) {
       createdCompetitionBouts.addAll(
         CompetitionWeightCategoryController.convertBoutsOfRound(
           weightCategory,

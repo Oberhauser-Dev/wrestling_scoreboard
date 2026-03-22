@@ -103,22 +103,28 @@ class CustomTextInput extends StatelessWidget {
 
 class NumericalInput<T extends num> extends StatelessWidget {
   final FormFieldSetter<T>? onSaved;
+  final ValueChanged<T?>? onChanged;
   final IconData? iconData;
   final String label;
   final T? initialValue;
   final bool isMandatory;
   final FormFieldValidator<String>? validator;
   final TextInputFormatter inputFormatter;
+  final Widget? trailing;
+  final Widget? subtitle;
 
   const NumericalInput({
     super.key,
     this.onSaved,
+    this.onChanged,
     this.iconData,
     required this.label,
     this.initialValue,
     this.isMandatory = false,
     this.validator,
     this.inputFormatter = const NumericalRangeFormatter(min: 0, max: 1000),
+    this.trailing,
+    this.subtitle,
   });
 
   @override
@@ -126,22 +132,15 @@ class NumericalInput<T extends num> extends StatelessWidget {
     final localizations = context.l10n;
     return ListTile(
       leading: iconData != null ? Icon(iconData) : const SizedBox(),
+      trailing: trailing,
+      subtitle: subtitle,
       title: TextFormField(
         initialValue: initialValue?.toString() ?? '',
         keyboardType: TextInputType.number,
         decoration: CustomInputDecoration(isMandatory: isMandatory, label: label, localizations: localizations),
         inputFormatters: <TextInputFormatter>[inputFormatter],
-        onSaved: onSaved == null
-            ? null
-            : (String? value) {
-                if (T == int) {
-                  onSaved!(int.tryParse(value ?? '') as T?);
-                } else if (T == double) {
-                  onSaved!(double.tryParse(value ?? '') as T?);
-                } else {
-                  onSaved!(num.tryParse(value ?? '') as T?);
-                }
-              },
+        onSaved: onSaved == null ? null : (String? value) => _parseValue(value, onSaved!),
+        onChanged: onChanged == null ? null : (String? value) => _parseValue(value, onChanged!),
         validator:
             validator ??
             (value) {
@@ -152,6 +151,16 @@ class NumericalInput<T extends num> extends StatelessWidget {
             },
       ),
     );
+  }
+
+  void _parseValue(String? value, void Function(T? val) callback) {
+    if (T == int) {
+      callback(int.tryParse(value ?? '') as T?);
+    } else if (T == double) {
+      callback(double.tryParse(value ?? '') as T?);
+    } else {
+      callback(num.tryParse(value ?? '') as T?);
+    }
   }
 }
 

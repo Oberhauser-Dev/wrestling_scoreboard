@@ -15,13 +15,13 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CompetitionSystemPhase {
 
- int? get id; CompetitionSystemAffiliation get competitionSystemAffiliation; CompetitionSystem get competitionSystem; int get poolGroupCount; bool get isCrossOver;/// The maximum rank the bouts can be fought for. Rank is described as x * 2 + 1 (+1).
-/// This must be greater smaller than or equal to [maxContestants] / 2.
-/// 0: 1+2
-/// 1: 3+4
-/// 2: 5+6 ...
-///
-/// x * 2 contestants will be ranked or get into the next round.
+ int? get id; CompetitionSystemAffiliation get competitionSystemAffiliation; CompetitionSystem get competitionSystem; int get poolGroupCount; bool get isCrossOver;/// The maximum contestants that will be ranked or get into the next round.
+/// This must be smaller than or equal to [CompetitionSystemAffiliation.maxContestants].
+/// 0: No one will be ranked.
+/// 1: 1 contestant will be ranked, but would need to fight against another unranked contestant.
+/// 2: 2 contestants will be ranked.
+/// 3: ...
+/// null: Everyone will be ranked.
  int? get maxRank; int get pos;
 /// Create a copy of CompetitionSystemPhase
 /// with the given fields replaced by the non-null parameter values.
@@ -239,13 +239,13 @@ class _CompetitionSystemPhase extends CompetitionSystemPhase {
 @override final  CompetitionSystem competitionSystem;
 @override@JsonKey() final  int poolGroupCount;
 @override@JsonKey() final  bool isCrossOver;
-/// The maximum rank the bouts can be fought for. Rank is described as x * 2 + 1 (+1).
-/// This must be greater smaller than or equal to [maxContestants] / 2.
-/// 0: 1+2
-/// 1: 3+4
-/// 2: 5+6 ...
-///
-/// x * 2 contestants will be ranked or get into the next round.
+/// The maximum contestants that will be ranked or get into the next round.
+/// This must be smaller than or equal to [CompetitionSystemAffiliation.maxContestants].
+/// 0: No one will be ranked.
+/// 1: 1 contestant will be ranked, but would need to fight against another unranked contestant.
+/// 2: 2 contestants will be ranked.
+/// 3: ...
+/// null: Everyone will be ranked.
 @override final  int? maxRank;
 @override final  int pos;
 
