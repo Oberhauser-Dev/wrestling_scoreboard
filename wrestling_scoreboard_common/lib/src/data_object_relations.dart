@@ -10,6 +10,7 @@ const Map<Type, List<String>> dataObjectOrder = {
   Competition: ['date', 'name'],
   BoutAction: ['duration_millis'],
   Person: ['prename', 'surname'],
+  CompetitionSystemAffiliation: ['max_contestants'],
 };
 
 const Map<Type, Map<Type, List<String>>> directDataObjectRelations = {

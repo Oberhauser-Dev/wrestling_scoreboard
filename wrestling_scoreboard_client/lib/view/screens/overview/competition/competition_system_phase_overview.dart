@@ -53,7 +53,7 @@ class CompetitionSystemPhaseOverview extends ConsumerWidget {
               ),
             ),
             ContentItem.icon(
-              title: competitionSystemPhase.competitionSystem.name,
+              title: competitionSystemPhase.competitionSystem.localize(context),
               subtitle: localizations.competitionSystem,
               iconData: Icons.label,
             ),
@@ -78,8 +78,8 @@ class CompetitionSystemPhaseOverview extends ConsumerWidget {
         );
         return FavoriteScaffold<CompetitionSystemPhase>(
           dataObject: competitionSystemPhase,
-          label: localizations.competitionSystem,
-          details: competitionSystemPhase.competitionSystem.name,
+          label: localizations.phase,
+          details: competitionSystemPhase.competitionSystem.localize(context),
           tabs: [Tab(child: HeadingText(localizations.info))],
           body: TabGroup(items: [description]),
         );

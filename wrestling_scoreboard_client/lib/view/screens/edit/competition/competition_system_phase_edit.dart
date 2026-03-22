@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
@@ -55,7 +56,8 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
             isNullable: false,
             selected: _competitionSystem,
             options: CompetitionSystem.values.map(
-              (system) => MapEntry(system, Tooltip(message: system.name, child: Text(system.name))),
+              (system) =>
+                  MapEntry(system, Tooltip(message: system.localize(context), child: Text(system.localize(context)))),
             ),
             onSaved: (newValue) {
               if (newValue != null) _competitionSystem = newValue;
@@ -103,7 +105,7 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
     return Form(
       key: _formKey,
       child: EditWidget(
-        typeLocalization: localizations.competitionSystem,
+        typeLocalization: localizations.phase,
         id: widget.competitionSystemPhase?.id,
         onSubmit: () => handleSubmit(navigator),
         items: items,
