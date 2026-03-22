@@ -213,6 +213,7 @@ class _CompetitionBoutListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final width = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () => CompetitionBoutDisplay.navigateTo(context, competitionBout),
       child: IntrinsicHeight(
@@ -221,7 +222,7 @@ class _CompetitionBoutListItem extends ConsumerWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(competitionBout.id.toString()),
+              SizedBox(width: width / 50, child: Text((competitionBout.id ?? 0 % 10000).toString())),
               Expanded(
                 child: BoutListItem(
                   boutConfig: competition.boutConfig,

@@ -88,49 +88,47 @@ class BoutListItem extends ConsumerWidget {
       builder: (context, bout) {
         return Row(
           children: [
-            Row(
+            Column(
               children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      if (ageCategory != null)
-                        Center(
-                          child: FittedText(
-                            ageCategory!.name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            softWrap: false,
-                          ),
-                        ),
-                      if (weightClass != null)
-                        Expanded(
-                          child: Center(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ScaledText(
-                                  '${weightClass!.weight} ',
-                                  softWrap: false,
-                                  minFontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                ScaledText(weightUnit, softWrap: false, minFontSize: 10),
-                              ],
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                if (weightClass != null)
-                  Expanded(
-                    child: Center(
-                      child: ScaledText(
-                        weightClass!.style.abbreviation(context),
-                        minFontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
+                if (ageCategory != null)
+                  Center(
+                    child: FittedText(
+                      ageCategory!.name,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      softWrap: false,
+                      overflow: TextOverflow.fade,
                     ),
+                  ),
+                if (weightClass != null)
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ScaledText(
+                                '${weightClass!.weight} ',
+                                softWrap: false,
+                                minFontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              ScaledText(weightUnit, softWrap: false, minFontSize: 10),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: ScaledText(
+                            weightClass!.style.abbreviation(context),
+                            minFontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
               ],
             ),
