@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 4vO6GsddD8k2TzMekqU6ZwKR6B7bnUdxUWIf3gQRbhStvmq94LIed09W6GOPv5N
+\restrict i3jqUPxfOhhwFahnZ4A6G9eCuwbvbBa3OnczhVt0f0Od1CjzjCi9fbjDslM9MoD
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -759,7 +759,7 @@ CREATE TABLE public.competition_system_phase (
     competition_system public.competition_system NOT NULL,
     pool_group_count smallint DEFAULT 1 NOT NULL,
     cross_over boolean DEFAULT false NOT NULL,
-    max_rank integer DEFAULT 3 NOT NULL,
+    max_rank integer,
     pos integer DEFAULT 0 NOT NULL
 );
 
@@ -2127,7 +2127,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.10-pre.2	0.3.10
+0.3.10-pre.3	0.3.10
 \.
 
 
@@ -3606,5 +3606,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 4vO6GsddD8k2TzMekqU6ZwKR6B7bnUdxUWIf3gQRbhStvmq94LIed09W6GOPv5N
+\unrestrict i3jqUPxfOhhwFahnZ4A6G9eCuwbvbBa3OnczhVt0f0Od1CjzjCi9fbjDslM9MoD
 

@@ -203,6 +203,24 @@
   "pool": "Pool",
   "poolGroupCount": "Anzahl der Poolgruppen",
   "rank": "Platz",
+  "holdBoutsForRanks": "Kämpfe werden für die Plätze {ranks} ausgetragen.",
+  "@holdBoutsForRanks": {
+    "placeholders": {
+      "ranks": {
+        "type": "String",
+        "example": "1 - 6"
+      }
+    }
+  },
+  "boutForRank": "Kampf um Platz {rank}",
+  "@boutForRank": {
+    "placeholders": {
+      "rank": {
+        "type": "String",
+        "example": "1+2"
+      }
+    }
+  },
   "cycle": "Zyklus",
   "cycles": "Zyklen",
   "round": "Runde",

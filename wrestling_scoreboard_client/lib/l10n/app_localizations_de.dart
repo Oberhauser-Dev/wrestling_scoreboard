@@ -511,6 +511,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get rank => 'Platz';
 
   @override
+  String holdBoutsForRanks(String ranks) {
+    return 'Kämpfe werden für die Plätze $ranks ausgetragen.';
+  }
+
+  @override
+  String boutForRank(String rank) {
+    return 'Kampf um Platz $rank.';
+  }
+
+  @override
   String get cycle => 'Zyklus';
 
   @override

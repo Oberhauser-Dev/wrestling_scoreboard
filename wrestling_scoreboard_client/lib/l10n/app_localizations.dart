@@ -1040,6 +1040,18 @@ abstract class AppLocalizations {
   /// **'Rank'**
   String get rank;
 
+  /// No description provided for @holdBoutsForRanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Bouts will be held for ranks {ranks}.'**
+  String holdBoutsForRanks(String ranks);
+
+  /// No description provided for @boutForRank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bout for rank {rank}.'**
+  String boutForRank(String rank);
+
   /// No description provided for @cycle.
   ///
   /// In en, this message translates to:

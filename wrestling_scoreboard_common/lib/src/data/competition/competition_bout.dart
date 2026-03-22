@@ -60,7 +60,11 @@ abstract class CompetitionBout with _$CompetitionBout implements DataObject, Pos
 
   bool equalDuringBout(CompetitionBout o) => bout.equalDuringBout(o.bout) && weightCategory == o.weightCategory;
 
-  String? get displayRanks => rank == null ? null : '${rank! * 2 + 1}+${rank! * 2 + 2}';
+  static String? displayRanksFromIndex(int? rankIndex) {
+    return rankIndex == null ? null : '${rankIndex * 2 + 1}+${rankIndex * 2 + 2}';
+  }
+
+  String? get displayRanks => displayRanksFromIndex(rank);
 
   @override
   Map<String, dynamic> toRaw() {

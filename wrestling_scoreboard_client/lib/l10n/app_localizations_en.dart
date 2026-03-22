@@ -507,6 +507,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rank => 'Rank';
 
   @override
+  String holdBoutsForRanks(String ranks) {
+    return 'Bouts will be held for ranks $ranks.';
+  }
+
+  @override
+  String boutForRank(String rank) {
+    return 'Bout for rank $rank.';
+  }
+
+  @override
   String get cycle => 'Cycle';
 
   @override

@@ -16,13 +16,13 @@ abstract class CompetitionSystemPhase with _$CompetitionSystemPhase implements D
     @Default(1) int poolGroupCount,
     @Default(false) bool isCrossOver,
 
-    /// The maximum rank the bouts can be fought for. Rank is described as x * 2 + 1 (+1).
-    /// This must be greater smaller than or equal to [maxContestants] / 2.
-    /// 0: 1+2
-    /// 1: 3+4
-    /// 2: 5+6 ...
-    ///
-    /// x * 2 contestants will be ranked or get into the next round.
+    /// The maximum contestants that will be ranked or get into the next round.
+    /// This must be smaller than or equal to [CompetitionSystemAffiliation.maxContestants].
+    /// 0: No one will be ranked.
+    /// 1: 1 contestant will be ranked, but would need to fight against another unranked contestant.
+    /// 2: 2 contestants will be ranked.
+    /// 3: ...
+    /// null: Everyone will be ranked.
     int? maxRank,
     required int pos,
   }) = _CompetitionSystemPhase;
@@ -58,6 +58,13 @@ abstract class CompetitionSystemPhase with _$CompetitionSystemPhase implements D
       'pos': pos,
     };
   }
+
+  static String displayMaxRanks(int? maxRank) {
+    return maxRank == null ? '1 - ∞' : (maxRank == 0 ? '–' : '1 - $maxRank');
+  }
+
+  /// The maximum rank a contestant must reach in a single bracket (of total two brackets) in order to get ranked in total.
+  int? get maxRankPerBracket => maxRank == null ? null : (maxRank! / 2).ceil();
 
   @override
   @override

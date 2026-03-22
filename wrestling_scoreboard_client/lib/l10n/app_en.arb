@@ -206,6 +206,24 @@
   "pool": "Pool",
   "poolGroupCount": "Pool group count",
   "rank": "Rank",
+  "holdBoutsForRanks": "Bouts will be held for ranks {ranks}.",
+  "@holdBoutsForRanks": {
+    "placeholders": {
+      "ranks": {
+        "type": "String",
+        "example": "1 - 6"
+      }
+    }
+  },
+  "boutForRank": "Bout for rank {rank}",
+  "@boutForRank": {
+    "placeholders": {
+      "rank": {
+        "type": "String",
+        "example": "1+2"
+      }
+    }
+  },
   "cycle": "Cycle",
   "cycles": "Cycles",
   "round": "Round",

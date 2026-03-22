@@ -90,7 +90,7 @@ class CompetitionBoutOverview extends ConsumerWidget with BoutOverview<Competiti
               iconData: Icons.restart_alt,
             ),
             ContentItem.icon(
-              title: competitionBout.displayRanks ?? '-',
+              title: localizations.boutForRank(competitionBout.displayRanks ?? '–'),
               subtitle: localizations.rank,
               iconData: Icons.leaderboard,
             ),

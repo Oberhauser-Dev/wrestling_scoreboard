@@ -331,7 +331,7 @@ class MockedData {
     competitionSystemAffiliation: competitionSystemAffiliationBestOfThree,
     competitionSystem: CompetitionSystem.bestOfThree,
     poolGroupCount: 1,
-    maxRank: 1,
+    maxRank: 2,
   );
 
   late final competitionSystemAffiliationNordic = CompetitionSystemAffiliation(
@@ -344,7 +344,7 @@ class MockedData {
     pos: 0,
     competitionSystemAffiliation: competitionSystemAffiliationNordic,
     competitionSystem: CompetitionSystem.nordic,
-    maxRank: 3,
+    maxRank: 5,
     poolGroupCount: 1,
   );
 
@@ -358,7 +358,7 @@ class MockedData {
     pos: 0,
     competitionSystemAffiliation: competitionSystemAffiliationNordicTwoPools,
     competitionSystem: CompetitionSystem.nordic,
-    maxRank: 2,
+    maxRank: 3,
     poolGroupCount: 2,
   );
   late final competitionSystemPhaseNordicTwoPools2 = CompetitionSystemPhase(
@@ -366,7 +366,7 @@ class MockedData {
     pos: 1,
     competitionSystemAffiliation: competitionSystemAffiliationNordicTwoPools,
     competitionSystem: CompetitionSystem.finals,
-    maxRank: 3,
+    maxRank: 6,
     isCrossOver: true,
     poolGroupCount: 1,
   );
@@ -382,14 +382,14 @@ class MockedData {
     competitionSystemAffiliation: competitionSystemAffiliationNordicDoubleEliminationTwoPools,
     competitionSystem: CompetitionSystem.nordicDoubleElimination,
     poolGroupCount: 2,
-    maxRank: 2,
+    maxRank: 3,
   );
   late final competitionSystemPhaseNordicDoubleEliminationTwoPools2 = CompetitionSystemPhase(
     id: 6,
     pos: 1,
     competitionSystemAffiliation: competitionSystemAffiliationNordicDoubleEliminationTwoPools,
     competitionSystem: CompetitionSystem.finals,
-    maxRank: 3,
+    maxRank: 6,
     isCrossOver: false,
     poolGroupCount: 1,
   );

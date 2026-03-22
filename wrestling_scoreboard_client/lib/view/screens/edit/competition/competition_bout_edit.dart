@@ -69,6 +69,7 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
+    final displayRanks = CompetitionBout.displayRanksFromIndex(_rank);
     return buildEdit(
       context,
       id: widget.competitionBout?.id,
@@ -139,12 +140,16 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
         NumericalInput(
           iconData: Icons.leaderboard,
           initialValue: _rank,
-          label: '${localizations.rank} (2x+1(+1))',
-          inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+          label: '${localizations.rank} [2 * x + 1 ( + 1)]',
+          inputFormatter: NumericalRangeFormatter(min: 0, max: 1000),
           isMandatory: false,
           onSaved: (int? value) => _rank = value,
+          // Display implications of max rank.
+          onChanged: (int? value) => setState(() {
+            _rank = value;
+          }),
+          subtitle: Text(localizations.boutForRank(displayRanks ?? '–')),
         ),
-
         ListTile(
           title: SearchableDropdown<int>(
             allowEmpty: false,
