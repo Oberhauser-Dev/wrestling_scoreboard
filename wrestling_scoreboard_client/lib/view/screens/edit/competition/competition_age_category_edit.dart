@@ -43,7 +43,7 @@ class CompetitionAgeCategoryEditState extends ConsumerState<CompetitionAgeCatego
         iconData: Icons.format_list_numbered,
         initialValue: widget.competitionAgeCategory?.pos,
         label: localizations.position,
-        inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
+        inputFormatter: NumericalRangeFormatter(min: 0, max: 1000),
         isMandatory: true,
         onSaved: (int? value) => _pos = value ?? 0,
       ),
@@ -70,7 +70,7 @@ class CompetitionAgeCategoryEditState extends ConsumerState<CompetitionAgeCatego
     return Form(
       key: _formKey,
       child: EditWidget(
-        typeLocalization: localizations.lineup,
+        typeLocalization: localizations.ageCategory,
         id: widget.competitionAgeCategory?.id,
         onSubmit: () => handleSubmit(navigator),
         items: items,
