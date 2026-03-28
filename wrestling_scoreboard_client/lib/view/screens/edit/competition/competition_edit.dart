@@ -35,6 +35,12 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
     _startDate = widget.competition?.date ?? DateTime.now();
     _endDate = widget.competition?.endDate;
     _comment = widget.competition?.comment;
+    _location = widget.competition?.location;
+    _name = widget.competition?.name;
+    _no = widget.competition?.no;
+    _matCount = widget.competition?.matCount;
+    _visitorsCount = widget.competition?.visitorsCount;
+    _comment = widget.competition?.comment;
   }
 
   @override
@@ -48,12 +54,12 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
         label: localizations.name,
         isMandatory: true,
         iconData: Icons.short_text,
-        initialValue: widget.competition?.name,
+        initialValue: _name,
       ),
       CustomTextInput.icon(
         iconData: Icons.tag,
         label: localizations.competitionNumber,
-        initialValue: widget.competition?.no,
+        initialValue: _no,
         isMandatory: false,
         onSaved: (value) => _no = value,
       ),
@@ -62,7 +68,7 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
         label: localizations.place,
         isMandatory: true,
         iconData: Icons.place,
-        initialValue: widget.competition?.location,
+        initialValue: _location,
       ),
       DateTimeInput(
         iconData: Icons.event,
@@ -89,7 +95,7 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
       NumericalInput(
         iconData: Icons.adjust,
         // Replace with square_dot
-        initialValue: widget.competition?.matCount,
+        initialValue: _matCount,
         label: localizations.mats,
         inputFormatter: NumericalRangeFormatter(min: 1, max: 1000),
         isMandatory: true,
@@ -97,7 +103,7 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
       ),
       NumericalInput(
         iconData: Icons.confirmation_number,
-        initialValue: widget.competition?.visitorsCount,
+        initialValue: _visitorsCount,
         label: localizations.visitors,
         inputFormatter: NumericalRangeFormatter(min: 1, max: 9223372036854775808),
         isMandatory: false,
@@ -106,7 +112,7 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
       CustomTextInput.icon(
         iconData: Icons.comment,
         label: localizations.comment,
-        initialValue: widget.competition?.comment,
+        initialValue: _comment,
         isMandatory: false,
         onSaved: (value) => _comment = value,
       ),
@@ -133,23 +139,25 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
           await (await ref.read(dataManagerProvider)).createOrUpdateSingle(boutConfig),
         );
       }
-      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(
-        Competition(
-          id: widget.competition?.id,
-          organization: widget.competition?.organization ?? widget.initialOrganization,
-          orgSyncId: widget.competition?.orgSyncId,
-          location: _location!,
-          no: _no,
-          date: _startDate,
-          endDate: _endDate,
-          comment: _comment,
-          name: _name!,
-          boutConfig: boutConfig,
-          visitorsCount: _visitorsCount,
-          matCount: _matCount!,
-        ),
-      );
+      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(_buildCompetition(boutConfig: boutConfig));
       navigator.pop();
     }
+  }
+
+  Competition _buildCompetition({BoutConfig? boutConfig}) {
+    return Competition(
+      id: widget.competition?.id,
+      organization: widget.competition?.organization ?? widget.initialOrganization,
+      orgSyncId: widget.competition?.orgSyncId,
+      location: _location!,
+      no: _no,
+      date: _startDate,
+      endDate: _endDate,
+      comment: _comment,
+      name: _name!,
+      boutConfig: boutConfig ?? Competition.defaultBoutConfig,
+      visitorsCount: _visitorsCount,
+      matCount: _matCount!,
+    );
   }
 }
