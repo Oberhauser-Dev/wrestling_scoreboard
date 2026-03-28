@@ -5,7 +5,6 @@ import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
@@ -23,6 +22,7 @@ import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
@@ -157,46 +157,11 @@ class CustomSettingsScreen extends ConsumerWidget {
                     ),
                     title: Text(localizations.fontFamily),
                     subtitle: Text(fontFamily ?? localizations.systemSetting),
-                    onTap: () async {
-                      final currentTextTheme = Theme.of(context).textTheme;
-
-                      final List<String?> fontFamilies = [null];
-                      fontFamilies.addAll(GoogleFonts.asMap().keys.toList());
-                      await showRadioDialog<String?>(
-                        context: context,
-                        initialValue: fontFamily,
-                        shrinkWrap: false,
-                        itemCount: fontFamilies.length,
-                        itemBuilder: (index) {
-                          final fontFamily = fontFamilies[index];
-                          final fontStyle = fontFamily != null
-                              ? GoogleFonts.getTextTheme(fontFamily, currentTextTheme).headlineMedium
-                              : Theme.of(context).textTheme
-                                    .apply(fontFamily: Typography.material2021().white.headlineMedium?.fontFamily)
-                                    .headlineMedium;
-                          return (
-                            fontFamily,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(fontFamily ?? localizations.systemFont, style: fontStyle),
-                                IconButton(
-                                  onPressed: () => showOkDialog(
-                                    context: context,
-                                    child: Text(
-                                      'ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz',
-                                      style: fontStyle,
-                                    ),
-                                  ),
-                                  icon: const Icon(Icons.abc),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        onSuccess: (value) => ref.read(fontFamilyProvider.notifier).setState(value),
-                      );
-                    },
+                    onTap: () async => await Font.showFontDialog(
+                      context,
+                      initialFontFamily: fontFamily,
+                      onSelect: (value) => ref.read(fontFamilyProvider.notifier).setState(value),
+                    ),
                   ),
                 ],
               );
