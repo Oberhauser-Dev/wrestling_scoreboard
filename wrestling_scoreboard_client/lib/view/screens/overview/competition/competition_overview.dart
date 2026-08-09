@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
@@ -105,6 +109,9 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
             //   },
             // );
 
+            final certificateText = competition.certificateTemplate == null
+                ? null
+                : Document.fromJson(jsonDecode(competition.certificateTemplate!)).toPlainText().trim();
             final description = InfoWidget(
               obj: competition,
               editPage: CompetitionEdit(competition: competition),
@@ -144,6 +151,11 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                   title: competition.comment ?? '-',
                   subtitle: localizations.comment,
                   iconData: Icons.comment,
+                ),
+                ContentItem.icon(
+                  title: certificateText?.substring(0, math.min(100, certificateText.length)).split('\n').first ?? '-',
+                  subtitle: localizations.certificate,
+                  iconData: Icons.description,
                 ),
               ],
             );

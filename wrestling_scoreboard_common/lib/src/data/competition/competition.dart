@@ -24,8 +24,9 @@ abstract class Competition extends WrestlingEvent with _$Competition {
     String? comment,
     required int matCount,
 
-    /// The ranks which must be determined
+    /// The ranks which get a certificate.
     @Default(10) maxRanking,
+    String? certificateTemplate,
   }) = _Competition;
 
   factory Competition.fromJson(Map<String, Object?> json) => _$CompetitionFromJson(json);
@@ -47,14 +48,20 @@ abstract class Competition extends WrestlingEvent with _$Competition {
       matCount: e['mat_count'] as int,
       maxRanking: e['max_ranking'] as int,
       comment: e['comment'] as String?,
+      certificateTemplate: e['certificate_template'] as String?,
       boutConfig: boutConfig,
     );
   }
 
   @override
   Map<String, dynamic> toRaw() {
-    return super.toRaw()
-      ..addAll({'name': name, 'bout_config_id': boutConfig.id!, 'mat_count': matCount, 'max_ranking': maxRanking});
+    return super.toRaw()..addAll({
+      'name': name,
+      'bout_config_id': boutConfig.id!,
+      'mat_count': matCount,
+      'max_ranking': maxRanking,
+      'certificate_template': certificateTemplate,
+    });
   }
 
   Future<List<CompetitionBout>> generateBouts(

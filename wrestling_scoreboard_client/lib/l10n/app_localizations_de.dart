@@ -521,6 +521,9 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get certificate => 'Urkunde';
+
+  @override
   String get cycle => 'Zyklus';
 
   @override

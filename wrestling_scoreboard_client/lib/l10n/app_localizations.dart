@@ -1052,6 +1052,12 @@ abstract class AppLocalizations {
   /// **'Bout for rank {rank}'**
   String boutForRank(String rank);
 
+  /// No description provided for @certificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Certificate'**
+  String get certificate;
+
   /// No description provided for @cycle.
   ///
   /// In en, this message translates to:

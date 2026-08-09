@@ -22,6 +22,7 @@ _Competition _$CompetitionFromJson(Map<String, dynamic> json) => _Competition(
   comment: json['comment'] as String?,
   matCount: (json['matCount'] as num).toInt(),
   maxRanking: json['maxRanking'] ?? 10,
+  certificateTemplate: json['certificateTemplate'] as String?,
 );
 
 Map<String, dynamic> _$CompetitionToJson(_Competition instance) => <String, dynamic>{
@@ -38,4 +39,5 @@ Map<String, dynamic> _$CompetitionToJson(_Competition instance) => <String, dyna
   'comment': instance.comment,
   'matCount': instance.matCount,
   'maxRanking': instance.maxRanking,
+  'certificateTemplate': instance.certificateTemplate,
 };

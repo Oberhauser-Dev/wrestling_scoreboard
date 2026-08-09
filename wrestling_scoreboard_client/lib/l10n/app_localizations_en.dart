@@ -517,6 +517,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get certificate => 'Certificate';
+
+  @override
   String get cycle => 'Cycle';
 
   @override

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import 'dart:io';
 import 'package:window_manager/window_manager.dart';
 import 'package:wrestling_scoreboard_client/app.dart';
 import 'package:wrestling_scoreboard_client/mocks/main.dart';
@@ -28,6 +29,7 @@ final defaultProviderScope = ProviderScope(
 );
 
 void main() async {
+  print(Platform.environment);
   Logger.root.level = Level.INFO;
   Logger.root.onRecord.listen((record) {
     debugPrint(record.formatted);

@@ -1,7 +1,15 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/services/print/pdf/competition_certificate.dart';
+import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_overview.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/document_editor.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/edit.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/form.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/formatter.dart';
@@ -28,6 +36,7 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
   String? _name;
   int? _visitorsCount;
   int? _matCount;
+  late QuillController _quillController;
 
   @override
   void initState() {
@@ -41,6 +50,18 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
     _matCount = widget.competition?.matCount;
     _visitorsCount = widget.competition?.visitorsCount;
     _comment = widget.competition?.comment;
+
+    final certificateJson = widget.competition?.certificateTemplate;
+    _quillController = QuillController.basic();
+    if (certificateJson != null) {
+      _quillController.document = Document.fromJson(jsonDecode(certificateJson));
+    }
+  }
+
+  @override
+  void dispose() {
+    _quillController.dispose();
+    super.dispose();
   }
 
   @override
@@ -48,6 +69,7 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
     final localizations = context.l10n;
     final navigator = Navigator.of(context);
 
+    final quillText = _quillController.document.toPlainText().trim();
     final items = [
       CustomTextInput.icon(
         onSaved: (String? value) => _name = value,
@@ -116,6 +138,26 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
         isMandatory: false,
         onSaved: (value) => _comment = value,
       ),
+      ExpansionTile(
+        // TODO: replace with Icons.contract
+        leading: Icon(Icons.description),
+        trailing: IconButton(
+          onPressed: () async {
+            final competition = _buildCompetition();
+            final competitionCertificate = CompetitionCertificate(
+              buildContext: context,
+              competition: competition,
+              deltaAsJson: jsonEncode(_quillController.document.toDelta().toJson()),
+            );
+            final bytes = await competitionCertificate.buildPdf();
+            await Printing.sharePdf(bytes: bytes, filename: '${competition.fileBaseName}-Certificate-Template.pdf');
+          },
+          icon: Icon(Icons.print),
+        ),
+        title: Text(quillText.substring(0, math.min(100, quillText.length)).split('\n').first),
+        subtitle: Text(localizations.certificate),
+        children: [DocumentEditor(quillController: _quillController)],
+      ),
     ];
 
     return Form(
@@ -139,12 +181,15 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
           await (await ref.read(dataManagerProvider)).createOrUpdateSingle(boutConfig),
         );
       }
-      await (await ref.read(dataManagerProvider)).createOrUpdateSingle(_buildCompetition(boutConfig: boutConfig));
+      final String certificateJson = jsonEncode(_quillController.document.toDelta().toJson());
+      await (await ref.read(
+        dataManagerProvider,
+      )).createOrUpdateSingle(_buildCompetition(boutConfig: boutConfig, certificateJson: certificateJson));
       navigator.pop();
     }
   }
 
-  Competition _buildCompetition({BoutConfig? boutConfig}) {
+  Competition _buildCompetition({BoutConfig? boutConfig, String? certificateJson}) {
     return Competition(
       id: widget.competition?.id,
       organization: widget.competition?.organization ?? widget.initialOrganization,
@@ -158,6 +203,7 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
       boutConfig: boutConfig ?? Competition.defaultBoutConfig,
       visitorsCount: _visitorsCount,
       matCount: _matCount!,
+      certificateTemplate: certificateJson,
     );
   }
 }

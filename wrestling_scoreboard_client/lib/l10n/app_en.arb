@@ -224,6 +224,7 @@
       }
     }
   },
+  "certificate": "Certificate",
   "cycle": "Cycle",
   "cycles": "Cycles",
   "round": "Round",
