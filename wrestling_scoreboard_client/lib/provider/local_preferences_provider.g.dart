@@ -11,12 +11,12 @@ part of 'local_preferences_provider.dart';
 /// Null value represents the system locale `Platform.localeName`.
 
 @ProviderFor(LocaleNotifier)
-const localeProvider = LocaleNotifierProvider._();
+final localeProvider = LocaleNotifierProvider._();
 
 /// Null value represents the system locale `Platform.localeName`.
 final class LocaleNotifierProvider extends $NotifierProvider<LocaleNotifier, Raw<Future<Locale?>>> {
   /// Null value represents the system locale `Platform.localeName`.
-  const LocaleNotifierProvider._()
+  LocaleNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,8 +48,7 @@ abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
   Raw<Future<Locale?>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<Locale?>>, Raw<Future<Locale?>>>;
     final element =
         ref.element
@@ -59,15 +58,15 @@ abstract class _$LocaleNotifier extends $Notifier<Raw<Future<Locale?>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ThemeModeNotifier)
-const themeModeProvider = ThemeModeNotifierProvider._();
+final themeModeProvider = ThemeModeNotifierProvider._();
 
 final class ThemeModeNotifierProvider extends $NotifierProvider<ThemeModeNotifier, Raw<Future<ThemeMode>>> {
-  const ThemeModeNotifierProvider._()
+  ThemeModeNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -97,8 +96,7 @@ abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
   Raw<Future<ThemeMode>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<ThemeMode>>, Raw<Future<ThemeMode>>>;
     final element =
         ref.element
@@ -108,15 +106,15 @@ abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(FontFamilyNotifier)
-const fontFamilyProvider = FontFamilyNotifierProvider._();
+final fontFamilyProvider = FontFamilyNotifierProvider._();
 
 final class FontFamilyNotifierProvider extends $NotifierProvider<FontFamilyNotifier, Raw<Future<String?>>> {
-  const FontFamilyNotifierProvider._()
+  FontFamilyNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -146,8 +144,7 @@ abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<String?>>, Raw<Future<String?>>>;
     final element =
         ref.element
@@ -157,15 +154,15 @@ abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(WebSocketUrlNotifier)
-const webSocketUrlProvider = WebSocketUrlNotifierProvider._();
+final webSocketUrlProvider = WebSocketUrlNotifierProvider._();
 
 final class WebSocketUrlNotifierProvider extends $NotifierProvider<WebSocketUrlNotifier, Raw<Future<String>>> {
-  const WebSocketUrlNotifierProvider._()
+  WebSocketUrlNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -195,8 +192,7 @@ abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<String>>, Raw<Future<String>>>;
     final element =
         ref.element
@@ -206,7 +202,7 @@ abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
@@ -214,14 +210,14 @@ abstract class _$WebSocketUrlNotifier extends $Notifier<Raw<Future<String>>> {
 /// It is used for sharing the web url on native platforms.
 
 @ProviderFor(WebClientUrlNotifier)
-const webClientUrlProvider = WebClientUrlNotifierProvider._();
+final webClientUrlProvider = WebClientUrlNotifierProvider._();
 
 /// The url used to host the client for web. This can be unset.
 /// It is used for sharing the web url on native platforms.
 final class WebClientUrlNotifierProvider extends $NotifierProvider<WebClientUrlNotifier, Raw<Future<String?>>> {
   /// The url used to host the client for web. This can be unset.
   /// It is used for sharing the web url on native platforms.
-  const WebClientUrlNotifierProvider._()
+  WebClientUrlNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -254,8 +250,7 @@ abstract class _$WebClientUrlNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<String?>>, Raw<Future<String?>>>;
     final element =
         ref.element
@@ -265,15 +260,15 @@ abstract class _$WebClientUrlNotifier extends $Notifier<Raw<Future<String?>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(NetworkTimeoutNotifier)
-const networkTimeoutProvider = NetworkTimeoutNotifierProvider._();
+final networkTimeoutProvider = NetworkTimeoutNotifierProvider._();
 
 final class NetworkTimeoutNotifierProvider extends $NotifierProvider<NetworkTimeoutNotifier, Raw<Future<Duration>>> {
-  const NetworkTimeoutNotifierProvider._()
+  NetworkTimeoutNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -303,8 +298,7 @@ abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>>
   Raw<Future<Duration>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<Duration>>, Raw<Future<Duration>>>;
     final element =
         ref.element
@@ -314,15 +308,15 @@ abstract class _$NetworkTimeoutNotifier extends $Notifier<Raw<Future<Duration>>>
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ApiUrlNotifier)
-const apiUrlProvider = ApiUrlNotifierProvider._();
+final apiUrlProvider = ApiUrlNotifierProvider._();
 
 final class ApiUrlNotifierProvider extends $NotifierProvider<ApiUrlNotifier, Raw<Future<String>>> {
-  const ApiUrlNotifierProvider._()
+  ApiUrlNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -352,8 +346,7 @@ abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<String>>, Raw<Future<String>>>;
     final element =
         ref.element
@@ -363,15 +356,15 @@ abstract class _$ApiUrlNotifier extends $Notifier<Raw<Future<String>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(AppDataDirectoryNotifier)
-const appDataDirectoryProvider = AppDataDirectoryNotifierProvider._();
+final appDataDirectoryProvider = AppDataDirectoryNotifierProvider._();
 
 final class AppDataDirectoryNotifierProvider extends $NotifierProvider<AppDataDirectoryNotifier, Raw<Future<String?>>> {
-  const AppDataDirectoryNotifierProvider._()
+  AppDataDirectoryNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -401,8 +394,7 @@ abstract class _$AppDataDirectoryNotifier extends $Notifier<Raw<Future<String?>>
   Raw<Future<String?>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<String?>>, Raw<Future<String?>>>;
     final element =
         ref.element
@@ -412,15 +404,15 @@ abstract class _$AppDataDirectoryNotifier extends $Notifier<Raw<Future<String?>>
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(BellSoundNotifier)
-const bellSoundProvider = BellSoundNotifierProvider._();
+final bellSoundProvider = BellSoundNotifierProvider._();
 
 final class BellSoundNotifierProvider extends $NotifierProvider<BellSoundNotifier, Raw<Future<String>>> {
-  const BellSoundNotifierProvider._()
+  BellSoundNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -450,8 +442,7 @@ abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
   Raw<Future<String>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<String>>, Raw<Future<String>>>;
     final element =
         ref.element
@@ -461,15 +452,15 @@ abstract class _$BellSoundNotifier extends $Notifier<Raw<Future<String>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(TimeCountDownNotifier)
-const timeCountDownProvider = TimeCountDownNotifierProvider._();
+final timeCountDownProvider = TimeCountDownNotifierProvider._();
 
 final class TimeCountDownNotifierProvider extends $NotifierProvider<TimeCountDownNotifier, Raw<Future<bool>>> {
-  const TimeCountDownNotifierProvider._()
+  TimeCountDownNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -499,8 +490,7 @@ abstract class _$TimeCountDownNotifier extends $Notifier<Raw<Future<bool>>> {
   Raw<Future<bool>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<bool>>, Raw<Future<bool>>>;
     final element =
         ref.element
@@ -510,15 +500,15 @@ abstract class _$TimeCountDownNotifier extends $Notifier<Raw<Future<bool>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(SmartBoutActionsNotifier)
-const smartBoutActionsProvider = SmartBoutActionsNotifierProvider._();
+final smartBoutActionsProvider = SmartBoutActionsNotifierProvider._();
 
 final class SmartBoutActionsNotifierProvider extends $NotifierProvider<SmartBoutActionsNotifier, Raw<Future<bool>>> {
-  const SmartBoutActionsNotifierProvider._()
+  SmartBoutActionsNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -548,8 +538,7 @@ abstract class _$SmartBoutActionsNotifier extends $Notifier<Raw<Future<bool>>> {
   Raw<Future<bool>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<bool>>, Raw<Future<bool>>>;
     final element =
         ref.element
@@ -559,16 +548,16 @@ abstract class _$SmartBoutActionsNotifier extends $Notifier<Raw<Future<bool>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(TeamMatchChronologicalSortNotifier)
-const teamMatchChronologicalSortProvider = TeamMatchChronologicalSortNotifierProvider._();
+final teamMatchChronologicalSortProvider = TeamMatchChronologicalSortNotifierProvider._();
 
 final class TeamMatchChronologicalSortNotifierProvider
     extends $NotifierProvider<TeamMatchChronologicalSortNotifier, Raw<Future<bool>>> {
-  const TeamMatchChronologicalSortNotifierProvider._()
+  TeamMatchChronologicalSortNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -598,8 +587,7 @@ abstract class _$TeamMatchChronologicalSortNotifier extends $Notifier<Raw<Future
   Raw<Future<bool>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<bool>>, Raw<Future<bool>>>;
     final element =
         ref.element
@@ -609,15 +597,15 @@ abstract class _$TeamMatchChronologicalSortNotifier extends $Notifier<Raw<Future
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(FavoritesNotifier)
-const favoritesProvider = FavoritesNotifierProvider._();
+final favoritesProvider = FavoritesNotifierProvider._();
 
 final class FavoritesNotifierProvider extends $NotifierProvider<FavoritesNotifier, Raw<Future<Map<String, Set<int>>>>> {
-  const FavoritesNotifierProvider._()
+  FavoritesNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -650,8 +638,7 @@ abstract class _$FavoritesNotifier extends $Notifier<Raw<Future<Map<String, Set<
   Raw<Future<Map<String, Set<int>>>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<Map<String, Set<int>>>>, Raw<Future<Map<String, Set<int>>>>>;
     final element =
         ref.element
@@ -661,15 +648,15 @@ abstract class _$FavoritesNotifier extends $Notifier<Raw<Future<Map<String, Set<
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(OrgAuthNotifier)
-const orgAuthProvider = OrgAuthNotifierProvider._();
+final orgAuthProvider = OrgAuthNotifierProvider._();
 
 final class OrgAuthNotifierProvider extends $NotifierProvider<OrgAuthNotifier, Raw<Future<Map<int, AuthService>>>> {
-  const OrgAuthNotifierProvider._()
+  OrgAuthNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -702,8 +689,7 @@ abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthServi
   Raw<Future<Map<int, AuthService>>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<Map<int, AuthService>>>, Raw<Future<Map<int, AuthService>>>>;
     final element =
         ref.element
@@ -713,16 +699,16 @@ abstract class _$OrgAuthNotifier extends $Notifier<Raw<Future<Map<int, AuthServi
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProposeApiImportDurationNotifier)
-const proposeApiImportDurationProvider = ProposeApiImportDurationNotifierProvider._();
+final proposeApiImportDurationProvider = ProposeApiImportDurationNotifierProvider._();
 
 final class ProposeApiImportDurationNotifierProvider
     extends $NotifierProvider<ProposeApiImportDurationNotifier, Raw<Future<Duration>>> {
-  const ProposeApiImportDurationNotifierProvider._()
+  ProposeApiImportDurationNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -752,8 +738,7 @@ abstract class _$ProposeApiImportDurationNotifier extends $Notifier<Raw<Future<D
   Raw<Future<Duration>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<Duration>>, Raw<Future<Duration>>>;
     final element =
         ref.element
@@ -763,15 +748,15 @@ abstract class _$ProposeApiImportDurationNotifier extends $Notifier<Raw<Future<D
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(JwtNotifier)
-const jwtProvider = JwtNotifierProvider._();
+final jwtProvider = JwtNotifierProvider._();
 
 final class JwtNotifierProvider extends $NotifierProvider<JwtNotifier, Raw<Future<String?>>> {
-  const JwtNotifierProvider._()
+  JwtNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -801,8 +786,7 @@ abstract class _$JwtNotifier extends $Notifier<Raw<Future<String?>>> {
   Raw<Future<String?>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<String?>>, Raw<Future<String?>>>;
     final element =
         ref.element
@@ -812,30 +796,30 @@ abstract class _$JwtNotifier extends $Notifier<Raw<Future<String?>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(BackupEnabledNotifier)
-const backupEnabledProvider = BackupEnabledNotifierProvider._();
+final backupEnabledProvider = BackupEnabledNotifierProvider._();
 
 final class BackupEnabledNotifierProvider extends $NotifierProvider<BackupEnabledNotifier, Raw<Future<bool>>> {
-  const BackupEnabledNotifierProvider._()
+  BackupEnabledNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'backupEnabledProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[userProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[userProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           BackupEnabledNotifierProvider.$allTransitiveDependencies0,
           BackupEnabledNotifierProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = userProvider;
-  static const $allTransitiveDependencies1 = UserNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies0 = userProvider;
+  static final $allTransitiveDependencies1 = UserNotifierProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$backupEnabledNotifierHash();
@@ -856,8 +840,7 @@ abstract class _$BackupEnabledNotifier extends $Notifier<Raw<Future<bool>>> {
   Raw<Future<bool>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<bool>>, Raw<Future<bool>>>;
     final element =
         ref.element
@@ -867,32 +850,32 @@ abstract class _$BackupEnabledNotifier extends $Notifier<Raw<Future<bool>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(BackupRulesNotifier)
-const backupRulesProvider = BackupRulesNotifierProvider._();
+final backupRulesProvider = BackupRulesNotifierProvider._();
 
 final class BackupRulesNotifierProvider extends $NotifierProvider<BackupRulesNotifier, Raw<Future<List<BackupRule>>>> {
-  const BackupRulesNotifierProvider._()
+  BackupRulesNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'backupRulesProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[backupEnabledProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[backupEnabledProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           BackupRulesNotifierProvider.$allTransitiveDependencies0,
           BackupRulesNotifierProvider.$allTransitiveDependencies1,
           BackupRulesNotifierProvider.$allTransitiveDependencies2,
         ],
       );
 
-  static const $allTransitiveDependencies0 = backupEnabledProvider;
-  static const $allTransitiveDependencies1 = BackupEnabledNotifierProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = BackupEnabledNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies0 = backupEnabledProvider;
+  static final $allTransitiveDependencies1 = BackupEnabledNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 = BackupEnabledNotifierProvider.$allTransitiveDependencies1;
 
   @override
   String debugGetCreateSourceHash() => _$backupRulesNotifierHash();
@@ -913,8 +896,7 @@ abstract class _$BackupRulesNotifier extends $Notifier<Raw<Future<List<BackupRul
   Raw<Future<List<BackupRule>>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<List<BackupRule>>>, Raw<Future<List<BackupRule>>>>;
     final element =
         ref.element
@@ -924,6 +906,6 @@ abstract class _$BackupRulesNotifier extends $Notifier<Raw<Future<List<BackupRul
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

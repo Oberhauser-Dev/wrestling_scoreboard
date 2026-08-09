@@ -15,8 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Membership {
 
- int? get id; String? get orgSyncId; Organization? get organization; String? get no;// Mitgliedsnummer
- Club get club; Person get person;
+ int? get id; String? get orgSyncId; Organization? get organization; String? get no; Club get club; Person get person;
 /// Create a copy of Membership
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -252,7 +251,6 @@ class _Membership extends Membership {
 @override final  String? orgSyncId;
 @override final  Organization? organization;
 @override final  String? no;
-// Mitgliedsnummer
 @override final  Club club;
 @override final  Person person;
 

@@ -81,7 +81,7 @@ class _CompetitionCycleManagementState extends ConsumerState<CompetitionCycleMan
                   },
                 );
               }).toList(),
-              onReorder: (oldIndex, newIndex) => _onReorder(oldIndex, newIndex, competitionAgeCategories),
+              onReorderItem: (oldIndex, newIndex) => _onReorder(oldIndex, newIndex, competitionAgeCategories),
             );
           },
         ),
@@ -121,7 +121,7 @@ class _CompetitionCycleManagementState extends ConsumerState<CompetitionCycleMan
                   },
                 );
               }).toList(),
-              onReorder: (oldIndex, newIndex) => _onReorder(oldIndex, newIndex, competitionWeightCategories),
+              onReorderItem: (oldIndex, newIndex) => _onReorder(oldIndex, newIndex, competitionWeightCategories),
             );
           },
         ),
@@ -130,27 +130,11 @@ class _CompetitionCycleManagementState extends ConsumerState<CompetitionCycleMan
   }
 
   Future<void> _onReorder<T extends PosOrderable>(int oldIndex, int newIndex, List<T> orderedData) async {
-    late int newPos;
-    final oldPos = orderedData[oldIndex].pos;
-    if (newIndex > oldIndex) {
-      newPos = orderedData[newIndex - 1].pos;
-      if (oldPos == newPos) {
-        newPos += 1;
-      }
-    } else if (newIndex < oldIndex) {
-      newPos = orderedData[newIndex].pos;
-      if (oldPos == newPos) {
-        newPos -= 1;
-      }
-    } else {
-      return;
-    }
-
     await catchAsync(context, () async {
       final e = orderedData[oldIndex];
       await (await ref.read(
         dataManagerProvider,
-      )).reorder<T, Competition>(id: e.id!, newIndex: newPos, filterObject: widget.competition);
+      )).reorder<T, Competition>(id: e.id!, newIndex: orderedData[newIndex].pos, filterObject: widget.competition);
     });
   }
 }

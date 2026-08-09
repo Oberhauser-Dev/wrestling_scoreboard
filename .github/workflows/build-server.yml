@@ -9,12 +9,12 @@ on:
         type: choice
         options:
           - 'any'
-          - '3.41.x'
+          - '3.44.x'
   workflow_call:
     inputs:
       flutter_version:
         required: false
-        default: '3.41.5'
+        default: '3.44.9'
         type: string
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           # Remove checks when arm is supported on stable: https://github.com/flutter/flutter/issues/164431
-          flutter-version: ${{ matrix.os == 'windows-11-arm' && '056fb36' || '3.41.5' }}
+          flutter-version: '3.44.9'
           channel: ${{ endsWith(matrix.os, '-arm') && 'master' || 'stable' }}
       # doctor is needed to download the arm master artifacts:
       - run: flutter doctor

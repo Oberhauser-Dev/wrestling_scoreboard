@@ -10,21 +10,21 @@ part of 'account_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(UserNotifier)
-const userProvider = UserNotifierProvider._();
+final userProvider = UserNotifierProvider._();
 
 final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Future<User?>>> {
-  const UserNotifierProvider._()
+  UserNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'userProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[dataManagerProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[UserNotifierProvider.$allTransitiveDependencies0],
+        dependencies: <ProviderOrFamily>[dataManagerProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[UserNotifierProvider.$allTransitiveDependencies0],
       );
 
-  static const $allTransitiveDependencies0 = dataManagerProvider;
+  static final $allTransitiveDependencies0 = dataManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$userNotifierHash();
@@ -39,14 +39,13 @@ final class UserNotifierProvider extends $NotifierProvider<UserNotifier, Raw<Fut
   }
 }
 
-String _$userNotifierHash() => r'776af099628f606e9432ab9ae2367f22132fd1f5';
+String _$userNotifierHash() => r'62ec3741f5b6df50a18c93439710469909ee73eb';
 
 abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
   Raw<Future<User?>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<User?>>, Raw<Future<User?>>>;
     final element =
         ref.element
@@ -56,6 +55,6 @@ abstract class _$UserNotifier extends $Notifier<Raw<Future<User?>>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

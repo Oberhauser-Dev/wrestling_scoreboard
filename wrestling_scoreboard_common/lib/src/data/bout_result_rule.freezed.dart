@@ -15,9 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BoutResultRule {
 
- int? get id; BoutConfig get boutConfig; BoutResult get boutResult; WrestlingStyle? get style;// Minimum points, the winner must have to fulfill this rule
- int? get winnerTechnicalPoints;// Minimum points, the loser must have to fulfill this rule
- int? get loserTechnicalPoints; int? get technicalPointsDifference; int get winnerClassificationPoints; int get loserClassificationPoints;
+ int? get id; BoutConfig get boutConfig; BoutResult get boutResult; WrestlingStyle? get style; int? get winnerTechnicalPoints; int? get loserTechnicalPoints; int? get technicalPointsDifference; int get winnerClassificationPoints; int get loserClassificationPoints;
 /// Create a copy of BoutResultRule
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -235,9 +233,7 @@ class _BoutResultRule extends BoutResultRule {
 @override final  BoutConfig boutConfig;
 @override final  BoutResult boutResult;
 @override final  WrestlingStyle? style;
-// Minimum points, the winner must have to fulfill this rule
 @override final  int? winnerTechnicalPoints;
-// Minimum points, the loser must have to fulfill this rule
 @override final  int? loserTechnicalPoints;
 @override final  int? technicalPointsDifference;
 @override final  int winnerClassificationPoints;

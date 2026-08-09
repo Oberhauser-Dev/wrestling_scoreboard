@@ -10,11 +10,11 @@ part of 'network_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(MockDataManagerNotifier)
-const mockDataManagerProvider = MockDataManagerNotifierProvider._();
+final mockDataManagerProvider = MockDataManagerNotifierProvider._();
 
 final class MockDataManagerNotifierProvider
     extends $NotifierProvider<MockDataManagerNotifier, Raw<Future<DataManager>>> {
-  const MockDataManagerNotifierProvider._()
+  MockDataManagerNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -44,8 +44,7 @@ abstract class _$MockDataManagerNotifier extends $Notifier<Raw<Future<DataManage
   Raw<Future<DataManager>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<DataManager>>, Raw<Future<DataManager>>>;
     final element =
         ref.element
@@ -55,16 +54,16 @@ abstract class _$MockDataManagerNotifier extends $Notifier<Raw<Future<DataManage
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(MockWebsocketManagerNotifier)
-const mockWebsocketManagerProvider = MockWebsocketManagerNotifierProvider._();
+final mockWebsocketManagerProvider = MockWebsocketManagerNotifierProvider._();
 
 final class MockWebsocketManagerNotifierProvider
     extends $NotifierProvider<MockWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> {
-  const MockWebsocketManagerNotifierProvider._()
+  MockWebsocketManagerNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -94,8 +93,7 @@ abstract class _$MockWebsocketManagerNotifier extends $Notifier<Raw<Future<WebSo
   Raw<Future<WebSocketManager>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<WebSocketManager>>, Raw<Future<WebSocketManager>>>;
     final element =
         ref.element
@@ -105,6 +103,6 @@ abstract class _$MockWebsocketManagerNotifier extends $Notifier<Raw<Future<WebSo
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

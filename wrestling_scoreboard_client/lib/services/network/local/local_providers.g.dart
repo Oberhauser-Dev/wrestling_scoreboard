@@ -10,24 +10,24 @@ part of 'local_providers.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(LocalWebsocketManagerNotifier)
-const localWebsocketManagerProvider = LocalWebsocketManagerNotifierProvider._();
+final localWebsocketManagerProvider = LocalWebsocketManagerNotifierProvider._();
 
 final class LocalWebsocketManagerNotifierProvider
     extends $NotifierProvider<LocalWebsocketManagerNotifier, Raw<Future<WebSocketManager>>> {
-  const LocalWebsocketManagerNotifierProvider._()
+  LocalWebsocketManagerNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'localWebsocketManagerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[dataManagerProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[dataManagerProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           LocalWebsocketManagerNotifierProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = dataManagerProvider;
+  static final $allTransitiveDependencies0 = dataManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$localWebsocketManagerNotifierHash();
@@ -48,8 +48,7 @@ abstract class _$LocalWebsocketManagerNotifier extends $Notifier<Raw<Future<WebS
   Raw<Future<WebSocketManager>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<WebSocketManager>>, Raw<Future<WebSocketManager>>>;
     final element =
         ref.element
@@ -59,33 +58,31 @@ abstract class _$LocalWebsocketManagerNotifier extends $Notifier<Raw<Future<WebS
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 /// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
 
 @ProviderFor(LocalDataManagerNotifier)
-const localDataManagerProvider = LocalDataManagerNotifierProvider._();
+final localDataManagerProvider = LocalDataManagerNotifierProvider._();
 
 /// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
 final class LocalDataManagerNotifierProvider
     extends $NotifierProvider<LocalDataManagerNotifier, Raw<Future<DataManager>>> {
   /// [LocalDataManager] uses [LocalDataNotifier] internally, so need to list it as dependency.
-  const LocalDataManagerNotifierProvider._()
+  LocalDataManagerNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'localDataManagerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[localDataProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          LocalDataManagerNotifierProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: <ProviderOrFamily>[localDataProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[LocalDataManagerNotifierProvider.$allTransitiveDependencies0],
       );
 
-  static const $allTransitiveDependencies0 = localDataProvider;
+  static final $allTransitiveDependencies0 = localDataProvider;
 
   @override
   String debugGetCreateSourceHash() => _$localDataManagerNotifierHash();
@@ -108,8 +105,7 @@ abstract class _$LocalDataManagerNotifier extends $Notifier<Raw<Future<DataManag
   Raw<Future<DataManager>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<DataManager>>, Raw<Future<DataManager>>>;
     final element =
         ref.element
@@ -119,16 +115,16 @@ abstract class _$LocalDataManagerNotifier extends $Notifier<Raw<Future<DataManag
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(LocalDataNotifier)
-const localDataProvider = LocalDataNotifierFamily._();
+final localDataProvider = LocalDataNotifierFamily._();
 
 final class LocalDataNotifierProvider<T extends DataObject>
     extends $NotifierProvider<LocalDataNotifier<T>, Raw<Future<List<Map<String, dynamic>>>>> {
-  const LocalDataNotifierProvider._({required LocalDataNotifierFamily super.from})
+  LocalDataNotifierProvider._({required LocalDataNotifierFamily super.from})
     : super(
         argument: null,
         retry: null,
@@ -178,7 +174,7 @@ final class LocalDataNotifierProvider<T extends DataObject>
 String _$localDataNotifierHash() => r'e5a48460159238b44baafcf28a8ffd85738092c2';
 
 final class LocalDataNotifierFamily extends $Family {
-  const LocalDataNotifierFamily._()
+  LocalDataNotifierFamily._()
     : super(
         retry: null,
         name: r'localDataProvider',
@@ -224,8 +220,7 @@ abstract class _$LocalDataNotifier<T extends DataObject> extends $Notifier<Raw<F
   Raw<Future<List<Map<String, dynamic>>>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<List<Map<String, dynamic>>>>, Raw<Future<List<Map<String, dynamic>>>>>;
     final element =
         ref.element
@@ -235,6 +230,6 @@ abstract class _$LocalDataNotifier<T extends DataObject> extends $Notifier<Raw<F
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

@@ -15,9 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Bout {
 
- int? get id; String? get orgSyncId; Organization? get organization; AthleteBoutState? get r;// red
- AthleteBoutState? get b;// blue
- BoutRole? get winnerRole; BoutResult? get result; Duration get duration; bool get isRunning; String? get comment;
+ int? get id; String? get orgSyncId; Organization? get organization; AthleteBoutState? get r; AthleteBoutState? get b; BoutRole? get winnerRole; BoutResult? get result; Duration get duration; bool get isRunning; String? get comment;
 /// Create a copy of Bout
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -263,9 +261,7 @@ class _Bout extends Bout {
 @override final  String? orgSyncId;
 @override final  Organization? organization;
 @override final  AthleteBoutState? r;
-// red
 @override final  AthleteBoutState? b;
-// blue
 @override final  BoutRole? winnerRole;
 @override final  BoutResult? result;
 @override@JsonKey() final  Duration duration;

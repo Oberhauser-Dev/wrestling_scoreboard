@@ -10,18 +10,18 @@ part of 'backup_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(BackupNotifier)
-const backupProvider = BackupNotifierProvider._();
+final backupProvider = BackupNotifierProvider._();
 
 final class BackupNotifierProvider extends $NotifierProvider<BackupNotifier, Raw<Future<(String?, List<BackupRule>)>>> {
-  const BackupNotifierProvider._()
+  BackupNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'backupProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[backupEnabledProvider, backupRulesProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        dependencies: <ProviderOrFamily>[backupEnabledProvider, backupRulesProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>{
           BackupNotifierProvider.$allTransitiveDependencies0,
           BackupNotifierProvider.$allTransitiveDependencies1,
           BackupNotifierProvider.$allTransitiveDependencies2,
@@ -29,10 +29,10 @@ final class BackupNotifierProvider extends $NotifierProvider<BackupNotifier, Raw
         },
       );
 
-  static const $allTransitiveDependencies0 = backupEnabledProvider;
-  static const $allTransitiveDependencies1 = BackupEnabledNotifierProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = BackupEnabledNotifierProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 = backupRulesProvider;
+  static final $allTransitiveDependencies0 = backupEnabledProvider;
+  static final $allTransitiveDependencies1 = BackupEnabledNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 = BackupEnabledNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 = backupRulesProvider;
 
   @override
   String debugGetCreateSourceHash() => _$backupNotifierHash();
@@ -56,8 +56,7 @@ abstract class _$BackupNotifier extends $Notifier<Raw<Future<(String?, List<Back
   Raw<Future<(String?, List<BackupRule>)>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<(String?, List<BackupRule>)>>, Raw<Future<(String?, List<BackupRule>)>>>;
     final element =
         ref.element
@@ -67,6 +66,6 @@ abstract class _$BackupNotifier extends $Notifier<Raw<Future<(String?, List<Back
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

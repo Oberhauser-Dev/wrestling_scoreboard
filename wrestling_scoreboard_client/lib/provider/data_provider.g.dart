@@ -10,10 +10,10 @@ part of 'data_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(SingleDataStream)
-const singleDataStreamProvider = SingleDataStreamFamily._();
+final singleDataStreamProvider = SingleDataStreamFamily._();
 
 final class SingleDataStreamProvider<T extends DataObject> extends $StreamNotifierProvider<SingleDataStream<T>, T> {
-  const SingleDataStreamProvider._({
+  SingleDataStreamProvider._({
     required SingleDataStreamFamily super.from,
     required SingleProviderData<T> super.argument,
   }) : super(
@@ -24,11 +24,11 @@ final class SingleDataStreamProvider<T extends DataObject> extends $StreamNotifi
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = webSocketStateStreamProvider;
-  static const $allTransitiveDependencies1 = WebSocketStateStreamProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = WebSocketStateStreamProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 = WebSocketStateStreamProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 = WebSocketStateStreamProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies0 = webSocketStateStreamProvider;
+  static final $allTransitiveDependencies1 = WebSocketStateStreamProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 = WebSocketStateStreamProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 = WebSocketStateStreamProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 = WebSocketStateStreamProvider.$allTransitiveDependencies3;
 
   @override
   String debugGetCreateSourceHash() => _$singleDataStreamHash();
@@ -62,12 +62,12 @@ final class SingleDataStreamProvider<T extends DataObject> extends $StreamNotifi
 String _$singleDataStreamHash() => r'4220f5b8b4c20526e69e2d1cede4d0705a13f53f';
 
 final class SingleDataStreamFamily extends $Family {
-  const SingleDataStreamFamily._()
+  SingleDataStreamFamily._()
     : super(
         retry: null,
         name: r'singleDataStreamProvider',
-        dependencies: const <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        dependencies: <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>{
           SingleDataStreamProvider.$allTransitiveDependencies0,
           SingleDataStreamProvider.$allTransitiveDependencies1,
           SingleDataStreamProvider.$allTransitiveDependencies2,
@@ -116,38 +116,35 @@ abstract class _$SingleDataStream<T extends DataObject> extends $StreamNotifier<
   Stream<T> build(SingleProviderData<T> pData);
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build(_$args);
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<T>, T>;
     final element =
         ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<T>, T>, AsyncValue<T>, Object?, Object?>;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, () => build(_$args));
   }
 }
 
 @ProviderFor(manyDataStream)
-const manyDataStreamProvider = ManyDataStreamFamily._();
+final manyDataStreamProvider = ManyDataStreamFamily._();
 
 final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
     extends $FunctionalProvider<AsyncValue<List<T>>, List<T>, Stream<List<T>>>
     with $FutureModifier<List<T>>, $StreamProvider<List<T>> {
-  const ManyDataStreamProvider._({
-    required ManyDataStreamFamily super.from,
-    required ManyProviderData<T, S> super.argument,
-  }) : super(
-         retry: null,
-         name: r'manyDataStreamProvider',
-         isAutoDispose: true,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
+  ManyDataStreamProvider._({required ManyDataStreamFamily super.from, required ManyProviderData<T, S> super.argument})
+    : super(
+        retry: null,
+        name: r'manyDataStreamProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
-  static const $allTransitiveDependencies0 = webSocketStateStreamProvider;
-  static const $allTransitiveDependencies1 = WebSocketStateStreamProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = WebSocketStateStreamProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 = WebSocketStateStreamProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 = WebSocketStateStreamProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 = singleDataStreamProvider;
+  static final $allTransitiveDependencies0 = webSocketStateStreamProvider;
+  static final $allTransitiveDependencies1 = WebSocketStateStreamProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 = WebSocketStateStreamProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 = WebSocketStateStreamProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 = WebSocketStateStreamProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 = singleDataStreamProvider;
 
   @override
   String debugGetCreateSourceHash() => _$manyDataStreamHash();
@@ -187,16 +184,12 @@ final class ManyDataStreamProvider<T extends DataObject, S extends DataObject?>
 String _$manyDataStreamHash() => r'e77c8cb667e658fb3c79634a97d9ce8a97bf8c21';
 
 final class ManyDataStreamFamily extends $Family {
-  const ManyDataStreamFamily._()
+  ManyDataStreamFamily._()
     : super(
         retry: null,
         name: r'manyDataStreamProvider',
-        dependencies: const <ProviderOrFamily>[
-          webSocketStateStreamProvider,
-          dataManagerProvider,
-          singleDataStreamProvider,
-        ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        dependencies: <ProviderOrFamily>[webSocketStateStreamProvider, dataManagerProvider, singleDataStreamProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>{
           ManyDataStreamProvider.$allTransitiveDependencies0,
           ManyDataStreamProvider.$allTransitiveDependencies1,
           ManyDataStreamProvider.$allTransitiveDependencies2,
@@ -230,23 +223,23 @@ final class ManyDataStreamFamily extends $Family {
 }
 
 @ProviderFor(remoteConfigNotifier)
-const remoteConfigProvider = RemoteConfigNotifierProvider._();
+final remoteConfigProvider = RemoteConfigNotifierProvider._();
 
 final class RemoteConfigNotifierProvider
     extends $FunctionalProvider<AsyncValue<RemoteConfig>, RemoteConfig, FutureOr<RemoteConfig>>
     with $FutureModifier<RemoteConfig>, $FutureProvider<RemoteConfig> {
-  const RemoteConfigNotifierProvider._()
+  RemoteConfigNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'remoteConfigProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[dataManagerProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[RemoteConfigNotifierProvider.$allTransitiveDependencies0],
+        dependencies: <ProviderOrFamily>[dataManagerProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[RemoteConfigNotifierProvider.$allTransitiveDependencies0],
       );
 
-  static const $allTransitiveDependencies0 = dataManagerProvider;
+  static final $allTransitiveDependencies0 = dataManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$remoteConfigNotifierHash();
