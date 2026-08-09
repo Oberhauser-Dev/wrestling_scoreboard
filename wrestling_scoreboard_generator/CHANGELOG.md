@@ -1,3 +1,8 @@
+## 0.3.1
+
+ - **FEAT**: Upgrade Flutter to v3.44.x. ([839a95e9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/839a95e9598422d242324793930abdcde97c8b66))
+ - **FEAT**: Split CompetitionSystemAffiliation in separate Phases. ([f79203c8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f79203c84dc8d5c6d3388fbe3fdd118d7ef9d312))
+
 ## 0.3.0+2
 
  - **FIX**: Keep single providers of many lists alive ([#222](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/222)). ([3f042ca0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3f042ca0f5d416dbdaf66add320744083d0296b2))

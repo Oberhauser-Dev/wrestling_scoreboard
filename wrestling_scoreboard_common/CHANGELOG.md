@@ -1,3 +1,20 @@
+## 0.3.9
+
+ - **REFACTOR**: Remove TeamMatch resultRole. ([a5477882](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a5477882e1d1db13496228441c11d6255b922e10))
+ - **REFACTOR**: Wrestling event tests and preparation. ([16e08009](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/16e08009dc32f9f219f3f5e4832e1f5ef40a7220))
+ - **REFACTOR**: Deprecate Leg fouls (L) (closes [#258](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/258)). ([b0b341ae](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b0b341ae19fae2eb46d29484816e7ea89d691b2c))
+ - **FIX**: Rework competition rank display. ([e1015828](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e1015828f06acf52282b04df286de7836dfbada5))
+ - **FIX**: Display competition Weight Category on empty phases. ([edb9e382](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/edb9e38251debe47cfb397634828dfceb4391a95))
+ - **FIX**: Assert pointCount is not null when actionType is `points`. ([20978536](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2097853668faa156df79fcfebd8928489c295f25))
+ - **FIX**: New line on logging StackTrace. ([2b4ca478](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2b4ca4783408d5d7ea69f2676ca85c7cb6cb4ae8))
+ - **FIX**: Include null values into raw data. ([f13653f6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f13653f6cdfab4bb8d8e583c9c9fe54e0922a6e1))
+ - **FEAT**: Upgrade Flutter to v3.44.x. ([839a95e9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/839a95e9598422d242324793930abdcde97c8b66))
+ - **FEAT**: Competition System localizations. ([0b8d2058](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0b8d2058df99f2543b7906c67383cb5aeabb4def))
+ - **FEAT**: Split CompetitionSystemAffiliation in separate Phases. ([f79203c8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f79203c84dc8d5c6d3388fbe3fdd118d7ef9d312))
+ - **FEAT**: Set team match result, if every bout has a result. ([5187ecb7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5187ecb7c4f8426a3541fcb572ac9fb9ece8e64b))
+ - **FEAT**: Store team match classification points separately. ([9c4c2392](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9c4c2392215b7d660d4f6c37bf74043db9b63463))
+ - **FEAT**: PDF print weight lists (closes [#239](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/239)). ([abee0373](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/abee03739f05b42eb20c426aae9cb8ccee67c3e9))
+
 ## 0.3.8
 
  - **FEAT**: Warning on forfeit ([#227](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/227)). ([04497093](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0449709310449ed3c51f4dfa749c4ea871fd4911))

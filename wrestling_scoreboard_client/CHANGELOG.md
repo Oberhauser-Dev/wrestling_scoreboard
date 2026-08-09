@@ -1,3 +1,25 @@
+## 0.3.11
+
+ - **REFACTOR**: Fill default values on competition edit. ([91c4393e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/91c4393ef2a732066cd3103f70dc336144739a66))
+ - **REFACTOR**: Move font selection. ([875c9c83](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/875c9c833ad40dba9e6882f2357d900055ed67d8))
+ - **REFACTOR**: Remove TeamMatch resultRole. ([a5477882](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a5477882e1d1db13496228441c11d6255b922e10))
+ - **REFACTOR**: Move common bout utility. ([418d263e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/418d263ed1ce90f2e9251165029f0190702e52df))
+ - **REFACTOR**: Deprecate Leg fouls (L) (closes [#258](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/258)). ([b0b341ae](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b0b341ae19fae2eb46d29484816e7ea89d691b2c))
+ - **FIX**: Apply correct label in age category edit. ([db904e5f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/db904e5f031bc1583e21c22a82812d9fa913c10a))
+ - **FIX**: Align Bout List with Ids. ([5d86ff72](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5d86ff725f605fde98c52b2250361a1ae30e77eb))
+ - **FIX**: Rework competition rank display. ([e1015828](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e1015828f06acf52282b04df286de7836dfbada5))
+ - **FIX**: Competition Display text alignment. ([cdeb1fbf](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/cdeb1fbf50d931e20c7e547abdcd9f324875a946))
+ - **FIX**: Scroll to last item available in list, if no item matches. ([de220ab9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/de220ab9321d57f0c330df295e078c9c62d674d5))
+ - **FEAT**: Upgrade Flutter to v3.44.x. ([839a95e9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/839a95e9598422d242324793930abdcde97c8b66))
+ - **FEAT**: Competition System localizations. ([0b8d2058](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0b8d2058df99f2543b7906c67383cb5aeabb4def))
+ - **FEAT**: Split CompetitionSystemAffiliation in separate Phases. ([f79203c8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f79203c84dc8d5c6d3388fbe3fdd118d7ef9d312))
+ - **FEAT**: Warning for missing data on export (closes [#261](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/261)). ([7e8a9e0c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7e8a9e0c694d635c85b698c9f5b3aad3402cb062))
+ - **FEAT**: Show result in match list. ([f58f280c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f58f280cc394269e08008d3513ecea50f09f525b))
+ - **FEAT**: Store team match classification points separately. ([9c4c2392](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9c4c2392215b7d660d4f6c37bf74043db9b63463))
+ - **FEAT**: LeagueDisplay (closes [#186](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/186)). ([52648045](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/52648045efd954afee7b58a88cfc36394a99d1d0))
+ - **FEAT**: PDF print weight lists (closes [#239](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/239)). ([abee0373](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/abee03739f05b42eb20c426aae9cb8ccee67c3e9))
+ - **FEAT**: Winner on tie for 1:1 in Greco-roman. ([a29aa451](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a29aa451e96fd9c7f08cfa7bbe755a5f5678569b))
+
 ## 0.3.10
 
  - **REFACTOR**: Use enabled color for bout navigation buttons. ([7a504886](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7a504886f07f14fcd3a340d6273cf22c7d646c13))
