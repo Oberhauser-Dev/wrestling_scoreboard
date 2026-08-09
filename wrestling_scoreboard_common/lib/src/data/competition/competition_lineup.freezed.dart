@@ -15,8 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CompetitionLineup {
 
- int? get id; Competition get competition; Club get club; Membership? get leader;// Mannschaftsführer
- Membership? get coach;
+ int? get id; Competition get competition; Club get club; Membership? get leader; Membership? get coach;
 /// Create a copy of CompetitionLineup
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -263,7 +262,6 @@ class _CompetitionLineup extends CompetitionLineup {
 @override final  Competition competition;
 @override final  Club club;
 @override final  Membership? leader;
-// Mannschaftsführer
 @override final  Membership? coach;
 
 /// Create a copy of CompetitionLineup

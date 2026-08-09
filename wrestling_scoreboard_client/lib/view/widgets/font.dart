@@ -13,10 +13,7 @@ class HeadingText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(bottom: 10, top: 20),
-      child: Text(heading.toUpperCase(), style: Theme
-          .of(context)
-          .textTheme
-          .bodySmall),
+      child: Text(heading.toUpperCase(), style: Theme.of(context).textTheme.bodySmall),
     );
   }
 }
@@ -37,49 +34,36 @@ class AutoTextScaler extends TextScaler {
 }
 
 class Font {
-  static final List<String> supportedFontFamilies = GoogleFonts
-      .asMap()
-      .keys
-      .toList();
+  static final List<String> supportedFontFamilies = GoogleFonts.asMap().keys.toList();
 
   static TextStyle? getStyleOfFamily({required String? fontFamily, required TextTheme textTheme}) {
     if (fontFamily == null) return null;
-    return GoogleFonts
-        .getTextTheme(fontFamily, textTheme)
-        .headlineMedium;
+    return GoogleFonts.getTextTheme(fontFamily, textTheme).headlineMedium;
   }
 
   static Widget buildStyledEntry(BuildContext context, {required String? fontFamily}) {
-    final currentTextTheme = Theme
-        .of(context)
-        .textTheme;
+    final currentTextTheme = Theme.of(context).textTheme;
     final fontStyle =
         Font.getStyleOfFamily(textTheme: currentTextTheme, fontFamily: fontFamily) ??
-            currentTextTheme
-                .apply(fontFamily: Typography
-                .material2021()
-                .white
-                .headlineMedium
-                ?.fontFamily)
-                .headlineMedium;
+        currentTextTheme.apply(fontFamily: Typography.material2021().white.headlineMedium?.fontFamily).headlineMedium;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(child: Text(fontFamily ?? context.l10n.systemFont, style: fontStyle)),
         IconButton(
-          onPressed: () =>
-              showOkDialog(
-                context: context,
-                child: Text('ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz', style: fontStyle),
-              ),
+          onPressed: () => showOkDialog(
+            context: context,
+            child: Text('ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz', style: fontStyle),
+          ),
           icon: const Icon(Icons.abc),
         ),
       ],
     );
   }
 
-  static Future<void> showFontDialog(BuildContext context, {
+  static Future<void> showFontDialog(
+    BuildContext context, {
     String? initialFontFamily,
     Iterable<String>? supportedFontFamilies,
     required void Function(String? fontFamily) onSelect,

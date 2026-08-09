@@ -2,7 +2,7 @@ name: wrestling_scoreboard
 repository: https://github.com/Oberhauser-dev/wrestling_scoreboard
 publish_to: none
 environment:
-  sdk: ^3.11.0
+  sdk: ^3.12.0
 workspace:
   - wrestling_scoreboard_client
   - wrestling_scoreboard_server
@@ -10,7 +10,7 @@ workspace:
   - wrestling_scoreboard_generator
 
 dev_dependencies:
-  melos: ^7.4.1
+  melos: ^7.7.0
 
 melos:
   command:
@@ -24,23 +24,9 @@ melos:
 
     bootstrap:
       environment:
-        sdk: ^3.11.0
+        sdk: ^3.12.0
 
   scripts:
-    lint:all:
-      steps:
-        - analyze
-        - format
-      description: Run all static analysis checks.
-
-    analyze:
-      run: melos exec dart analyze .
-      description: Run `dart analyze` for all packages.
-
-    format-check:
-      run: melos exec dart format . --set-exit-if-changed
-      description: Run `dart format` checks for all packages.
-
     upgrade: melos exec flutter pub upgrade
 
     test:select:

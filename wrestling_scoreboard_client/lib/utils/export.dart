@@ -34,8 +34,7 @@ Future<void> exportRDB({required String fileBaseName, required String rdbString}
 
 /// Exports a [table] (list of rows) as CSV to the specified [fileBaseName] (without extension).
 Future<void> exportCSV({required String fileBaseName, required List<List<dynamic>> table}) async {
-  const converter = ListToCsvConverter();
-  final content = converter.convert(table);
+  final content = csv.encode(table);
   await downloadSelector(content: content, fileExtension: 'csv', fileBaseName: fileBaseName, mimeType: 'text/csv');
 }
 

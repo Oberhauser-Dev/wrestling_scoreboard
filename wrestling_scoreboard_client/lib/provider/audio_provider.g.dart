@@ -10,10 +10,10 @@ part of 'audio_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(BellPlayerNotifier)
-const bellPlayerProvider = BellPlayerNotifierProvider._();
+final bellPlayerProvider = BellPlayerNotifierProvider._();
 
 final class BellPlayerNotifierProvider extends $NotifierProvider<BellPlayerNotifier, Raw<Future<AudioPlayer>>> {
-  const BellPlayerNotifierProvider._()
+  BellPlayerNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -43,8 +43,7 @@ abstract class _$BellPlayerNotifier extends $Notifier<Raw<Future<AudioPlayer>>> 
   Raw<Future<AudioPlayer>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<AudioPlayer>>, Raw<Future<AudioPlayer>>>;
     final element =
         ref.element
@@ -54,6 +53,6 @@ abstract class _$BellPlayerNotifier extends $Notifier<Raw<Future<AudioPlayer>>> 
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

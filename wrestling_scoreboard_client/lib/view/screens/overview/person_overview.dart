@@ -382,10 +382,7 @@ class _ReorderablePersonExpansionTileState extends ConsumerState<ReorderablePers
                 ),
               )
               .toList(),
-          onReorder: (oldIndex, newIndex) {
-            if (oldIndex < newIndex) {
-              newIndex -= 1;
-            }
+          onReorderItem: (oldIndex, newIndex) {
             setState(() {
               final item = persons.removeAt(oldIndex);
               persons.insert(newIndex, item);

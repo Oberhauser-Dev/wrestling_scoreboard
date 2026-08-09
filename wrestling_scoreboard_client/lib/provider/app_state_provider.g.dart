@@ -10,10 +10,10 @@ part of 'app_state_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(WindowStateNotifier)
-const windowStateProvider = WindowStateNotifierProvider._();
+final windowStateProvider = WindowStateNotifierProvider._();
 
 final class WindowStateNotifierProvider extends $NotifierProvider<WindowStateNotifier, Raw<Future<WindowState>>> {
-  const WindowStateNotifierProvider._()
+  WindowStateNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -43,8 +43,7 @@ abstract class _$WindowStateNotifier extends $Notifier<Raw<Future<WindowState>>>
   Raw<Future<WindowState>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Raw<Future<WindowState>>, Raw<Future<WindowState>>>;
     final element =
         ref.element
@@ -54,6 +53,6 @@ abstract class _$WindowStateNotifier extends $Notifier<Raw<Future<WindowState>>>
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
