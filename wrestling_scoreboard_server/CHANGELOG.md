@@ -1,3 +1,18 @@
+## 0.3.10
+
+ - **REFACTOR**: Remove TeamMatch resultRole. ([a5477882](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a5477882e1d1db13496228441c11d6255b922e10))
+ - **REFACTOR**: Wrestling event tests and preparation. ([16e08009](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/16e08009dc32f9f219f3f5e4832e1f5ef40a7220))
+ - **FIX**: Rework competition rank display. ([e1015828](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e1015828f06acf52282b04df286de7836dfbada5))
+ - **FIX**: Use validated team match result on import. ([d363b1e4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d363b1e497e193f18d8d8e21fb1caf3d7f326982))
+ - **FIX**: Assert pointCount is not null when actionType is `points`. ([20978536](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2097853668faa156df79fcfebd8928489c295f25))
+ - **FIX**: Broadcast bout changes correctly. ([cd516fd9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/cd516fd9a0202e5ec4d7a3990b283c21ec826e07))
+ - **FIX**: Disallow overwrite of certain properties on import (closes [#247](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/247)). ([82479dd9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/82479dd95e0265ec8b68565ff7e812724d4ffb97))
+ - **FEAT**: Upgrade Flutter to v3.44.x. ([839a95e9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/839a95e9598422d242324793930abdcde97c8b66))
+ - **FEAT**: Split CompetitionSystemAffiliation in separate Phases. ([f79203c8](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f79203c84dc8d5c6d3388fbe3fdd118d7ef9d312))
+ - **FEAT**: Warning for missing data on export (closes [#261](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/261)). ([7e8a9e0c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7e8a9e0c694d635c85b698c9f5b3aad3402cb062))
+ - **FEAT**: Set team match result, if every bout has a result. ([5187ecb7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5187ecb7c4f8426a3541fcb572ac9fb9ece8e64b))
+ - **FEAT**: Store team match classification points separately. ([9c4c2392](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9c4c2392215b7d660d4f6c37bf74043db9b63463))
+
 ## 0.3.9
 
  - **FIX**: Make entity deletion more rubust. ([eec3b04b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eec3b04bc91c0fac82f49a3e2e3f42d2aab86e86))

@@ -2127,7 +2127,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.10-pre.3	0.3.10
+0.3.10	0.3.11
 \.
 
 
