@@ -57,75 +57,103 @@ class LeagueDisplay extends ConsumerWidget {
                   filterObject: league,
                   builder: (context, matches) {
                     Future<List<MapEntry<Team, LeagueTeamPoints>>> getAllLeagueTeamPoints() async {
-                      final List<MapEntry<TeamMatch, (LeagueTeamPoints, LeagueTeamPoints)>>
-                      teamMatchBoutsMap = await Future.wait(
-                        matches.map((tm) async {
-                          int? homeCPoints = tm.home.classificationPoints;
-                          int? guestCPoints = tm.guest.classificationPoints;
-                          if (homeCPoints == null || guestCPoints == null) {
-                            final bouts = (await _getTeamMatchBouts(ref, tm));
-                            homeCPoints = TeamMatch.getHomePoints(bouts);
-                            guestCPoints = TeamMatch.getGuestPoints(bouts);
-                          }
-                          final resultRole = TeamMatch.getResultRole(home: tm.home, guest: tm.guest);
-                          final matchEndedValue = resultRole == null ? 0 : 1;
-                          final tmpResultRole = resultRole ?? MatchResultRole.fromDiff(homeCPoints - guestCPoints);
-                          if (tmpResultRole == MatchResultRole.tie) {
-                            // If the match has not yet started at all (means no team has made classification points), do not count it as tie (yet).
-                            final matchStartedValue = resultRole == null && homeCPoints == 0 && guestCPoints == 0
-                                ? 0
-                                : 1;
-                            final homePoints = LeagueTeamPoints(
-                              teamPoints: matchStartedValue,
-                              teamLossPoints: matchStartedValue,
-                              classificationPoints: homeCPoints,
-                              classificationLossPoints: guestCPoints,
-                              wins: 0,
-                              ties: matchStartedValue,
-                              losses: 0,
-                              matchCount: matchEndedValue,
-                            );
-                            final guestPoints = LeagueTeamPoints(
-                              teamPoints: matchStartedValue,
-                              teamLossPoints: matchStartedValue,
-                              classificationPoints: guestCPoints,
-                              classificationLossPoints: homeCPoints,
-                              wins: 0,
-                              ties: matchStartedValue,
-                              losses: 0,
-                              matchCount: matchEndedValue,
-                            );
-                            return MapEntry(tm, (homePoints, guestPoints));
-                          }
-                          final LeagueTeamPoints winner, looser;
-                          final winnerPoints = tmpResultRole == MatchResultRole.home ? homeCPoints : guestCPoints;
-                          final looserPoints = tmpResultRole == MatchResultRole.home ? guestCPoints : homeCPoints;
-                          winner = LeagueTeamPoints(
-                            teamPoints: 2,
-                            teamLossPoints: 0,
-                            classificationPoints: winnerPoints,
-                            classificationLossPoints: looserPoints,
-                            wins: 1,
-                            ties: 0,
-                            losses: 0,
-                            matchCount: matchEndedValue,
+                      final List<MapEntry<TeamMatch, (LeagueTeamPoints, LeagueTeamPoints)>> teamMatchBoutsMap =
+                          await Future.wait(
+                            matches.map((tm) async {
+                              int? homeCPoints = tm.home.classificationPoints;
+                              int? guestCPoints = tm.guest.classificationPoints;
+                              if (homeCPoints == null || guestCPoints == null) {
+                                // Fall back to calculating the classification points from the bouts.
+                                final bouts = (await _getTeamMatchBouts(ref, tm));
+                                // Only calculate the classification points if there are bouts,
+                                // otherwise leave them as null (to indicate that the match has not yet started).
+                                if (bouts.isNotEmpty) {
+                                  homeCPoints = TeamMatch.getHomePoints(bouts);
+                                  guestCPoints = TeamMatch.getGuestPoints(bouts);
+                                }
+                              }
+
+                              if (homeCPoints == null || guestCPoints == null) {
+                                // Match has not yet started
+                                final homePoints = LeagueTeamPoints(
+                                  teamPoints: 0,
+                                  teamLossPoints: 0,
+                                  classificationPoints: 0,
+                                  classificationLossPoints: 0,
+                                  wins: 0,
+                                  ties: 0,
+                                  losses: 0,
+                                  matchCount: 0,
+                                );
+                                final guestPoints = LeagueTeamPoints(
+                                  teamPoints: 0,
+                                  teamLossPoints: 0,
+                                  classificationPoints: 0,
+                                  classificationLossPoints: 0,
+                                  wins: 0,
+                                  ties: 0,
+                                  losses: 0,
+                                  matchCount: 0,
+                                );
+                                return MapEntry(tm, (homePoints, guestPoints));
+                              }
+
+                              // No result role yet, if no classification points given.
+                              final resultRole = TeamMatch.getResultRole(home: tm.home, guest: tm.guest);
+                              final matchEndedValue = resultRole == null ? 0 : 1;
+                              final tmpResultRole = resultRole ?? MatchResultRole.fromDiff(homeCPoints - guestCPoints);
+                              if (tmpResultRole == MatchResultRole.tie) {
+                                final homePoints = LeagueTeamPoints(
+                                  teamPoints: 1,
+                                  teamLossPoints: 1,
+                                  classificationPoints: homeCPoints,
+                                  classificationLossPoints: guestCPoints,
+                                  wins: 0,
+                                  ties: 1,
+                                  losses: 0,
+                                  matchCount: matchEndedValue,
+                                );
+                                final guestPoints = LeagueTeamPoints(
+                                  teamPoints: 1,
+                                  teamLossPoints: 1,
+                                  classificationPoints: guestCPoints,
+                                  classificationLossPoints: homeCPoints,
+                                  wins: 0,
+                                  ties: 1,
+                                  losses: 0,
+                                  matchCount: matchEndedValue,
+                                );
+                                return MapEntry(tm, (homePoints, guestPoints));
+                              }
+                              final LeagueTeamPoints winner, looser;
+                              final winnerPoints = tmpResultRole == MatchResultRole.home ? homeCPoints : guestCPoints;
+                              final looserPoints = tmpResultRole == MatchResultRole.home ? guestCPoints : homeCPoints;
+                              winner = LeagueTeamPoints(
+                                teamPoints: 2,
+                                teamLossPoints: 0,
+                                classificationPoints: winnerPoints,
+                                classificationLossPoints: looserPoints,
+                                wins: 1,
+                                ties: 0,
+                                losses: 0,
+                                matchCount: matchEndedValue,
+                              );
+                              looser = LeagueTeamPoints(
+                                teamPoints: 0,
+                                teamLossPoints: 2,
+                                classificationPoints: looserPoints,
+                                classificationLossPoints: winnerPoints,
+                                wins: 0,
+                                ties: 0,
+                                losses: 1,
+                                matchCount: matchEndedValue,
+                              );
+                              return MapEntry(
+                                tm,
+                                tmpResultRole == MatchResultRole.home ? (winner, looser) : (looser, winner),
+                              );
+                            }),
                           );
-                          looser = LeagueTeamPoints(
-                            teamPoints: 0,
-                            teamLossPoints: 2,
-                            classificationPoints: looserPoints,
-                            classificationLossPoints: winnerPoints,
-                            wins: 0,
-                            ties: 0,
-                            losses: 1,
-                            matchCount: matchEndedValue,
-                          );
-                          return MapEntry(
-                            tm,
-                            tmpResultRole == MatchResultRole.home ? (winner, looser) : (looser, winner),
-                          );
-                        }),
-                      );
                       final pointsPerTeam = leagueTeamParticipations.map((ltp) {
                         final pointsTuplePerMatch = teamMatchBoutsMap
                             .where((tmbm) {
