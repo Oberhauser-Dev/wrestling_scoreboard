@@ -29,7 +29,7 @@ extension AuthRequest on Request {
           'You don\'t have the permission for this request. Ask the administrator in order to give you access.',
         );
       }
-      return handler(this, user);
+      return await handler(this, user);
     } on JWTExpiredException {
       return Response.unauthorized('JWT token expired');
     } on JWTException catch (ex) {

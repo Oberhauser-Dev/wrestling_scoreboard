@@ -23,7 +23,7 @@ dependencies:
   dropdown_search: ^6.0.2
   audioplayers: ^6.0.0
   web_socket_channel: ^3.0.1
-  go_router: ^17.4.0
+  go_router: ^18.0.1
   path_provider: ^2.0.8
   shared_preferences: ^2.0.13
   wrestling_scoreboard_common:
@@ -62,12 +62,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.14.2
+  # TODO: flutter_launcher_icons not compatible with cli_util >=0.5.0
+  # See: https://github.com/fluttercommunity/flutter_launcher_icons/issues/675
+  #flutter_launcher_icons: ^0.14.2
   flutter_lints: ^6.0.0
   riverpod_generator: ^4.0.4
   build_runner: ^2.4.7
   riverpod_lint: ^3.0.3
-  freezed: ^3.1.0
+  freezed: ^4.0.1
   json_serializable: ^6.9.5
 
 dependency_overrides:
@@ -95,15 +97,15 @@ flutter:
     - assets/images/icons/
     - assets/fonts/google/
 
-flutter_launcher_icons:
-  android: "ic_launcher"
-  ios: true
-  remove_alpha_ios: true
-  image_path: "assets/images/icons/launcher.png"
-  web:
-    generate: true
-  windows:
-    generate: true
-    icon_size: 256
-  macos:
-    generate: true
+#flutter_launcher_icons:
+#  android: "ic_launcher"
+#  ios: true
+#  remove_alpha_ios: true
+#  image_path: "assets/images/icons/launcher.png"
+#  web:
+#    generate: true
+#  windows:
+#    generate: true
+#    icon_size: 256
+#  macos:
+#    generate: true

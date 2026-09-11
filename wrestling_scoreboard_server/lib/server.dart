@@ -43,7 +43,7 @@ Future<HttpServer> init() async {
     ..mount('/ws', (Request request) {
       try {
         return websocketHandler(request);
-      } on HijackException catch (error, _) {
+      } on HijackException catch (error) {
         // A HijackException should bypass the response-writing logic entirely.
         webSocketLog.warning(
           'Warning: HijackException thrown on WebsocketHandler.',

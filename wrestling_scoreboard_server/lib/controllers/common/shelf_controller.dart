@@ -111,7 +111,7 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
   Future<Response> postRequestSingle(Request request, User? user) async {
     final message = await request.readAsString();
     try {
-      return handlePostRequestSingle(jsonDecode(message));
+      return await handlePostRequestSingle(jsonDecode(message));
     } on FormatException catch (e) {
       final errMessage =
           'The data object of table "$tableName" could not be created. Check the format: $message'
