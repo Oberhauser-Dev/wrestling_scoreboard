@@ -12,8 +12,6 @@ linter:
 analyzer:
   language:
     strict-raw-types: true
-  plugins:
-    - custom_lint
 
 formatter:
   page_width: 120
