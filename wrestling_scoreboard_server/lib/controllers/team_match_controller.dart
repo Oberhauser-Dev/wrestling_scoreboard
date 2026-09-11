@@ -214,56 +214,59 @@ class TeamMatchController extends ShelfController<TeamMatch>
     final tmbMap = await apiProvider.importTeamMatchBouts(teamMatch: entity);
     List<TeamMatchBout> teamMatchBouts = tmbMap.keys.toList();
 
-    teamMatchBouts = await TeamMatchBoutController().updateOrCreateManyOfOrg(
-      teamMatchBouts,
-      filterType: TeamMatch,
-      filterId: entity.id,
-      onUpdateOrCreate: (previous, current) async {
-        var bout = current.bout;
-        final actions = tmbMap[current]!;
+    // Do not override existing bouts and lineups, if they are not present in the API (yet).
+    if (teamMatchBouts.isNotEmpty) {
+      teamMatchBouts = await TeamMatchBoutController().updateOrCreateManyOfOrg(
+        teamMatchBouts,
+        filterType: TeamMatch,
+        filterId: entity.id,
+        onUpdateOrCreate: (previous, current) async {
+          var bout = current.bout;
+          final actions = tmbMap[current]!;
 
-        bout = await BoutController().updateOrCreateSingleOfOrg(
-          bout,
-          onUpdateOrCreate: (previousBout) async {
-            return bout.copyWith(
-              r: await _saveDeepParticipantState(
-                bout.r,
-                previousAthleteBoutState: previousBout?.r,
-                lineup: entity.home,
-                weightClass: current.weightClass!,
-              ),
-              b: await _saveDeepParticipantState(
-                bout.b,
-                previousAthleteBoutState: previousBout?.b,
-                lineup: entity.guest,
-                weightClass: current.weightClass!,
-              ),
-            );
-          },
-        );
+          bout = await BoutController().updateOrCreateSingleOfOrg(
+            bout,
+            onUpdateOrCreate: (previousBout) async {
+              return bout.copyWith(
+                r: await _saveDeepAthleteBoutState(
+                  bout.r,
+                  previousAthleteBoutState: previousBout?.r,
+                  lineup: entity.home,
+                  weightClass: current.weightClass!,
+                ),
+                b: await _saveDeepAthleteBoutState(
+                  bout.b,
+                  previousAthleteBoutState: previousBout?.b,
+                  lineup: entity.guest,
+                  weightClass: current.weightClass!,
+                ),
+              );
+            },
+          );
 
-        // Add missing id to bout of boutActions
-        final Iterable<BoutAction> boutActions = actions.map((action) => action.copyWith(bout: bout));
-        await BoutActionController().updateOnDiffMany(boutActions.toList(), filterType: Bout, filterId: bout.id);
-        return current.copyWith(bout: bout);
-      },
-      onDelete: (previous) async {
-        // BoutActions are deleted within BoutController().deleteSingle(id)
-      },
-      onDeleted: (previous) async {
-        // Bout is deleted within TeamMatchBoutController().deleteSingle(id)
-        // AthleteBoutState is deleted within BoutController().deleteSingle(id)
-      },
-    );
+          // Add missing id to bout of boutActions
+          final Iterable<BoutAction> boutActions = actions.map((action) => action.copyWith(bout: bout));
+          await BoutActionController().updateOnDiffMany(boutActions.toList(), filterType: Bout, filterId: bout.id);
+          return current.copyWith(bout: bout);
+        },
+        onDelete: (previous) async {
+          // BoutActions are deleted within BoutController().deleteSingle(id)
+        },
+        onDeleted: (previous) async {
+          // Bout is deleted within TeamMatchBoutController().deleteSingle(id)
+          // AthleteBoutState is deleted within BoutController().deleteSingle(id)
+        },
+      );
 
-    await _updateLineupParticipations(
-      entity.home,
-      Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.r))),
-    );
-    await _updateLineupParticipations(
-      entity.guest,
-      Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.b))),
-    );
+      await _updateLineupParticipations(
+        entity.home,
+        Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.r))),
+      );
+      await _updateLineupParticipations(
+        entity.guest,
+        Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.b))),
+      );
+    }
 
     yield (++step) / totalSteps;
 
@@ -310,7 +313,7 @@ class TeamMatchController extends ShelfController<TeamMatch>
     );
   }
 
-  Future<AthleteBoutState?> _saveDeepParticipantState(
+  Future<AthleteBoutState?> _saveDeepAthleteBoutState(
     AthleteBoutState? athleteBoutState, {
     AthleteBoutState? previousAthleteBoutState,
     required TeamLineup lineup,

@@ -73,25 +73,44 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
       filterId: entity.id,
       onUpdatedOrCreated: (previous, teamMatch) async {
         final officials = teamMatchMap.entries.where((tmm) => tmm.key.orgSyncId == teamMatch.orgSyncId).single.value;
-        final updatedOfficials = await forEachFuture(officials.entries, (official) async {
-          return MapEntry(
-            official.key.id != null ? official.key : (await PersonController().updateOrCreateSingleOfOrg(official.key)),
-            official.value,
-          );
-        });
+        // Do not override existing officials, if they are not present in the API (yet).
+        if (officials.isNotEmpty) {
+          final updatedOfficials = await forEachFuture(officials.entries, (official) async {
+            return MapEntry(
+              official.key.id != null
+                  ? official.key
+                  : (await PersonController().updateOrCreateSingleOfOrg(official.key)),
+              official.value,
+            );
+          });
 
-        await TeamMatchPersonController().updateOnDiffMany(
-          updatedOfficials
-              .map((official) => TeamMatchPerson(teamMatch: teamMatch, person: official.key, role: official.value))
-              .toList(),
-          filterType: TeamMatch,
-          filterId: teamMatch.id,
-        );
+          await TeamMatchPersonController().updateOnDiffMany(
+            updatedOfficials
+                .map((official) => TeamMatchPerson(teamMatch: teamMatch, person: official.key, role: official.value))
+                .toList(),
+            filterType: TeamMatch,
+            filterId: teamMatch.id,
+          );
+        }
       },
       onUpdateOrCreate: (prevTeamMatch, teamMatch) async {
+        // Do not override existing coach and leader, if they are not present in the API (yet).
+        final homeLineup = teamMatch.home.copyWith(
+          coach: teamMatch.home.coach ?? prevTeamMatch?.home.coach,
+          leader: teamMatch.home.leader ?? prevTeamMatch?.home.leader,
+        );
+        final guestLineup = teamMatch.guest.copyWith(
+          coach: teamMatch.guest.coach ?? prevTeamMatch?.guest.coach,
+          leader: teamMatch.guest.leader ?? prevTeamMatch?.guest.leader,
+        );
         return teamMatch.copyWith(
-          home: await TeamLineupController().updateOnDiffSingle(teamMatch.home, previous: prevTeamMatch?.home),
-          guest: await TeamLineupController().updateOnDiffSingle(teamMatch.guest, previous: prevTeamMatch?.guest),
+          home: await TeamLineupController().updateOnDiffSingle(homeLineup, previous: prevTeamMatch?.home),
+          guest: await TeamLineupController().updateOnDiffSingle(guestLineup, previous: prevTeamMatch?.guest),
+          // Do not override existing information
+          comment: teamMatch.comment ?? prevTeamMatch?.comment,
+          location: teamMatch.location ?? prevTeamMatch?.location,
+          visitorsCount: teamMatch.visitorsCount ?? prevTeamMatch?.visitorsCount,
+          endDate: teamMatch.endDate ?? prevTeamMatch?.endDate,
         );
       },
       onDelete: (previous) async {
