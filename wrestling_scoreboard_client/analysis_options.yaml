@@ -15,6 +15,14 @@ analyzer:
   errors:
     # Needed for freezed package:
     invalid_annotation_target: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 formatter:
   page_width: 120
