@@ -21,7 +21,7 @@ sudo apt install postgresql-client
 
 - Open psql command line: `psql -U postgres`
 - List all users: `\du`
-- Start the database server: `postgres -D /.../PostgreSQL/16/data`
+- Start the database server: `postgres -D /.../PostgreSQL/<version>/data`
 
 Login as database admin:
 ```shell

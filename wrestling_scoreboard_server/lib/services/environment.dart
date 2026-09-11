@@ -17,6 +17,7 @@ class Environment {
   late final String? databaseUser;
   late final String? databasePassword;
   late final String? databaseName;
+  late final String? databaseSslMode;
   late final String? corsAllowOrigin;
   late final int? webSocketPingIntervalSecs;
 
@@ -40,6 +41,7 @@ class Environment {
     databaseUser = dotEnv['DATABASE_USER'];
     databasePassword = dotEnv['DATABASE_PASSWORD'];
     databaseName = dotEnv['DATABASE_NAME'];
+    databaseSslMode = dotEnv['DATABASE_SSL_MODE'];
     corsAllowOrigin = dotEnv['CORS_ALLOW_ORIGIN'];
     webSocketPingIntervalSecs = int.tryParse(dotEnv['WEB_SOCKET_PING_INTERVAL_SECS'] ?? '');
     webClientUrl = dotEnv['WEB_CLIENT_URL'];
