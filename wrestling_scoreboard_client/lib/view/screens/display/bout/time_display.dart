@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/scaled_container.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -119,12 +120,16 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
                   padding: EdgeInsets.symmetric(
                     vertical: ((widget.fontSize ?? 14) / 4) * MediaQuery.of(context).size.width / 1000,
                   ),
-                  child: ScaledText(
-                    adjustedTime().formatDeciSeconds(),
-                    fontSize: (widget.fontSize ?? 14) / 4,
-                    color: _stopwatch.isRunning ? widget.color : widget.color.disabled(),
-                    minFontSize: 8,
-                    softWrap: false,
+                  // Avoid jumping of the deci seconds by using a fixed width container, e.g. see font "Albert Sans".
+                  child: ScaledContainer(
+                    width: 0.02,
+                    child: ScaledText(
+                      adjustedTime().formatDeciSeconds(),
+                      fontSize: (widget.fontSize ?? 14) / 4,
+                      color: _stopwatch.isRunning ? widget.color : widget.color.disabled(),
+                      minFontSize: 8,
+                      softWrap: false,
+                    ),
                   ),
                 ),
             ],
