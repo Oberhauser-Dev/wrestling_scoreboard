@@ -21,6 +21,7 @@ melos:
       releaseUrl: true
       includeCommitId: true
       linkToCommits: true
+      mode: fixed
 
     bootstrap:
       environment:
