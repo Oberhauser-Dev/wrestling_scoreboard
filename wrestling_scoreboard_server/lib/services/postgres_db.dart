@@ -19,6 +19,12 @@ class PostgresDb {
   final String dbUser = env.databaseUser ?? 'postgres';
   final String dbPW = env.databasePassword ?? '';
   final String postgresDatabaseName = env.databaseName ?? 'wrestling_scoreboard';
+  final psql.SslMode postgresDatabaseSslMode = switch (env.databaseSslMode?.toUpperCase()) {
+    'DISABLE' => psql.SslMode.disable,
+    'VERIFY_FULL' => psql.SslMode.verifyFull,
+    'REQUIRE' => psql.SslMode.require,
+    _ => psql.SslMode.require,
+  };
 
   static final PostgresDb _singleton = PostgresDb._internal();
 
@@ -44,7 +50,7 @@ class PostgresDb {
         password: dbPW,
       ),
       settings: psql.ConnectionSettings(
-        sslMode: _isReleaseMode ? psql.SslMode.require : psql.SslMode.disable,
+        sslMode: postgresDatabaseSslMode,
         // Increase connection timeout while debugging
         connectTimeout: Duration(seconds: _isReleaseMode ? 15 : 180),
         timeZone: 'UTC',
