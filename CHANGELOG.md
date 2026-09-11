@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-09-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_server` - `v0.3.11`](#wrestling_scoreboard_server---v0311)
+
+---
+
+#### `wrestling_scoreboard_server` - `v0.3.11`
+
+ - **FIX**: Allow custom database SSL mode. ([43f556d3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/43f556d3f2174119993c94c06008162ea489d2d8))
+
+
 ## 2026-08-09
 
 ### Changes

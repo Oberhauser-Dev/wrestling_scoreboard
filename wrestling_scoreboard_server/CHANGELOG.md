@@ -1,3 +1,7 @@
+## 0.3.11
+
+ - **FIX**: Allow custom database SSL mode. ([43f556d3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/43f556d3f2174119993c94c06008162ea489d2d8))
+
 ## 0.3.10
 
  - **REFACTOR**: Remove TeamMatch resultRole. ([a5477882](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a5477882e1d1db13496228441c11d6255b922e10))
