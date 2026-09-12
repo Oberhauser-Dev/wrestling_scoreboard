@@ -1,3 +1,8 @@
+## 0.3.12
+
+ - **FIX**: Parse "0"-classification points as null, if decision is not set. ([df493bac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/df493bac0804a7a23af9d5a255848a30a298290e))
+ - **FIX**: Avoid jumping deci seconds in time display. ([652c4f93](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/652c4f93794576423d66f033b8f266b5d8015f0d))
+
 ## 0.3.11
 
  - **REFACTOR**: Fill default values on competition edit. ([91c4393e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/91c4393ef2a732066cd3103f70dc336144739a66))

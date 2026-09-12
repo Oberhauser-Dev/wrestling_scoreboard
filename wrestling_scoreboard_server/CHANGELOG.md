@@ -1,3 +1,8 @@
+## 0.3.12
+
+ - **FIX**: Parse "0"-classification points as null, if decision is not set. ([df493bac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/df493bac0804a7a23af9d5a255848a30a298290e))
+ - **FIX**: Avoid overriding existing lineups and bouts on incomplete import. ([040cd344](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/040cd3444ee51aa6f4c0b04f638330b5fa87f2bd))
+
 ## 0.3.11
 
  - **FIX**: Allow custom database SSL mode. ([43f556d3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/43f556d3f2174119993c94c06008162ea489d2d8))
