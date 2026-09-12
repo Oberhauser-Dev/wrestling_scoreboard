@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-09-12
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.12`](#wrestling_scoreboard_client---v0312)
+ - [`wrestling_scoreboard_server` - `v0.3.12`](#wrestling_scoreboard_server---v0312)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.12`
+
+ - **FIX**: Parse "0"-classification points as null, if decision is not set. ([df493bac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/df493bac0804a7a23af9d5a255848a30a298290e))
+ - **FIX**: Avoid jumping deci seconds in time display. ([652c4f93](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/652c4f93794576423d66f033b8f266b5d8015f0d))
+
+#### `wrestling_scoreboard_server` - `v0.3.12`
+
+ - **FIX**: Parse "0"-classification points as null, if decision is not set. ([df493bac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/df493bac0804a7a23af9d5a255848a30a298290e))
+ - **FIX**: Avoid overriding existing lineups and bouts on incomplete import. ([040cd344](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/040cd3444ee51aa6f4c0b04f638330b5fa87f2bd))
+
+
 ## 2026-09-11
 
 ### Changes
