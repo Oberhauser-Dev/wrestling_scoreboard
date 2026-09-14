@@ -47,6 +47,7 @@ class MembershipDropdown extends ConsumerWidget {
           disableFilter: true,
           containerBuilder: (context, popupWidget) {
             return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 if (authServiceMap[organization?.id] == null)
                   const PaddedCard(
@@ -54,7 +55,7 @@ class MembershipDropdown extends ConsumerWidget {
                       "⚠ You have not specified any credentials for this organization, therefore you can't search for sensitive data.",
                     ),
                   ),
-                Expanded(child: popupWidget),
+                popupWidget,
               ],
             );
           },
