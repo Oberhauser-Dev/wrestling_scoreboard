@@ -201,58 +201,61 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     final localizations = context.l10n;
     return Form(
       key: _formKey,
-      child: CustomizableEditWidget(
-        typeLocalization: localizations.lineup,
-        id: widget.lineup.id,
-        buildActions: _buildActions,
-        items: [
-          LoadingBuilder(
-            future: _getClubs(),
-            builder: (context, clubs) {
-              if (clubs.isEmpty) return SizedBox.shrink();
-              return ListTile(
+      child: LoadingBuilder(
+        future: _getClubs(),
+        builder: (context, clubs) {
+          if (clubs.isEmpty) return SizedBox.shrink();
+          return CustomizableEditWidget(
+            typeLocalization: localizations.lineup,
+            id: widget.lineup.id,
+            buildActions: _buildActions,
+            items: [
+              ListTile(
                 title: HeadingText(widget.lineup.team.name),
                 trailing: AddOrCreateButton(
                   addPageBuilder: (context) =>
                       MembershipEdit(initialOrganization: widget.lineup.team.organization!, initialClub: clubs.first),
                   createPageBuilder: (context) => MembershipPersonEdit(initialClub: clubs.first),
                 ),
-              );
-            },
-          ),
-          if (widget.participations.isEmpty && (widget.initialParticipations?.isNotEmpty ?? false))
-            IconCard(icon: const Icon(Icons.warning), child: Text(localizations.warningPrefilledLineup)),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: MembershipDropdown(
-              label: localizations.leader,
-              getOrSetMemberships: _getMemberships,
-              organization: widget.lineup.team.organization,
-              selectedItem: _leader,
-              onSave: (Membership? value) => _leader = value,
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: MembershipDropdown(
-              label: localizations.coach,
-              getOrSetMemberships: _getMemberships,
-              organization: widget.lineup.team.organization,
-              selectedItem: _coach,
-              onSave: (Membership? value) => _coach = value,
-            ),
-          ),
-          ..._participations.entries.map((mapEntry) {
-            return ParticipationEditTile(
-              getOrSetMemberships: _getMemberships,
-              lineup: widget.lineup,
-              participation: mapEntry.value,
-              weightClass: mapEntry.key,
-              createOrUpdateParticipation: (participation) => _createOrUpdateParticipations.add(participation),
-              deleteParticipation: (participation) => _deleteParticipations.add(participation),
-            );
-          }),
-        ],
+              ),
+              if (widget.participations.isEmpty && (widget.initialParticipations?.isNotEmpty ?? false))
+                IconCard(icon: const Icon(Icons.warning), child: Text(localizations.warningPrefilledLineup)),
+              ListTile(
+                leading: Icon(Icons.person),
+                title: MembershipDropdown(
+                  label: localizations.leader,
+                  getOrSetMemberships: _getMemberships,
+                  organization: widget.lineup.team.organization,
+                  selectedItem: _leader,
+                  onSave: (Membership? value) => _leader = value,
+                  clubFilter: clubs,
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.person),
+                title: MembershipDropdown(
+                  label: localizations.coach,
+                  getOrSetMemberships: _getMemberships,
+                  organization: widget.lineup.team.organization,
+                  selectedItem: _coach,
+                  onSave: (Membership? value) => _coach = value,
+                  clubFilter: clubs,
+                ),
+              ),
+              ..._participations.entries.map((mapEntry) {
+                return ParticipationEditTile(
+                  getOrSetMemberships: _getMemberships,
+                  lineup: widget.lineup,
+                  participation: mapEntry.value,
+                  weightClass: mapEntry.key,
+                  createOrUpdateParticipation: (participation) => _createOrUpdateParticipations.add(participation),
+                  deleteParticipation: (participation) => _deleteParticipations.add(participation),
+                  clubFilter: clubs,
+                );
+              }),
+            ],
+          );
+        },
       ),
     );
   }
@@ -300,6 +303,7 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
   final void Function(TeamLineupParticipation participation) deleteParticipation;
   final void Function(TeamLineupParticipation participation) createOrUpdateParticipation;
   final Future<Iterable<Membership>> Function() getOrSetMemberships;
+  final Iterable<Club>? clubFilter;
 
   const ParticipationEditTile({
     super.key,
@@ -309,6 +313,7 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
     required this.deleteParticipation,
     required this.createOrUpdateParticipation,
     required this.getOrSetMemberships,
+    this.clubFilter,
   });
 
   @override
@@ -394,6 +399,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
                 organization: widget.lineup.team.organization,
                 selectedItem: widget.participation?.membership,
                 onSave: (_) => onSave(),
+                clubFilter: widget.clubFilter,
               ),
             ),
           ),
