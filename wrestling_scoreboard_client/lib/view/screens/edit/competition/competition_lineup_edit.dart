@@ -87,6 +87,7 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
           onSave: (value) => setState(() {
             _leader = value;
           }),
+          clubFilter: [?_club],
         ),
       ),
       ListTile(

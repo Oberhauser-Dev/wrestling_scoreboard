@@ -16,6 +16,7 @@ class MembershipDropdown extends ConsumerWidget {
   final String? label;
   final Organization? organization;
   final bool allowEmpty;
+  final Iterable<Club>? clubFilter;
 
   const MembershipDropdown({
     super.key,
@@ -26,6 +27,7 @@ class MembershipDropdown extends ConsumerWidget {
     this.onChange,
     required this.onSave,
     this.allowEmpty = true,
+    this.clubFilter,
   });
 
   @override
@@ -33,18 +35,28 @@ class MembershipDropdown extends ConsumerWidget {
     return LoadingBuilder<Map<int, AuthService>>(
       future: ref.watch(orgAuthProvider),
       builder: (context, authServiceMap) {
-        return SearchableDropdown<Membership>.stringItems(
+        return SearchableDropdown<Membership>(
           selectedItem: selectedItem,
           label: label,
           context: context,
           onChanged: onChange,
           onSaved: onSave,
-          itemAsString: (u) => u.info + (u.id == null ? ' (API)' : ''),
+          itemBuilder: (context, item) {
+            return Row(
+              spacing: 12,
+              children: [
+                Expanded(child: Text(item.info)),
+                if (item.id == null)
+                  Chip(label: const Text('API'), backgroundColor: Colors.amber.withValues(alpha: 0.2)),
+                if (clubFilter case final filter? when filter.isNotEmpty && !filter.contains(item.club))
+                  Chip(label: Text(item.club.name), backgroundColor: Colors.red.withValues(alpha: 0.2)),
+              ],
+            );
+          },
           asyncItems: (String filter) async {
             return _filterMemberships(ref, filter, organization, await getOrSetMemberships());
           },
           allowEmpty: allowEmpty,
-          disableFilter: true,
           containerBuilder: (context, popupWidget) {
             return Column(
               mainAxisSize: MainAxisSize.min,
