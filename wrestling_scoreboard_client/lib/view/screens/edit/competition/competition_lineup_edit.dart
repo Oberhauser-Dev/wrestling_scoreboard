@@ -53,7 +53,7 @@ class CompetitionLineupEditState extends ConsumerState<CompetitionLineupEdit> {
 
     final items = [
       ListTile(
-        title: SearchableDropdown<Club>(
+        title: SearchableDropdown<Club>.stringItems(
           allowEmpty: false,
           icon: const Icon(Icons.foundation),
           selectedItem: _club,

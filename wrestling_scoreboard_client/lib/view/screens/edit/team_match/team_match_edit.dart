@@ -109,7 +109,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         onSaved: (newValue) => _endDate = newValue,
       ),
       ListTile(
-        title: SearchableDropdown<Team>(
+        title: SearchableDropdown<Team>.stringItems(
           icon: const Icon(Icons.group),
           selectedItem: _homeTeam,
           label: '${localizations.team} ${localizations.red}',
@@ -122,7 +122,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         ),
       ),
       ListTile(
-        title: SearchableDropdown<Team>(
+        title: SearchableDropdown<Team>.stringItems(
           icon: const Icon(Icons.group),
           selectedItem: _guestTeam,
           label: '${localizations.team} ${localizations.blue}',
@@ -166,7 +166,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
         onSaved: (value) => _comment = value,
       ),
       ListTile(
-        title: SearchableDropdown<League>(
+        title: SearchableDropdown<League>.stringItems(
           icon: const Icon(Icons.emoji_events),
           selectedItem: _league,
           label: localizations.league,

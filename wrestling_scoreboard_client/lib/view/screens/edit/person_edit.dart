@@ -98,7 +98,7 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
         ),
       ),
       ListTile(
-        title: SearchableDropdown<Country>(
+        title: SearchableDropdown<Country>.stringItems(
           // TODO: replace icon with home_pin when available, also in overview
           //  https://github.com/flutter/flutter/issues/102560
           icon: const Icon(Icons.location_on),

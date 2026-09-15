@@ -48,7 +48,7 @@ class CompetitionAgeCategoryEditState extends ConsumerState<CompetitionAgeCatego
         onSaved: (int? value) => _pos = value ?? 0,
       ),
       ListTile(
-        title: SearchableDropdown<AgeCategory>(
+        title: SearchableDropdown<AgeCategory>.stringItems(
           icon: const Icon(Icons.school),
           selectedItem: _ageCategory,
           label: localizations.ageCategory,

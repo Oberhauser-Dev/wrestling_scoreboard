@@ -60,7 +60,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
 
     final items = [
       ListTile(
-        title: SearchableDropdown<CompetitionLineup>(
+        title: SearchableDropdown<CompetitionLineup>.stringItems(
           allowEmpty: false,
           icon: const Icon(Icons.view_list),
           selectedItem: _lineup,
@@ -99,7 +99,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
         ),
       ),
       ListTile(
-        title: SearchableDropdown<CompetitionWeightCategory>(
+        title: SearchableDropdown<CompetitionWeightCategory>.stringItems(
           allowEmpty: false,
           icon: const Icon(Icons.category),
           selectedItem: _weightCategory,

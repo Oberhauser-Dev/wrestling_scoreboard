@@ -79,7 +79,7 @@ class TeamMatchBoutEditState extends BoutEditState<TeamMatchBoutEdit> {
           onSaved: (int? value) => _pos = value ?? 0,
         ),
         ListTile(
-          title: SearchableDropdown<WeightClass>(
+          title: SearchableDropdown<WeightClass>.stringItems(
             icon: const Icon(Icons.fitness_center),
             selectedItem: _weightClass,
             label: context.l10n.weightClass,

@@ -280,7 +280,7 @@ class _MergePersonDialogState extends ConsumerState<_MergePersonDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(localizations.mergeObjectData),
-              SearchableDropdown<Person>(
+              SearchableDropdown<Person>.stringItems(
                 icon: const Icon(Icons.person),
                 selectedItem: _mergePerson,
                 label: localizations.person,

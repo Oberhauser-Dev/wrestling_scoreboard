@@ -129,7 +129,7 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
         onSaved: (int? value) => _technicalPointsDifference = value,
       ),
       ListTile(
-        title: SearchableDropdown<BoutConfig>(
+        title: SearchableDropdown<BoutConfig>.stringItems(
           icon: const Icon(Icons.tune),
           selectedItem: _boutConfig,
           label: localizations.boutConfig,
