@@ -75,33 +75,33 @@ abstract class BoutEditState<T extends BoutEdit> extends ConsumerState<T> implem
       ),
       ListTile(
         leading: const Icon(Icons.emoji_events),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<BoutRole>(
-            label: localizations.winner,
-            isNullable: true,
-            selected: _winnerRole,
-            options: BoutRole.values.map((BoutRole value) => MapEntry(value, Text(value.localize(context)))),
-            onSaved: (BoutRole? newValue) => _winnerRole = newValue,
+        title: SimpleDropdown<BoutRole>(
+          label: localizations.winner,
+          isNullable: true,
+          selected: _winnerRole,
+          options: BoutRole.values.map(
+            (BoutRole value) => DropdownMenuEntry(value: value, label: value.localize(context)),
           ),
+          onSaved: (BoutRole? newValue) => _winnerRole = newValue,
         ),
       ),
       ListTile(
         leading: const Icon(Icons.label),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<BoutResult>(
-            label: localizations.result,
-            isNullable: true,
-            selected: _boutResult,
-            options: BoutResult.values.map(
-              (BoutResult boutResult) => MapEntry(
-                boutResult,
-                Tooltip(message: boutResult.description(context), child: Text(boutResult.abbreviation(context))),
+        title: SimpleDropdown<BoutResult>(
+          label: localizations.result,
+          isNullable: true,
+          selected: _boutResult,
+          options: BoutResult.values.map(
+            (BoutResult boutResult) => DropdownMenuEntry(
+              value: boutResult,
+              label: boutResult.abbreviation(context),
+              labelWidget: Tooltip(
+                message: boutResult.description(context),
+                child: Text(boutResult.abbreviation(context)),
               ),
             ),
-            onSaved: (BoutResult? newValue) => _boutResult = newValue,
           ),
+          onSaved: (BoutResult? newValue) => _boutResult = newValue,
         ),
       ),
       ListTile(

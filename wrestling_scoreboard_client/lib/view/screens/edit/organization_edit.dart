@@ -114,16 +114,13 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
       ),
       ListTile(
         leading: const Icon(Icons.api),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<WrestlingApiProvider>(
-            isNullable: true,
-            label: localizations.apiProvider,
-            isExpanded: true,
-            options: WrestlingApiProvider.values.map((value) => MapEntry(value, Text(value.name))),
-            selected: _apiProvider,
-            onSaved: (newValue) => _apiProvider = newValue,
-          ),
+        title: SimpleDropdown<WrestlingApiProvider>(
+          isNullable: true,
+          label: localizations.apiProvider,
+          isExpanded: true,
+          options: WrestlingApiProvider.values.map((value) => DropdownMenuEntry(value: value, label: value.name)),
+          selected: _apiProvider,
+          onSaved: (newValue) => _apiProvider = newValue,
         ),
       ),
       CustomTextInput.icon(
@@ -144,16 +141,13 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
       ),
       ListTile(
         leading: const Icon(Icons.description),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<WrestlingReportProvider>(
-            isNullable: true,
-            label: localizations.reportProvider,
-            isExpanded: true,
-            options: WrestlingReportProvider.values.map((value) => MapEntry(value, Text(value.name))),
-            selected: _reportProvider,
-            onSaved: (newValue) => _reportProvider = newValue,
-          ),
+        title: SimpleDropdown<WrestlingReportProvider>(
+          isNullable: true,
+          label: localizations.reportProvider,
+          isExpanded: true,
+          options: WrestlingReportProvider.values.map((value) => DropdownMenuEntry(value: value, label: value.name)),
+          selected: _reportProvider,
+          onSaved: (newValue) => _reportProvider = newValue,
         ),
       ),
     ];

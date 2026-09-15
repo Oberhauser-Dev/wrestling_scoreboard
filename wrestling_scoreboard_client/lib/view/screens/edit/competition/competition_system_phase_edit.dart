@@ -49,20 +49,16 @@ class CompetitionSystemAffiliationEditState extends ConsumerState<CompetitionSys
     final items = [
       ListTile(
         leading: const Icon(Icons.label),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<CompetitionSystem>(
-            label: localizations.competitionSystem,
-            isNullable: false,
-            selected: _competitionSystem,
-            options: CompetitionSystem.values.map(
-              (system) =>
-                  MapEntry(system, Tooltip(message: system.localize(context), child: Text(system.localize(context)))),
-            ),
-            onSaved: (newValue) {
-              if (newValue != null) _competitionSystem = newValue;
-            },
+        title: SimpleDropdown<CompetitionSystem>(
+          label: localizations.competitionSystem,
+          isNullable: false,
+          selected: _competitionSystem,
+          options: CompetitionSystem.values.map(
+            (system) => DropdownMenuEntry(value: system, label: system.localize(context)),
           ),
+          onSaved: (newValue) {
+            if (newValue != null) _competitionSystem = newValue;
+          },
         ),
       ),
       NumericalInput(

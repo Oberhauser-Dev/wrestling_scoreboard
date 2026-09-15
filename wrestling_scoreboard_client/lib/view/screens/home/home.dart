@@ -255,16 +255,17 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
           ),
         ),
         if (_showFilterOptions)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Wrap(
+            alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: SimpleDropdown<Type?>(
                   options: [null, ...searchableDataTypes.keys].map(
-                    (type) => MapEntry(
-                      type,
-                      Text(type != null ? localizeType(context, type) : '${localizations.optionSelect} Type'),
+                    (type) => DropdownMenuEntry(
+                      value: type,
+                      label: type != null ? localizeType(context, type) : '${localizations.optionSelect} Type',
                     ),
                   ),
                   selected: _searchType,
@@ -282,13 +283,11 @@ class _HomeSearchState extends ConsumerState<_HomeSearch> {
                   builder: (BuildContext context, List<Organization> organizations) {
                     return SimpleDropdown<Organization?>(
                       options: [null, ...organizations].map(
-                        (organization) => MapEntry(
-                          organization,
-                          Text(
-                            organization != null
-                                ? organization.name
-                                : '${localizations.optionSelect} ${localizations.organization}',
-                          ),
+                        (organization) => DropdownMenuEntry(
+                          value: organization,
+                          label: organization != null
+                              ? organization.name
+                              : '${localizations.optionSelect} ${localizations.organization}',
                         ),
                       ),
                       selected: _searchOrganization,

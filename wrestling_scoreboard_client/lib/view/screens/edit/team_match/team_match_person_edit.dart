@@ -89,16 +89,13 @@ class TeamMatchPersonEditState extends ConsumerState<TeamMatchPersonEdit> {
       ),
       ListTile(
         leading: const Icon(Icons.label),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<PersonRole>(
-            isNullable: false,
-            label: localizations.role,
-            isExpanded: true,
-            options: PersonRole.values.map((value) => MapEntry(value, Text(value.localize(context)))),
-            selected: _personRole,
-            onSaved: (newValue) => _personRole = newValue,
-          ),
+        title: SimpleDropdown<PersonRole>(
+          isNullable: false,
+          label: localizations.role,
+          isExpanded: true,
+          options: PersonRole.values.map((value) => DropdownMenuEntry(value: value, label: value.localize(context))),
+          selected: _personRole,
+          onSaved: (newValue) => _personRole = newValue,
         ),
       ),
     ];

@@ -56,36 +56,37 @@ class BoutResultRuleEditState extends ConsumerState<BoutResultRuleEdit> {
     final items = [
       ListTile(
         leading: const Icon(Icons.label),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<BoutResult>(
-            label: localizations.result,
-            isNullable: false,
-            selected: _boutResult,
-            options: BoutResult.values.map(
-              (BoutResult boutResult) => MapEntry(
-                boutResult,
-                Tooltip(message: boutResult.description(context), child: Text(boutResult.abbreviation(context))),
+        title: SimpleDropdown<BoutResult>(
+          label: localizations.result,
+          isNullable: false,
+          selected: _boutResult,
+          options: BoutResult.values.map(
+            (BoutResult boutResult) => DropdownMenuEntry(
+              value: boutResult,
+              label: boutResult.abbreviation(context),
+              labelWidget: Tooltip(
+                message: boutResult.description(context),
+                child: Text(boutResult.abbreviation(context)),
               ),
             ),
-            onSaved: (BoutResult? newValue) => _boutResult = newValue!,
           ),
+          onSaved: (BoutResult? newValue) => _boutResult = newValue!,
         ),
       ),
       ListTile(
         leading: const Icon(Icons.style),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<WrestlingStyle>(
-            isNullable: true,
-            label: localizations.wrestlingStyle,
-            isExpanded: true,
-            options: WrestlingStyle.values.map((WrestlingStyle style) {
-              return MapEntry(style, Text('${style.localize(context)} (${style.abbreviation(context)})'));
-            }),
-            selected: _wrestlingStyle,
-            onSaved: (newValue) => _wrestlingStyle = newValue,
-          ),
+        title: SimpleDropdown<WrestlingStyle>(
+          isNullable: true,
+          label: localizations.wrestlingStyle,
+          isExpanded: true,
+          options: WrestlingStyle.values.map((WrestlingStyle style) {
+            return DropdownMenuEntry(
+              value: style,
+              label: '${style.localize(context)} (${style.abbreviation(context)})',
+            );
+          }),
+          selected: _wrestlingStyle,
+          onSaved: (newValue) => _wrestlingStyle = newValue,
         ),
       ),
       NumericalInput(
