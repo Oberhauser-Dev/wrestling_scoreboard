@@ -45,7 +45,7 @@ class LeagueEditState extends ConsumerState<LeagueEdit> {
 
     final items = [
       ListTile(
-        title: SearchableDropdown<Division>(
+        title: SearchableDropdown<Division>.stringItems(
           icon: const Icon(Icons.inventory),
           selectedItem: _division,
           label: localizations.division,

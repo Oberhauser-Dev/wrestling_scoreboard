@@ -51,7 +51,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
           onSaved: (int? value) => _pos = value ?? 0,
         ),
         ListTile(
-          title: SearchableDropdown<CompetitionAgeCategory>(
+          title: SearchableDropdown<CompetitionAgeCategory>.stringItems(
             icon: const Icon(Icons.school),
             selectedItem: _competitionAgeCategory,
             label: localizations.ageCategory,
@@ -70,7 +70,7 @@ class CompetitionWeightCategoryEditState extends WeightClassEditState<Competitio
           ),
         ),
         ListTile(
-          title: SearchableDropdown<CompetitionSystemAffiliation>(
+          title: SearchableDropdown<CompetitionSystemAffiliation>.stringItems(
             icon: const Icon(Icons.account_tree),
             selectedItem: _competitionSystemAffiliation,
             label: localizations.competitionSystem,

@@ -96,7 +96,7 @@ class _OrganizationEditState extends ConsumerState<_OrganizationEdit> {
         onSaved: (value) => _abbreviation = value,
       ),
       ListTile(
-        title: SearchableDropdown<Organization>(
+        title: SearchableDropdown<Organization>.stringItems(
           icon: const Icon(Icons.corporate_fare),
           selectedItem: _parent,
           label: localizations.umbrellaOrganization,

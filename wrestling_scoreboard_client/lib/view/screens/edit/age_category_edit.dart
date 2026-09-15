@@ -61,7 +61,7 @@ class AgeCategoryEditState extends ConsumerState<AgeCategoryEdit> {
         onSaved: (int? value) => _maxAge = value,
       ),
       ListTile(
-        title: SearchableDropdown<Organization>(
+        title: SearchableDropdown<Organization>.stringItems(
           icon: const Icon(Icons.corporate_fare),
           selectedItem: _organization,
           label: localizations.organization,

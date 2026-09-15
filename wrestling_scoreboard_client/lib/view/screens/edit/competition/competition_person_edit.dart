@@ -49,7 +49,7 @@ class CompetitionPersonEditState extends ConsumerState<CompetitionPersonEdit> {
 
     final items = [
       ListTile(
-        title: SearchableDropdown<Person>(
+        title: SearchableDropdown<Person>.stringItems(
           icon: const Icon(Icons.person),
           selectedItem: _person,
           label: localizations.person,
@@ -68,7 +68,7 @@ class CompetitionPersonEditState extends ConsumerState<CompetitionPersonEdit> {
         ),
       ),
       ListTile(
-        title: SearchableDropdown<Competition>(
+        title: SearchableDropdown<Competition>.stringItems(
           icon: const Icon(Icons.leaderboard),
           selectedItem: _competition,
           label: localizations.competition,

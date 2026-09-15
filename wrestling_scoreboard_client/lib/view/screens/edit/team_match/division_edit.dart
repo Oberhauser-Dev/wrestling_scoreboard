@@ -92,7 +92,7 @@ class DivisionEditState extends ConsumerState<DivisionEdit> {
         onSaved: (int? value) => _seasonPartitions = value ?? 1,
       ),
       ListTile(
-        title: SearchableDropdown<Organization>(
+        title: SearchableDropdown<Organization>.stringItems(
           icon: const Icon(Icons.corporate_fare),
           selectedItem: _organization,
           label: localizations.organization,
@@ -109,7 +109,7 @@ class DivisionEditState extends ConsumerState<DivisionEdit> {
         ),
       ),
       ListTile(
-        title: SearchableDropdown<Division>(
+        title: SearchableDropdown<Division>.stringItems(
           icon: const Icon(Icons.inventory),
           selectedItem: _parentDivision,
           label: localizations.division,

@@ -101,7 +101,7 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
           onSaved: (int? value) => _mat = value,
         ),
         ListTile(
-          title: SearchableDropdown<CompetitionWeightCategory>(
+          title: SearchableDropdown<CompetitionWeightCategory>.stringItems(
             icon: const Icon(Icons.fitness_center),
             selectedItem: _weightCategory,
             label: context.l10n.weightCategory,
@@ -151,7 +151,7 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
           subtitle: Text(localizations.boutForRank(displayRanks ?? '–')),
         ),
         ListTile(
-          title: SearchableDropdown<int>(
+          title: SearchableDropdown<int>.stringItems(
             allowEmpty: false,
             icon: const Icon(Icons.stairs),
             selectedItem: _phasePos,

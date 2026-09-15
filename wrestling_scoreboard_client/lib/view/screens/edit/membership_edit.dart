@@ -48,7 +48,7 @@ class MembershipEditState extends ConsumerState<MembershipEdit> {
 
     final items = [
       ListTile(
-        title: SearchableDropdown<Person>(
+        title: SearchableDropdown<Person>.stringItems(
           icon: const Icon(Icons.person),
           selectedItem: _person,
           label: localizations.person,
@@ -67,7 +67,7 @@ class MembershipEditState extends ConsumerState<MembershipEdit> {
         ),
       ),
       ListTile(
-        title: SearchableDropdown<Club>(
+        title: SearchableDropdown<Club>.stringItems(
           icon: const Icon(Icons.foundation),
           selectedItem: _club,
           label: localizations.club,
@@ -147,7 +147,7 @@ class MembershipPersonEditState extends AbstractPersonEditState<MembershipPerson
           onSaved: (value) => _no = value,
         ),
         ListTile(
-          title: SearchableDropdown<Club>(
+          title: SearchableDropdown<Club>.stringItems(
             icon: const Icon(Icons.foundation),
             selectedItem: _club,
             label: localizations.club,

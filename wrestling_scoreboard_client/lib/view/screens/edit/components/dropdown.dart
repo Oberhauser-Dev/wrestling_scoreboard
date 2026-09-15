@@ -33,7 +33,7 @@ class MembershipDropdown extends ConsumerWidget {
     return LoadingBuilder<Map<int, AuthService>>(
       future: ref.watch(orgAuthProvider),
       builder: (context, authServiceMap) {
-        return SearchableDropdown<Membership>(
+        return SearchableDropdown<Membership>.stringItems(
           selectedItem: selectedItem,
           label: label,
           context: context,

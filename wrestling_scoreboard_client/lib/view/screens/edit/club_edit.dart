@@ -63,7 +63,7 @@ class ClubEditState extends ConsumerState<ClubEdit> {
         onSaved: (value) => _no = value,
       ),
       ListTile(
-        title: SearchableDropdown<Organization>(
+        title: SearchableDropdown<Organization>.stringItems(
           icon: const Icon(Icons.corporate_fare),
           selectedItem: _organization,
           label: localizations.organization,

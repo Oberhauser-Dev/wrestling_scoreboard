@@ -18,11 +18,11 @@ class SearchableDropdown<T> extends FormField<T> {
     super.onSaved,
     required Future<List<T>> Function(String filter) asyncItems,
     bool Function(T item, String filter)? onFilter,
-    required String Function(T u) itemAsString,
+    required Widget Function(BuildContext context, T item) itemBuilder,
+    int Function(T a, T b)? sortBy,
     bool allowEmpty = true,
     required BuildContext context,
     Widget? icon,
-    bool disableFilter = false,
     Widget Function(BuildContext context, Widget popupWidget)? containerBuilder,
     super.key,
   }) : super(
@@ -34,10 +34,10 @@ class SearchableDropdown<T> extends FormField<T> {
              label: label,
              icon: icon,
              allowEmpty: allowEmpty,
-             disableFilter: disableFilter,
              asyncItems: asyncItems,
              onFilter: onFilter,
-             itemAsString: itemAsString,
+             itemBuilder: itemBuilder,
+             sortBy: sortBy,
              errorText: state.errorText,
              containerBuilder: containerBuilder,
              onChanged: (value) {
@@ -47,6 +47,43 @@ class SearchableDropdown<T> extends FormField<T> {
            );
          },
        );
+
+  /// Restores the previous behavior of building each item's display from a plain [String], which
+  /// is also used as the default text filter and sort order unless [onFilter] or [sortBy] is given.
+  SearchableDropdown.stringItems({
+    required T? selectedItem,
+    String? label,
+    void Function(T? value)? onChanged,
+    FormFieldSetter<T>? onSaved,
+    required Future<List<T>> Function(String filter) asyncItems,
+    bool Function(T item, String filter)? onFilter,
+    required String Function(T item) itemAsString,
+    int Function(T a, T b)? sortBy,
+    bool allowEmpty = true,
+    required BuildContext context,
+    Widget? icon,
+    bool disableFilter = false,
+    Widget Function(BuildContext context, Widget popupWidget)? containerBuilder,
+    Key? key,
+  }) : this(
+         selectedItem: selectedItem,
+         label: label,
+         onChanged: onChanged,
+         onSaved: onSaved,
+         asyncItems: asyncItems,
+         onFilter:
+             onFilter ??
+             (disableFilter
+                 ? null
+                 : (item, filter) => itemAsString(item).toLowerCase().contains(filter.trim().toLowerCase())),
+         itemBuilder: (context, item) => Text(itemAsString(item)),
+         sortBy: sortBy ?? (a, b) => itemAsString(a).compareTo(itemAsString(b)),
+         allowEmpty: allowEmpty,
+         context: context,
+         icon: icon,
+         containerBuilder: containerBuilder,
+         key: key,
+       );
 }
 
 class _SearchableDropdownField<T> extends StatefulWidget {
@@ -54,10 +91,10 @@ class _SearchableDropdownField<T> extends StatefulWidget {
   final String? label;
   final Widget? icon;
   final bool allowEmpty;
-  final bool disableFilter;
   final Future<List<T>> Function(String filter) asyncItems;
   final bool Function(T item, String filter)? onFilter;
-  final String Function(T u) itemAsString;
+  final Widget Function(BuildContext context, T item) itemBuilder;
+  final int Function(T a, T b)? sortBy;
   final String? errorText;
   final Widget Function(BuildContext context, Widget popupWidget)? containerBuilder;
   final ValueChanged<T?> onChanged;
@@ -67,10 +104,10 @@ class _SearchableDropdownField<T> extends StatefulWidget {
     this.label,
     this.icon,
     required this.allowEmpty,
-    required this.disableFilter,
     required this.asyncItems,
     this.onFilter,
-    required this.itemAsString,
+    required this.itemBuilder,
+    this.sortBy,
     this.errorText,
     this.containerBuilder,
     required this.onChanged,
@@ -116,8 +153,6 @@ class _SearchableDropdownFieldState<T> extends State<_SearchableDropdownField<T>
     super.dispose();
   }
 
-  String _labelFor(T? item) => item == null ? '' : widget.itemAsString(item);
-
   void _onSearchChanged() {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () => _loadItems(_searchController.text));
@@ -134,11 +169,11 @@ class _SearchableDropdownFieldState<T> extends State<_SearchableDropdownField<T>
     }
     if (widget.onFilter != null) {
       items = items.where((item) => widget.onFilter!(item, filter)).toList();
-    } else if (!widget.disableFilter && filter.trim().isNotEmpty) {
-      final normalizedFilter = filter.trim().toLowerCase();
-      items = items.where((item) => widget.itemAsString(item).toLowerCase().contains(normalizedFilter)).toList();
     }
-    items.sort((a, b) => widget.itemAsString(a).compareTo(widget.itemAsString(b)));
+    final sortBy = widget.sortBy;
+    if (sortBy != null) {
+      items.sort(sortBy);
+    }
     if (!mounted || token != _requestToken) return;
     setState(() {
       _items = items;
@@ -195,7 +230,7 @@ class _SearchableDropdownFieldState<T> extends State<_SearchableDropdownField<T>
                   children: [
                     for (final item in _items)
                       ListTile(
-                        title: Text(widget.itemAsString(item)),
+                        title: widget.itemBuilder(context, item),
                         selected: item == _selected,
                         onTap: () => _select(item),
                       ),
@@ -238,7 +273,14 @@ class _SearchableDropdownFieldState<T> extends State<_SearchableDropdownField<T>
                   ),
                 ),
                 isEmpty: _selected == null,
-                child: Text(_labelFor(_selected), maxLines: 1, softWrap: false, overflow: TextOverflow.fade),
+                child: _selected == null
+                    ? const SizedBox.shrink()
+                    : DefaultTextStyle.merge(
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.fade,
+                        child: widget.itemBuilder(context, _selected as T),
+                      ),
               ),
             );
           },

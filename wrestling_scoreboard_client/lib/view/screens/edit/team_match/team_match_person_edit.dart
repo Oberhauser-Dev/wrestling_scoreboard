@@ -50,7 +50,7 @@ class TeamMatchPersonEditState extends ConsumerState<TeamMatchPersonEdit> {
 
     final items = [
       ListTile(
-        title: SearchableDropdown<Person>(
+        title: SearchableDropdown<Person>.stringItems(
           icon: const Icon(Icons.person),
           selectedItem: _person,
           label: localizations.person,
@@ -69,7 +69,7 @@ class TeamMatchPersonEditState extends ConsumerState<TeamMatchPersonEdit> {
         ),
       ),
       ListTile(
-        title: SearchableDropdown<TeamMatch>(
+        title: SearchableDropdown<TeamMatch>.stringItems(
           icon: const Icon(Icons.leaderboard),
           selectedItem: _teamMatch,
           label: localizations.match,

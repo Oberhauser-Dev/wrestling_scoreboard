@@ -39,7 +39,7 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
 
     final items = [
       ListTile(
-        title: SearchableDropdown<Team>(
+        title: SearchableDropdown<Team>.stringItems(
           icon: const Icon(Icons.group),
           selectedItem: _team,
           label: localizations.team,
@@ -56,7 +56,7 @@ class TeamEditState extends ConsumerState<TeamClubAffiliationEdit> {
         ),
       ),
       ListTile(
-        title: SearchableDropdown<Club>(
+        title: SearchableDropdown<Club>.stringItems(
           icon: const Icon(Icons.foundation),
           selectedItem: _club,
           label: localizations.club,

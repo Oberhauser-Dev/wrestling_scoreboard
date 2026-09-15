@@ -37,7 +37,7 @@ class ScratchBoutEditState extends BoutEditState<ScratchBoutEdit> {
       classLocale: localizations.bout,
       fields: [
         ListTile(
-          title: SearchableDropdown<WeightClass>(
+          title: SearchableDropdown<WeightClass>.stringItems(
             allowEmpty: false,
             icon: const Icon(Icons.fitness_center),
             selectedItem: _weightClass,
