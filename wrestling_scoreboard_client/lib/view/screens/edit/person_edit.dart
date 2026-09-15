@@ -85,16 +85,13 @@ abstract class AbstractPersonEditState<T extends AbstractPersonEdit> extends Con
       ),
       ListTile(
         leading: const Icon(Icons.transgender),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<Gender>(
-            isNullable: true,
-            label: localizations.gender,
-            isExpanded: true,
-            options: Gender.values.map((Gender value) => MapEntry(value, Text(value.localize(context)))),
-            selected: _gender,
-            onSaved: (newValue) => _gender = newValue,
-          ),
+        title: SimpleDropdown<Gender>(
+          isNullable: true,
+          label: localizations.gender,
+          isExpanded: true,
+          options: Gender.values.map((Gender value) => DropdownMenuEntry(value: value, label: value.localize(context))),
+          selected: _gender,
+          onSaved: (newValue) => _gender = newValue,
         ),
       ),
       ListTile(

@@ -124,17 +124,14 @@ class CompetitionBoutEditState extends BoutEditState<CompetitionBoutEdit> {
         ),
         ListTile(
           leading: const Icon(Icons.restart_alt),
-          title: ButtonTheme(
-            alignedDropdown: true,
-            child: SimpleDropdown<RoundType>(
-              label: localizations.roundType,
-              isNullable: false,
-              selected: _roundType,
-              options: RoundType.values.map((rType) => MapEntry(rType, Text(rType.localize(context)))),
-              onSaved: (newValue) {
-                if (newValue != null) _roundType = newValue;
-              },
-            ),
+          title: SimpleDropdown<RoundType>(
+            label: localizations.roundType,
+            isNullable: false,
+            selected: _roundType,
+            options: RoundType.values.map((rType) => DropdownMenuEntry(value: rType, label: rType.localize(context))),
+            onSaved: (newValue) {
+              if (newValue != null) _roundType = newValue;
+            },
           ),
         ),
         NumericalInput(

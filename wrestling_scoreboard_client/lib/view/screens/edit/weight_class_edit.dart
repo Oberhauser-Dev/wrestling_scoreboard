@@ -52,32 +52,29 @@ abstract class WeightClassEditState<T extends WeightClassEdit> extends ConsumerS
       ),
       ListTile(
         leading: const Icon(Icons.style),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<WrestlingStyle>(
-            label: localizations.wrestlingStyle,
-            isExpanded: true,
-            options: WrestlingStyle.values.map((WrestlingStyle style) {
-              return MapEntry(style, Text('${style.localize(context)} (${style.abbreviation(context)})'));
-            }),
-            selected: _wrestlingStyle,
-            onSaved: (newValue) => _wrestlingStyle = newValue!,
-          ),
+        title: SimpleDropdown<WrestlingStyle>(
+          label: localizations.wrestlingStyle,
+          isExpanded: true,
+          options: WrestlingStyle.values.map((WrestlingStyle style) {
+            return DropdownMenuEntry(
+              value: style,
+              label: '${style.localize(context)} (${style.abbreviation(context)})',
+            );
+          }),
+          selected: _wrestlingStyle,
+          onSaved: (newValue) => _wrestlingStyle = newValue!,
         ),
       ),
       ListTile(
         leading: const Icon(Icons.straighten),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<WeightUnit>(
-            label: localizations.weightUnit,
-            isExpanded: true,
-            options: WeightUnit.values.map((WeightUnit value) {
-              return MapEntry(value, Text(value.toAbbr()));
-            }),
-            selected: _unit,
-            onSaved: (value) => _unit = value!,
-          ),
+        title: SimpleDropdown<WeightUnit>(
+          label: localizations.weightUnit,
+          isExpanded: true,
+          options: WeightUnit.values.map((WeightUnit value) {
+            return DropdownMenuEntry(value: value, label: value.toAbbr());
+          }),
+          selected: _unit,
+          onSaved: (value) => _unit = value!,
         ),
       ),
       CustomTextInput.icon(

@@ -65,16 +65,13 @@ class UserEditState extends ConsumerState<UserEdit> {
         PasswordInput(isMandatory: true, onSaved: (String? value) => _password = value, isNewPassword: true),
       ListTile(
         leading: const Icon(Icons.key),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<UserPrivilege>(
-            isNullable: false,
-            label: localizations.privilege,
-            isExpanded: true,
-            options: UserPrivilege.values.map((value) => MapEntry(value, Text(value.name))),
-            selected: _userPrivilege,
-            onSaved: (newValue) => _userPrivilege = newValue!,
-          ),
+        title: SimpleDropdown<UserPrivilege>(
+          isNullable: false,
+          label: localizations.privilege,
+          isExpanded: true,
+          options: UserPrivilege.values.map((value) => DropdownMenuEntry(value: value, label: value.name)),
+          selected: _userPrivilege,
+          onSaved: (newValue) => _userPrivilege = newValue!,
         ),
       ),
     ];

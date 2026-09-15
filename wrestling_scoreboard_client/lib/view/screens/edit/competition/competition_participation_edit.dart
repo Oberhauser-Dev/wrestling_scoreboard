@@ -127,15 +127,14 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
       ),
       ListTile(
         leading: const Icon(Icons.cancel_outlined),
-        title: ButtonTheme(
-          alignedDropdown: true,
-          child: SimpleDropdown<ContestantStatus>(
-            label: localizations.result,
-            isNullable: true,
-            selected: _contestantStatus,
-            options: ContestantStatus.values.map((status) => MapEntry(status, Text(status.localize(context)))),
-            onSaved: (newValue) => _contestantStatus = newValue,
+        title: SimpleDropdown<ContestantStatus>(
+          label: localizations.result,
+          isNullable: true,
+          selected: _contestantStatus,
+          options: ContestantStatus.values.map(
+            (status) => DropdownMenuEntry(value: status, label: status.localize(context)),
           ),
+          onSaved: (newValue) => _contestantStatus = newValue,
         ),
       ),
     ];
