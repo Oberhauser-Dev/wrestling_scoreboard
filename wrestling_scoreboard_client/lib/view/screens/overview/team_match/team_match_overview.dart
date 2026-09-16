@@ -494,10 +494,20 @@ class TeamMatchOverview extends ConsumerWidget {
     TeamMatch match,
     NavigatorState navigator,
   ) async {
-    final participations = await ref.readAsync(
+    List<TeamLineupParticipation> participations = await ref.readAsync(
       manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
         ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: lineup),
       ).future,
+    );
+    // Update cached participations:
+    participations = await Future.wait(
+      participations.map(
+        (p) async => await ref.readAsync(
+          singleDataStreamProvider<TeamLineupParticipation>(
+            SingleProviderData<TeamLineupParticipation>(id: p.id!),
+          ).future,
+        ),
+      ),
     );
     final weightClasses = await _getWeightClasses(ref, match);
     TeamLineup? proposedLineup;
