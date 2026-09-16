@@ -149,6 +149,20 @@ void main() {
         // Bouts with the same participants and weight class keep their actions
         expect((await BoutActionController().getMany(obfuscate: false)).length, 2);
       });
+
+      test('Reject a second participation for an already occupied weight class', () async {
+        // wc57 is already occupied by mockedData.r1 within the home lineup.
+        final duplicateParticipation = TeamLineupParticipation(
+          membership: mockedData.r2,
+          lineup: mockedData.menRPWMatch.home,
+          weightClass: mockedData.wc57,
+          weight: 56.5,
+        );
+        final body = jsonEncode(singleToJson(duplicateParticipation, TeamLineupParticipation, CRUD.create));
+        final uri = Uri.parse('$apiUrl/${duplicateParticipation.tableName}');
+        final postRes = await http.post(uri, headers: authHeaders, body: body);
+        expect(postRes.statusCode, 400, reason: postRes.body);
+      });
     });
   });
 }

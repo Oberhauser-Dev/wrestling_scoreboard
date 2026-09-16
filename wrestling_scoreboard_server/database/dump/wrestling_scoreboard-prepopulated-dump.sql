@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict i3jqUPxfOhhwFahnZ4A6G9eCuwbvbBa3OnczhVt0f0Od1CjzjCi9fbjDslM9MoD
+\restrict rj1KlYFjAnYrUl3CtmhssGGgJGmfLnhJTSwPwKHWgd75eX8RAutUsby113hsOWi
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -2127,7 +2127,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.10	0.3.11
+0.3.13-pre.1	0.3.11
 \.
 
 
@@ -2906,11 +2906,11 @@ ALTER TABLE ONLY public.team_lineup_participation
 
 
 --
--- Name: team_lineup_participation team_lineup_participation_pk_2; Type: CONSTRAINT; Schema: public; Owner: wrestling
+-- Name: team_lineup_participation team_lineup_participation_weight_class_uk; Type: CONSTRAINT; Schema: public; Owner: wrestling
 --
 
 ALTER TABLE ONLY public.team_lineup_participation
-    ADD CONSTRAINT team_lineup_participation_pk_2 UNIQUE (membership_id, lineup_id, weight_class_id);
+    ADD CONSTRAINT team_lineup_participation_weight_class_uk UNIQUE (lineup_id, weight_class_id);
 
 
 --
@@ -3606,5 +3606,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict i3jqUPxfOhhwFahnZ4A6G9eCuwbvbBa3OnczhVt0f0Od1CjzjCi9fbjDslM9MoD
+\unrestrict rj1KlYFjAnYrUl3CtmhssGGgJGmfLnhJTSwPwKHWgd75eX8RAutUsby113hsOWi
 
