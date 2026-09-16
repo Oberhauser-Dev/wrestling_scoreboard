@@ -78,7 +78,10 @@ class SearchController {
               searchStr: likeParam,
               searchType: searchType,
             );
-            manyJson = manyToJson(orgSearchRes, searchType, CRUD.read, isRaw: false);
+            final manyFromOrg = manyToJson(orgSearchRes, searchType, CRUD.read, isRaw: false);
+            // Merge with provider results
+            manyFromOrg['data'] = [...?manyJson?['data'], ...manyFromOrg['data']];
+            manyJson = manyFromOrg;
           }
         } else if (!searchAllTypes) {
           manyJson = await _filterObfuscated(
