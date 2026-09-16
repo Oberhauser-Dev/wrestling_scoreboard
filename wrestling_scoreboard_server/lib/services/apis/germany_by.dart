@@ -427,34 +427,30 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   }) async {
     final json = await _getSaisonWrestler(passCode: passCode);
     final wrestlerJson = json['wrestler'];
-    try {
-      final club = await getClub(wrestlerJson['clubId']);
-      if (wrestlerJson == null) {
-        throw Exception('No field "wrestler" and/or "clubId" found for json:\n$json');
-      }
-      return Membership(
-        club: club,
-        organization: organization,
-        no: json['passcode'],
-        orgSyncId: '${wrestlerJson['clubId']}-${json['passcode']}',
-        person: _copyPersonWithOrg(
-          Person(
-            prename: wrestlerJson['givenname'],
-            surname: wrestlerJson['name'],
-            gender: wrestlerJson['gender'] == 'm'
-                ? Gender.male
-                : (wrestlerJson['gender'] == 'w' ? Gender.female : Gender.other),
-            birthDate: DateTime.parse(wrestlerJson['birthday']).copyWith(isUtc: true),
-            nationality: Countries.values.singleWhereOrNull(
-              (element) => element.unofficialNames.contains(wrestlerJson['nationality']),
-            ),
+
+    final club = await getClub(wrestlerJson['clubId']);
+    if (wrestlerJson == null) {
+      throw Exception('No field "wrestler" and/or "clubId" found for json:\n$json');
+    }
+    return Membership(
+      club: club,
+      organization: organization,
+      no: json['passcode'],
+      orgSyncId: '${wrestlerJson['clubId']}-${json['passcode']}',
+      person: _copyPersonWithOrg(
+        Person(
+          prename: wrestlerJson['givenname'],
+          surname: wrestlerJson['name'],
+          gender: wrestlerJson['gender'] == 'm'
+              ? Gender.male
+              : (wrestlerJson['gender'] == 'w' ? Gender.female : Gender.other),
+          birthDate: DateTime.parse(wrestlerJson['birthday']).copyWith(isUtc: true),
+          nationality: Countries.values.singleWhereOrNull(
+            (element) => element.unofficialNames.contains(wrestlerJson['nationality']),
           ),
         ),
-      );
-    } catch (e, st) {
-      _logger.severe('Could not load membership for passCode $passCode:\n$wrestlerJson', e, st);
-      return null;
-    }
+      ),
+    );
   }
 
   @override
@@ -683,6 +679,9 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 } else {
                   rethrow;
                 }
+              } catch (e, st) {
+                _logger.severe('Could not load membership for passCode $membershipSyncId.', e, st);
+                return null;
               }
             }
             return null;
