@@ -437,6 +437,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'This action will overwrite bouts in the modified weight classes. To edit individual bouts, use the bout editing page. Are you sure you want to continue?';
 
   @override
+  String get warningBoutLineupMismatch =>
+      'The bouts do not match the current lineups. Pair the bouts again to apply them?';
+
+  @override
   String get warningPrefilledLineup => 'The lineup was prefilled with values from a previous match!';
 
   @override

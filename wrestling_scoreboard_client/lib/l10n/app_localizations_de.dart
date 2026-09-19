@@ -440,6 +440,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Diese Aktion überschreibt Kämpfe der geänderten Gewichtsklassen. Um einzelne Kämpfe zu bearbeiten, nutze die Seite zur Kampf-Bearbeitung. Bist du sicher, dass du fortfahren möchtest?';
 
   @override
+  String get warningBoutLineupMismatch =>
+      'Die Kämpfe stimmen nicht mit den aktuellen Aufstellungen überein. Kämpfe erneut paaren, um sie zu übernehmen?';
+
+  @override
   String get warningPrefilledLineup => 'Die Aufstellung wurde mit Werten einer vorherigen Begegnung vorausgefüllt!';
 
   @override

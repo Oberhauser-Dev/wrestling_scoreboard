@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/common.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/responsive_container.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -71,48 +73,56 @@ class TeamMatchBoutDisplay extends ConsumerWidget {
                                       participations: homeParticipations,
                                       weightClass: teamMatchBout.weightClass,
                                     );
-                                    assert(
-                                      homeParticipation?.membership == bout.r?.membership,
-                                      'Memberships of home do not match',
-                                    );
                                     final guestParticipation = TeamLineupParticipation.fromParticipationsAndWeightClass(
                                       participations: guestParticipations,
                                       weightClass: teamMatchBout.weightClass,
                                     );
-                                    assert(
-                                      guestParticipation?.membership == bout.b?.membership,
-                                      'Memberships of guest do not match',
-                                    );
 
-                                    return BoutScreen(
-                                      wrestlingEvent: match,
-                                      officials: Map.fromEntries(
-                                        officials.map((tmp) => MapEntry(tmp.person, tmp.role)),
-                                      ),
-                                      boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-                                      boutRules: boutResultRules,
-                                      bouts: bouts,
-                                      boutIndex: teamMatchBoutIndex,
-                                      bout: bout,
-                                      actions: [
-                                        DefaultResponsiveScaffoldActionItem(
-                                          label: localizations.info,
-                                          icon: const Icon(Icons.info),
-                                          onTap: () => TeamMatchBoutOverview.navigateTo(context, teamMatchBout),
+                                    // Watch the single participations, to also get updates when they change participants.
+                                    return NullableSingleConsumer<TeamLineupParticipation>(
+                                      id: homeParticipation?.id,
+                                      builder: (context, home) => NullableSingleConsumer<TeamLineupParticipation>(
+                                        id: guestParticipation?.id,
+                                        builder: (context, guest) => _LineupMismatchGuard(
+                                          match: match,
+                                          hasMismatch:
+                                              home?.membership != bout.r?.membership ||
+                                              guest?.membership != bout.b?.membership,
+                                          child: BoutScreen(
+                                            wrestlingEvent: match,
+                                            officials: Map.fromEntries(
+                                              officials.map((tmp) => MapEntry(tmp.person, tmp.role)),
+                                            ),
+                                            boutConfig:
+                                                match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+                                            boutRules: boutResultRules,
+                                            bouts: bouts,
+                                            boutIndex: teamMatchBoutIndex,
+                                            bout: bout,
+                                            actions: [
+                                              DefaultResponsiveScaffoldActionItem(
+                                                label: localizations.info,
+                                                icon: const Icon(Icons.info),
+                                                onTap: () => TeamMatchBoutOverview.navigateTo(context, teamMatchBout),
+                                              ),
+                                            ],
+                                            navigateToBoutByIndex: (context, index) {
+                                              context.pushReplacement(
+                                                TeamMatchBoutDisplay.fullRoute(teamMatchBouts[index]),
+                                              );
+                                            },
+                                            headerItems: CommonElements.getTeamHeader(
+                                              match.home.team,
+                                              match.guest.team,
+                                              bouts,
+                                              context,
+                                            ),
+                                            weightClass: teamMatchBout.weightClass,
+                                            weightR: home?.weight,
+                                            weightB: guest?.weight,
+                                          ),
                                         ),
-                                      ],
-                                      navigateToBoutByIndex: (context, index) {
-                                        context.pushReplacement(TeamMatchBoutDisplay.fullRoute(teamMatchBouts[index]));
-                                      },
-                                      headerItems: CommonElements.getTeamHeader(
-                                        match.home.team,
-                                        match.guest.team,
-                                        bouts,
-                                        context,
                                       ),
-                                      weightClass: teamMatchBout.weightClass,
-                                      weightR: homeParticipation?.weight,
-                                      weightB: guestParticipation?.weight,
                                     );
                                   },
                                 );
@@ -131,4 +141,71 @@ class TeamMatchBoutDisplay extends ConsumerWidget {
       },
     );
   }
+}
+
+/// Proposes to pair the bouts, if the bout does not match the lineups.
+///
+/// The dialog is shown outside of the build method and only once per mismatch.
+class _LineupMismatchGuard extends ConsumerStatefulWidget {
+  final TeamMatch match;
+  final bool hasMismatch;
+  final Widget child;
+
+  const _LineupMismatchGuard({required this.match, required this.hasMismatch, required this.child});
+
+  @override
+  ConsumerState<_LineupMismatchGuard> createState() => _LineupMismatchGuardState();
+}
+
+class _LineupMismatchGuardState extends ConsumerState<_LineupMismatchGuard> {
+  bool _isPrompted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _check();
+  }
+
+  @override
+  void didUpdateWidget(covariant _LineupMismatchGuard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _check();
+  }
+
+  void _check() {
+    if (!widget.hasMismatch) {
+      // Ask again, if a mismatch appears later.
+      _isPrompted = false;
+      return;
+    }
+    if (_isPrompted) return;
+    _isPrompted = true;
+    // Dialogs must not be shown while building.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _showPairDialog();
+    });
+  }
+
+  Future<void> _showPairDialog() async {
+    final localizations = context.l10n;
+    final confirmed = await showOkCancelDialog(
+      context: context,
+      title: Text(localizations.pairBouts),
+      child: Text(localizations.warningBoutLineupMismatch),
+      okText: localizations.pairBouts,
+    );
+    if (!confirmed || !mounted) return;
+    await catchAsync(context, () async {
+      // Pop, because current bout may be deleted.
+      context.pop();
+      final dataManager = await ref.read(dataManagerProvider);
+      await dataManager.generateBouts<TeamMatch>(widget.match, false);
+      if (mounted) {
+        await showOkDialog(context: context, child: Text(localizations.actionSuccessful));
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }
