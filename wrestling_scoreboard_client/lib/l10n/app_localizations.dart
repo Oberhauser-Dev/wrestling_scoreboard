@@ -902,6 +902,12 @@ abstract class AppLocalizations {
   /// **'This action will overwrite bouts in the modified weight classes. To edit individual bouts, use the bout editing page. Are you sure you want to continue?'**
   String get warningBoutGenerate;
 
+  /// No description provided for @warningBoutLineupMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The bouts do not match the current lineups. Pair the bouts again to apply them?'**
+  String get warningBoutLineupMismatch;
+
   /// No description provided for @warningPrefilledLineup.
   ///
   /// In en, this message translates to:
