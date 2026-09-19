@@ -70,8 +70,8 @@ class _ScratchBoutDisplayState extends State<ScratchBoutDisplay> {
                                   ref.invalidate(localDataProvider);
 
                                   // Invalidate stream providers
-                                  ref.invalidate(singleDataStreamProvider);
                                   ref.invalidate(manyDataStreamProvider);
+                                  ref.invalidate(singleDataStreamProvider);
                                 }
                               },
                               label: localizations.reset,

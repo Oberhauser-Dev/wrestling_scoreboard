@@ -29,6 +29,9 @@ class SingleProviderData<T extends DataObject> {
 
 @Riverpod(dependencies: [webSocketStateStream, DataManagerNotifier])
 class SingleDataStream<T extends DataObject> extends _$SingleDataStream<T> {
+  /// Whether the provider was built before, e.g. it gets rebuilt by an invalidation.
+  bool _isRebuild = false;
+
   @override
   Stream<T> build(SingleProviderData<T> pData) async* {
     ref.cache();
@@ -45,12 +48,16 @@ class SingleDataStream<T extends DataObject> extends _$SingleDataStream<T> {
     }
 
     final dataManager = await ref.watch(dataManagerProvider);
-    if (pData.initialData != null) {
-      keepDependenciesAlive(pData.initialData!);
-      yield pData.initialData!;
+    // The notifier survives invalidations, whereas `pData.initialData` is only the value of the first build.
+    // So on a rebuild, drop the outdated initial data and load the current value instead.
+    final initialData = _isRebuild ? null : pData.initialData;
+    _isRebuild = true;
+    if (initialData != null) {
+      keepDependenciesAlive(initialData);
+      yield initialData;
     }
 
-    final dataStream = dataManager.streamSingle<T>(pData.id, init: pData.initialData == null);
+    final dataStream = dataManager.streamSingle<T>(pData.id, init: initialData == null);
 
     // Reload, whenever the stream is connected
     final connectionStateStreamController = StreamController<T>();
