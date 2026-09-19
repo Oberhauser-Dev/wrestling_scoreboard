@@ -142,6 +142,7 @@ class GlobalWidget extends ConsumerStatefulWidget {
 
 class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
   final Set<Timer> _backupTimers = {};
+
   late final ProviderSubscription<Future<String?>> _appDataDirectorySubscription;
   late final ProviderSubscription<Future<(String?, List<BackupRule>)>> _backupSubscription;
 
@@ -255,8 +256,9 @@ class _GlobalWidgetState extends ConsumerState<GlobalWidget> {
       child: Actions(
         actions: <Type, Action<Intent>>{
           AppActionIntent: CallbackAction<AppActionIntent>(
-            onInvoke: (AppActionIntent intent) {
-              return intent.handle(context, ref);
+            onInvoke: (AppActionIntent intent) async {
+              await intent.handle(context, ref);
+              return null;
             },
           ),
         },

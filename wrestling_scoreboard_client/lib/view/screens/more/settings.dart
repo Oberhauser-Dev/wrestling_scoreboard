@@ -563,8 +563,8 @@ class CustomSettingsScreen extends ConsumerWidget {
   }
 
   void _invalidateProviders(WidgetRef ref) {
-    ref.invalidate(singleDataStreamProvider);
     ref.invalidate(manyDataStreamProvider);
+    ref.invalidate(singleDataStreamProvider);
   }
 }
 
