@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
@@ -26,6 +29,13 @@ class ActionsWidget extends ConsumerWidget {
     required this.onCreateOrUpdateAction,
   });
 
+  /// The (zero based) period of the action. An action at the very end of a period still belongs to it.
+  int _period(BoutAction action) {
+    final period = boutConfig.periodDuration;
+    if (period <= Duration.zero) return 0;
+    return math.max(0, (action.duration.inMicroseconds - 1) ~/ period.inMicroseconds);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = context.l10n;
@@ -41,64 +51,69 @@ class ActionsWidget extends ConsumerWidget {
           child: IntrinsicHeight(
             child: Row(
               children: [
-                ...actions.map((action) {
-                  return SingleConsumer<BoutAction>(
-                    id: action.id,
-                    initialData: action,
-                    builder: (context, action) {
-                      final color = action.role.color();
-                      return MenuAnchor(
-                        builder: (context, controller, child) {
-                          return InkWell(
-                            child: child,
-                            onTap: () {
-                              if (controller.isOpen) {
-                                controller.close();
-                              } else {
-                                controller.open();
-                              }
-                            },
-                          );
-                        },
-                        menuChildren: [
-                          MenuItemButton(
-                            child: Text(localizations.remove),
-                            onPressed: () async => await onDeleteAction(action),
-                          ),
-                          MenuItemButton(
-                            child: Text(localizations.edit),
-                            onPressed: () async {
-                              final val = await showDurationDialog(
-                                context: context,
-                                initialDuration: action.duration.invertIf(
-                                  isTimeCountDown,
-                                  max: boutConfig.totalPeriodDuration,
-                                ),
-                                maxValue: boutConfig.totalPeriodDuration,
-                              );
-                              if (val != null) {
-                                onCreateOrUpdateAction(
-                                  action.copyWith(
-                                    duration: isTimeCountDown ? boutConfig.totalPeriodDuration - val : val,
+                ...actions.mapIndexed((index, action) {
+                  // Separate the actions of different periods.
+                  final isNewPeriod = index > 0 && _period(actions[index - 1]) != _period(action);
+                  return Padding(
+                    padding: EdgeInsets.only(left: isNewPeriod ? padding : 0),
+                    child: SingleConsumer<BoutAction>(
+                      id: action.id,
+                      initialData: action,
+                      builder: (context, action) {
+                        final color = action.role.color();
+                        return MenuAnchor(
+                          builder: (context, controller, child) {
+                            return InkWell(
+                              child: child,
+                              onTap: () {
+                                if (controller.isOpen) {
+                                  controller.close();
+                                } else {
+                                  controller.open();
+                                }
+                              },
+                            );
+                          },
+                          menuChildren: [
+                            MenuItemButton(
+                              child: Text(localizations.remove),
+                              onPressed: () async => await onDeleteAction(action),
+                            ),
+                            MenuItemButton(
+                              child: Text(localizations.edit),
+                              onPressed: () async {
+                                final val = await showDurationDialog(
+                                  context: context,
+                                  initialDuration: action.duration.invertIf(
+                                    isTimeCountDown,
+                                    max: boutConfig.totalPeriodDuration,
                                   ),
+                                  maxValue: boutConfig.totalPeriodDuration,
                                 );
-                              }
-                            },
+                                if (val != null) {
+                                  onCreateOrUpdateAction(
+                                    action.copyWith(
+                                      duration: isTimeCountDown ? boutConfig.totalPeriodDuration - val : val,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                          child: Tooltip(
+                            message:
+                                (isTimeCountDown ? boutConfig.totalPeriodDuration - action.duration : action.duration)
+                                    .formatMinutesAndSeconds(),
+                            child: ThemedContainer(
+                              margin: const EdgeInsets.symmetric(horizontal: 1),
+                              padding: EdgeInsets.all(padding),
+                              color: color,
+                              child: ScaledText(action.actionValue, fontSize: 28, softWrap: false),
+                            ),
                           ),
-                        ],
-                        child: Tooltip(
-                          message:
-                              (isTimeCountDown ? boutConfig.totalPeriodDuration - action.duration : action.duration)
-                                  .formatMinutesAndSeconds(),
-                          child: ThemedContainer(
-                            margin: const EdgeInsets.symmetric(horizontal: 1),
-                            padding: EdgeInsets.all(padding),
-                            color: color,
-                            child: ScaledText(action.actionValue, fontSize: 28, softWrap: false),
-                          ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   );
                 }),
               ],
