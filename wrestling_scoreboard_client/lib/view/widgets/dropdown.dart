@@ -290,7 +290,7 @@ class _SearchableDropdownFieldState<T> extends State<_SearchableDropdownField<T>
   }
 }
 
-class SimpleDropdown<T> extends StatelessWidget {
+class SimpleDropdown<T> extends StatefulWidget {
   final Iterable<DropdownMenuEntry<T>> options;
   final T? selected;
   final void Function(T? value)? onChange;
@@ -311,11 +311,36 @@ class SimpleDropdown<T> extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  State<SimpleDropdown<T>> createState() => _SimpleDropdownState<T>();
+}
+
+class _SimpleDropdownState<T> extends State<SimpleDropdown<T>> {
+  final _textController = TextEditingController();
+
+  @override
+  void didUpdateWidget(covariant SimpleDropdown<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selected != oldWidget.selected && widget.selected != _textController.text) {
+      // Formfield does not change the initialValue. So if changed externally, we need to update the text field manually.
+      _textController.text =
+          _entries(context).where((entry) => entry.value == widget.selected).firstOrNull?.label ?? '';
+    }
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  List<DropdownMenuEntry<T?>> _entries(BuildContext context) {
     // DropdownMenuEntry.value is non-nullable, so a selectable "none" entry needs the entries'
     // type parameter to be nullable, regardless of whether T itself already is.
-    final entries = <DropdownMenuEntry<T?>>[
-      for (final option in options)
+    return [
+      // Show the text in the menu, but keep the text field empty, if nothing is selected.
+      if (widget.isNullable)
+        DropdownMenuEntry<T?>(value: null, label: '', labelWidget: Text(context.l10n.optionSelect)),
+      for (final option in widget.options)
         DropdownMenuEntry<T?>(
           value: option.value,
           label: option.label,
@@ -325,19 +350,23 @@ class SimpleDropdown<T> extends StatelessWidget {
           enabled: option.enabled,
           style: option.style,
         ),
-      if (isNullable) DropdownMenuEntry<T?>(value: null, label: context.l10n.optionSelect),
     ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return DropdownMenuFormField<T?>(
+      controller: _textController,
       enableFilter: false,
       enableSearch: false,
       selectOnly: true,
-      initialSelection: selected,
-      dropdownMenuEntries: entries,
-      expandedInsets: isExpanded ? EdgeInsets.zero : null,
-      onSelected: onChange,
-      onSaved: onSaved,
+      initialSelection: widget.selected,
+      dropdownMenuEntries: _entries(context),
+      expandedInsets: widget.isExpanded ? EdgeInsets.zero : null,
+      onSelected: widget.onChange,
+      onSaved: widget.onSaved,
       decorationBuilder: (context, _) =>
-          CustomInputDecoration(label: label, localizations: context.l10n, isMandatory: !isNullable),
+          CustomInputDecoration(label: widget.label, localizations: context.l10n, isMandatory: !widget.isNullable),
     );
   }
 }
