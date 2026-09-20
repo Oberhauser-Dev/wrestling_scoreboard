@@ -126,7 +126,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
       children: [
         Expanded(
           flex: 35,
-          child: _MainControlDropDown(
+          child: _ResultDropDown(
             role: BoutRole.red,
             bout: widget.boutState.bout,
             wrestlingStyle: widget.boutState.weightClass?.style,
@@ -136,7 +136,7 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
         if (isBigScreen) Expanded(flex: 50, child: buttonControls),
         Expanded(
           flex: 35,
-          child: _MainControlDropDown(
+          child: _ResultDropDown(
             role: BoutRole.blue,
             bout: widget.boutState.bout,
             wrestlingStyle: widget.boutState.weightClass?.style,
@@ -150,13 +150,13 @@ class BoutMainControlsState extends ConsumerState<BoutMainControls> {
   }
 }
 
-class _MainControlDropDown extends ConsumerWidget {
+class _ResultDropDown extends ConsumerWidget {
   final BoutRole role;
   final Bout bout;
   final WrestlingStyle? wrestlingStyle;
   final List<BoutResultRule> boutRules;
 
-  const _MainControlDropDown({
+  const _ResultDropDown({
     required this.role,
     required this.bout,
     required this.wrestlingStyle,
@@ -178,50 +178,47 @@ class _MainControlDropDown extends ConsumerWidget {
             builder: (context, actions) {
               // Empty List, if pStatus is empty
               final List<DropdownMenuEntry<BoutResult>> boutResultOptions = [];
-              if (pStatus != null) {
-                final boutResultValues = List.of(BoutResult.values);
-                if (pStatusOpponent == null) {
-                  // Cannot select this option, as there is no opponent
-                  boutResultValues.remove(BoutResult.bothDsq);
-                  boutResultValues.remove(BoutResult.bothVin);
-                  // Theoretically the other one does not show up or fails in weigh in, so don't remove the option:
-                  // boutResultValues.remove(BoutResult.bothVfo);
-                }
-                boutResultOptions.addAll(
-                  boutResultValues.map((BoutResult boutResult) {
-                    final resultRule = BoutConfig.resultRule(
-                      result: boutResult,
-                      style: wrestlingStyle ?? WrestlingStyle.free,
-                      technicalPointsWinner: AthleteBoutState.getTechnicalPoints(actions, role),
-                      technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
-                        actions,
-                        role == BoutRole.red ? BoutRole.blue : BoutRole.red,
-                      ),
-                      rules: boutRules,
-                    );
-                    final isEnabled = resultRule != null;
-                    return DropdownMenuEntry(
-                      // Only allow to select option, if current state and resultRules allow it.
-                      enabled: isEnabled,
-                      value: boutResult,
-                      label: boutResult.abbreviation(context),
-                      labelWidget: Tooltip(
-                        message: boutResult.description(context),
-                        child: Text(
-                          boutResult.abbreviation(context),
-                          style: isEnabled ? null : TextStyle(color: Theme.of(context).disabledColor),
-                        ),
-                      ),
-                    );
-                  }),
-                );
+
+              final boutResultValues = pStatus == null ? [BoutResult.bothVfo] : List.of(BoutResult.values);
+              if (pStatusOpponent == null) {
+                // Cannot select this option, as there is no opponent
+                boutResultValues.remove(BoutResult.bothDsq);
+                boutResultValues.remove(BoutResult.bothVin);
+                // Theoretically the other one does not show up or fails in weigh in, so don't remove the option:
+                // boutResultValues.remove(BoutResult.bothVfo);
               }
+              boutResultOptions.addAll(
+                boutResultValues.map((BoutResult boutResult) {
+                  final resultRule = BoutConfig.resultRule(
+                    result: boutResult,
+                    style: wrestlingStyle ?? WrestlingStyle.free,
+                    technicalPointsWinner: AthleteBoutState.getTechnicalPoints(actions, role),
+                    technicalPointsLoser: AthleteBoutState.getTechnicalPoints(
+                      actions,
+                      role == BoutRole.red ? BoutRole.blue : BoutRole.red,
+                    ),
+                    rules: boutRules,
+                  );
+                  final isEnabled = resultRule != null;
+                  return DropdownMenuEntry(
+                    // Only allow to select option, if current state and resultRules allow it.
+                    enabled: isEnabled,
+                    value: boutResult,
+                    label: boutResult.abbreviation(context),
+                    labelWidget: Tooltip(
+                      message: boutResult.description(context),
+                      child: Text(
+                        boutResult.abbreviation(context),
+                        style: isEnabled ? null : TextStyle(color: Theme.of(context).disabledColor),
+                      ),
+                    ),
+                  );
+                }),
+              );
 
               return SimpleDropdown<BoutResult>(
                 isNullable: true,
-                selected: pStatus != null && (role == bout.winnerRole || (bout.result?.affectsBoth() ?? false))
-                    ? bout.result
-                    : null,
+                selected: (role == bout.winnerRole || (bout.result?.affectsBoth() ?? false)) ? bout.result : null,
                 options: boutResultOptions,
                 onChange: (BoutResult? val) async {
                   final dataManager = await ref.read(dataManagerProvider);
