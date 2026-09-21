@@ -6,11 +6,12 @@ import 'package:postgres/postgres.dart' as psql;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/entity_controller.dart';
+import 'package:wrestling_scoreboard_server/services/base_dir.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 
 const _isReleaseMode = bool.fromEnvironment('dart.vm.product');
-const definitionDatabasePath = './database/dump/wrestling_scoreboard-definition-dump.sql';
-const prepopulatedDatabasePath = './database/dump/wrestling_scoreboard-prepopulated-dump.sql';
+String get definitionDatabasePath => resolvePath('database/dump/wrestling_scoreboard-definition-dump.sql');
+String get prepopulatedDatabasePath => resolvePath('database/dump/wrestling_scoreboard-prepopulated-dump.sql');
 
 class PostgresDb {
   final log = Logger('PostgresDb');
@@ -95,7 +96,7 @@ extension DatabaseExt on PostgresDb {
     }
     final databaseVersion = Version.parse(semver);
 
-    final migrationMap = await readMigrationScripts(folderPath: 'database/migration');
+    final migrationMap = await readMigrationScripts(folderPath: resolvePath('database/migration'));
     int migrationStartIndex = 0;
     while (migrationStartIndex < migrationMap.length) {
       if (databaseVersion.compareTo(migrationMap[migrationStartIndex].key) < 0) {

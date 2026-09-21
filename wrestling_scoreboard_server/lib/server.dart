@@ -15,6 +15,7 @@ import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler
 import 'package:wrestling_scoreboard_server/middleware/cors.dart';
 import 'package:wrestling_scoreboard_server/middleware/logging.dart';
 import 'package:wrestling_scoreboard_server/routes/api_route.dart';
+import 'package:wrestling_scoreboard_server/services/base_dir.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'package:wrestling_scoreboard_server/services/pubspec.dart';
@@ -68,7 +69,7 @@ Future<HttpServer> init() async {
     });
 
   // Serve files from the file system.
-  final staticHandler = shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
+  final staticHandler = shelf_static.createStaticHandler(resolvePath('public'), defaultDocument: 'index.html');
 
   // See https://pub.dev/documentation/shelf/latest/shelf/Cascade-class.html
   final cascade = Cascade()
@@ -89,11 +90,11 @@ Future<HttpServer> init() async {
     port,
   );
 
-  final serverUrl = 'http://${server.address.host}:${server.port}';
+  final serverOrigin = 'http://${server.address.host}:${server.port}';
   serverLog.info('\n\n############## Server started at ${DateTime.now().toIso8601String()} ###########\n');
-  serverLog.info('Serving at $serverUrl');
-  serverLog.info('Serving API at $serverUrl/api');
-  serverLog.info('Serving Websocket at $serverUrl/ws');
+  serverLog.info('Serving at $serverOrigin');
+  serverLog.info('Serving API at $serverOrigin/api');
+  serverLog.info('Serving Websocket at ws://${server.address.host}:${server.port}/ws');
 
   return server;
 }
