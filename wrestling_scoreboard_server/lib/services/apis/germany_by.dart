@@ -16,6 +16,7 @@ import 'package:wrestling_scoreboard_server/services/apis/mocks/listLiga.json.da
 import 'package:wrestling_scoreboard_server/services/apis/mocks/listSaison.json.dart';
 import 'package:wrestling_scoreboard_server/services/apis/mocks/wrestler.json.dart';
 import 'package:wrestling_scoreboard_server/utils/date_time.dart';
+import 'package:wrestling_scoreboard_server/utils/http.dart';
 
 final _whiteSpaceRegex = RegExp(r'\s+');
 
@@ -154,7 +155,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     } else {
       final uri = Uri.parse(apiUrl).replace(queryParameters: {'op': 'getSaisonWrestler', 'passcode': '2781'});
       _logger.fine('Call API to check credentials: $uri');
-      final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
+      final response = await retryRequest(runAsync: () => http.get(uri, headers: authService?.header));
       if (response.statusCode >= 400) {
         return false;
       }
@@ -425,6 +426,10 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     required int passCode,
     required Future<Club> Function(String clubId) getClub,
   }) async {
+    if (passCode == 0 || passCode == 1) {
+      // Vacant wrestler
+      return null;
+    }
     final json = await _getSaisonWrestler(passCode: passCode);
     final wrestlerJson = json['wrestler'];
 
@@ -882,7 +887,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           _logger.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
+          final response = await retryRequest(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the season list', response: response);
           }
@@ -914,7 +919,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           _logger.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
+          final response = await retryRequest(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the saison list', response: response);
           }
@@ -945,7 +950,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           _logger.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
+          final response = await retryRequest(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the liga list (seasonId: $seasonId)', response: response);
           }
@@ -990,7 +995,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           _logger.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
+          final response = await retryRequest(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException(
               'Failed to get the competition list (seasonId: $seasonId, ligaId: $ligaId, rid: $regionId)',
@@ -1028,7 +1033,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String body;
         if (!isMock) {
           _logger.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
+          final response = await retryRequest(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException(
               'Failed to get the competition (seasonId: $seasonId, competitionId: $competitionId)',
@@ -1071,7 +1076,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
         String? body;
         if (!isMock) {
           _logger.fine('Call API: $uri');
-          final response = await retry(runAsync: () => http.get(uri, headers: authService?.header));
+          final response = await retryRequest(runAsync: () => http.get(uri, headers: authService?.header));
           if (response.statusCode >= 400) {
             throw HttpException('Failed to get the wrestler (passcode: $passCode)', response: response);
           }
