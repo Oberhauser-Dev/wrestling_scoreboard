@@ -52,11 +52,15 @@ Future<Completer?> _lockTransaction({required String key, bool Function()? canAb
 
 Future<T> retry<T>({
   required Future<T> Function() runAsync,
-  Duration timeout = const Duration(seconds: 5),
-  int attempts = 10,
+  Duration? retryBaseDelay,
+  Duration? timeout,
+  int? attempts,
 }) async {
+  attempts ??= 10;
+  timeout ??= const Duration(seconds: 5);
   for (int attempt = 0; attempt < attempts; attempt++) {
     try {
+      if (retryBaseDelay != null) await Future.delayed(retryBaseDelay * attempt);
       return await runAsync().timeout(
         timeout,
         onTimeout: () => throw 'Async execution took longer than $timeout. Retry ${attempt + 1}',
