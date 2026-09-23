@@ -38,6 +38,9 @@ class WrestlingScoreboardApp extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => WrestlingScoreboardAppState();
 }
 
+/// Attached to [MaterialApp.scaffoldMessengerKey] to show snackbars from outside the widget tree.
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> {
   // Initialize router once to avoid reloading initial path on rebuild.
   final routerConfig = getRouter();
@@ -104,6 +107,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
               future: ref.watch(fontFamilyProvider),
               builder: (context, fontFamily) {
                 return MaterialApp.router(
+                  scaffoldMessengerKey: scaffoldMessengerKey,
                   debugShowCheckedModeBanner: false,
                   title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
                   theme: _buildTheme(Brightness.light, fontFamily),

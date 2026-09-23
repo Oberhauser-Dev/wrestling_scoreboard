@@ -427,6 +427,28 @@ class AppLocalizationsDe extends AppLocalizations {
       'Die Verbindung zum Server konnte nicht aufgebaut werden oder wurde unterbrochen.';
 
   @override
+  String get webSocketConnected => 'Websocket-Verbindung hergestellt.';
+
+  @override
+  String get webSocketReconnecting => 'Websocket-Verbindung wird wiederhergestellt…';
+
+  @override
+  String get webSocketDisconnected => 'Websocket-Verbindung vom Client geschlossen.';
+
+  @override
+  String get webSocketConnectionFailed =>
+      'Websocket-Verbindung konnte nicht hergestellt werden oder wurde vom Server geschlossen.';
+
+  @override
+  String get webSocketConnectionLost => 'Websocket-Verbindung vom Server geschlossen.';
+
+  @override
+  String get webSocketConnectionRefused => 'Websocket-Verbindung vom Server abgelehnt.';
+
+  @override
+  String get changeWebSocketSettings => 'Einstellung für Websocket-Verbindung ändern';
+
+  @override
   String get errorOccurred => 'Etwas ist schief gelaufen :/';
 
   @override

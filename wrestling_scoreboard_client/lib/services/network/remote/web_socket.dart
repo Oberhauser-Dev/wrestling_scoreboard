@@ -2,10 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:wrestling_scoreboard_client/routes/router.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/url.dart';
+import 'package:wrestling_scoreboard_client/view/screens/home/more.dart';
+import 'package:wrestling_scoreboard_client/view/screens/more/settings.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -95,6 +100,7 @@ class WebSocketManager {
             onError: (e) {
               if (e is WebSocketChannelException) {
                 _logger.warning('Websocket connection refused by server');
+                showAppSnackBar((l10n) => l10n.webSocketConnectionRefused, clearSnackBars: true);
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnecting);
               }
             },
@@ -104,9 +110,11 @@ class WebSocketManager {
               _channelSubscription = null;
               if (_channel?.closeCode == 4210) {
                 _logger.info('Websocket connection reconnecting: ${_channel?.closeReason}');
+                showAppSnackBar((l10n) => l10n.webSocketReconnecting, clearSnackBars: true);
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
               } else if (_channel?.closeCode == 1001) {
                 _logger.info('Websocket connection closed by client ${_channel?.closeReason}');
+                showAppSnackBar((l10n) => l10n.webSocketDisconnected, clearSnackBars: true);
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
               } else if (_channel?.closeCode == null) {
                 // E.g.
@@ -114,8 +122,18 @@ class WebSocketManager {
                 // - server is already shut down
                 // - no internet
                 // - refusing the connection
+                // - wrong connection url
                 _logger.info(
                   'Websocket connection could not be established or was closed by server without close code',
+                );
+                showAppSnackBar(
+                  (l10n) => l10n.webSocketConnectionFailed,
+                  clearSnackBars: true,
+                  actionBuilder: (l10n) => SnackBarAction(
+                    label: l10n.changeWebSocketSettings,
+                    onPressed: () =>
+                        rootNavigatorKey.currentContext?.push('/${MoreScreen.route}/${CustomSettingsScreen.route}'),
+                  ),
                 );
                 // Avoid overriding previous SocketException when setting a disconnected state
 
@@ -127,6 +145,7 @@ class WebSocketManager {
                 _logger.info(
                   'Websocket connection closed by server (Code: ${_channel?.closeCode}, Reason: ${_channel?.closeReason})',
                 );
+                showAppSnackBar((l10n) => l10n.webSocketConnectionLost, clearSnackBars: true);
                 onWebSocketConnection.sink.add(WebSocketConnectionState.disconnected);
 
                 _retryConnecting();
@@ -136,6 +155,7 @@ class WebSocketManager {
           );
           await _channel?.ready.timeout(const Duration(seconds: 5));
           _logger.fine('Websocket connection established: $_wsUrl');
+          showAppSnackBar((l10n) => l10n.webSocketConnected, clearSnackBars: true);
           onWebSocketConnection.sink.add(WebSocketConnectionState.connected);
           // Reset retry count
           _retryCount = 0;
@@ -146,6 +166,7 @@ class WebSocketManager {
         } on SocketException catch (e) {
           // Thrown, when connection failed, waiting for `ready` state.
           _logger.warning('Websocket connection refused by server: $e');
+          showAppSnackBar((l10n) => l10n.webSocketConnectionRefused, clearSnackBars: true);
           onWebSocketConnection.sink.addError(e);
         }
       } else if (connectionState == WebSocketConnectionState.disconnecting) {
