@@ -537,25 +537,28 @@ class _EntityGrid extends ConsumerWidget {
                   )
                 else
                   _CardBackgroundImage(imageUri: data is ImageObjectData ? data.imageUri : null),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ClipRect(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                        child: Container(
-                          color: Colors.black.withValues(alpha: 0.5),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(getTitle(data), style: const TextStyle(color: Colors.white)),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.5),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              getTitle(data),
+                              style: const TextStyle(color: Colors.white),
+                              overflow: TextOverflow.fade,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
                 if (actionItemBuilder != null)
                   Align(
