@@ -48,8 +48,9 @@ import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/tea
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_person_overview.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_overview.dart';
 
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+
 GoRouter getRouter() {
-  final rootNavigatorKey = GlobalKey<NavigatorState>();
   final dataObjectRoutes = [
     GoRoute(
       path: '${TeamOverview.route}/:team_id',

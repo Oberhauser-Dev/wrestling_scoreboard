@@ -424,6 +424,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noWebSocketConnection => 'The connection to the server could not be established or was interrupted.';
 
   @override
+  String get webSocketConnected => 'Websocket connection established.';
+
+  @override
+  String get webSocketReconnecting => 'Websocket connection reconnecting…';
+
+  @override
+  String get webSocketDisconnected => 'Websocket connection closed by client.';
+
+  @override
+  String get webSocketConnectionFailed => 'Websocket connection could not be established or was closed by server.';
+
+  @override
+  String get webSocketConnectionLost => 'Websocket connection closed by server.';
+
+  @override
+  String get webSocketConnectionRefused => 'Websocket connection refused by server.';
+
+  @override
+  String get changeWebSocketSettings => 'Change Websocket connection settings';
+
+  @override
   String get errorOccurred => 'Something went wrong :/';
 
   @override

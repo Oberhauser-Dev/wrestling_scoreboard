@@ -878,6 +878,48 @@ abstract class AppLocalizations {
   /// **'The connection to the server could not be established or was interrupted.'**
   String get noWebSocketConnection;
 
+  /// No description provided for @webSocketConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Websocket connection established.'**
+  String get webSocketConnected;
+
+  /// No description provided for @webSocketReconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Websocket connection reconnecting…'**
+  String get webSocketReconnecting;
+
+  /// No description provided for @webSocketDisconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Websocket connection closed by client.'**
+  String get webSocketDisconnected;
+
+  /// No description provided for @webSocketConnectionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Websocket connection could not be established or was closed by server.'**
+  String get webSocketConnectionFailed;
+
+  /// No description provided for @webSocketConnectionLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Websocket connection closed by server.'**
+  String get webSocketConnectionLost;
+
+  /// No description provided for @webSocketConnectionRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'Websocket connection refused by server.'**
+  String get webSocketConnectionRefused;
+
+  /// No description provided for @changeWebSocketSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Websocket connection settings'**
+  String get changeWebSocketSettings;
+
   /// No description provided for @errorOccurred.
   ///
   /// In en, this message translates to:
