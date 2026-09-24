@@ -1,3 +1,7 @@
+## 0.3.13
+
+ - **FEAT**: Upgrade Flutter to v3.47.x. ([f7a34f20](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f7a34f2094d18df8581a6d0e20df6d4b6a6e2475))
+
 ## 0.3.1
 
  - **FEAT**: Upgrade Flutter to v3.44.x. ([839a95e9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/839a95e9598422d242324793930abdcde97c8b66))
