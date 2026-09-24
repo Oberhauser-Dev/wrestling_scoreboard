@@ -1,3 +1,8 @@
+## 0.3.13
+
+ - **FIX**: Retry on import via API. ([5f21b7da](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5f21b7da6f6ec2817679a251a1ab209dab3458f5))
+ - **FEAT**: Upgrade Flutter to v3.47.x. ([f7a34f20](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f7a34f2094d18df8581a6d0e20df6d4b6a6e2475))
+
 ## 0.3.9
 
  - **REFACTOR**: Remove TeamMatch resultRole. ([a5477882](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/a5477882e1d1db13496228441c11d6255b922e10))

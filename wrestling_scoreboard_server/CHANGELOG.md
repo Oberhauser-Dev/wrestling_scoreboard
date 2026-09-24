@@ -1,3 +1,12 @@
+## 0.3.13
+
+ - **FIX**: Retry on import via API. ([5f21b7da](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5f21b7da6f6ec2817679a251a1ab209dab3458f5))
+ - **FIX**: Avoid more than one athlete for one weight class in team matches ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([9fc8f5d9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9fc8f5d99d416e291aa60c9acc4369c4d5c364ea))
+ - **FIX**: Merge regular and provider search results ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([d30d467e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d30d467e144d62e1b5957c4ea79db26deab37720))
+ - **FIX**: Avoid logging error on missing club for membership search. ([363da5cd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/363da5cdca0dd937e37cd3c9f1e2678b838838da))
+ - **FEAT**: Run server executable from within the bin folder ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([0b4cdf17](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0b4cdf17286bce695d07156b34f56926b3caa310))
+ - **FEAT**: Upgrade Flutter to v3.47.x. ([f7a34f20](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f7a34f2094d18df8581a6d0e20df6d4b6a6e2475))
+
 ## 0.3.12
 
  - **FIX**: Parse "0"-classification points as null, if decision is not set. ([df493bac](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/df493bac0804a7a23af9d5a255848a30a298290e))

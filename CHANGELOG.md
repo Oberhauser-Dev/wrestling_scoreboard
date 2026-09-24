@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-09-24
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.13`](#wrestling_scoreboard_client---v0313)
+ - [`wrestling_scoreboard_common` - `v0.3.13`](#wrestling_scoreboard_common---v0313)
+ - [`wrestling_scoreboard_generator` - `v0.3.13`](#wrestling_scoreboard_generator---v0313)
+ - [`wrestling_scoreboard_server` - `v0.3.13`](#wrestling_scoreboard_server---v0313)
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.13`
+
+ - **FIX**: Avoid render overflow in home item. ([45b652bc](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/45b652bc6f8e2ec9def69d494c53ba40ae0f1e20))
+ - **FIX**: Update Android platform folder. ([d17f281d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d17f281d8876d5b22a4824bf7b9eae9c99897dd1))
+ - **FIX**: Update Dropdown Formfield on externally changed value ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([b16e25e3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b16e25e3b28d72d117ceeeb199aa3c3ec200b9c3))
+ - **FIX**: Allow bothVfo both participants are vacant ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([fdc0cd9c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fdc0cd9c6dded6f6d1bc21417da1ae8125910f0b))
+ - **FIX**: Show warning on lineups and bouts mismatch ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([d3a34f87](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d3a34f87b6cb711e0ef73b48128e625ba39e586f))
+ - **FIX**: Update paused cached provider ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([fd2cff82](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fd2cff82c12e0617bbb3bbbb5047a6a1bff03cc5))
+ - **FEAT**: Show Snackbar on Websocket connection change. ([9581fabb](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9581fabb3a60016cdd4e1b23cf22956b005bf16a))
+ - **FEAT**: Add extra padding between periods in bout actions ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([07507bf4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/07507bf435d820797966ed675157983c3f376457))
+ - **FEAT**: Reload page via F5 ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([d4ff5625](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d4ff56257fbfd554d0951dfc22da6cc1e400e218))
+ - **FEAT**: Convert DropdownButton to DropdownMenu for SimpleDropdown. ([eb5b3b50](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/eb5b3b50815d0b84850bd8b6bd10ae0a092d1e8c))
+ - **FEAT**: Mark API and external Memberships in MembershipDropdown ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([b5dd0ea1](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b5dd0ea17c9d9752e71eab4fde1576684c20e6ed))
+ - **FEAT**: SearchableDropdown itemBuilder. ([c883ca57](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/c883ca573938e9bbd181cb315d8aa91630db2747))
+ - **FEAT**: Replace DropdownSearch with custom implementation. ([6eb4c829](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6eb4c829253271272f6e166c794041e9dd4e3273))
+ - **FEAT**: Upgrade Flutter to v3.47.x. ([f7a34f20](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f7a34f2094d18df8581a6d0e20df6d4b6a6e2475))
+
+#### `wrestling_scoreboard_common` - `v0.3.13`
+
+ - **FIX**: Retry on import via API. ([5f21b7da](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5f21b7da6f6ec2817679a251a1ab209dab3458f5))
+ - **FEAT**: Upgrade Flutter to v3.47.x. ([f7a34f20](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f7a34f2094d18df8581a6d0e20df6d4b6a6e2475))
+
+#### `wrestling_scoreboard_generator` - `v0.3.13`
+
+ - **FEAT**: Upgrade Flutter to v3.47.x. ([f7a34f20](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f7a34f2094d18df8581a6d0e20df6d4b6a6e2475))
+
+#### `wrestling_scoreboard_server` - `v0.3.13`
+
+ - **FIX**: Retry on import via API. ([5f21b7da](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5f21b7da6f6ec2817679a251a1ab209dab3458f5))
+ - **FIX**: Avoid more than one athlete for one weight class in team matches ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([9fc8f5d9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/9fc8f5d99d416e291aa60c9acc4369c4d5c364ea))
+ - **FIX**: Merge regular and provider search results ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([d30d467e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d30d467e144d62e1b5957c4ea79db26deab37720))
+ - **FIX**: Avoid logging error on missing club for membership search. ([363da5cd](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/363da5cdca0dd937e37cd3c9f1e2678b838838da))
+ - **FEAT**: Run server executable from within the bin folder ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([0b4cdf17](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0b4cdf17286bce695d07156b34f56926b3caa310))
+ - **FEAT**: Upgrade Flutter to v3.47.x. ([f7a34f20](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f7a34f2094d18df8581a6d0e20df6d4b6a6e2475))
+
+
 ## 2026-09-12
 
 ### Changes
