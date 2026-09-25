@@ -44,15 +44,10 @@ Future<HttpServer> init() async {
     ..mount('/ws', (Request request) {
       try {
         return websocketHandler(request);
-      } on HijackException catch (error) {
-        // A HijackException should bypass the response-writing logic entirely.
-        webSocketLog.warning(
-          'Warning: HijackException thrown on WebsocketHandler.',
-          error,
-          // stackTrace: We do not log the stackTrace as it does not give any more value
-        );
-        // TODO hide stack trace or handle better
-        // Exception is handled here: https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
+      } on HijackException {
+        // Expected to throw on every successful websocket upgrade: the request is hijacked and handled silently by shelf_io:
+        // https://pub.dev/documentation/shelf/latest/shelf_io/handleRequest.html
+        // Caught here to bypass the logging of the error in the general catch block.
         rethrow;
       } catch (error, stackTrace) {
         webSocketLog.severe('Error thrown by Websocket Handler handler.', error, stackTrace);
