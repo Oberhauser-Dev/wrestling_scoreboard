@@ -14,7 +14,9 @@ Future<http.Response> retryRequest({
   return await retry(
     runAsync: () async {
       final result = await runAsync();
-      if (result.statusCode == 429) {
+      if (result.statusCode == 429 ||
+          // Retry on bad gateway errors, which can occur when the server is overloaded.
+          result.statusCode == 502) {
         throw Exception('StatusCode ${result.statusCode}: ${result.reasonPhrase}.');
       }
       return result;
@@ -22,6 +24,6 @@ Future<http.Response> retryRequest({
     attempts: attempts,
     timeout: timeout,
     // Avoid retrying every request at the same time.
-    retryBaseDelay: retryBaseDelay ?? Duration(milliseconds: _random.nextInt(1000)),
+    retryBaseDelay: retryBaseDelay ?? Duration(milliseconds: _random.nextInt(2000)),
   );
 }
