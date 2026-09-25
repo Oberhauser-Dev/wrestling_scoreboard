@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-09-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_server` - `v0.3.14`](#wrestling_scoreboard_server---v0314)
+
+---
+
+#### `wrestling_scoreboard_server` - `v0.3.14`
+
+ - **FIX**: Avoid warning for HijackException. ([3d785c7f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3d785c7f489b6d1effb45558df86f74c4692ce51))
+ - **FIX**: Retry with status code 502 on import via API. ([b96918a3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b96918a3bd2183c414fc28510b3fa0249f02fe90))
+
+
 ## 2026-09-24
 
 ### Changes
