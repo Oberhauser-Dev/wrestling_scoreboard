@@ -1,3 +1,8 @@
+## 0.3.14
+
+ - **FIX**: Avoid warning for HijackException. ([3d785c7f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3d785c7f489b6d1effb45558df86f74c4692ce51))
+ - **FIX**: Retry with status code 502 on import via API. ([b96918a3](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b96918a3bd2183c414fc28510b3fa0249f02fe90))
+
 ## 0.3.13
 
  - **FIX**: Retry on import via API. ([5f21b7da](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5f21b7da6f6ec2817679a251a1ab209dab3458f5))
