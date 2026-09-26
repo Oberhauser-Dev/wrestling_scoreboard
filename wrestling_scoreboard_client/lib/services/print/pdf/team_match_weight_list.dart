@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show rootBundle;
@@ -126,6 +127,16 @@ class TeamMatchWeightList extends PdfSheet {
 
   Widget _buildBoutTable(Context context) {
     const marginBottom = EdgeInsets.only(bottom: PdfSheet.verticalGap);
+    final substitutes = weightClasses
+        .map(
+          (weightClass) => TeamLineupParticipation.fromParticipationsAndWeightClass(
+            participations: participations,
+            weightClass: weightClass,
+            isSubstitute: true,
+          ),
+        )
+        .nonNulls
+        .toList();
 
     List<TableColumnWidth> participantStateColumnWidths() => [
       const FlexColumnWidth(0.8), // Weight
@@ -186,10 +197,15 @@ class TeamMatchWeightList extends PdfSheet {
       ];
     }
 
-    List<Widget> buildParticipantState(WeightClass? weightClass, Iterable<TeamLineupParticipation> participations) {
+    List<Widget> buildParticipantState(
+      WeightClass? weightClass,
+      Iterable<TeamLineupParticipation> participations, {
+      bool isSubstitute = false,
+    }) {
       final teamMatchParticipation = TeamLineupParticipation.fromParticipationsAndWeightClass(
         participations: participations,
         weightClass: weightClass,
+        isSubstitute: isSubstitute,
       );
       final membership = teamMatchParticipation?.membership;
       return [
@@ -268,7 +284,7 @@ class TeamMatchWeightList extends PdfSheet {
                 localizations.total,
                 height: cellHeight,
                 fontSize: cellFontSize,
-                // Gab to replacement
+                // Gap to substitutes
                 margin: marginBottom,
               ),
             ),
@@ -281,7 +297,7 @@ class TeamMatchWeightList extends PdfSheet {
             TableCell(
               columnSpan: 4 + 4,
               child: buildTextCell(
-                localizations.replacement,
+                localizations.substitutes,
                 borderWidth: 0,
                 height: cellHeight,
                 fontSize: cellFontSize,
@@ -289,10 +305,24 @@ class TeamMatchWeightList extends PdfSheet {
             ),
           ],
         ),
-        ...List.generate(
-          3,
-          (e) => TableRow(children: List.generate(4 + 4, (e) => buildTextCell('', height: cellHeight))),
-        ),
+        // Leave at least three rows to fill in substitutes by hand.
+        ...List.generate(max(3, substitutes.length), (index) {
+          final substitute = substitutes.elementAtOrNull(index);
+          final weightClass = substitute?.weightClass;
+          return TableRow(
+            children: [
+              buildTextCell('', height: cellHeight), // No
+              buildTextCell(weightClass?.name ?? '', height: cellHeight, fontSize: cellFontSize),
+              buildTextCell(
+                weightClass?.style.abbreviation(buildContext) ?? '',
+                height: cellHeight,
+                fontSize: cellFontSize,
+              ),
+              ...buildParticipantState(weightClass, substitute == null ? const [] : [substitute], isSubstitute: true),
+              buildTextCell('', height: cellHeight), // Comment
+            ],
+          );
+        }),
       ],
     );
   }

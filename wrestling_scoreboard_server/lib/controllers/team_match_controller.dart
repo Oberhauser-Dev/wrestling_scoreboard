@@ -320,13 +320,23 @@ class TeamMatchController extends ShelfController<TeamMatch>
       // Keep previous weight on import
       // TODO: remove when weight is available on import.
       modify: (previous) {
-        return updated
-            .map(
-              (c) => c.copyWith(
-                weight: c.weight ?? previous.where((p) => p.weightClass == c.weightClass).firstOrNull?.weight,
-              ),
-            )
-            .toList();
+        return [
+          ...updated.map(
+            (c) => c.copyWith(
+              weight:
+                  c.weight ??
+                  previous.where((p) => p.weightClass == c.weightClass && !p.isSubstitute).firstOrNull?.weight,
+            ),
+          ),
+          // Keep substitutes, as they are not part of the import, unless they became the regular participant.
+          ...previous
+              .where(
+                (p) =>
+                    p.isSubstitute &&
+                    !updated.any((c) => c.weightClass == p.weightClass && c.membership.id == p.membership.id),
+              )
+              .map((p) => p.copyWithId(null)),
+        ];
       },
     );
   }

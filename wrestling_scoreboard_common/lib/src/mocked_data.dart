@@ -196,6 +196,16 @@ class MockedData {
     _teamLineupParticipations.add(
       TeamLineupParticipation(id: 8, membership: b4, lineup: menRpwGuestTeamLineup, weightClass: wc130, weight: 129.9),
     );
+    _teamLineupParticipations.add(
+      TeamLineupParticipation(
+        id: 9,
+        membership: r2,
+        lineup: menRpwHomeTeamLineup,
+        weightClass: wc57,
+        weight: 56.2,
+        isSubstitute: true,
+      ),
+    );
 
     final tm = TeamMatch(
       id: 1,
