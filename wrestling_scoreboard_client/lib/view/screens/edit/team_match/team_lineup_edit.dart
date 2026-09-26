@@ -8,6 +8,7 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/components/dropdown.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/membership_edit.dart';
@@ -26,6 +27,7 @@ class TeamLineupEdit extends ConsumerStatefulWidget {
   final TeamLineup lineup;
   final List<WeightClass> weightClasses;
   final List<TeamLineupParticipation> participations;
+  final List<TeamLineupMembership> lineupMemberships;
   final Membership? initialLeader;
   final Membership? initialCoach;
   final List<TeamLineupParticipation>? initialParticipations;
@@ -36,6 +38,7 @@ class TeamLineupEdit extends ConsumerStatefulWidget {
     required this.lineup,
     required this.weightClasses,
     required this.participations,
+    required this.lineupMemberships,
     this.initialLeader,
     this.initialCoach,
     this.initialParticipations,
@@ -60,8 +63,9 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
   @override
   void initState() {
     super.initState();
-    _leader = widget.lineup.leader;
-    _coach = widget.lineup.coach;
+    // Only one leader and coach can be edited, even if there are multiple in the background.
+    _leader = widget.lineupMemberships.firstOfRole(LineupRole.leader)?.membership ?? widget.initialLeader;
+    _coach = widget.lineupMemberships.firstOfRole(LineupRole.coach)?.membership ?? widget.initialCoach;
 
     if (widget.participations.isNotEmpty) {
       _participations = Map.fromEntries(
@@ -115,7 +119,8 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
       }
 
       final dataManager = await ref.read(dataManagerProvider);
-      await dataManager.createOrUpdateSingle(widget.lineup.copyWith(leader: _leader, coach: _coach));
+      await _saveLineupMembership(dataManager, LineupRole.leader, _leader);
+      await _saveLineupMembership(dataManager, LineupRole.coach, _coach);
       await Future.forEach(_deleteParticipations, (TeamLineupParticipation element) async {
         await dataManager.deleteSingle<TeamLineupParticipation>(element);
       });
@@ -157,6 +162,21 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
       }
 
       navigator.pop();
+    }
+  }
+
+  /// Creates, updates or deletes the (first) lineup membership of the given [role].
+  Future<void> _saveLineupMembership(DataManager dataManager, LineupRole role, Membership? membership) async {
+    final lineupMembership = widget.lineupMemberships.firstOfRole(role);
+    if (lineupMembership?.membership == membership) return;
+    if (membership == null) {
+      await dataManager.deleteSingle<TeamLineupMembership>(lineupMembership!);
+    } else if (lineupMembership != null) {
+      await dataManager.createOrUpdateSingle<TeamLineupMembership>(lineupMembership.copyWith(membership: membership));
+    } else {
+      await dataManager.createOrUpdateSingle<TeamLineupMembership>(
+        TeamLineupMembership(lineup: widget.lineup, membership: membership, role: role),
+      );
     }
   }
 

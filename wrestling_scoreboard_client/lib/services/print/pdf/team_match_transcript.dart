@@ -20,6 +20,8 @@ class TeamMatchTranscript extends PdfSheet {
     required this.officials,
     required this.homeParticipations,
     required this.guestParticipations,
+    required this.homeLineupMemberships,
+    required this.guestLineupMemberships,
     required this.boutConfig,
     required this.isTimeCountDown,
     super.baseColor,
@@ -30,6 +32,8 @@ class TeamMatchTranscript extends PdfSheet {
   final Map<TeamMatchBout, List<BoutAction>> teamMatchBoutActions;
   final List<TeamLineupParticipation> homeParticipations;
   final List<TeamLineupParticipation> guestParticipations;
+  final List<TeamLineupMembership> homeLineupMemberships;
+  final List<TeamLineupMembership> guestLineupMemberships;
   final BoutConfig boutConfig;
   final TeamMatch teamMatch;
   final Map<Person, PersonRole> officials;
@@ -190,12 +194,12 @@ class TeamMatchTranscript extends PdfSheet {
     return [
       buildPerson(
         title: '${localizations.home} ${localizations.leader.toUpperCase()}',
-        no: teamMatch.home.leader?.person.fullName ?? '',
+        no: homeLineupMemberships.firstOfRole(LineupRole.leader)?.membership.person.fullName ?? '',
         width: width,
       ),
       buildPerson(
         title: '${localizations.guest} ${localizations.leader.toUpperCase()}',
-        no: teamMatch.guest.leader?.person.fullName ?? '',
+        no: guestLineupMemberships.firstOfRole(LineupRole.leader)?.membership.person.fullName ?? '',
         width: width,
       ),
     ];

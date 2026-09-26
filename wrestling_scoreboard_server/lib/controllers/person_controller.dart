@@ -8,10 +8,11 @@ import 'package:wrestling_scoreboard_server/controllers/auth_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/organizational_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/shelf_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/common/websocket_handler.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_lineup_membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/organization_controller.dart';
-import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_person_controller.dart';
 
@@ -80,12 +81,32 @@ class PersonController extends ShelfController<Person> with OrganizationalContro
             }
 
             // Update deleted memberships
-            final lnc = TeamLineupController();
-            final lineupsByLeader = await lnc.getByLeader(user, deleteMembership.id!);
-            await Future.wait(lineupsByLeader.map((e) => lnc.updateSingle(e.copyWith(leader: replacingMembership))));
+            final tlmc = TeamLineupMembershipController();
+            final keepTeamLineupMemberships = await tlmc.getByMembership(user, replacingMembership.id!);
+            final teamLineupMemberships = await tlmc.getByMembership(user, deleteMembership.id!);
+            await Future.wait(
+              teamLineupMemberships.map((e) {
+                // Avoid duplicates, if the replacing membership already has the same role in the lineup.
+                final isDuplicate = keepTeamLineupMemberships.any((k) => k.lineup == e.lineup && k.role == e.role);
+                return isDuplicate
+                    ? tlmc.deleteSingle(e.id!)
+                    : tlmc.updateSingle(e.copyWith(membership: replacingMembership));
+              }),
+            );
 
-            final lineupsByCoach = await lnc.getByCoach(user, deleteMembership.id!);
-            await Future.wait(lineupsByCoach.map((e) => lnc.updateSingle(e.copyWith(coach: replacingMembership))));
+            final clmc = CompetitionLineupMembershipController();
+            final keepCompetitionLineupMemberships = await clmc.getByMembership(user, replacingMembership.id!);
+            final competitionLineupMemberships = await clmc.getByMembership(user, deleteMembership.id!);
+            await Future.wait(
+              competitionLineupMemberships.map((e) {
+                final isDuplicate = keepCompetitionLineupMemberships.any(
+                  (k) => k.lineup == e.lineup && k.role == e.role,
+                );
+                return isDuplicate
+                    ? clmc.deleteSingle(e.id!)
+                    : clmc.updateSingle(e.copyWith(membership: replacingMembership));
+              }),
+            );
 
             final participations = await TeamLineupParticipationController().getByMembership(
               user,

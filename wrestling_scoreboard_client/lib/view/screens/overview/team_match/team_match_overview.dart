@@ -294,9 +294,17 @@ class TeamMatchOverview extends ConsumerWidget {
                         );
 
                         final officials = await _getOfficials(ref, match: match);
+                        final homeLineupMemberships = await _getLineupMemberships(ref, lineup: match.home);
+                        final guestLineupMemberships = await _getLineupMemberships(ref, lineup: match.guest);
 
                         if (!context.mounted) return;
-                        final missingAttributes = match.missingAttributes(context, officials, teamMatchBouts);
+                        final missingAttributes = match.missingAttributes(
+                          context,
+                          officials,
+                          teamMatchBouts,
+                          homeLineupMemberships: homeLineupMemberships,
+                          guestLineupMemberships: guestLineupMemberships,
+                        );
                         if (missingAttributes != null) {
                           final continueExport = await showOkCancelDialog(
                             title: Icon(Icons.warning),
@@ -358,6 +366,14 @@ class TeamMatchOverview extends ConsumerWidget {
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
   );
 
+  static Future<List<TeamLineupMembership>> _getLineupMemberships(WidgetRef ref, {required TeamLineup lineup}) async {
+    return await ref.readAsync(
+      manyDataStreamProvider<TeamLineupMembership, TeamLineup>(
+        ManyProviderData<TeamLineupMembership, TeamLineup>(filterObject: lineup),
+      ).future,
+    );
+  }
+
   static Future<Map<Person, PersonRole>> _getOfficials(WidgetRef ref, {required TeamMatch match}) async {
     final officials = await ref.readAsync(
       manyDataStreamProvider<TeamMatchPerson, TeamMatch>(
@@ -401,6 +417,8 @@ class TeamMatchOverview extends ConsumerWidget {
     );
 
     final officials = await _getOfficials(ref, match: match);
+    final homeLineupMemberships = await _getLineupMemberships(ref, lineup: match.home);
+    final guestLineupMemberships = await _getLineupMemberships(ref, lineup: match.guest);
 
     if (context.mounted) {
       final bytes = await TeamMatchWeightList(
@@ -408,6 +426,8 @@ class TeamMatchOverview extends ConsumerWidget {
         buildContext: context,
         teamMatch: match,
         officials: officials,
+        homeLineupMemberships: homeLineupMemberships,
+        guestLineupMemberships: guestLineupMemberships,
         participations: participations,
         lineup: lineup,
       ).buildPdf();
@@ -461,9 +481,17 @@ class TeamMatchOverview extends ConsumerWidget {
     );
 
     final officials = await _getOfficials(ref, match: match);
+    final homeLineupMemberships = await _getLineupMemberships(ref, lineup: match.home);
+    final guestLineupMemberships = await _getLineupMemberships(ref, lineup: match.guest);
 
     if (!context.mounted) return;
-    final missingAttributes = match.missingAttributes(context, officials, teamMatchBouts);
+    final missingAttributes = match.missingAttributes(
+      context,
+      officials,
+      teamMatchBouts,
+      homeLineupMemberships: homeLineupMemberships,
+      guestLineupMemberships: guestLineupMemberships,
+    );
     if (missingAttributes != null) {
       final continueExport = await showOkCancelDialog(
         title: Icon(Icons.warning),
@@ -479,6 +507,8 @@ class TeamMatchOverview extends ConsumerWidget {
       buildContext: context,
       teamMatch: match,
       officials: officials,
+      homeLineupMemberships: homeLineupMemberships,
+      guestLineupMemberships: guestLineupMemberships,
       boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
       isTimeCountDown: isTimeCountDown,
       guestParticipations: guestParticipations,
@@ -509,8 +539,9 @@ class TeamMatchOverview extends ConsumerWidget {
         ),
       ),
     );
+    final lineupMemberships = await _getLineupMemberships(ref, lineup: lineup);
     final weightClasses = await _getWeightClasses(ref, match);
-    TeamLineup? proposedLineup;
+    List<TeamLineupMembership>? proposedLineupMemberships;
     List<TeamLineupParticipation>? proposedParticipations;
     if (participations.isEmpty) {
       // Load lineup from previous fight as proposal
@@ -534,7 +565,8 @@ class TeamMatchOverview extends ConsumerWidget {
           id: resolvedMatch.id!,
           importType: OrganizationImportType.teamMatch,
         );
-        proposedLineup = resolvedMatch.home.team == lineup.team ? resolvedMatch.home : resolvedMatch.guest;
+        final proposedLineup = resolvedMatch.home.team == lineup.team ? resolvedMatch.home : resolvedMatch.guest;
+        proposedLineupMemberships = await _getLineupMemberships(ref, lineup: proposedLineup);
         proposedParticipations = await ref.readAsync(
           manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
             ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: proposedLineup),
@@ -549,9 +581,10 @@ class TeamMatchOverview extends ConsumerWidget {
             teamMatch: match,
             weightClasses: weightClasses,
             participations: participations,
+            lineupMemberships: lineupMemberships,
             lineup: lineup,
-            initialCoach: proposedLineup?.coach,
-            initialLeader: proposedLineup?.leader,
+            initialCoach: proposedLineupMemberships?.firstOfRole(LineupRole.coach)?.membership,
+            initialLeader: proposedLineupMemberships?.firstOfRole(LineupRole.leader)?.membership,
             initialParticipations: proposedParticipations,
           );
         },

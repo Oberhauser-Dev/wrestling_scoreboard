@@ -290,11 +290,30 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                         ManyProviderData<CompetitionLineup, Competition>(filterObject: competition),
                       ).future,
                     );
+                    final lineupsMap = Map.fromEntries(
+                      await Future.wait(
+                        lineups.map(
+                          (lineup) async => MapEntry(
+                            lineup,
+                            await ref.readAsync(
+                              manyDataStreamProvider(
+                                ManyProviderData<CompetitionLineupMembership, CompetitionLineup>(filterObject: lineup),
+                              ).future,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
 
                     final officials = await _getOfficials(ref, competition: competition);
 
                     if (!context.mounted) return;
-                    final missingAttributes = competition.missingAttributes(context, lineups, boutMap.keys, officials);
+                    final missingAttributes = competition.missingAttributes(
+                      context,
+                      lineupsMap,
+                      boutMap.keys,
+                      officials,
+                    );
                     if (missingAttributes != null) {
                       final continueExport = await showOkCancelDialog(
                         title: Icon(Icons.warning),
