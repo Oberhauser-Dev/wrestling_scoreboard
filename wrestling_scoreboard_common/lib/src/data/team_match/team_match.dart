@@ -95,13 +95,13 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     final bouts = <TeamMatchBout>[];
     if (teamParticipations.length != 2) throw 'TeamMatch must have exactly two lineups';
     for (final weightClass in weightClasses) {
-      final homePartList = teamParticipations[0].where((el) => el.weightClass == weightClass);
+      final homePartList = teamParticipations[0].where((el) => el.weightClass == weightClass && !el.isSubstitute);
       if (homePartList.length > 1) {
         throw Exception(
           'Home team has two or more participants in the same weight class ${weightClass.suffix}: ${homePartList.map((e) => e.membership.person.fullName).join(', ')}',
         );
       }
-      final guestPartList = teamParticipations[1].where((el) => (el.weightClass == weightClass));
+      final guestPartList = teamParticipations[1].where((el) => el.weightClass == weightClass && !el.isSubstitute);
       if (guestPartList.length > 1) {
         throw Exception(
           'Guest team has two or more participants in the same weight class ${weightClass.suffix}: ${guestPartList.map((e) => e.membership.person.fullName).join(', ')}',

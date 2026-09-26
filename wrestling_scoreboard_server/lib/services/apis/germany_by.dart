@@ -539,6 +539,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             'tie' => MatchResultRole.tie,
             _ => null,
           };
+
           /// [side] is either 'Home' or 'Opponent' (the API's name for the guest).
           Future<TeamLineup> getLineup(String side) async {
             int? classificationPoints;

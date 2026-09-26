@@ -57,6 +57,10 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
   Membership? _leader;
   Membership? _coach;
   late Map<WeightClass, TeamLineupParticipation?> _participations;
+  late Map<WeightClass, TeamLineupParticipation?> _substitutes;
+
+  /// The weight classes, for which a substitute can be edited.
+  late final Set<WeightClass> _substituteWeightClasses;
   final HashSet<TeamLineupParticipation> _deleteParticipations = HashSet();
   final HashSet<TeamLineupParticipation> _createOrUpdateParticipations = HashSet();
 
@@ -67,22 +71,32 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     _leader = widget.lineupMemberships.firstOfRole(LineupRole.leader)?.membership ?? widget.initialLeader;
     _coach = widget.lineupMemberships.firstOfRole(LineupRole.coach)?.membership ?? widget.initialCoach;
 
+    _participations = _getInitialParticipations(isSubstitute: false);
+    _substitutes = _getInitialParticipations(isSubstitute: true);
+    _substituteWeightClasses = _substitutes.entries.where((e) => e.value != null).map((e) => e.key).toSet();
+  }
+
+  Map<WeightClass, TeamLineupParticipation?> _getInitialParticipations({required bool isSubstitute}) {
     if (widget.participations.isNotEmpty) {
-      _participations = Map.fromEntries(
+      return Map.fromEntries(
         widget.weightClasses.map((e) {
-          final participation = widget.participations
-              .where((participation) => participation.weightClass == e)
-              .zeroOrOne;
+          final participation = TeamLineupParticipation.fromParticipationsAndWeightClass(
+            participations: widget.participations,
+            weightClass: e,
+            isSubstitute: isSubstitute,
+          );
           return MapEntry(e, participation);
         }),
       );
     } else {
       // Copy participations from an old match.
-      _participations = Map.fromEntries(
+      return Map.fromEntries(
         widget.weightClasses.map((e) {
-          var participation = widget.initialParticipations
-              ?.where((participation) => participation.weightClass == e)
-              .zeroOrOne;
+          var participation = TeamLineupParticipation.fromParticipationsAndWeightClass(
+            participations: widget.initialParticipations ?? const [],
+            weightClass: e,
+            isSubstitute: isSubstitute,
+          );
           if (participation != null) {
             participation = participation.copyWith(id: null, lineup: widget.lineup);
           }
@@ -90,6 +104,23 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
         }),
       );
     }
+  }
+
+  void _addSubstitute(WeightClass weightClass) {
+    setState(() {
+      _substituteWeightClasses.add(weightClass);
+      final substitute = _substitutes[weightClass];
+      if (substitute != null) _deleteParticipations.remove(substitute);
+    });
+  }
+
+  void _removeSubstitute(WeightClass weightClass) {
+    setState(() {
+      _substituteWeightClasses.remove(weightClass);
+      // The tile is not part of the form anymore, so an existing substitute needs to be deleted here.
+      final substitute = _substitutes[weightClass];
+      if (substitute?.id != null) _deleteParticipations.add(substitute!);
+    });
   }
 
   Future<void> handleSubmit(NavigatorState navigator) async {
@@ -262,16 +293,46 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
                   clubFilter: clubs,
                 ),
               ),
-              ..._participations.entries.map((mapEntry) {
-                return ParticipationEditTile(
-                  getOrSetMemberships: _getMemberships,
-                  lineup: widget.lineup,
-                  participation: mapEntry.value,
-                  weightClass: mapEntry.key,
-                  createOrUpdateParticipation: (participation) => _createOrUpdateParticipations.add(participation),
-                  deleteParticipation: (participation) => _deleteParticipations.add(participation),
-                  clubFilter: clubs,
-                );
+              ListTile(title: HeadingText(localizations.athletes)),
+              ..._participations.entries.expand((mapEntry) {
+                final weightClass = mapEntry.key;
+                final hasSubstitute = _substituteWeightClasses.contains(weightClass);
+                return [
+                  ParticipationEditTile(
+                    key: ValueKey((weightClass, false)),
+                    getOrSetMemberships: _getMemberships,
+                    lineup: widget.lineup,
+                    participation: mapEntry.value,
+                    weightClass: weightClass,
+                    createOrUpdateParticipation: (participation) => _createOrUpdateParticipations.add(participation),
+                    deleteParticipation: (participation) => _deleteParticipations.add(participation),
+                    clubFilter: clubs,
+                    trailing: hasSubstitute
+                        ? null
+                        : IconButton(
+                            tooltip: localizations.substitute,
+                            icon: const Icon(Icons.person_add_alt),
+                            onPressed: () => _addSubstitute(weightClass),
+                          ),
+                  ),
+                  if (hasSubstitute)
+                    ParticipationEditTile(
+                      key: ValueKey((weightClass, true)),
+                      getOrSetMemberships: _getMemberships,
+                      lineup: widget.lineup,
+                      participation: _substitutes[weightClass],
+                      weightClass: weightClass,
+                      isSubstitute: true,
+                      createOrUpdateParticipation: (participation) => _createOrUpdateParticipations.add(participation),
+                      deleteParticipation: (participation) => _deleteParticipations.add(participation),
+                      clubFilter: clubs,
+                      trailing: IconButton(
+                        tooltip: localizations.remove,
+                        icon: const Icon(Icons.person_remove_alt_1),
+                        onPressed: () => _removeSubstitute(weightClass),
+                      ),
+                    ),
+                ];
               }),
             ],
           );
@@ -320,6 +381,8 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
   final TeamLineupParticipation? participation;
   final WeightClass weightClass;
   final TeamLineup lineup;
+  final bool isSubstitute;
+  final Widget? trailing;
   final void Function(TeamLineupParticipation participation) deleteParticipation;
   final void Function(TeamLineupParticipation participation) createOrUpdateParticipation;
   final Future<Iterable<Membership>> Function() getOrSetMemberships;
@@ -330,6 +393,8 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
     this.participation,
     required this.weightClass,
     required this.lineup,
+    this.isSubstitute = false,
+    this.trailing,
     required this.deleteParticipation,
     required this.createOrUpdateParticipation,
     required this.getOrSetMemberships,
@@ -373,6 +438,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
           lineup: widget.lineup,
           weightClass: widget.weightClass,
           weight: _curWeight,
+          isSubstitute: widget.isSubstitute,
         );
       } else {
         curParticipation = TeamLineupParticipation(
@@ -380,6 +446,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
           lineup: widget.lineup,
           weightClass: widget.weightClass,
           weight: _curWeight,
+          isSubstitute: widget.isSubstitute,
         );
       }
       widget.createOrUpdateParticipation(curParticipation);
@@ -391,7 +458,8 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
     final localizations = context.l10n;
     return ListTile(
       // TODO replace with image of person
-      leading: Icon(Icons.person_2),
+      leading: Icon(widget.isSubstitute ? Icons.person_outline : Icons.person_2),
+      trailing: widget.trailing,
       title: Row(
         spacing: 16,
         children: [
@@ -412,6 +480,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: MembershipDropdown(
+                label: widget.isSubstitute ? localizations.substitute : null,
                 getOrSetMemberships: widget.getOrSetMemberships,
                 onChange: (Membership? newMembership) {
                   _curMembership = newMembership;

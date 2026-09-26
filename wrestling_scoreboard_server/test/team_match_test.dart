@@ -46,12 +46,13 @@ void main() {
     BoutConfig,
   ];
 
-  Future<void> loadMockedData() async {
+  Future<void> loadMockedData(PostgresDb db) async {
     for (final dataType in teamMatchDataTypes.reversed) {
       final List<DataObject> objs = mockedData.getByType(dataType);
       final controller = ShelfController.getControllerFromDataType(dataType);
       await controller!.createMany(objs);
     }
+    await syncIdSequences(db, teamMatchDataTypes);
   }
 
   group('TeamMatch', () {
@@ -73,7 +74,7 @@ void main() {
       setUp(() async {
         await db.reset();
         serverInstance = await server.init();
-        await loadMockedData();
+        await loadMockedData(db);
         apiUrl = 'http://${serverInstance.address.address}:${serverInstance.port}/api';
         authHeaders = await getAuthHeaders(apiUrl);
       });
@@ -96,6 +97,7 @@ void main() {
             expect(postRes.statusCode, 200, reason: postRes.body);
           }
         }
+        await syncIdSequences(db, teamMatchDataTypes);
         final databaseExportForApi = await db.export();
 
         expect(DatabaseExt.sanitizeSql(databaseExportForApi), DatabaseExt.sanitizeSql(databaseExportForController));
@@ -162,6 +164,36 @@ void main() {
         final uri = Uri.parse('$apiUrl/${duplicateParticipation.tableName}');
         final postRes = await http.post(uri, headers: authHeaders, body: body);
         expect(postRes.statusCode, 400, reason: postRes.body);
+        expect(postRes.body, contains('team_lineup_participation_weight_class_uk'));
+      });
+
+      test('Allow only one substitute per weight class, which is not paired', () async {
+        // wc57 is already occupied by mockedData.r1 and the substitute mockedData.r2 within the home lineup.
+        final secondSubstitute = TeamLineupParticipation(
+          membership: mockedData.r3,
+          lineup: mockedData.menRPWMatch.home,
+          weightClass: mockedData.wc57,
+          isSubstitute: true,
+        );
+        final uri = Uri.parse('$apiUrl/${secondSubstitute.tableName}');
+        final postRes = await http.post(
+          uri,
+          headers: authHeaders,
+          body: jsonEncode(singleToJson(secondSubstitute, TeamLineupParticipation, CRUD.create)),
+        );
+        expect(postRes.statusCode, 400, reason: postRes.body);
+        expect(postRes.body, contains('team_lineup_participation_weight_class_uk'));
+
+        final TeamMatch teamMatch = mockedData.menRPWMatch;
+        final teamMatchGenerateUri = Uri.parse(
+          '$apiUrl/${TeamMatch.cTableName}/${teamMatch.id}/${Bout.cTableName}s/generate',
+        );
+        final generateRes = await http.post(teamMatchGenerateUri, headers: authHeaders);
+        expect(generateRes.statusCode, 200, reason: generateRes.body);
+
+        final teamMatchBouts = await TeamMatchBoutController().getByTeamMatch(teamMatch.id!, obfuscate: false);
+        expect(teamMatchBouts.length, 1);
+        expect(teamMatchBouts.single.bout.r?.membership.id, mockedData.r1.id);
       });
     });
   });

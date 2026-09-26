@@ -7,6 +7,7 @@ part 'team_lineup_participation.g.dart';
 
 /// The participation of a person (member) on a team match through the teams lineup.
 /// A person can participate in multiple weight classes, if wanted. But they only have to weight once.
+/// Each weight class can additionally have one substitute ([isSubstitute]), which is not paired in bouts.
 @freezed
 abstract class TeamLineupParticipation with _$TeamLineupParticipation implements DataObject {
   const TeamLineupParticipation._();
@@ -17,6 +18,7 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
     required TeamLineup lineup,
     WeightClass? weightClass,
     double? weight,
+    @Default(false) bool isSubstitute,
   }) = _TeamLineupParticipation;
 
   factory TeamLineupParticipation.fromJson(Map<String, Object?> json) => _$TeamLineupParticipationFromJson(json);
@@ -24,8 +26,11 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
   static TeamLineupParticipation? fromParticipationsAndWeightClass({
     required Iterable<TeamLineupParticipation> participations,
     required WeightClass? weightClass,
+    bool isSubstitute = false,
   }) {
-    return participations.where((element) => element.weightClass == weightClass).zeroOrOne;
+    return participations
+        .where((element) => element.weightClass == weightClass && element.isSubstitute == isSubstitute)
+        .zeroOrOne;
   }
 
   static Future<TeamLineupParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
@@ -44,6 +49,7 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
       lineup: lineup,
       membership: membership,
       weight: weight,
+      isSubstitute: e['is_substitute'] as bool? ?? false,
     );
   }
 
@@ -55,6 +61,7 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
       'lineup_id': lineup.id!,
       'membership_id': membership.id!,
       'weight': weight?.toString(),
+      'is_substitute': isSubstitute,
     };
   }
 
