@@ -13,15 +13,17 @@ extension TeamMatchLocalization on TeamMatch {
   String? missingAttributes(
     BuildContext context,
     Map<Person, PersonRole> personsWithRoles,
-    Iterable<TeamMatchBout> teamMatchBouts,
-  ) {
+    Iterable<TeamMatchBout> teamMatchBouts, {
+    required Iterable<TeamLineupMembership> homeLineupMemberships,
+    required Iterable<TeamLineupMembership> guestLineupMemberships,
+  }) {
     final missingAttr = <String>[];
     final localizations = context.l10n;
     if (home.classificationPoints == 0 && guest.classificationPoints == 0) {
       missingAttr.add(localizations.classificationPoints);
     }
-    missingAttr.addAll(_missingLineupAttributes(localizations, home, localizations.home));
-    missingAttr.addAll(_missingLineupAttributes(localizations, guest, localizations.guest));
+    missingAttr.addAll(_missingLineupAttributes(localizations, home, homeLineupMemberships, localizations.home));
+    missingAttr.addAll(_missingLineupAttributes(localizations, guest, guestLineupMemberships, localizations.guest));
 
     final roles = personsWithRoles.values;
     if (!roles.any((role) => role == PersonRole.referee)) {
@@ -58,15 +60,20 @@ extension TeamMatchLocalization on TeamMatch {
     return missingAttr.map((e) => '• $e').join('\n');
   }
 
-  List<String> _missingLineupAttributes(AppLocalizations localizations, TeamLineup lineup, String lineupLocalization) {
+  List<String> _missingLineupAttributes(
+    AppLocalizations localizations,
+    TeamLineup lineup,
+    Iterable<TeamLineupMembership> lineupMemberships,
+    String lineupLocalization,
+  ) {
     final missingAttr = <String>[];
     if (lineup.classificationPoints == null) {
       missingAttr.add('${localizations.classificationPoints} ($lineupLocalization)');
     }
-    if (lineup.coach == null) {
+    if (lineupMemberships.firstOfRole(LineupRole.coach) == null) {
       missingAttr.add('${localizations.coach} ($lineupLocalization)');
     }
-    if (lineup.leader == null) {
+    if (lineupMemberships.firstOfRole(LineupRole.leader) == null) {
       missingAttr.add('${localizations.leader} ($lineupLocalization)');
     }
     return missingAttr;

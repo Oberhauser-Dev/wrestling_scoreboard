@@ -166,6 +166,12 @@ class MockedData {
     final menRpwGuestTeamLineup = TeamLineup(id: 2, team: guestTeam);
     _teamLineups.add(menRpwHomeTeamLineup);
     _teamLineups.add(menRpwGuestTeamLineup);
+    _teamLineupMemberships.add(
+      TeamLineupMembership(id: 1, lineup: menRpwHomeTeamLineup, membership: r1, role: LineupRole.leader),
+    );
+    _teamLineupMemberships.add(
+      TeamLineupMembership(id: 2, lineup: menRpwGuestTeamLineup, membership: b1, role: LineupRole.leader),
+    );
     _teamLineupParticipations.add(
       TeamLineupParticipation(id: 1, membership: r1, lineup: menRpwHomeTeamLineup, weightClass: wc57, weight: 55.8),
     );
@@ -680,6 +686,7 @@ class MockedData {
   late final List<TeamLineupParticipation> _teamLineupParticipations =
       []; // Is filled during initialization of team matches
   late final List<TeamMatchPerson> _teamMatchPersons = []; // Is filled during initialization of team matches
+  late final List<TeamLineupMembership> _teamLineupMemberships = []; // Is filled during initialization of team matches
   late final List<AthleteBoutState> _athleteBoutStates = [
     boutState1R,
     boutState1B,
@@ -760,6 +767,9 @@ class MockedData {
   ];
   late final List<CompetitionAgeCategory> _competitionAgeCategories = [competitionAgeCategory, competitionAgeCategory2];
   late final List<CompetitionLineup> _competitionLineups = [competitionLineup1, competitionLineup2];
+  late final List<CompetitionLineupMembership> _competitionLineupMemberships = [
+    CompetitionLineupMembership(id: 1, lineup: competitionLineup1, membership: r1, role: LineupRole.coach),
+  ];
   late final List<CompetitionParticipation> _competitionParticipations = [
     competitionParticipation1,
     competitionParticipation2,
@@ -794,6 +804,8 @@ class MockedData {
   List<Membership> getMemberships() => _memberships;
 
   List<TeamLineupParticipation> getTeamLineupParticipations() => _teamLineupParticipations;
+
+  List<TeamLineupMembership> getTeamLineupMemberships() => _teamLineupMemberships;
 
   List<AthleteBoutState> getAthleteBoutStates() => _athleteBoutStates;
 
@@ -831,6 +843,8 @@ class MockedData {
 
   List<CompetitionLineup> getCompetitionLineups() => _competitionLineups;
 
+  List<CompetitionLineupMembership> getCompetitionLineupMemberships() => _competitionLineupMemberships;
+
   List<CompetitionParticipation> getCompetitionParticipations() => _competitionParticipations;
 
   List<WeightClass> getWeightClasses() => _weightClasses;
@@ -847,6 +861,7 @@ class MockedData {
       const (CompetitionPerson) => getCompetitionPersons(),
       const (CompetitionBout) => getCompetitionBouts(),
       const (CompetitionLineup) => getCompetitionLineups(),
+      const (CompetitionLineupMembership) => getCompetitionLineupMemberships(),
       const (CompetitionSystemAffiliation) => getCompetitionSystemAffiliations(),
       const (CompetitionSystemPhase) => getCompetitionSystemPhases(),
       const (CompetitionAgeCategory) => getCompetitionAgeCategories(),
@@ -861,6 +876,7 @@ class MockedData {
       const (TeamLineup) => getTeamLineups(),
       const (Membership) => getMemberships(),
       const (TeamLineupParticipation) => getTeamLineupParticipations(),
+      const (TeamLineupMembership) => getTeamLineupMemberships(),
       const (AthleteBoutState) => getAthleteBoutStates(),
       const (Person) => getPersons(),
       const (Team) => getTeams(),

@@ -17,6 +17,7 @@ import 'package:wrestling_scoreboard_server/controllers/competition_age_category
 import 'package:wrestling_scoreboard_server/controllers/competition_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_lineup_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/competition_lineup_membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/competition_system_affiliation_controller.dart';
@@ -33,6 +34,7 @@ import 'package:wrestling_scoreboard_server/controllers/person_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_club_affiliation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_controller.dart';
+import 'package:wrestling_scoreboard_server/controllers/team_lineup_membership_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_lineup_participation_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_bout_controller.dart';
 import 'package:wrestling_scoreboard_server/controllers/team_match_controller.dart';
@@ -166,6 +168,8 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return CompetitionBoutController();
       case const (CompetitionLineup):
         return CompetitionLineupController();
+      case const (CompetitionLineupMembership):
+        return CompetitionLineupMembershipController();
       case const (CompetitionSystemAffiliation):
         return CompetitionSystemAffiliationController();
       case const (CompetitionSystemPhase):
@@ -194,6 +198,8 @@ abstract class ShelfController<T extends DataObject> extends EntityController<T>
         return MembershipController();
       case const (TeamLineupParticipation):
         return TeamLineupParticipationController();
+      case const (TeamLineupMembership):
+        return TeamLineupMembershipController();
       case const (AthleteBoutState):
         return AthleteBoutStateController();
       case const (Person):

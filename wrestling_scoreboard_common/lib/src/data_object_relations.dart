@@ -68,6 +68,10 @@ const Map<Type, Map<Type, List<String>>> directDataObjectRelations = {
     TeamLineup: ['lineup_id'],
     Membership: ['membership_id'],
   },
+  TeamLineupMembership: {
+    TeamLineup: ['lineup_id'],
+    Membership: ['membership_id'],
+  },
   CompetitionParticipation: {
     CompetitionLineup: ['competition_lineup_id'],
     Membership: ['membership_id'],
@@ -87,7 +91,10 @@ const Map<Type, Map<Type, List<String>>> directDataObjectRelations = {
   CompetitionLineup: {
     Competition: ['competition_id'],
     Club: ['club_id'],
-    Membership: ['leader_id', 'coach_id'],
+  },
+  CompetitionLineupMembership: {
+    CompetitionLineup: ['competition_lineup_id'],
+    Membership: ['membership_id'],
   },
   CompetitionPerson: {
     Competition: ['competition_id'],
