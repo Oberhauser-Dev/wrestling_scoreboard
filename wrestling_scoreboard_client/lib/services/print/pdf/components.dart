@@ -84,11 +84,17 @@ Widget buildFormCell({
   PdfColor borderColor = PdfColors.grey,
   PdfColor? color,
   PdfColor pencilColor = PdfSheet.pencilColor,
+  double? pencilSize = 11,
   AlignmentGeometry? contentAlignment = Alignment.center,
 }) {
   return buildFormCellWidget(
     title: title,
-    content: content == null ? null : Text(content, style: TextStyle(fontSize: 11, color: pencilColor)),
+    content: content == null
+        ? null
+        : Text(
+            content,
+            style: TextStyle(fontSize: pencilSize, color: pencilColor),
+          ),
     height: height,
     width: width,
     borderColor: borderColor,
