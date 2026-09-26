@@ -1250,12 +1250,6 @@ abstract class AppLocalizations {
   /// **'No.'**
   String get numberAbbreviation;
 
-  /// No description provided for @replacement.
-  ///
-  /// In en, this message translates to:
-  /// **'Replacement'**
-  String get replacement;
-
   /// No description provided for @total.
   ///
   /// In en, this message translates to:
@@ -1399,6 +1393,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coaches'**
   String get coaches;
+
+  /// No description provided for @substitute.
+  ///
+  /// In en, this message translates to:
+  /// **'Substitute'**
+  String get substitute;
+
+  /// No description provided for @substitutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Substitutes'**
+  String get substitutes;
+
+  /// No description provided for @athletes.
+  ///
+  /// In en, this message translates to:
+  /// **'Athletes'**
+  String get athletes;
 
   /// No description provided for @team.
   ///

@@ -585,6 +585,10 @@ class TeamMatchOverview extends ConsumerWidget {
             lineup: lineup,
             initialCoach: proposedLineupMemberships?.firstOfRole(LineupRole.coach)?.membership,
             initialLeader: proposedLineupMemberships?.firstOfRole(LineupRole.leader)?.membership,
+            initialSubstitutes: proposedLineupMemberships
+                ?.where((e) => e.role == LineupRole.substitute)
+                .map((e) => e.membership)
+                .toList(),
             initialParticipations: proposedParticipations,
           );
         },

@@ -257,7 +257,6 @@
   "status": "Status",
   "visitors": "Visitors",
   "numberAbbreviation": "No.",
-  "replacement": "Replacement",
   "total": "Total",
   "participantVacant": "vacant",
 
@@ -283,6 +282,9 @@
   "leaders": "Team Leaders",
   "coach": "Coach",
   "coaches": "Coaches",
+  "substitute": "Substitute",
+  "substitutes": "Substitutes",
+  "athletes": "Athletes",
   "team": "Team",
   "teams": "Teams",
   "teamClubAffiliation": "Team Club Affiliation",

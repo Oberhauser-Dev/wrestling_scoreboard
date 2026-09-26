@@ -622,9 +622,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get numberAbbreviation => 'Nr.';
 
   @override
-  String get replacement => 'Ersatz';
-
-  @override
   String get total => 'Gesamt';
 
   @override
@@ -695,6 +692,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get coaches => 'Trainer';
+
+  @override
+  String get substitute => 'Ersatzringer';
+
+  @override
+  String get substitutes => 'Ersatzringer';
+
+  @override
+  String get athletes => 'Ringer';
 
   @override
   String get team => 'Mannschaft';

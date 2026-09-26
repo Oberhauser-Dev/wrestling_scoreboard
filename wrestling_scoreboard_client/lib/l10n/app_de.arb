@@ -254,7 +254,6 @@
   "status": "Status",
   "visitors": "Besucher",
   "numberAbbreviation": "Nr.",
-  "replacement": "Ersatz",
   "total": "Gesamt",
   "participantVacant": "unbesetzt",
 
@@ -280,6 +279,9 @@
   "leaders": "Mannschaftsführer",
   "coach": "Trainer",
   "coaches": "Trainer",
+  "substitute": "Ersatzringer",
+  "substitutes": "Ersatzringer",
+  "athletes": "Ringer",
   "team": "Mannschaft",
   "teams": "Mannschaften",
   "teamClubAffiliation": "Team-Club-Zugehörigkeit",

@@ -30,7 +30,10 @@ class TeamLineupEdit extends ConsumerStatefulWidget {
   final List<TeamLineupMembership> lineupMemberships;
   final Membership? initialLeader;
   final Membership? initialCoach;
+  final List<Membership>? initialSubstitutes;
   final List<TeamLineupParticipation>? initialParticipations;
+
+  static const maxSubstitutes = 3;
 
   const TeamLineupEdit({
     super.key,
@@ -41,6 +44,7 @@ class TeamLineupEdit extends ConsumerStatefulWidget {
     required this.lineupMemberships,
     this.initialLeader,
     this.initialCoach,
+    this.initialSubstitutes,
     this.initialParticipations,
   });
 
@@ -56,6 +60,8 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
 
   Membership? _leader;
   Membership? _coach;
+  late final List<TeamLineupMembership> _prevSubstitutes;
+  late final List<Membership?> _substitutes;
   late Map<WeightClass, TeamLineupParticipation?> _participations;
   final HashSet<TeamLineupParticipation> _deleteParticipations = HashSet();
   final HashSet<TeamLineupParticipation> _createOrUpdateParticipations = HashSet();
@@ -66,6 +72,19 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
     // Only one leader and coach can be edited, even if there are multiple in the background.
     _leader = widget.lineupMemberships.firstOfRole(LineupRole.leader)?.membership ?? widget.initialLeader;
     _coach = widget.lineupMemberships.firstOfRole(LineupRole.coach)?.membership ?? widget.initialCoach;
+
+    // Only the first substitutes (up to the maximum) can be edited.
+    _prevSubstitutes = widget.lineupMemberships
+        .where((e) => e.role == LineupRole.substitute)
+        .take(TeamLineupEdit.maxSubstitutes)
+        .toList();
+    final initialSubstitutes = _prevSubstitutes.isNotEmpty
+        ? _prevSubstitutes.map((e) => e.membership)
+        : (widget.initialSubstitutes ?? const <Membership>[]).take(TeamLineupEdit.maxSubstitutes);
+    _substitutes = List<Membership?>.generate(
+      TeamLineupEdit.maxSubstitutes,
+      (index) => initialSubstitutes.elementAtOrNull(index),
+    );
 
     if (widget.participations.isNotEmpty) {
       _participations = Map.fromEntries(
@@ -121,6 +140,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
       final dataManager = await ref.read(dataManagerProvider);
       await _saveLineupMembership(dataManager, LineupRole.leader, _leader);
       await _saveLineupMembership(dataManager, LineupRole.coach, _coach);
+      await _saveSubstitutes(dataManager);
       await Future.forEach(_deleteParticipations, (TeamLineupParticipation element) async {
         await dataManager.deleteSingle<TeamLineupParticipation>(element);
       });
@@ -177,6 +197,28 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
       await dataManager.createOrUpdateSingle<TeamLineupMembership>(
         TeamLineupMembership(lineup: widget.lineup, membership: membership, role: role),
       );
+    }
+  }
+
+  /// Creates or deletes substitutes, depending on the selected memberships of the substitute slots.
+  Future<void> _saveSubstitutes(DataManager dataManager) async {
+    final substitutes = _substitutes.nonNulls.toSet();
+    for (final prevSubstitute in _prevSubstitutes) {
+      if (!substitutes.contains(prevSubstitute.membership)) {
+        await dataManager.deleteSingle<TeamLineupMembership>(prevSubstitute);
+      }
+    }
+    // Also consider substitutes exceeding the maximum, to not create them twice.
+    final existingSubstitutes = widget.lineupMemberships
+        .where((e) => e.role == LineupRole.substitute)
+        .map((e) => e.membership)
+        .toSet();
+    for (final substitute in substitutes) {
+      if (!existingSubstitutes.contains(substitute)) {
+        await dataManager.createOrUpdateSingle<TeamLineupMembership>(
+          TeamLineupMembership(lineup: widget.lineup, membership: substitute, role: LineupRole.substitute),
+        );
+      }
     }
   }
 
@@ -262,6 +304,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
                   clubFilter: clubs,
                 ),
               ),
+              ListTile(title: HeadingText(localizations.athletes)),
               ..._participations.entries.map((mapEntry) {
                 return ParticipationEditTile(
                   getOrSetMemberships: _getMemberships,
@@ -271,6 +314,20 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
                   createOrUpdateParticipation: (participation) => _createOrUpdateParticipations.add(participation),
                   deleteParticipation: (participation) => _deleteParticipations.add(participation),
                   clubFilter: clubs,
+                );
+              }),
+              ListTile(title: HeadingText(localizations.substitutes)),
+              ...List.generate(TeamLineupEdit.maxSubstitutes, (index) {
+                return ListTile(
+                  leading: Icon(Icons.person_outline),
+                  title: MembershipDropdown(
+                    label: '${localizations.substitute} ${index + 1}',
+                    getOrSetMemberships: _getMemberships,
+                    organization: widget.lineup.team.organization,
+                    selectedItem: _substitutes[index],
+                    onSave: (Membership? value) => _substitutes[index] = value,
+                    clubFilter: clubs,
+                  ),
                 );
               }),
             ],

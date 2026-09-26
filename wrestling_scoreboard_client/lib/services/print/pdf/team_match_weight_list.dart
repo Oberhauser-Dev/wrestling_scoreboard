@@ -126,6 +126,10 @@ class TeamMatchWeightList extends PdfSheet {
 
   Widget _buildBoutTable(Context context) {
     const marginBottom = EdgeInsets.only(bottom: PdfSheet.verticalGap);
+    final substitutes = (lineupRole == BoutRole.red ? homeLineupMemberships : guestLineupMemberships)
+        .where((e) => e.role == LineupRole.substitute)
+        .map((e) => e.membership)
+        .toList();
 
     List<TableColumnWidth> participantStateColumnWidths() => [
       const FlexColumnWidth(0.8), // Weight
@@ -268,7 +272,7 @@ class TeamMatchWeightList extends PdfSheet {
                 localizations.total,
                 height: cellHeight,
                 fontSize: cellFontSize,
-                // Gab to replacement
+                // Gap to substitutes
                 margin: marginBottom,
               ),
             ),
@@ -281,7 +285,7 @@ class TeamMatchWeightList extends PdfSheet {
             TableCell(
               columnSpan: 4 + 4,
               child: buildTextCell(
-                localizations.replacement,
+                localizations.substitutes,
                 borderWidth: 0,
                 height: cellHeight,
                 fontSize: cellFontSize,
@@ -289,10 +293,18 @@ class TeamMatchWeightList extends PdfSheet {
             ),
           ],
         ),
-        ...List.generate(
-          3,
-          (e) => TableRow(children: List.generate(4 + 4, (e) => buildTextCell('', height: cellHeight))),
-        ),
+        ...List.generate(3, (index) {
+          final membership = substitutes.elementAtOrNull(index);
+          return TableRow(
+            children: [
+              ...List.generate(4, (e) => buildTextCell('', height: cellHeight)), // No, Weightclass, Style, Weight
+              buildTextCell(membership?.person.fullName ?? '', height: cellHeight, fontSize: cellFontSize),
+              buildTextCell(membership?.no ?? '', height: cellHeight, fontSize: cellFontSize),
+              buildTextCell(membership?.person.toStatus() ?? '', height: cellHeight, fontSize: cellFontSize),
+              buildTextCell('', height: cellHeight), // Comment
+            ],
+          );
+        }),
       ],
     );
   }
