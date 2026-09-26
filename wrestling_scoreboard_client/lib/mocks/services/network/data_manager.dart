@@ -97,6 +97,10 @@ class MockDataManager extends DataManager {
         if (filterObject is Competition) {
           return all.where((e) => (e as CompetitionLineup).competition.id == filterObject.id).toList();
         }
+      case const (CompetitionLineupMembership):
+        if (filterObject is CompetitionLineup) {
+          return all.where((e) => (e as CompetitionLineupMembership).lineup.id == filterObject.id).toList();
+        }
       case const (CompetitionParticipation):
         if (filterObject is CompetitionWeightCategory) {
           return all.where((e) => (e as CompetitionParticipation).weightCategory?.id == filterObject.id).toList();
@@ -181,6 +185,10 @@ class MockDataManager extends DataManager {
       case const (TeamLineupParticipation):
         if (filterObject is TeamLineup) {
           return all.where((e) => (e as TeamLineupParticipation).lineup.id == filterObject.id).toList();
+        }
+      case const (TeamLineupMembership):
+        if (filterObject is TeamLineup) {
+          return all.where((e) => (e as TeamLineupMembership).lineup.id == filterObject.id).toList();
         }
       case const (WeightClass):
         if (filterObject is Division) {
@@ -353,6 +361,22 @@ class MockDataManager extends DataManager {
           filterId: single.lineup.id,
         ),
       );
+    } else if (single is TeamLineupMembership) {
+      getManyStreamController<TeamLineupMembership>(filterType: TeamLineup)?.add(
+        ManyDataObject(
+          data: await readMany<TeamLineupMembership, TeamLineup>(filterObject: single.lineup),
+          filterType: TeamLineup,
+          filterId: single.lineup.id,
+        ),
+      );
+    } else if (single is CompetitionLineupMembership) {
+      getManyStreamController<CompetitionLineupMembership>(filterType: CompetitionLineup)?.add(
+        ManyDataObject(
+          data: await readMany<CompetitionLineupMembership, CompetitionLineup>(filterObject: single.lineup),
+          filterType: CompetitionLineup,
+          filterId: single.lineup.id,
+        ),
+      );
     } else if (single is Person) {
     } else if (single is ScratchBout) {
     } else if (single is Team) {
@@ -403,6 +427,8 @@ class MockDataManager extends DataManager {
         return mockedData.getCompetitionBouts().cast<T>();
       case const (CompetitionLineup):
         return mockedData.getCompetitionLineups().cast<T>();
+      case const (CompetitionLineupMembership):
+        return mockedData.getCompetitionLineupMemberships().cast<T>();
       case const (CompetitionParticipation):
         return mockedData.getCompetitionParticipations().cast<T>();
       case const (CompetitionWeightCategory):
@@ -425,6 +451,8 @@ class MockDataManager extends DataManager {
         return mockedData.getMemberships().cast<T>();
       case const (TeamLineupParticipation):
         return mockedData.getTeamLineupParticipations().cast<T>();
+      case const (TeamLineupMembership):
+        return mockedData.getTeamLineupMemberships().cast<T>();
       case const (AthleteBoutState):
         return mockedData.getAthleteBoutStates().cast<T>();
       case const (Person):

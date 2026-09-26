@@ -17,12 +17,13 @@ final dataTypes = [
   User,
   TeamMatchPerson,
   TeamMatch,
+  TeamLineupMembership,
   TeamLineup,
   TeamClubAffiliation,
   LeagueTeamParticipation,
   Team,
   SecuredUser,
-  CompetitionLineup,
+  CompetitionLineupMembership,
   BoutAction,
   Bout,
   AthleteBoutState,
@@ -33,6 +34,7 @@ final dataTypes = [
   Division,
   CompetitionSystemPhase,
   CompetitionSystemAffiliation,
+  CompetitionLineup,
   CompetitionAgeCategory,
   Competition,
   Club,
@@ -51,6 +53,7 @@ String getTableNameFromType(Type t) {
     const (Club) => Club.cTableName,
     const (Competition) => Competition.cTableName,
     const (CompetitionAgeCategory) => CompetitionAgeCategory.cTableName,
+    const (CompetitionLineup) => CompetitionLineup.cTableName,
     const (CompetitionSystemAffiliation) => CompetitionSystemAffiliation.cTableName,
     const (CompetitionSystemPhase) => CompetitionSystemPhase.cTableName,
     const (Division) => Division.cTableName,
@@ -61,12 +64,13 @@ String getTableNameFromType(Type t) {
     const (AthleteBoutState) => AthleteBoutState.cTableName,
     const (Bout) => Bout.cTableName,
     const (BoutAction) => BoutAction.cTableName,
-    const (CompetitionLineup) => CompetitionLineup.cTableName,
+    const (CompetitionLineupMembership) => CompetitionLineupMembership.cTableName,
     const (SecuredUser) => SecuredUser.cTableName,
     const (Team) => Team.cTableName,
     const (LeagueTeamParticipation) => LeagueTeamParticipation.cTableName,
     const (TeamClubAffiliation) => TeamClubAffiliation.cTableName,
     const (TeamLineup) => TeamLineup.cTableName,
+    const (TeamLineupMembership) => TeamLineupMembership.cTableName,
     const (TeamMatch) => TeamMatch.cTableName,
     const (TeamMatchPerson) => TeamMatchPerson.cTableName,
     const (User) => User.cTableName,
@@ -93,6 +97,7 @@ Type getTypeFromTableName(String tableName) {
     Club.cTableName => Club,
     Competition.cTableName => Competition,
     CompetitionAgeCategory.cTableName => CompetitionAgeCategory,
+    CompetitionLineup.cTableName => CompetitionLineup,
     CompetitionSystemAffiliation.cTableName => CompetitionSystemAffiliation,
     CompetitionSystemPhase.cTableName => CompetitionSystemPhase,
     Division.cTableName => Division,
@@ -103,12 +108,13 @@ Type getTypeFromTableName(String tableName) {
     AthleteBoutState.cTableName => AthleteBoutState,
     Bout.cTableName => Bout,
     BoutAction.cTableName => BoutAction,
-    CompetitionLineup.cTableName => CompetitionLineup,
+    CompetitionLineupMembership.cTableName => CompetitionLineupMembership,
     SecuredUser.cTableName => SecuredUser,
     Team.cTableName => Team,
     LeagueTeamParticipation.cTableName => LeagueTeamParticipation,
     TeamClubAffiliation.cTableName => TeamClubAffiliation,
     TeamLineup.cTableName => TeamLineup,
+    TeamLineupMembership.cTableName => TeamLineupMembership,
     TeamMatch.cTableName => TeamMatch,
     TeamMatchPerson.cTableName => TeamMatchPerson,
     User.cTableName => User,
@@ -178,6 +184,13 @@ Future<int?> handleGenericJson(
       handleManyRaw: handleManyRaw,
     ),
     const (CompetitionAgeCategory) => handleJson<CompetitionAgeCategory>(
+      json,
+      handleSingle: handleSingle,
+      handleMany: handleMany,
+      handleSingleRaw: handleSingleRaw,
+      handleManyRaw: handleManyRaw,
+    ),
+    const (CompetitionLineup) => handleJson<CompetitionLineup>(
       json,
       handleSingle: handleSingle,
       handleMany: handleMany,
@@ -254,7 +267,7 @@ Future<int?> handleGenericJson(
       handleSingleRaw: handleSingleRaw,
       handleManyRaw: handleManyRaw,
     ),
-    const (CompetitionLineup) => handleJson<CompetitionLineup>(
+    const (CompetitionLineupMembership) => handleJson<CompetitionLineupMembership>(
       json,
       handleSingle: handleSingle,
       handleMany: handleMany,
@@ -290,6 +303,13 @@ Future<int?> handleGenericJson(
       handleManyRaw: handleManyRaw,
     ),
     const (TeamLineup) => handleJson<TeamLineup>(
+      json,
+      handleSingle: handleSingle,
+      handleMany: handleMany,
+      handleSingleRaw: handleSingleRaw,
+      handleManyRaw: handleManyRaw,
+    ),
+    const (TeamLineupMembership) => handleJson<TeamLineupMembership>(
       json,
       handleSingle: handleSingle,
       handleMany: handleMany,
@@ -394,6 +414,7 @@ extension DataObjectParser on DataObject {
       const (Club) => Club.fromJson(json) as T,
       const (Competition) => Competition.fromJson(json) as T,
       const (CompetitionAgeCategory) => CompetitionAgeCategory.fromJson(json) as T,
+      const (CompetitionLineup) => CompetitionLineup.fromJson(json) as T,
       const (CompetitionSystemAffiliation) => CompetitionSystemAffiliation.fromJson(json) as T,
       const (CompetitionSystemPhase) => CompetitionSystemPhase.fromJson(json) as T,
       const (Division) => Division.fromJson(json) as T,
@@ -404,12 +425,13 @@ extension DataObjectParser on DataObject {
       const (AthleteBoutState) => AthleteBoutState.fromJson(json) as T,
       const (Bout) => Bout.fromJson(json) as T,
       const (BoutAction) => BoutAction.fromJson(json) as T,
-      const (CompetitionLineup) => CompetitionLineup.fromJson(json) as T,
+      const (CompetitionLineupMembership) => CompetitionLineupMembership.fromJson(json) as T,
       const (SecuredUser) => SecuredUser.fromJson(json) as T,
       const (Team) => Team.fromJson(json) as T,
       const (LeagueTeamParticipation) => LeagueTeamParticipation.fromJson(json) as T,
       const (TeamClubAffiliation) => TeamClubAffiliation.fromJson(json) as T,
       const (TeamLineup) => TeamLineup.fromJson(json) as T,
+      const (TeamLineupMembership) => TeamLineupMembership.fromJson(json) as T,
       const (TeamMatch) => TeamMatch.fromJson(json) as T,
       const (TeamMatchPerson) => TeamMatchPerson.fromJson(json) as T,
       const (User) => User.fromJson(json) as T,
@@ -435,6 +457,7 @@ extension DataObjectParser on DataObject {
       const (Club) => (await Club.fromRaw(raw, getSingle)) as T,
       const (Competition) => (await Competition.fromRaw(raw, getSingle)) as T,
       const (CompetitionAgeCategory) => (await CompetitionAgeCategory.fromRaw(raw, getSingle)) as T,
+      const (CompetitionLineup) => (await CompetitionLineup.fromRaw(raw, getSingle)) as T,
       const (CompetitionSystemAffiliation) => (await CompetitionSystemAffiliation.fromRaw(raw, getSingle)) as T,
       const (CompetitionSystemPhase) => (await CompetitionSystemPhase.fromRaw(raw, getSingle)) as T,
       const (Division) => (await Division.fromRaw(raw, getSingle)) as T,
@@ -445,12 +468,13 @@ extension DataObjectParser on DataObject {
       const (AthleteBoutState) => (await AthleteBoutState.fromRaw(raw, getSingle)) as T,
       const (Bout) => (await Bout.fromRaw(raw, getSingle)) as T,
       const (BoutAction) => (await BoutAction.fromRaw(raw, getSingle)) as T,
-      const (CompetitionLineup) => (await CompetitionLineup.fromRaw(raw, getSingle)) as T,
+      const (CompetitionLineupMembership) => (await CompetitionLineupMembership.fromRaw(raw, getSingle)) as T,
       const (SecuredUser) => (await SecuredUser.fromRaw(raw, getSingle)) as T,
       const (Team) => (await Team.fromRaw(raw, getSingle)) as T,
       const (LeagueTeamParticipation) => (await LeagueTeamParticipation.fromRaw(raw, getSingle)) as T,
       const (TeamClubAffiliation) => (await TeamClubAffiliation.fromRaw(raw, getSingle)) as T,
       const (TeamLineup) => (await TeamLineup.fromRaw(raw, getSingle)) as T,
+      const (TeamLineupMembership) => (await TeamLineupMembership.fromRaw(raw, getSingle)) as T,
       const (TeamMatch) => (await TeamMatch.fromRaw(raw, getSingle)) as T,
       const (TeamMatchPerson) => (await TeamMatchPerson.fromRaw(raw, getSingle)) as T,
       const (User) => (await User.fromRaw(raw, getSingle)) as T,
@@ -485,6 +509,8 @@ Iterable<R> mapDirectDataObjectRelations<T extends DataObject, R>(
       return [callback(single.organization), callback(single.boutConfig)];
     case final CompetitionAgeCategory single:
       return [callback(single.competition), callback(single.ageCategory)];
+    case final CompetitionLineup single:
+      return [callback(single.competition), callback(single.club)];
     case final CompetitionSystemAffiliation single:
       return [callback(single.competition)];
     case final CompetitionSystemPhase single:
@@ -505,8 +531,8 @@ Iterable<R> mapDirectDataObjectRelations<T extends DataObject, R>(
       return [callback(single.organization), callback(single.r), callback(single.b)];
     case final BoutAction single:
       return [callback(single.bout)];
-    case final CompetitionLineup single:
-      return [callback(single.competition), callback(single.club), callback(single.leader), callback(single.coach)];
+    case final CompetitionLineupMembership single:
+      return [callback(single.lineup), callback(single.membership)];
     case final SecuredUser single:
       return [callback(single.person)];
     case final Team single:
@@ -516,7 +542,9 @@ Iterable<R> mapDirectDataObjectRelations<T extends DataObject, R>(
     case final TeamClubAffiliation single:
       return [callback(single.team), callback(single.club)];
     case final TeamLineup single:
-      return [callback(single.team), callback(single.leader), callback(single.coach)];
+      return [callback(single.team)];
+    case final TeamLineupMembership single:
+      return [callback(single.lineup), callback(single.membership)];
     case final TeamMatch single:
       return [callback(single.organization), callback(single.home), callback(single.guest), callback(single.league)];
     case final TeamMatchPerson single:

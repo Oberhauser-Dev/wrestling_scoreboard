@@ -13,6 +13,8 @@ class TeamMatchWeightList extends PdfSheet {
   TeamMatchWeightList({
     required this.teamMatch,
     required this.officials,
+    required this.homeLineupMemberships,
+    required this.guestLineupMemberships,
     required this.weightClasses,
     required this.participations,
     required this.lineup,
@@ -25,6 +27,8 @@ class TeamMatchWeightList extends PdfSheet {
   final List<TeamLineupParticipation> participations;
   final TeamMatch teamMatch;
   final Map<Person, PersonRole> officials;
+  final List<TeamLineupMembership> homeLineupMemberships;
+  final List<TeamLineupMembership> guestLineupMemberships;
   final TeamLineup lineup;
   final BoutRole lineupRole;
   late final TeamMatchPdfCommon teamMatchPdfCommon = TeamMatchPdfCommon(localizations);
@@ -109,12 +113,12 @@ class TeamMatchWeightList extends PdfSheet {
     return [
       buildPerson(
         title: '${localizations.home} ${localizations.leader.toUpperCase()}',
-        no: teamMatch.home.leader?.person.fullName ?? '',
+        no: homeLineupMemberships.firstOfRole(LineupRole.leader)?.membership.person.fullName ?? '',
         width: width,
       ),
       buildPerson(
         title: '${localizations.guest} ${localizations.leader.toUpperCase()}',
-        no: teamMatch.guest.leader?.person.fullName ?? '',
+        no: guestLineupMemberships.firstOfRole(LineupRole.leader)?.membership.person.fullName ?? '',
         width: width,
       ),
     ];

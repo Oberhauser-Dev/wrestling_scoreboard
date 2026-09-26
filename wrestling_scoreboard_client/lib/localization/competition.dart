@@ -70,14 +70,14 @@ extension CompetitionSystemLocalization on CompetitionSystem {
 extension CompetitionLocalization on Competition {
   String? missingAttributes(
     BuildContext context,
-    Iterable<CompetitionLineup> lineups,
+    Map<CompetitionLineup, Iterable<CompetitionLineupMembership>> lineups,
     Iterable<CompetitionBout> competitionBouts,
     Map<Person, PersonRole> personsWithRoles,
   ) {
     final missingAttr = <String>[];
     final localizations = context.l10n;
-    for (final lineup in lineups) {
-      final missingLineupAttributes = _missingLineupAttributes(localizations, lineup);
+    for (final MapEntry(key: lineup, value: lineupMemberships) in lineups.entries) {
+      final missingLineupAttributes = _missingLineupAttributes(localizations, lineup, lineupMemberships);
       if (missingLineupAttributes != null) missingAttr.add(missingLineupAttributes);
     }
 
@@ -116,12 +116,16 @@ extension CompetitionLocalization on Competition {
     return missingAttr.map((e) => '• $e').join('\n');
   }
 
-  String? _missingLineupAttributes(AppLocalizations localizations, CompetitionLineup lineup) {
+  String? _missingLineupAttributes(
+    AppLocalizations localizations,
+    CompetitionLineup lineup,
+    Iterable<CompetitionLineupMembership> lineupMemberships,
+  ) {
     final missingAttr = <String>[];
-    if (lineup.coach == null) {
+    if (lineupMemberships.firstOfRole(LineupRole.coach) == null) {
       missingAttr.add(localizations.coach);
     }
-    if (lineup.leader == null) {
+    if (lineupMemberships.firstOfRole(LineupRole.leader) == null) {
       missingAttr.add(localizations.leader);
     }
 

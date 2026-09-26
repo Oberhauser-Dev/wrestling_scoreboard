@@ -10,37 +10,21 @@ part 'team_lineup.g.dart';
 abstract class TeamLineup with _$TeamLineup implements DataObject {
   const TeamLineup._();
 
-  const factory TeamLineup({
-    int? id,
-    int? classificationPoints,
-    required Team team,
-    Membership? leader, // Mannschaftsführer
-    Membership? coach, // Trainer
-  }) = _TeamLineup;
+  const factory TeamLineup({int? id, int? classificationPoints, required Team team}) = _TeamLineup;
 
   factory TeamLineup.fromJson(Map<String, Object?> json) => _$TeamLineupFromJson(json);
 
   static Future<TeamLineup> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
-    final leaderId = e['leader_id'] as int?;
-    final coachId = e['coach_id'] as int?;
     return TeamLineup(
       id: e['id'] as int?,
       classificationPoints: e['classification_points'] as int?,
       team: await getSingle<Team>(e['team_id'] as int),
-      leader: leaderId == null ? null : await getSingle<Membership>(leaderId),
-      coach: coachId == null ? null : await getSingle<Membership>(coachId),
     );
   }
 
   @override
   Map<String, dynamic> toRaw() {
-    return {
-      if (id != null) 'id': id,
-      'classification_points': classificationPoints,
-      'team_id': team.id!,
-      'leader_id': leader?.id!,
-      'coach_id': coach?.id!,
-    };
+    return {if (id != null) 'id': id, 'classification_points': classificationPoints, 'team_id': team.id!};
   }
 
   @override

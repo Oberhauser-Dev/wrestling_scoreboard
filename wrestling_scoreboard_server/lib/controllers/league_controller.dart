@@ -94,18 +94,9 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
         }
       },
       onUpdateOrCreate: (prevTeamMatch, teamMatch) async {
-        // Do not override existing coach and leader, if they are not present in the API (yet).
-        final homeLineup = teamMatch.home.copyWith(
-          coach: teamMatch.home.coach ?? prevTeamMatch?.home.coach,
-          leader: teamMatch.home.leader ?? prevTeamMatch?.home.leader,
-        );
-        final guestLineup = teamMatch.guest.copyWith(
-          coach: teamMatch.guest.coach ?? prevTeamMatch?.guest.coach,
-          leader: teamMatch.guest.leader ?? prevTeamMatch?.guest.leader,
-        );
         return teamMatch.copyWith(
-          home: await TeamLineupController().updateOnDiffSingle(homeLineup, previous: prevTeamMatch?.home),
-          guest: await TeamLineupController().updateOnDiffSingle(guestLineup, previous: prevTeamMatch?.guest),
+          home: await TeamLineupController().updateOnDiffSingle(teamMatch.home, previous: prevTeamMatch?.home),
+          guest: await TeamLineupController().updateOnDiffSingle(teamMatch.guest, previous: prevTeamMatch?.guest),
           // Do not override existing information
           comment: teamMatch.comment ?? prevTeamMatch?.comment,
           location: teamMatch.location ?? prevTeamMatch?.location,
