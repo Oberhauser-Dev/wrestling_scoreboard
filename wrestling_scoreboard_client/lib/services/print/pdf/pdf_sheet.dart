@@ -121,7 +121,7 @@ abstract class PdfSheet {
         1: const FlexColumnWidth(1), // League
         2: const FixedColumnWidth(80), // Season partition
         3: const FixedColumnWidth(80), // Date
-        4: const FixedColumnWidth(120), // Place
+        4: const FixedColumnWidth(160), // Place
       },
       children: [
         TableRow(
@@ -152,6 +152,7 @@ abstract class PdfSheet {
               content: wrestlingEvent.location,
               color: PdfColors.grey100,
               pencilColor: PdfSheet.pencilColor,
+              pencilSize: 8,
               height: 40,
             ),
           ],
@@ -162,7 +163,7 @@ abstract class PdfSheet {
 
   Widget buildPerson({required String title, String? no, double? width}) {
     const cellHeight = 25.0;
-    return buildFormCell(title: '$title (Name/Nr.)', content: no, height: cellHeight, width: width);
+    return buildFormCell(title: title, content: no, height: cellHeight, width: width, pencilSize: 8);
   }
 
   List<Widget> buildOfficials(
@@ -180,7 +181,7 @@ abstract class PdfSheet {
             .map(
               (person) => buildPerson(
                 title: personRole.localize(buildContext).toUpperCase(),
-                no: person == null ? '' : '${person.id} / ${person.fullName}',
+                no: person == null ? '' : person.fullName,
                 width: width,
               ),
             ),
