@@ -72,10 +72,11 @@ abstract class DataManager implements AuthManager {
       rules: rules,
       style: style ?? WrestlingStyle.free,
     );
-    await createOrUpdateSingle(updatedBout);
-    // Need to await saving, otherwise a read of the AthleteBoutState list happens on old values within createOrUpdateSingle (e.g. for local running local bouts).
     if (updatedBout.r != null) await createOrUpdateSingle(updatedBout.r!);
     if (updatedBout.b != null) await createOrUpdateSingle(updatedBout.b!);
+    // Need to save bout after their athlete states, otherwise the logic for saving the team match points is based on old athlete state values.
+    // E.g. the classification points would not be available yet.
+    await createOrUpdateSingle(updatedBout);
   }
 
   /// DELETE: delete a single object

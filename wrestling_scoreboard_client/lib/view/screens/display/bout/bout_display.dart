@@ -599,13 +599,13 @@ class BoutState extends ConsumerState<BoutScreen> {
       case BoutScreenActionType.nextBout:
         final int index = widget.boutIndex + 1;
         if (index < widget.bouts.length) {
-          saveAndNavigateToBoutByIndex(context, index);
+          saveBoutWithTimeAndNavigateToBoutByIndex(context, index);
         }
         break;
       case BoutScreenActionType.previousBout:
         final int index = widget.boutIndex - 1;
         if (index >= 0) {
-          saveAndNavigateToBoutByIndex(context, index);
+          saveBoutWithTimeAndNavigateToBoutByIndex(context, index);
         }
         break;
       case BoutScreenActionType.quit:
@@ -713,7 +713,7 @@ class BoutState extends ConsumerState<BoutScreen> {
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop, result) async {
-        await save();
+        await saveBoutWithTime();
       },
       child: BoutActionHandler(
         handleIntent: handleOrCatchIntent,
@@ -823,13 +823,13 @@ class BoutState extends ConsumerState<BoutScreen> {
     );
   }
 
-  Future<void> saveAndNavigateToBoutByIndex(BuildContext context, int boutIndex) async {
-    await save();
+  Future<void> saveBoutWithTimeAndNavigateToBoutByIndex(BuildContext context, int boutIndex) async {
+    await saveBoutWithTime();
     if (!context.mounted) return;
     widget.navigateToBoutByIndex(context, boutIndex);
   }
 
-  Future<void> save() async {
+  Future<void> saveBoutWithTime() async {
     mainStopwatch.boutStopwatch.dispose();
     mainStopwatch.breakStopwatch.dispose();
 

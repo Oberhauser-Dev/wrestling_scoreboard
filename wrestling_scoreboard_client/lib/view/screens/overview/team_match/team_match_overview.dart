@@ -63,6 +63,8 @@ class TeamMatchOverview extends ConsumerWidget {
     return SingleConsumer<TeamMatch>(
       id: id,
       builder: (context, match) {
+        // The teamMatch also most likely has the updated lineups included,
+        // as the match gets updated after its lineups (e.g. when updating the classification points).
         return SingleConsumer<Organization>(
           id: match.organization?.id,
           initialData: match.organization,

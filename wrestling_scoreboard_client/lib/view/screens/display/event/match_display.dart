@@ -40,6 +40,8 @@ class MatchDisplay extends ConsumerWidget {
           id: id,
           initialData: teamMatch,
           builder: (context, match) {
+            // The teamMatch also most likely has the updated lineups included,
+            // as the match gets updated after its lineups (e.g. when updating the classification points).
             final chronologicalSortAction = DefaultResponsiveScaffoldActionItem(
               label: sortChronologically ? localizations.sortedChronologically : localizations.sortedByWeightClass,
               icon: Icon(sortChronologically ? Icons.timeline : Icons.format_list_numbered),

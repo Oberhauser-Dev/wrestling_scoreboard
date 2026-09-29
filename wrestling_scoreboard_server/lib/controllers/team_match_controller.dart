@@ -169,30 +169,28 @@ class TeamMatchController extends ShelfController<TeamMatch>
     final teamMatchBouts = await TeamMatchBoutController().getByTeamMatch(teamMatch.id!, obfuscate: obfuscate);
     if (teamMatchBouts.every((tmb) => tmb.bout.result != null)) {
       teamMatch = await TeamMatchController().getSingle(teamMatch.id!, obfuscate: obfuscate);
-      if (teamMatch.home.classificationPoints == null || teamMatch.guest.classificationPoints == null) {
-        final homeClassificationPoints = TeamMatch.getHomePoints(teamMatchBouts);
-        final guestClassificationPoints = TeamMatch.getGuestPoints(teamMatchBouts);
-        if (homeClassificationPoints > 0 || guestClassificationPoints > 0) {
-          final home = teamMatch.home.copyWith(classificationPoints: homeClassificationPoints);
-          final guest = teamMatch.guest.copyWith(classificationPoints: guestClassificationPoints);
-          final endDate = teamMatch.endDate ?? MockableDateTime.now().toUtc();
-          await TeamLineupController().updateSingle(home);
-          broadcastUpdateSingle(
-            (obfuscate) async =>
-                obfuscate ? (await TeamLineupController().getSingle(teamMatch.home.id!, obfuscate: obfuscate)) : home,
-          );
-          await TeamLineupController().updateSingle(guest);
-          broadcastUpdateSingle(
-            (obfuscate) async =>
-                obfuscate ? (await TeamLineupController().getSingle(teamMatch.guest.id!, obfuscate: obfuscate)) : guest,
-          );
-          teamMatch = teamMatch.copyWith(home: home, guest: guest, endDate: endDate);
-          await TeamMatchController().updateSingle(teamMatch);
-          broadcastUpdateSingle(
-            (obfuscate) async =>
-                obfuscate ? (await TeamMatchController().getSingle(teamMatch.id!, obfuscate: obfuscate)) : teamMatch,
-          );
-        }
+      final homeClassificationPoints = TeamMatch.getHomePoints(teamMatchBouts);
+      final guestClassificationPoints = TeamMatch.getGuestPoints(teamMatchBouts);
+      if (homeClassificationPoints > 0 || guestClassificationPoints > 0) {
+        final home = teamMatch.home.copyWith(classificationPoints: homeClassificationPoints);
+        final guest = teamMatch.guest.copyWith(classificationPoints: guestClassificationPoints);
+        final endDate = teamMatch.endDate ?? MockableDateTime.now().toUtc();
+        await TeamLineupController().updateSingle(home);
+        broadcastUpdateSingle(
+          (obfuscate) async =>
+              obfuscate ? (await TeamLineupController().getSingle(teamMatch.home.id!, obfuscate: obfuscate)) : home,
+        );
+        await TeamLineupController().updateSingle(guest);
+        broadcastUpdateSingle(
+          (obfuscate) async =>
+              obfuscate ? (await TeamLineupController().getSingle(teamMatch.guest.id!, obfuscate: obfuscate)) : guest,
+        );
+        teamMatch = teamMatch.copyWith(home: home, guest: guest, endDate: endDate);
+        await TeamMatchController().updateSingle(teamMatch);
+        broadcastUpdateSingle(
+          (obfuscate) async =>
+              obfuscate ? (await TeamMatchController().getSingle(teamMatch.id!, obfuscate: obfuscate)) : teamMatch,
+        );
       }
     }
   }
