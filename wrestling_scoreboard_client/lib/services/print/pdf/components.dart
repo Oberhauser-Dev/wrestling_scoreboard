@@ -27,6 +27,7 @@ Widget buildTextCell(
   double? height = 60,
   double? width,
   double? fontSize,
+  FontWeight? fontWeight,
   PdfColor? borderColor,
   double? borderWidth,
   PdfColor? textColor,
@@ -37,7 +38,7 @@ Widget buildTextCell(
   return buildTableCellWidget(
     child: Text(
       title,
-      style: TextStyle(fontSize: fontSize, color: textColor ?? PdfColors.black),
+      style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor ?? PdfColors.black),
     ),
     margin: margin,
     height: height,
