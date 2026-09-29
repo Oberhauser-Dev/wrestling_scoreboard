@@ -105,7 +105,7 @@ class TeamMatchTranscript extends PdfSheet {
                     height: 30,
                   ),
                   buildFormCell(
-                    title: localizations.comment,
+                    title: localizations.remarks,
                     content: teamMatch.comment ?? '',
                     height: 30.0,
                     color: PdfColors.grey100,

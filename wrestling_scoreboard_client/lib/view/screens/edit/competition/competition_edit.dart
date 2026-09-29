@@ -111,7 +111,7 @@ class CompetitionEditState extends ConsumerState<CompetitionEdit> {
       ),
       CustomTextInput.icon(
         iconData: Icons.comment,
-        label: localizations.comment,
+        label: localizations.remarks,
         initialValue: _comment,
         isMandatory: false,
         onSaved: (value) => _comment = value,

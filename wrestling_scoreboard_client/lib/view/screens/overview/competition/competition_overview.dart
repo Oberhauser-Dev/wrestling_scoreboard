@@ -142,7 +142,7 @@ class CompetitionOverview extends ConsumerWidget with BoutConfigOverviewTab {
                 ),
                 ContentItem.icon(
                   title: competition.comment ?? '-',
-                  subtitle: localizations.comment,
+                  subtitle: localizations.remarks,
                   iconData: Icons.comment,
                 ),
               ],
