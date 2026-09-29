@@ -156,7 +156,7 @@ class TeamMatchOverview extends ConsumerWidget {
                       ),
                       ContentItem.icon(
                         title: match.comment ?? '-',
-                        subtitle: localizations.comment,
+                        subtitle: localizations.remarks,
                         iconData: Icons.comment,
                       ),
                       ContentItem.icon(

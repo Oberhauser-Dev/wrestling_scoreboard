@@ -167,6 +167,7 @@
   "name": "Name",
   "description": "Beschreibung",
   "comment": "Kommentar",
+  "remarks": "Bemerkungen",
   "abbreviation": "Abkürzung",
   "position": "Position",
   "noItems": "Keine Einträge vorhanden.",

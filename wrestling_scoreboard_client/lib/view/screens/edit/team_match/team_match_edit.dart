@@ -160,7 +160,7 @@ class TeamMatchEditState extends ConsumerState<TeamMatchEdit> {
       ),
       CustomTextInput.icon(
         iconData: Icons.comment,
-        label: localizations.comment,
+        label: localizations.remarks,
         initialValue: widget.teamMatch?.comment,
         isMandatory: false,
         onSaved: (value) => _comment = value,

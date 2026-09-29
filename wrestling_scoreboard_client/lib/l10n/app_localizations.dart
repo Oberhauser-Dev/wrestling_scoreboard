@@ -836,6 +836,12 @@ abstract class AppLocalizations {
   /// **'Comment'**
   String get comment;
 
+  /// No description provided for @remarks.
+  ///
+  /// In en, this message translates to:
+  /// **'Remarks'**
+  String get remarks;
+
   /// No description provided for @abbreviation.
   ///
   /// In en, this message translates to:

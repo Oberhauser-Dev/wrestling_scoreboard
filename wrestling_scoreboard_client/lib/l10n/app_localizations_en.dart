@@ -403,6 +403,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get comment => 'Comment';
 
   @override
+  String get remarks => 'Remarks';
+
+  @override
   String get abbreviation => 'Abbreviation';
 
   @override
