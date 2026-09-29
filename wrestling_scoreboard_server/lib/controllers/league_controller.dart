@@ -84,12 +84,19 @@ class LeagueController extends ShelfController<League> with OrganizationalContro
             );
           });
 
+          final importedTeamMatchPersons = updatedOfficials
+              .map((official) => TeamMatchPerson(teamMatch: teamMatch, person: official.key, role: official.value))
+              .toList();
+          final importedRoles = importedTeamMatchPersons.map((tmp) => tmp.role).toSet();
           await TeamMatchPersonController().updateOnDiffMany(
-            updatedOfficials
-                .map((official) => TeamMatchPerson(teamMatch: teamMatch, person: official.key, role: official.value))
-                .toList(),
+            importedTeamMatchPersons,
             filterType: TeamMatch,
             filterId: teamMatch.id,
+            // Only replace the roles, which are present in the import, keep all others.
+            modify: (previous) => [
+              ...previous.where((prev) => !importedRoles.contains(prev.role)).map((prev) => prev.copyWithId(null)),
+              ...importedTeamMatchPersons,
+            ],
           );
         }
       },
