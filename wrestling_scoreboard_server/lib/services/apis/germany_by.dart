@@ -539,28 +539,27 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             'tie' => MatchResultRole.tie,
             _ => null,
           };
-          final int? homeClassificationPoints = int.tryParse(values['validatedHomePoints'] ?? values['homePoints']);
-          final home = TeamLineup(
-            team: await _getSingleBySyncId<Team>(
-              (competitionJson['homeTeamName'] as String).sanitizedName,
-            ), // teamId is not unique across all IDs
-            // Exclude "0" points, if no decisionRole is set yet.
-            classificationPoints: (homeClassificationPoints != null && homeClassificationPoints > 0)
-                ? homeClassificationPoints
-                : (decisionRole == null ? null : homeClassificationPoints),
-          );
-          final int? guestClassificationPoints = int.tryParse(
-            values['validatedOpponentPoints'] ?? values['opponentPoints'],
-          );
-          final guest = TeamLineup(
-            team: await _getSingleBySyncId<Team>(
-              (competitionJson['opponentTeamName'] as String).sanitizedName,
-            ), // teamId is not unique across all IDs
-            // Exclude "0" points, if no decisionRole is set yet.
-            classificationPoints: (guestClassificationPoints != null && guestClassificationPoints > 0)
-                ? guestClassificationPoints
-                : (decisionRole == null ? null : guestClassificationPoints),
-          );
+          /// [side] is either 'Home' or 'Opponent' (the API's name for the guest).
+          Future<TeamLineup> getLineup(String side) async {
+            int? classificationPoints;
+            final validatedPoints = int.tryParse(values['validated${side}Points'] ?? '');
+            final currentPoints = int.tryParse(values['${side.toLowerCase()}Points'] ?? '');
+            if (decisionRole != null) {
+              classificationPoints = validatedPoints ?? currentPoints;
+            } else {
+              // Exclude "0" points, if no decisionRole is set yet.
+              classificationPoints = (validatedPoints != null && validatedPoints > 0) ? validatedPoints : currentPoints;
+            }
+            return TeamLineup(
+              team: await _getSingleBySyncId<Team>(
+                (competitionJson['${side.toLowerCase()}TeamName'] as String).sanitizedName,
+              ), // teamId is not unique across all IDs
+              classificationPoints: classificationPoints,
+            );
+          }
+
+          final home = await getLineup('Home');
+          final guest = await getLineup('Opponent');
           if (decisionRole != TeamMatch.getResultRole(home: home, guest: guest)) {
             _logger.warning(
               'Decision / ResultRole (${decisionRole?.name}) and Classifications points (${home.classificationPoints} : ${guest.classificationPoints}) do not match. Bout:\n$values',
