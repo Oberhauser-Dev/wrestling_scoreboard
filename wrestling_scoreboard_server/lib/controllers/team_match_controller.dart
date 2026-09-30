@@ -242,9 +242,12 @@ class TeamMatchController extends ShelfController<TeamMatch>
             },
           );
 
-          // Add missing id to bout of boutActions
-          final Iterable<BoutAction> boutActions = actions.map((action) => action.copyWith(bout: bout));
-          await BoutActionController().updateOnDiffMany(boutActions.toList(), filterType: Bout, filterId: bout.id);
+          // Do not override existing bout actions, if they are not present in the API (yet).
+          if (actions.isNotEmpty) {
+            // Add missing id to bout of boutActions
+            final Iterable<BoutAction> boutActions = actions.map((action) => action.copyWith(bout: bout));
+            await BoutActionController().updateOnDiffMany(boutActions.toList(), filterType: Bout, filterId: bout.id);
+          }
           return current.copyWith(bout: bout);
         },
         onDelete: (previous) async {
