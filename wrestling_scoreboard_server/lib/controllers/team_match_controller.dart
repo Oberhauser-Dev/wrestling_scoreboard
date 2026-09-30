@@ -214,6 +214,21 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
     // Do not override existing bouts and lineups, if they are not present in the API (yet).
     if (teamMatchBouts.isNotEmpty) {
+      // Bouts created locally (e.g. via generateInitialBouts) have no orgSyncId and would be deleted
+      // including their bout actions. Link them to the imported bout of the same weight class instead.
+      // The actual update happens later.
+      final previousTeamMatchBouts = await TeamMatchBoutController().getByTeamMatch(entity.id!, obfuscate: false);
+      for (final prevTmb in previousTeamMatchBouts.where((tmb) => tmb.orgSyncId == null)) {
+        final importedTmb = teamMatchBouts.where((tmb) => tmb.weightClass?.id == prevTmb.weightClass?.id).firstOrNull;
+        if (importedTmb == null) continue;
+        await BoutController().updateSingle(
+          prevTmb.bout.copyWith(orgSyncId: importedTmb.bout.orgSyncId, organization: importedTmb.bout.organization),
+        );
+        await TeamMatchBoutController().updateSingle(
+          prevTmb.copyWith(orgSyncId: importedTmb.orgSyncId, organization: importedTmb.organization),
+        );
+      }
+
       teamMatchBouts = await TeamMatchBoutController().updateOrCreateManyOfOrg(
         teamMatchBouts,
         filterType: TeamMatch,
@@ -238,6 +253,8 @@ class TeamMatchController extends ShelfController<TeamMatch>
                   lineup: entity.guest,
                   weightClass: current.weightClass!,
                 ),
+                // Do not override existing duration, if it is not present in the API (yet).
+                duration: bout.duration == Duration.zero ? (previousBout?.duration ?? bout.duration) : bout.duration,
               );
             },
           );
