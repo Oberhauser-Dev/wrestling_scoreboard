@@ -134,23 +134,36 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
 
   NrwGermanyWrestlingReporter(this.organization);
 
-  String _handleComment(String comment) {
-    final String escapedComment = _htmlEscape
-        .convert(_sanitizeString(comment))
-        .replaceAll('(', '&#40;')
-        .replaceAll(')', '&#41;');
+  /// Parsing for the comment inside parentheses.
+  /// The specification for RDB 2.7.4. (2013):
+  /// https://www.brv-ringen.de/index.php?option=com_wbw&view=wbw&Itemid=516&tk=dw&dwbid=1&dwcid=15&op=da&opa=0&dwnid=18&opv=lql#top
+  String _escapeCommentInsideParentheses(String comment) {
+    String escapeHtml(String input) {
+      return _htmlEscape
+          .convert(
+            // We cannot escape the semicolon, because it cannot be processed by HtmlEscape itself.
+            // If we process it before, the escaped chars '&' will be escaped again.
+            // If we process it after, we cannot differentiate the escaped semicolon from the ending sequence of an escaped character,
+            // but we need to remove all semicolons to be valid RDB syntax, thus it would be removed.
+            _sanitizeString(input),
+          )
+          // The escaping for RDB does not include the semicolon, so remove it.
+          .replaceAll('(', '&#40;')
+          .replaceAll(')', '&#41;')
+          .replaceAll(';', '');
+    }
 
-    // Allow more than 200 characters for now.
-    /*if (escapedComment.length >= 200) {
+    String escapedComment = escapeHtml(comment);
+
+    if (escapedComment.length >= 200) {
       /// Comments must be HTML escaped and must be no longer than 200 characters due to specification.
-      while (escapedComment.length >= 197) {
+      while (escapedComment.length >= 194) {
         // Remove one char by one, until the escaped comment fits the field
         comment = comment.substring(0, comment.length - 1);
-        escapedComment =
-            _htmlEscape.convert(_sanitizeString(comment)).replaceAll('(', '&#40;').replaceAll(')', '&#41;');
+        escapedComment = escapeHtml(comment);
       }
-      escapedComment += '...';
-    }*/
+      escapedComment += '&#8230'; // '…'
+    }
     return escapedComment;
   }
 
@@ -184,7 +197,8 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
       teamMatch.visitorsCount ?? '',
       _sanitizeString(referee?.surname ?? ''),
       _sanitizeString(referee?.prename ?? ''),
-      _handleComment(teamMatch.comment ?? ''),
+      // General comment must not be HTML escaped
+      _sanitizeString(teamMatch.comment ?? ''),
     ];
     final boutInfos = boutMap.entries.map((entry) {
       final teamMatchBout = entry.key;
@@ -211,7 +225,7 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
       }
       String comment = bout.comment ?? '';
       if (comment.isNotEmpty) {
-        comment = '(comment ${_handleComment(comment)})';
+        comment = '(comment ${_escapeCommentInsideParentheses(comment)})';
       }
       var duration = '';
       if (bout.duration != Duration.zero) {

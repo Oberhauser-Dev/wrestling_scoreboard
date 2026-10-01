@@ -31,10 +31,9 @@ void main() {
     date: DateTime(2000),
     no: 'matchNo',
     visitorsCount: 5,
-    comment: 'Match comment: Semicolon;OpeningParenthesis(ClosingParenthesis)LessThan<GreaterThan>AndSign&'.padRight(
-      200,
-      '0',
-    ),
+    comment:
+        'Match comment: Semicolon ;, OpeningParenthesis (, ClosingParenthesis ), LessThan <, GreaterThan >, AndSign &, Slash /, Backslash \\, Hash #, OpeningBracket [, ClosingBracket ], Plus +, QuestionMark ?, Dollar \$, IsEqual =, Asterisk *, Caret ^, END'
+            .padRight(200, '0'),
   );
   final bout = Bout(
     duration: Duration(minutes: 2),
@@ -68,6 +67,9 @@ void main() {
     ),
     winnerRole: BoutRole.red,
     result: BoutResult.vfa,
+    comment:
+        'Bout comment: Semicolon ;, OpeningParenthesis (, ClosingParenthesis ), LessThan <, GreaterThan >, AndSign &, Slash /, Backslash \\, Hash #, OpeningBracket [, ClosingBracket ], Plus +, QuestionMark ?, Dollar \$, IsEqual =, Asterisk *, Caret ^, END'
+            .padRight(200, '0'),
   );
   final teamMatchBout = TeamMatchBout(
     pos: 0,
@@ -109,8 +111,8 @@ void main() {
       );
       expect(
         report,
-        'rdbi;2.0.0;MK;matchNo;Test Division Test League;1.1.2000;Team A;Team B;4;0;5;Referee;Mr.;Match comment: Semicolon,OpeningParenthesis&#40;ClosingParenthesis&#41;LessThan&lt;GreaterThan&gt;AndSign&amp;000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n'
-        '10;LL;LizNoA;SurnameA;PrenameA;JN;LizNoB;SurnameB;PrenameB;JEU;4;0;SS;4:2(points AB30,4R60,2B120)(duration 120)',
+        '''rdbi;2.0.0;MK;matchNo;Test Division Test League;1.1.2000;Team A;Team B;4;0;5;Referee;Mr.;Match comment: Semicolon ,, OpeningParenthesis (, ClosingParenthesis ), LessThan <, GreaterThan >, AndSign &, Slash /, Backslash \\, Hash #, OpeningBracket [, ClosingBracket ], Plus +, QuestionMark ?, Dollar \$, IsEqual =, Asterisk *, Caret ^, END
+10;LL;LizNoA;SurnameA;PrenameA;JN;LizNoB;SurnameB;PrenameB;JEU;4;0;SS;4:2(points AB30,4R60,2B120)(comment Bout comment: Semicolon ,, OpeningParenthesis &#40, ClosingParenthesis &#41, LessThan &lt, GreaterThan &gt, AndSign &amp, Slash /, Backslash \\, Hash #, OpeningBracket [, ClosingBracket ], Plus &#8230)(duration 120)''',
       );
     });
   });
