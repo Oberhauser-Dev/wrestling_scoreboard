@@ -1,3 +1,13 @@
+## 0.3.15
+
+ - **FIX**: Avoid overriding bouts and times on import. ([e0f2cb49](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e0f2cb49789d214a0cb3b08a19895feb743c5785))
+ - **FIX**: Updating team match result with correct values if not confirmed yet. ([da7a9da7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/da7a9da7add3cf52e1249a6d8a1b9e640f610e9e))
+ - **FIX**: Avoid updating actions on import if empty. ([aed01ed0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/aed01ed0e95b2889618cf13afdcb2d456fb83f9d))
+ - **FIX**: Avoid overriding existing team match persons with the same role. ([0913e135](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0913e135a9d0dddb624f97a482c5ecdaacc04dfb))
+ - **FIX**: Correct classification point calculation on finish ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([91528983](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/91528983d5996c164df6e6dda89e606d8293e89a))
+ - **FEAT**: Support substitutes in team lineup. ([70ba9d8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/70ba9d8bb9cc72d11c73a25c2848f78ec955d572))
+ - **FEAT**: Replace leader and coach with Lineup Membership list. ([2cf0f99d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2cf0f99df1574eabc3a91a2544d07349acb3df3d))
+
 ## 0.3.14
 
  - **FIX**: Avoid warning for HijackException. ([3d785c7f](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/3d785c7f489b6d1effb45558df86f74c4692ce51))

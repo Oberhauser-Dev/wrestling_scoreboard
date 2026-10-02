@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-10-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`wrestling_scoreboard_client` - `v0.3.15`](#wrestling_scoreboard_client---v0315)
+ - [`wrestling_scoreboard_common` - `v0.3.15`](#wrestling_scoreboard_common---v0315)
+ - [`wrestling_scoreboard_server` - `v0.3.15`](#wrestling_scoreboard_server---v0315)
+
+Packages versioned in lockstep only:
+
+> Packages listed below have no changes of their own. Their versions have been bumped to keep all packages in this workspace in lockstep.
+
+ - `wrestling_scoreboard_generator` - `v0.3.15`
+
+---
+
+#### `wrestling_scoreboard_client` - `v0.3.15`
+
+ - **REFACTOR**: Replace comment with remarks for events. ([f3e6ffa9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f3e6ffa9a26986409e1fc6888266c4787de3b69f))
+ - **FIX**: Correct classification point calculation on finish ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([91528983](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/91528983d5996c164df6e6dda89e606d8293e89a))
+ - **FEAT**: Team match transcript improvements. ([2029999c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2029999c1b4d919a009e84bd364f7ed23ed3fee5))
+ - **FEAT**: Support substitutes in team lineup. ([70ba9d8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/70ba9d8bb9cc72d11c73a25c2848f78ec955d572))
+ - **FEAT**: Improve team match transcript. ([6418011e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6418011e044509932f2b04080ab6a9130801e8d6))
+ - **FEAT**: Use smaller pencil size for certain cells in PDF. ([83e92d75](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/83e92d759a0c1acb1d329c9ef0759e5d5fce4abb))
+ - **FEAT**: Replace leader and coach with Lineup Membership list. ([2cf0f99d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2cf0f99df1574eabc3a91a2544d07349acb3df3d))
+
+#### `wrestling_scoreboard_common` - `v0.3.15`
+
+ - **FIX**: Differentiate escaping bout and match comment for BRV RDB results upload. ([76fc5ab5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/76fc5ab592a31d2cc3e7695517987bfe55d9c7d2))
+ - **FEAT**: Team match transcript improvements. ([2029999c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2029999c1b4d919a009e84bd364f7ed23ed3fee5))
+ - **FEAT**: Support substitutes in team lineup. ([70ba9d8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/70ba9d8bb9cc72d11c73a25c2848f78ec955d572))
+ - **FEAT**: Replace leader and coach with Lineup Membership list. ([2cf0f99d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2cf0f99df1574eabc3a91a2544d07349acb3df3d))
+
+#### `wrestling_scoreboard_server` - `v0.3.15`
+
+ - **FIX**: Avoid overriding bouts and times on import. ([e0f2cb49](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e0f2cb49789d214a0cb3b08a19895feb743c5785))
+ - **FIX**: Updating team match result with correct values if not confirmed yet. ([da7a9da7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/da7a9da7add3cf52e1249a6d8a1b9e640f610e9e))
+ - **FIX**: Avoid updating actions on import if empty. ([aed01ed0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/aed01ed0e95b2889618cf13afdcb2d456fb83f9d))
+ - **FIX**: Avoid overriding existing team match persons with the same role. ([0913e135](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/0913e135a9d0dddb624f97a482c5ecdaacc04dfb))
+ - **FIX**: Correct classification point calculation on finish ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([91528983](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/91528983d5996c164df6e6dda89e606d8293e89a))
+ - **FEAT**: Support substitutes in team lineup. ([70ba9d8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/70ba9d8bb9cc72d11c73a25c2848f78ec955d572))
+ - **FEAT**: Replace leader and coach with Lineup Membership list. ([2cf0f99d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2cf0f99df1574eabc3a91a2544d07349acb3df3d))
+
+
 ## 2026-09-25
 
 ### Changes
