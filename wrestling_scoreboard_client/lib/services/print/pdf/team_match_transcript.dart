@@ -63,55 +63,66 @@ class TeamMatchTranscript extends PdfSheet {
           Container(height: PdfSheet.verticalGap),
           _buildBoutTable(context),
           Container(height: PdfSheet.verticalGap),
-          Table(
-            columnWidths: [
-              const FlexColumnWidth(1), // Winner
-              const FlexColumnWidth(1), // Visitors count
-              const FlexColumnWidth(0.5), // Begin
-              const FlexColumnWidth(0.5), // End
-              const FlexColumnWidth(4), // Comment
-            ].asMap(),
+          Row(
             children: [
-              TableRow(
-                children: [
-                  buildFormCell(
-                    title: localizations.winner,
-                    content: switch (winner) {
-                      MatchResultRole.home => '${teamMatch.home.team.name} (${localizations.home})',
-                      MatchResultRole.guest => '${teamMatch.guest.team.name} (${localizations.guest})',
-                      MatchResultRole.tie => localizations.tie,
-                      _ => '',
-                    },
-                    pencilSize: 9,
-                    height: 30.0,
-                    color: PdfColors.grey100,
-                  ),
-                  buildFormCell(
-                    title: localizations.visitors,
-                    content: teamMatch.visitorsCount?.toString() ?? '',
-                    height: 30.0,
-                    color: PdfColors.grey100,
-                  ),
-                  buildFormCell(
-                    title: localizations.startDate,
-                    content: teamMatch.date.toTimeStringFromLocaleName(localizations.localeName),
-                    color: PdfColors.grey100,
-                    height: 30,
-                  ),
-                  buildFormCell(
-                    title: localizations.endDate,
-                    content: teamMatch.endDate?.toTimeStringFromLocaleName(localizations.localeName),
-                    color: PdfColors.grey100,
-                    height: 30,
-                  ),
-                  buildFormCell(
-                    title: localizations.remarks,
-                    content: teamMatch.comment ?? '',
-                    height: 30.0,
-                    color: PdfColors.grey100,
-                    pencilSize: 8,
-                  ),
-                ],
+              Expanded(
+                flex: 2,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    buildFormCell(
+                      title: localizations.winner,
+                      content: switch (winner) {
+                        MatchResultRole.home => '${teamMatch.home.team.name} (${localizations.home})',
+                        MatchResultRole.guest => '${teamMatch.guest.team.name} (${localizations.guest})',
+                        MatchResultRole.tie => localizations.tie,
+                        _ => '',
+                      },
+                      pencilSize: 9,
+                      height: 30.0,
+                      color: PdfColors.grey100,
+                    ),
+                    buildFormCell(
+                      title: localizations.visitors,
+                      content: teamMatch.visitorsCount?.toString() ?? '',
+                      height: 30.0,
+                      color: PdfColors.grey100,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    buildFormCell(
+                      title: localizations.startDate,
+                      content: teamMatch.date.toTimeStringFromLocaleName(localizations.localeName),
+                      color: PdfColors.grey100,
+                      height: 30,
+                    ),
+                    buildFormCell(
+                      title: localizations.endDate,
+                      content: teamMatch.endDate?.toTimeStringFromLocaleName(localizations.localeName),
+                      color: PdfColors.grey100,
+                      height: 30,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 11,
+                child: buildFormCell(
+                  title: localizations.remarks,
+                  content: teamMatch.comment ?? '',
+                  height: 60.0,
+                  color: PdfColors.grey100,
+                  contentAlignment: Alignment.topLeft,
+                  pencilSize: 8,
+                ),
               ),
             ],
           ),
@@ -310,11 +321,13 @@ class TeamMatchTranscript extends PdfSheet {
           fontSize: cellFontSize,
         ),
         buildTextCell(
-          membership?.person.fullName ?? (bout.result == null ? '' : localizations.participantVacant),
+          membership?.person.shortName ?? (bout.result == null ? '' : localizations.participantVacant),
           height: cellHeight,
           borderColor: borderColor,
           fontSize: cellFontSize,
           fontWeight: bout.winnerRole == role ? FontWeight.bold : null,
+          fontStyle: membership == null ? FontStyle.italic : null,
+          singleLine: true,
         ),
         buildTextCell(
           membership?.no ?? '',
@@ -458,6 +471,19 @@ class TeamMatchTranscript extends PdfSheet {
                   text: TextSpan(
                     style: const TextStyle(fontSize: 7),
                     children: [
+                      // Identify the shifted actions of each role at the beginning of the row.
+                      if (actions.isNotEmpty) ...[
+                        for (final role in [BoutRole.red, BoutRole.blue])
+                          TextSpan(
+                            text: role == BoutRole.red ? 'R' : 'B',
+                            style: TextStyle(color: role.pdfColor, fontWeight: FontWeight.bold),
+                            baseline: role == BoutRole.red ? 1.5 : -1.5,
+                          ),
+                        TextSpan(
+                          text: ' ',
+                          style: TextStyle(color: PdfColors.grey600),
+                        ),
+                      ],
                       ...actions.map(
                         (action) => TextSpan(
                           text: action == actions.last ? action.actionValue : '${action.actionValue} ',

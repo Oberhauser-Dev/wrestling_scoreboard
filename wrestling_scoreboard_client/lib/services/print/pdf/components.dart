@@ -28,18 +28,33 @@ Widget buildTextCell(
   double? width,
   double? fontSize,
   FontWeight? fontWeight,
+  FontStyle? fontStyle,
   PdfColor? borderColor,
   double? borderWidth,
   PdfColor? textColor,
   PdfColor? color,
   EdgeInsets? margin,
   Alignment alignment = Alignment.centerLeft,
+  bool singleLine = false,
 }) {
-  return buildTableCellWidget(
-    child: Text(
-      title,
-      style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor ?? PdfColors.black),
+  Widget text = Text(
+    title,
+    softWrap: !singleLine,
+    maxLines: singleLine ? 1 : null,
+    style: TextStyle(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      fontStyle: fontStyle,
+      color: textColor ?? PdfColors.black,
     ),
+  );
+  // FittedBox cannot scale an empty text with zero width.
+  if (singleLine && title.trim().isNotEmpty) {
+    // Shrink the text, if it doesn't fit in one line.
+    text = FittedBox(fit: BoxFit.scaleDown, alignment: alignment, child: text);
+  }
+  return buildTableCellWidget(
+    child: text,
     margin: margin,
     height: height,
     alignment: alignment,
