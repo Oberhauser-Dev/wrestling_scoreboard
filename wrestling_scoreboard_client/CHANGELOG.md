@@ -1,3 +1,13 @@
+## 0.3.15
+
+ - **REFACTOR**: Replace comment with remarks for events. ([f3e6ffa9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f3e6ffa9a26986409e1fc6888266c4787de3b69f))
+ - **FIX**: Correct classification point calculation on finish ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([91528983](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/91528983d5996c164df6e6dda89e606d8293e89a))
+ - **FEAT**: Team match transcript improvements. ([2029999c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2029999c1b4d919a009e84bd364f7ed23ed3fee5))
+ - **FEAT**: Support substitutes in team lineup. ([70ba9d8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/70ba9d8bb9cc72d11c73a25c2848f78ec955d572))
+ - **FEAT**: Improve team match transcript. ([6418011e](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/6418011e044509932f2b04080ab6a9130801e8d6))
+ - **FEAT**: Use smaller pencil size for certain cells in PDF. ([83e92d75](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/83e92d759a0c1acb1d329c9ef0759e5d5fce4abb))
+ - **FEAT**: Replace leader and coach with Lineup Membership list. ([2cf0f99d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2cf0f99df1574eabc3a91a2544d07349acb3df3d))
+
 ## 0.3.13
 
  - **FIX**: Avoid render overflow in home item. ([45b652bc](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/45b652bc6f8e2ec9def69d494c53ba40ae0f1e20))

@@ -1,3 +1,7 @@
+## 0.3.15
+
+ - Bump version to keep all packages in the workspace in lockstep.
+
 ## 0.3.13
 
  - **FEAT**: Upgrade Flutter to v3.47.x. ([f7a34f20](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f7a34f2094d18df8581a6d0e20df6d4b6a6e2475))

@@ -1,3 +1,10 @@
+## 0.3.15
+
+ - **FIX**: Differentiate escaping bout and match comment for BRV RDB results upload. ([76fc5ab5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/76fc5ab592a31d2cc3e7695517987bfe55d9c7d2))
+ - **FEAT**: Team match transcript improvements. ([2029999c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2029999c1b4d919a009e84bd364f7ed23ed3fee5))
+ - **FEAT**: Support substitutes in team lineup. ([70ba9d8b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/70ba9d8bb9cc72d11c73a25c2848f78ec955d572))
+ - **FEAT**: Replace leader and coach with Lineup Membership list. ([2cf0f99d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/2cf0f99df1574eabc3a91a2544d07349acb3df3d))
+
 ## 0.3.13
 
  - **FIX**: Retry on import via API. ([5f21b7da](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5f21b7da6f6ec2817679a251a1ab209dab3458f5))
