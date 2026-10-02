@@ -84,6 +84,12 @@ abstract class Person with _$Person implements DataObject, ImageObjectData, Orga
     return '$prename $surname';
   }
 
+  /// The full name, but only with the first of multiple prenames.
+  String get shortName {
+    final firstPrename = prename.trim().split(RegExp(r'\s+')).first;
+    return '$firstPrename $surname';
+  }
+
   @override
   @override
   String get tableName => cTableName;
