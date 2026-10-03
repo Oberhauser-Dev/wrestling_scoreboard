@@ -5,7 +5,6 @@ import 'package:printing/printing.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/team_match.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
-import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/utils/provider.dart';
@@ -59,8 +58,6 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
                     ).future,
                   );
 
-            final isTimeCountDown = await ref.read(timeCountDownProvider);
-
             final officials = await ref.readAsync(
               manyDataStreamProvider<TeamMatchPerson, TeamMatch>(
                 ManyProviderData<TeamMatchPerson, TeamMatch>(filterObject: teamMatchBout.teamMatch),
@@ -76,7 +73,6 @@ class TeamMatchBoutOverview extends ConsumerWidget with BoutOverview<TeamMatchBo
                 officials: Map.fromEntries(officials.map((tmp) => MapEntry(tmp.person, tmp.role))),
                 boutConfig: teamMatchBout.teamMatch.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
                 boutRules: boutRules,
-                isTimeCountDown: isTimeCountDown,
                 weightClass: teamMatchBout.weightClass,
               ).buildPdf();
               await Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(teamMatchBout.teamMatch)}.pdf');

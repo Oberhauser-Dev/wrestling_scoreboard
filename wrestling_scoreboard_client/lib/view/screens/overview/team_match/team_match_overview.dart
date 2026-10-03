@@ -12,7 +12,6 @@ import 'package:wrestling_scoreboard_client/localization/team_match.dart';
 import 'package:wrestling_scoreboard_client/models/organization_import_type.dart';
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
-import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_weight_list.dart';
@@ -468,7 +467,6 @@ class TeamMatchOverview extends ConsumerWidget {
         ),
       );
     }
-    final isTimeCountDown = await ref.read(timeCountDownProvider);
 
     final homeParticipations = await ref.readAsync(
       manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
@@ -512,7 +510,6 @@ class TeamMatchOverview extends ConsumerWidget {
       homeLineupMemberships: homeLineupMemberships,
       guestLineupMemberships: guestLineupMemberships,
       boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
-      isTimeCountDown: isTimeCountDown,
       guestParticipations: guestParticipations,
       homeParticipations: homeParticipations,
     ).buildPdf();

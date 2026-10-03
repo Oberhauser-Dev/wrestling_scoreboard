@@ -10,7 +10,6 @@ import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_pdf_common.dart';
-import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class TeamMatchTranscript extends PdfSheet {
@@ -23,7 +22,6 @@ class TeamMatchTranscript extends PdfSheet {
     required this.homeLineupMemberships,
     required this.guestLineupMemberships,
     required this.boutConfig,
-    required this.isTimeCountDown,
     super.baseColor,
     super.accentColor,
     required super.buildContext,
@@ -37,7 +35,6 @@ class TeamMatchTranscript extends PdfSheet {
   final BoutConfig boutConfig;
   final TeamMatch teamMatch;
   final Map<Person, PersonRole> officials;
-  final bool isTimeCountDown;
   late final TeamMatchPdfCommon teamMatchPdfCommon = TeamMatchPdfCommon(localizations);
 
   Iterable<Bout> get bouts => teamMatchBoutActions.keys.map((tmb) => tmb.bout);
@@ -344,7 +341,7 @@ class TeamMatchTranscript extends PdfSheet {
           fontSize: cellFontSize,
         ),
         buildTextCell(
-          boutState?.classificationPoints?.toString() ?? '',
+          bout.result == null ? '' : (boutState?.classificationPoints ?? 0).toString(),
           height: cellHeight,
           alignment: Alignment.center,
           borderColor: borderColor,
@@ -455,12 +452,11 @@ class TeamMatchTranscript extends PdfSheet {
                 fontSize: cellFontSize,
               ),
               buildTextCell(
-                // Do not show a '0:00' time, when bout not finished.
-                (bout.bout.duration == Duration.zero && bout.bout.result == null)
+                // Do not show a '0:00' time, when time was not started.
+                // Do not invert the time: Duration is always displayed as counting upwards.
+                bout.bout.result == null
                     ? ''
-                    : bout.bout.duration
-                          .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
-                          .formatMinutesAndSeconds(),
+                    : (bout.bout.duration == Duration.zero ? '–' : bout.bout.duration.formatMinutesAndSeconds()),
                 height: cellHeight,
                 alignment: Alignment.center,
                 fontSize: cellFontSize,

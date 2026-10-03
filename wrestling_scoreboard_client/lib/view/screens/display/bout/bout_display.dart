@@ -654,7 +654,6 @@ class BoutState extends ConsumerState<BoutScreen> {
       label: localizations.print,
       icon: const Icon(Icons.print),
       onTap: () async {
-        final isTimeCountDown = await ref.read(timeCountDownProvider);
         final actions = await ref.readAsync(
           manyDataStreamProvider(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
         );
@@ -667,7 +666,6 @@ class BoutState extends ConsumerState<BoutScreen> {
             officials: widget.officials,
             boutConfig: boutConfig,
             boutRules: boutRules,
-            isTimeCountDown: isTimeCountDown,
             weightClass: weightClass,
           ).buildPdf();
           await Printing.sharePdf(bytes: bytes, filename: '${bout.getFileBaseName(widget.wrestlingEvent)}.pdf');
