@@ -11,7 +11,6 @@ import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/components.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
-import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 class ScoreSheet extends PdfSheet {
@@ -23,7 +22,6 @@ class ScoreSheet extends PdfSheet {
     required this.boutConfig,
     required this.boutRules,
     required this.weightClass,
-    required this.isTimeCountDown,
     super.baseColor,
     super.accentColor,
     required super.buildContext,
@@ -36,7 +34,6 @@ class ScoreSheet extends PdfSheet {
   final List<BoutResultRule> boutRules;
   final WrestlingEvent wrestlingEvent;
   final Map<Person, PersonRole> officials;
-  final bool isTimeCountDown;
 
   WrestlingEvent get event => wrestlingEvent;
 
@@ -85,9 +82,9 @@ class ScoreSheet extends PdfSheet {
               ),
               buildFormCell(
                 title: localizations.duration,
-                content: bout.duration
-                    .invertIf(isTimeCountDown, max: boutConfig.totalPeriodDuration)
-                    .formatMinutesAndSeconds(),
+                content: bout.result == null
+                    ? null
+                    : (bout.duration == Duration.zero ? '–' : bout.duration.formatMinutesAndSeconds()),
                 width: 100,
               ),
             ],
@@ -474,7 +471,9 @@ class ScoreSheet extends PdfSheet {
       return TableRow(
         children: [
           buildFormCell(
-            content: AthleteBoutState.getTechnicalPoints(periodActions, BoutRole.red).toString(),
+            content: bout.result == null
+                ? null
+                : AthleteBoutState.getTechnicalPoints(periodActions, BoutRole.red).toString(),
             borderColor: PdfSheet.homeColor,
             height: roundCellHeight,
           ),
@@ -488,7 +487,9 @@ class ScoreSheet extends PdfSheet {
           ),
           buildPeriodTechnicalPoints(periodActions, BoutRole.blue),
           buildFormCell(
-            content: AthleteBoutState.getTechnicalPoints(periodActions, BoutRole.blue).toString(),
+            content: bout.result == null
+                ? null
+                : AthleteBoutState.getTechnicalPoints(periodActions, BoutRole.blue).toString(),
             borderColor: PdfSheet.guestColor,
             height: roundCellHeight,
           ),
@@ -587,18 +588,24 @@ class ScoreSheet extends PdfSheet {
           children: [
             Container(),
             buildTextCell(
-              AthleteBoutState.getTechnicalPoints(actions, BoutRole.red).toString(),
+              bout.result == null ? '' : AthleteBoutState.getTechnicalPoints(actions, BoutRole.red).toString(),
               height: headerCellHeight,
               borderWidth: 2,
               borderColor: PdfSheet.homeColor,
               alignment: Alignment.center,
               textColor: PdfSheet.pencilColor,
             ),
-            buildClassificationPoints(bout.r?.classificationPoints, PdfSheet.homeColor),
+            buildClassificationPoints(
+              bout.result == null ? null : (bout.r?.classificationPoints ?? 0),
+              PdfSheet.homeColor,
+            ),
             Container(),
-            buildClassificationPoints(bout.b?.classificationPoints, PdfSheet.guestColor),
+            buildClassificationPoints(
+              bout.result == null ? null : (bout.b?.classificationPoints ?? 0),
+              PdfSheet.guestColor,
+            ),
             buildTextCell(
-              AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue).toString(),
+              bout.result == null ? '' : AthleteBoutState.getTechnicalPoints(actions, BoutRole.blue).toString(),
               height: headerCellHeight,
               borderWidth: 2,
               borderColor: PdfSheet.guestColor,
