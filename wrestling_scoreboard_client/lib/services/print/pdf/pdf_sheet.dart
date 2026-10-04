@@ -43,7 +43,21 @@ abstract class PdfSheet {
     localizations = AppLocalizations.of(buildContext)!;
   }
 
-  Future<Uint8List> buildPdf({PdfPageFormat? pageFormat});
+  /// Adds the pages of this sheet to an existing [doc].
+  /// If [pageFormat] is null, the default format of the sheet is used.
+  Future<void> addPages(Document doc, {PdfPageFormat? pageFormat});
+
+  /// Builds a PDF containing only this sheet.
+  Future<Uint8List> buildPdf({PdfPageFormat? pageFormat}) => buildBatchPdf([this], pageFormat: pageFormat);
+
+  /// Builds one PDF containing the pages of all [sheets] in order, e.g. to print all score sheets of a team match.
+  static Future<Uint8List> buildBatchPdf(Iterable<PdfSheet> sheets, {PdfPageFormat? pageFormat}) async {
+    final doc = Document();
+    for (final sheet in sheets) {
+      await sheet.addPages(doc, pageFormat: pageFormat);
+    }
+    return doc.save();
+  }
 
   Widget buildFooter(Context context) {
     return Row(

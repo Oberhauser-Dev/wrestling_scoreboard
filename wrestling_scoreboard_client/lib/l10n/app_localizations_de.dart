@@ -513,6 +513,12 @@ class AppLocalizationsDe extends AppLocalizations {
       'https://www.ringen.de/wp-content/uploads/2019/01/Internationales-Regelwerk_Januar-2019_.pdf';
 
   @override
+  String get transcript => 'Protokoll';
+
+  @override
+  String get scoreSheets => 'Punktzettel';
+
+  @override
   String get teamMatchTranscript => 'Protokoll für Mannschaftskämpfe';
 
   @override

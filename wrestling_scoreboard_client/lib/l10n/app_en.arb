@@ -206,6 +206,8 @@
   "endDate": "End",
 
   "wrestlingRulesPdf": "https://uww.org/sites/default/files/2019-12/wrestling_rules.pdf",
+  "transcript": "Transcript",
+  "scoreSheets": "Score sheets",
   "teamMatchTranscript": "Transcript for Team Matches",
   "teamMatchScoreSheet": "Score sheet for Team Matches",
   "teamMatchWeightList": "Weight List for Team Matches",

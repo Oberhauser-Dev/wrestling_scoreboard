@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
@@ -43,9 +41,7 @@ class TeamMatchTranscript extends PdfSheet {
   String? _logo;
 
   @override
-  Future<Uint8List> buildPdf({PdfPageFormat? pageFormat}) async {
-    final doc = Document();
-
+  Future<void> addPages(Document doc, {PdfPageFormat? pageFormat}) async {
     _logo = await rootBundle.loadString('assets/images/icons/launcher.svg');
     final winner = TeamMatch.getResultRole(home: teamMatch.home, guest: teamMatch.guest);
 
@@ -128,9 +124,6 @@ class TeamMatchTranscript extends PdfSheet {
         ],
       ),
     );
-
-    // Return the PDF file content
-    return doc.save();
   }
 
   Widget _buildHeader(Context context) {

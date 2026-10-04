@@ -86,6 +86,45 @@ class DefaultResponsiveScaffoldActionItem extends ResponsiveScaffoldActionItemBu
   }
 }
 
+/// An action item, which opens a menu to select one of its [children].
+class MenuResponsiveScaffoldActionItem extends ResponsiveScaffoldActionItemBuilder {
+  final Widget icon;
+  final String label;
+  final List<DefaultResponsiveScaffoldActionItem> children;
+
+  const MenuResponsiveScaffoldActionItem({
+    super.style,
+    required this.icon,
+    required this.label,
+    required this.children,
+  });
+
+  @override
+  Widget buildForAppBar(BuildContext context) {
+    return MenuAnchor(
+      builder: (context, controller, child) {
+        void toggle() => controller.isOpen ? controller.close() : controller.open();
+        if (style == ResponsiveScaffoldActionItemStyle.elevatedIconAndText) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: ElevatedButton.icon(icon: icon, onPressed: toggle, label: Text(label)),
+          );
+        }
+        return IconButton(onPressed: toggle, icon: icon, tooltip: label);
+      },
+      menuChildren: children.map((a) => a.buildForPopupMenu(context)).toList(),
+    );
+  }
+
+  @override
+  Widget buildForPopupMenu(BuildContext context) {
+    return SubmenuButton(
+      menuChildren: children.map((a) => a.buildForPopupMenu(context)).toList(),
+      child: ListTile(leading: icon, title: Text(label)),
+    );
+  }
+}
+
 class ConsumerResponsiveScaffoldActionItem<T> extends ResponsiveScaffoldActionItemBuilder {
   final Future<T> Function(WidgetRef ref) futureBuilder;
   final Widget Function(BuildContext context, T data) iconBuilder;

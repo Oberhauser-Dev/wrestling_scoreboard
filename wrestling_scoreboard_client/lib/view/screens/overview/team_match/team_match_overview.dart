@@ -13,6 +13,8 @@ import 'package:wrestling_scoreboard_client/models/organization_import_type.dart
 import 'package:wrestling_scoreboard_client/provider/account_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
+import 'package:wrestling_scoreboard_client/services/print/pdf/pdf_sheet.dart';
+import 'package:wrestling_scoreboard_client/services/print/pdf/score_sheet.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_transcript.dart';
 import 'package:wrestling_scoreboard_client/services/print/pdf/team_match_weight_list.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
@@ -68,11 +70,7 @@ class TeamMatchOverview extends ConsumerWidget {
           id: match.organization?.id,
           initialData: match.organization,
           builder: (context, organization) {
-            final pdfAction = DefaultResponsiveScaffoldActionItem(
-              label: localizations.print,
-              icon: const Icon(Icons.print),
-              onTap: () => shareTeamMatchTranscript(context, ref, match),
-            );
+            final pdfAction = buildPrintActionItem(context, ref, match);
 
             return ConditionalOrganizationImportActionBuilder(
               id: id,
@@ -363,6 +361,41 @@ class TeamMatchOverview extends ConsumerWidget {
     );
   }
 
+  /// Get the actions of each bout, or placeholder bouts for each weight class, if there are no bouts yet.
+  static Future<Map<TeamMatchBout, List<BoutAction>>> _getBoutActionsOrPlaceholders(
+    WidgetRef ref, {
+    required TeamMatch match,
+    required List<TeamMatchBout> teamMatchBouts,
+  }) async {
+    if (teamMatchBouts.isEmpty) {
+      // Fill with placeholder bouts
+      final weightClasses = await _getWeightClasses(ref, match);
+      return Map.fromEntries(
+        weightClasses.indexed.map(
+          (indexedEntry) => MapEntry(
+            TeamMatchBout(
+              pos: indexedEntry.$1,
+              teamMatch: match,
+              bout: Bout(),
+              weightClass: indexedEntry.$2,
+              organization: match.organization,
+            ),
+            const [],
+          ),
+        ),
+      );
+    } else {
+      return Map.fromEntries(
+        await Future.wait(
+          teamMatchBouts.map((teamMatchBout) async {
+            final boutActions = await _getActions(ref, bout: teamMatchBout.bout);
+            return MapEntry(teamMatchBout, boutActions);
+          }),
+        ),
+      );
+    }
+  }
+
   static Future<List<BoutAction>> _getActions(WidgetRef ref, {required Bout bout}) => ref.readAsync(
     manyDataStreamProvider<BoutAction, Bout>(ManyProviderData<BoutAction, Bout>(filterObject: bout)).future,
   );
@@ -439,34 +472,7 @@ class TeamMatchOverview extends ConsumerWidget {
   static Future<void> shareTeamMatchTranscript(BuildContext context, WidgetRef ref, TeamMatch match) async {
     final teamMatchBouts = await _getBouts(ref, match: match);
 
-    final Map<TeamMatchBout, List<BoutAction>> teamMatchBoutActions;
-    if (teamMatchBouts.isEmpty) {
-      // Fill with placeholder bouts
-      final weightClasses = await _getWeightClasses(ref, match);
-      teamMatchBoutActions = Map.fromEntries(
-        weightClasses.indexed.map(
-          (indexedEntry) => MapEntry(
-            TeamMatchBout(
-              pos: indexedEntry.$1,
-              teamMatch: match,
-              bout: Bout(),
-              weightClass: indexedEntry.$2,
-              organization: match.organization,
-            ),
-            const [],
-          ),
-        ),
-      );
-    } else {
-      teamMatchBoutActions = Map.fromEntries(
-        await Future.wait(
-          teamMatchBouts.map((teamMatchBout) async {
-            final boutActions = await _getActions(ref, bout: teamMatchBout.bout);
-            return MapEntry(teamMatchBout, boutActions);
-          }),
-        ),
-      );
-    }
+    final teamMatchBoutActions = await _getBoutActionsOrPlaceholders(ref, match: match, teamMatchBouts: teamMatchBouts);
 
     final homeParticipations = await ref.readAsync(
       manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
@@ -514,6 +520,61 @@ class TeamMatchOverview extends ConsumerWidget {
       homeParticipations: homeParticipations,
     ).buildPdf();
     await Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}.pdf');
+  }
+
+  static Future<void> shareTeamMatchScoreSheets(BuildContext context, WidgetRef ref, TeamMatch match) async {
+    final teamMatchBouts = await _getBouts(ref, match: match);
+    final boutRules = match.league == null
+        ? TeamMatch.defaultBoutResultRules
+        : await ref.readAsync(
+            manyDataStreamProvider<BoutResultRule, BoutConfig>(
+              ManyProviderData<BoutResultRule, BoutConfig>(filterObject: match.league!.division.boutConfig),
+            ).future,
+          );
+    final officials = await _getOfficials(ref, match: match);
+    final teamMatchBoutActions = await _getBoutActionsOrPlaceholders(ref, match: match, teamMatchBouts: teamMatchBouts);
+
+    if (!context.mounted) return;
+    final bytes = await PdfSheet.buildBatchPdf(
+      teamMatchBoutActions.entries.map(
+        (entry) => ScoreSheet(
+          bout: entry.key.bout,
+          boutActions: entry.value,
+          buildContext: context,
+          wrestlingEvent: match,
+          officials: officials,
+          boutConfig: match.league?.division.boutConfig ?? TeamMatch.defaultBoutConfig,
+          boutRules: boutRules,
+          weightClass: entry.key.weightClass,
+        ),
+      ),
+    );
+    await Printing.sharePdf(bytes: bytes, filename: '${match.fileBaseName}_Score-Sheets.pdf');
+  }
+
+  static ResponsiveScaffoldActionItemBuilder buildPrintActionItem(
+    BuildContext context,
+    WidgetRef ref,
+    TeamMatch match,
+  ) {
+    final localizations = context.l10n;
+    return MenuResponsiveScaffoldActionItem(
+      label: localizations.print,
+      icon: const Icon(Icons.print),
+      children: [
+        DefaultResponsiveScaffoldActionItem(
+          label: localizations.transcript,
+          icon: const Icon(Icons.summarize),
+          onTap: () => shareTeamMatchTranscript(context, ref, match),
+        ),
+        DefaultResponsiveScaffoldActionItem(
+          label: localizations.scoreSheets,
+          // TODO: Replace with cards_stack, once available.
+          icon: const Icon(Icons.library_books),
+          onTap: () => shareTeamMatchScoreSheets(context, ref, match),
+        ),
+      ],
+    );
   }
 
   void handleSelectedLineup(

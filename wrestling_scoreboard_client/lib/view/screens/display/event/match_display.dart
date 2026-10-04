@@ -54,11 +54,7 @@ class MatchDisplay extends ConsumerWidget {
               icon: const Icon(Icons.info),
               onTap: () => TeamMatchOverview.navigateTo(context, match),
             );
-            final pdfAction = DefaultResponsiveScaffoldActionItem(
-              label: localizations.print,
-              icon: const Icon(Icons.print),
-              onTap: () => TeamMatchOverview.shareTeamMatchTranscript(context, ref, match),
-            );
+            final pdfAction = TeamMatchOverview.buildPrintActionItem(context, ref, match);
             return DisplayTheme(
               child: WindowStateScaffold(
                 hideAppBarOnFullscreen: true,
