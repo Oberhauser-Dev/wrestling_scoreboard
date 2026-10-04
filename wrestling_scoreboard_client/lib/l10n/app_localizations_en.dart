@@ -1106,6 +1106,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get steward => 'Steward';
 
   @override
+  String get paramedic => 'Paramedic';
+
+  @override
   String get prename => 'Prename';
 
   @override

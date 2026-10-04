@@ -166,8 +166,8 @@ class TeamMatchTranscript extends PdfSheet {
       groupedOfficials: groupedOfficials,
     );
     final stewards = buildOfficials(
-      order: [PersonRole.steward],
-      getPlaceHolderCount: (personRole) => 3,
+      order: [PersonRole.steward, PersonRole.paramedic],
+      getPlaceHolderCount: (personRole) => personRole == PersonRole.steward ? 3 : 1,
       context,
       event,
       groupedOfficials: groupedOfficials,
