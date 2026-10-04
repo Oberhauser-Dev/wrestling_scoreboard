@@ -1040,6 +1040,18 @@ abstract class AppLocalizations {
   /// **'https://uww.org/sites/default/files/2019-12/wrestling_rules.pdf'**
   String get wrestlingRulesPdf;
 
+  /// No description provided for @transcript.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcript'**
+  String get transcript;
+
+  /// No description provided for @scoreSheets.
+  ///
+  /// In en, this message translates to:
+  /// **'Score sheets'**
+  String get scoreSheets;
+
   /// No description provided for @teamMatchTranscript.
   ///
   /// In en, this message translates to:

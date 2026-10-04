@@ -508,6 +508,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wrestlingRulesPdf => 'https://uww.org/sites/default/files/2019-12/wrestling_rules.pdf';
 
   @override
+  String get transcript => 'Transcript';
+
+  @override
+  String get scoreSheets => 'Score sheets';
+
+  @override
   String get teamMatchTranscript => 'Transcript for Team Matches';
 
   @override

@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
@@ -38,9 +37,7 @@ class TeamMatchWeightList extends PdfSheet {
   String? _logo;
 
   @override
-  Future<Uint8List> buildPdf({PdfPageFormat? pageFormat}) async {
-    final doc = Document();
-
+  Future<void> addPages(Document doc, {PdfPageFormat? pageFormat}) async {
     _logo = await rootBundle.loadString('assets/images/icons/launcher.svg');
 
     // Add page to the PDF
@@ -58,9 +55,6 @@ class TeamMatchWeightList extends PdfSheet {
         ],
       ),
     );
-
-    // Return the PDF file content
-    return doc.save();
   }
 
   Widget _buildHeader(Context context) {

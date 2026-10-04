@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -40,9 +39,7 @@ class ScoreSheet extends PdfSheet {
   String? _logo;
 
   @override
-  Future<Uint8List> buildPdf({PdfPageFormat? pageFormat}) async {
-    final doc = Document();
-
+  Future<void> addPages(Document doc, {PdfPageFormat? pageFormat}) async {
     _logo = await rootBundle.loadString('assets/images/icons/launcher.svg');
     final actions = boutActions;
 
@@ -55,7 +52,7 @@ class ScoreSheet extends PdfSheet {
     // Add page to the PDF
     doc.addPage(
       MultiPage(
-        pageTheme: await buildTheme(),
+        pageTheme: await buildTheme(pageFormat: pageFormat ?? PdfSheet.a4),
         header: _buildHeader,
         footer: buildFooter,
         build: (context) => [
@@ -112,9 +109,6 @@ class ScoreSheet extends PdfSheet {
         ],
       ),
     );
-
-    // Return the PDF file content
-    return doc.save();
   }
 
   Widget _buildHeader(Context context) {
@@ -261,7 +255,8 @@ class ScoreSheet extends PdfSheet {
       );
       final content = [
         buildParticipantNameColumn(
-          name: membership?.person.fullName ?? localizations.participantVacant,
+          // Placeholder bouts (not persisted yet) leave the name blank to be filled in by hand.
+          name: membership?.person.fullName ?? (bout.id == null ? '' : localizations.participantVacant),
           club: membership?.club.name,
           borderColor: borderColor,
         ),

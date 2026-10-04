@@ -203,6 +203,8 @@
   "endDate": "Ende",
 
   "wrestlingRulesPdf": "https://www.ringen.de/wp-content/uploads/2019/01/Internationales-Regelwerk_Januar-2019_.pdf",
+  "transcript": "Protokoll",
+  "scoreSheets": "Punktzettel",
   "teamMatchTranscript": "Protokoll für Mannschaftskämpfe",
   "teamMatchScoreSheet": "Punktzettel für Mannschaftskämpfe",
   "teamMatchWeightList": "Wiegeliste für Mannschaftskämpfe",
