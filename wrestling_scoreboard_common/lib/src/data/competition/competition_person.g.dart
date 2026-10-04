@@ -27,4 +27,5 @@ const _$PersonRoleEnumMap = {
   PersonRole.transcriptWriter: 'transcriptWriter',
   PersonRole.timeKeeper: 'timeKeeper',
   PersonRole.steward: 'steward',
+  PersonRole.paramedic: 'paramedic',
 };

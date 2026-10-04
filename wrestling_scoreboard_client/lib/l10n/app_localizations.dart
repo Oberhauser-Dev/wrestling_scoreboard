@@ -2216,6 +2216,12 @@ abstract class AppLocalizations {
   /// **'Steward'**
   String get steward;
 
+  /// No description provided for @paramedic.
+  ///
+  /// In en, this message translates to:
+  /// **'Paramedic'**
+  String get paramedic;
+
   /// No description provided for @prename.
   ///
   /// In en, this message translates to:

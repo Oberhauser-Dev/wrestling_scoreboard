@@ -190,8 +190,8 @@ abstract class PdfSheet {
   }) {
     return [
       for (final personRole in order)
-        ...(groupedOfficials[personRole] ??
-                Iterable.generate(getPlaceHolderCount?.call(personRole) ?? 1, (index) => null).toSet())
+        ...((groupedOfficials[personRole] as Iterable<Person?>?) ??
+                List<Person?>.filled(getPlaceHolderCount?.call(personRole) ?? 1, null))
             .map(
               (person) => buildPerson(
                 title: personRole.localize(buildContext).toUpperCase(),

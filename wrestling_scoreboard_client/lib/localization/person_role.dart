@@ -12,6 +12,7 @@ extension PersonRoleLocalization on PersonRole {
       PersonRole.timeKeeper => localizations.timeKeeper,
       PersonRole.transcriptWriter => localizations.transcriptionWriter,
       PersonRole.steward => localizations.steward,
+      PersonRole.paramedic => localizations.paramedic,
     };
   }
 
@@ -23,6 +24,7 @@ extension PersonRoleLocalization on PersonRole {
       PersonRole.timeKeeper => Icons.pending_actions,
       PersonRole.transcriptWriter => Icons.history_edu,
       PersonRole.steward => Icons.security,
+      PersonRole.paramedic => Icons.medical_services,
     };
   }
 }

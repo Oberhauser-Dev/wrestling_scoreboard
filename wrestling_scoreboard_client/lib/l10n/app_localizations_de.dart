@@ -1110,6 +1110,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get steward => 'Ordner';
 
   @override
+  String get paramedic => 'Sanitäter';
+
+  @override
   String get prename => 'Vorname';
 
   @override

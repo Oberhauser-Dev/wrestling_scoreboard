@@ -159,7 +159,8 @@ CREATE TYPE public.person_role AS ENUM (
     'timeKeeper',
     'steward',
     'matChairman',
-    'judge'
+    'judge',
+    'paramedic'
 );
 
 
@@ -2093,7 +2094,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.15	0.3.15
+0.3.16-pre.1	0.3.15
 \.
 
 
