@@ -13,6 +13,13 @@ const _isReleaseMode = bool.fromEnvironment('dart.vm.product');
 String get definitionDatabasePath => resolvePath('database/dump/wrestling_scoreboard-definition-dump.sql');
 String get prepopulatedDatabasePath => resolvePath('database/dump/wrestling_scoreboard-prepopulated-dump.sql');
 
+/// Resolves a PostgreSQL client executable (e.g. `psql`) in `POSTGRES_BIN_DIR`, or falls back to the `PATH`.
+String postgresExecutable(String name) {
+  final binDir = env.postgresBinDir;
+  if (binDir == null || binDir.isEmpty) return name;
+  return '$binDir${Platform.pathSeparator}$name${Platform.isWindows ? '.exe' : ''}';
+}
+
 class PostgresDb {
   final log = Logger('PostgresDb');
   final String postgresHost = env.databaseHost ?? 'localhost';
@@ -170,7 +177,7 @@ extension DatabaseExt on PostgresDb {
       postgresDatabaseName,
     ];
     final processResult = await Process.run(
-      'psql',
+      postgresExecutable('psql'),
       args,
       environment: {'PGPASSWORD': dbPW},
       stdoutEncoding: utf8,
@@ -207,7 +214,7 @@ extension DatabaseExt on PostgresDb {
       'public',
     ];
     final process = await Process.run(
-      'pg_dump',
+      postgresExecutable('pg_dump'),
       args,
       environment: {'PGPASSWORD': dbPW},
       stdoutEncoding: utf8,

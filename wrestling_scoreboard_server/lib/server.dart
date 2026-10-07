@@ -20,10 +20,17 @@ import 'package:wrestling_scoreboard_server/services/environment.dart';
 import 'package:wrestling_scoreboard_server/services/postgres_db.dart';
 import 'package:wrestling_scoreboard_server/services/pubspec.dart';
 
-Future<HttpServer> init() async {
-  // Init logger
+bool _isLoggingInitialized = false;
+
+void initLogging() {
+  if (_isLoggingInitialized) return;
+  _isLoggingInitialized = true;
   Logger.root.level = env.logLevel ?? Level.INFO;
   Logger.root.onRecord.listen((record) => print(record.formatted));
+}
+
+Future<HttpServer> init() async {
+  initLogging();
 
   tz.initializeTimeZones();
 
