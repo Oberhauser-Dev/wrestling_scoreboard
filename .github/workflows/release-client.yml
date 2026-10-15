@@ -40,6 +40,12 @@ jobs:
           - os: windows-11-arm
             platform: windows
             build-type: windows
+          - os: windows-latest
+            platform: windows
+            build-type: msix
+          - os: windows-11-arm
+            platform: windows
+            build-type: msix
           - os: ubuntu-latest
             platform: linux
             build-type: debian
@@ -100,6 +106,9 @@ jobs:
           android-keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           android-key-alias: ${{ secrets.ANDROID_KEY_ALIAS }}
           android-key-password: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          # Identity of the Microsoft Store (Partner Center > Product identity)
+          windows-msix-identity-name: ${{ secrets.WINDOWS_STORE_IDENTITY_NAME }}
+          windows-msix-publisher-display-name: ${{ secrets.WINDOWS_STORE_PUBLISHER_DISPLAY_NAME }}
 
   publish-client:
     needs: [ release-client, pre-run ]
