@@ -164,7 +164,7 @@ jobs:
         # Windows powershell does not parse correctly
         shell: bash
       - name: Build
-        uses: oberhauser-dev/flutter-release-action@v0
+        uses: oberhauser-dev/flutter-release-action@dev
         with:
           working-directory: wrestling_scoreboard_client
           dry-run: true
