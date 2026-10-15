@@ -45,6 +45,11 @@ on:
         required: false
         default: false
         type: boolean
+      upload_release_artifacts:
+        description: 'Upload the release files of all builds'
+        required: false
+        default: false
+        type: boolean
   workflow_call:
     inputs:
       flutter_version:
@@ -79,6 +84,10 @@ on:
         required: false
         default: false
         type: boolean
+      upload_release_artifacts:
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   include-jobs:
@@ -96,6 +105,8 @@ jobs:
             ${{ inputs.enable_ios && '{"platform": "ios", "os": "macos-14", "build-type": "ipa"},' || '' }}
             ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-latest", "build-type": "windows"},' || '' }}
             ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-11-arm", "build-type": "windows"},' || '' }}
+            ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-latest", "build-type": "msix"},' || '' }}
+            ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-11-arm", "build-type": "msix"},' || '' }}
             ${{ inputs.enable_linux && '{"platform": "linux", "os": "ubuntu-latest", "build-type": "linux"},' || '' }}
             ${{ inputs.enable_linux && '{"platform": "linux", "os": "ubuntu-24.04-arm", "build-type": "linux"},' || '' }}
             ${{ inputs.enable_macos && '{"platform": "macos", "os": "macos-14", "build-type": "macos"},' || '' }}
@@ -105,7 +116,7 @@ jobs:
 
   build-client:
     needs: include-jobs
-    name: Build Client for ${{ matrix.platform }} on ${{ matrix.os }}
+    name: Build Client as ${{ matrix.build-type }} (${{ matrix.platform }}) on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
@@ -159,6 +170,16 @@ jobs:
             --dart-define=API_URL=https://dev.server.wrestling-scoreboard.oberhauser.dev/api
             --dart-define=WEB_SOCKET_URL=wss://dev.server.wrestling-scoreboard.oberhauser.dev/ws
             --dart-define=WEB_CLIENT_URL=https://oberhauser-dev.github.io/wrestling_scoreboard/#
+      - name: Upload release artifacts
+        # Provide the release files for testing.
+        if: inputs.upload_release_artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          # Upload the single release file without zipping, the artifact is named after the file.
+          path: wrestling_scoreboard_client/build/releases/*
+          archive: false
+          if-no-files-found: error
+          retention-days: 14
       - name: Upload pages artifact
         if: inputs.upload_pages_artifact && matrix.platform == 'web'
         uses: actions/upload-pages-artifact@v3
