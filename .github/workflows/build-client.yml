@@ -173,10 +173,11 @@ jobs:
       - name: Upload release artifacts
         # Provide the release files for testing.
         if: inputs.upload_release_artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: wrestling_scoreboard_client-${{ matrix.build-type }}-${{ matrix.os }}
-          path: wrestling_scoreboard_client/build/releases/
+          # Upload the single release file without zipping, the artifact is named after the file.
+          path: wrestling_scoreboard_client/build/releases/*
+          archive: false
           if-no-files-found: error
           retention-days: 14
       - name: Upload pages artifact
