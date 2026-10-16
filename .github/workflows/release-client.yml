@@ -112,13 +112,10 @@ jobs:
           android-keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           android-key-alias: ${{ secrets.ANDROID_KEY_ALIAS }}
           android-key-password: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          # Optional, otherwise the MSIX installer is signed with a test certificate
-          #windows-certificate-file-base64: ${{ secrets.WINDOWS_CERTIFICATE }}
-          #windows-certificate-password: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
           # Identity of the Microsoft Store (Partner Center > Product identity), the publisher only applies to the store build.
-          #windows-msix-identity-name: ${{ vars.WINDOWS_STORE_IDENTITY_NAME }}
-          #windows-msix-publisher-display-name: ${{ vars.WINDOWS_STORE_PUBLISHER_DISPLAY_NAME }}
-          #windows-msix-publisher: ${{ matrix.build-type == 'msix-store' && vars.WINDOWS_STORE_PUBLISHER || '' }}
+          windows-msix-identity-name: ${{ secrets.WINDOWS_STORE_IDENTITY_NAME }}
+          windows-msix-publisher-display-name: ${{ secrets.WINDOWS_STORE_PUBLISHER_DISPLAY_NAME }}
+          windows-msix-publisher: ${{ matrix.build-type == 'msix-store' && secrets.WINDOWS_STORE_PUBLISHER || '' }}
 
   publish-client:
     needs: [ release-client, pre-run ]
@@ -141,6 +138,9 @@ jobs:
           - os: macos-14
             platform: ios
             publish-distributor: ios-app-store
+          - os: windows-latest
+            platform: windows
+            publish-distributor: windows-ms-store
 
     steps:
       - uses: actions/checkout@v6
@@ -195,6 +195,16 @@ jobs:
           ios-team-id: ${{ secrets.IOS_TEAM_ID }}
           ios-distribution-private-key-base64: ${{ secrets.IOS_DISTRIBUTION_PRIVATE_KEY }}
           ios-distribution-cert-base64: ${{ secrets.IOS_DISTRIBUTION_CERT }}
+          # Windows
+          publish-windows-tenant-id: ${{ secrets.WINDOWS_STORE_TENANT_ID }}
+          publish-windows-client-id: ${{ secrets.WINDOWS_STORE_CLIENT_ID }}
+          publish-windows-client-secret: ${{ secrets.WINDOWS_STORE_CLIENT_SECRET }}
+          publish-windows-seller-id: ${{ secrets.WINDOWS_STORE_SELLER_ID }}
+          publish-windows-product-id: ${{ secrets.WINDOWS_STORE_PRODUCT_ID }}
+          # The packages are taken from the msix-store builds of the release-client job.
+          publish-windows-architectures: amd64,arm64
+          # Optional, publishes to the public (after certification) otherwise
+          publish-windows-flight-id: ${{ secrets.WINDOWS_STORE_FLIGHT_ID }}
           # Web
           publish-web-host: ${{ secrets.WEB_HOST }}
           publish-web-path: ${{ secrets.WEB_PATH }}
