@@ -30,6 +30,11 @@ on:
         required: false
         default: true
         type: boolean
+      enable_windows_store:
+        description: 'Build Windows MSIX for the Microsoft Store'
+        required: false
+        default: false
+        type: boolean
       enable_linux:
         description: 'Build Linux'
         required: false
@@ -72,6 +77,10 @@ on:
         required: false
         default: true
         type: boolean
+      enable_windows_store:
+        required: false
+        default: false
+        type: boolean
       enable_linux:
         required: false
         default: true
@@ -107,6 +116,8 @@ jobs:
             ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-11-arm", "build-type": "windows"},' || '' }}
             ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-latest", "build-type": "msix"},' || '' }}
             ${{ inputs.enable_windows && '{"platform": "windows", "os": "windows-11-arm", "build-type": "msix"},' || '' }}
+            ${{ inputs.enable_windows_store && '{"platform": "windows", "os": "windows-latest", "build-type": "msix-store"},' || '' }}
+            ${{ inputs.enable_windows_store && '{"platform": "windows", "os": "windows-11-arm", "build-type": "msix-store"},' || '' }}
             ${{ inputs.enable_linux && '{"platform": "linux", "os": "ubuntu-latest", "build-type": "linux"},' || '' }}
             ${{ inputs.enable_linux && '{"platform": "linux", "os": "ubuntu-24.04-arm", "build-type": "linux"},' || '' }}
             ${{ inputs.enable_macos && '{"platform": "macos", "os": "macos-14", "build-type": "macos"},' || '' }}
@@ -161,6 +172,10 @@ jobs:
           build-metadata: nightly.${{ env.GITHUB_SHA_SHORT }}
           tag: ${{ github.ref }}
           build-type: ${{ matrix.build-type }}
+          # Identity of the Microsoft Store (Partner Center > Product identity), the publisher only applies to the store build.
+          windows-msix-identity-name: ${{ secrets.WINDOWS_STORE_IDENTITY_NAME }}
+          windows-msix-publisher-display-name: ${{ secrets.WINDOWS_STORE_PUBLISHER_DISPLAY_NAME }}
+          windows-msix-publisher: ${{ matrix.build-type == 'msix-store' && secrets.WINDOWS_STORE_PUBLISHER || '' }}
           token: ${{ github.token }}
           # Android is not configured to create `--release` builds without signing.
           build-args: |-
