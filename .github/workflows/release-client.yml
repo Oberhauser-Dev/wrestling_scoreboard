@@ -46,6 +46,12 @@ jobs:
           - os: windows-11-arm
             platform: windows
             build-type: msix
+          - os: windows-latest
+            platform: windows
+            build-type: msix-store
+          - os: windows-11-arm
+            platform: windows
+            build-type: msix-store
           - os: ubuntu-latest
             platform: linux
             build-type: debian
@@ -109,6 +115,10 @@ jobs:
           # Optional, otherwise the MSIX installer is signed with a test certificate
           #windows-certificate-file-base64: ${{ secrets.WINDOWS_CERTIFICATE }}
           #windows-certificate-password: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+          # Identity of the Microsoft Store (Partner Center > Product identity), the publisher only applies to the store build.
+          #windows-msix-identity-name: ${{ vars.WINDOWS_STORE_IDENTITY_NAME }}
+          #windows-msix-publisher-display-name: ${{ vars.WINDOWS_STORE_PUBLISHER_DISPLAY_NAME }}
+          #windows-msix-publisher: ${{ matrix.build-type == 'msix-store' && vars.WINDOWS_STORE_PUBLISHER || '' }}
 
   publish-client:
     needs: [ release-client, pre-run ]
