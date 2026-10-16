@@ -99,8 +99,6 @@ flutter:
 # Windows installer, built via `flutter_release build msix`, see https://pub.dev/packages/msix
 msix_config:
   display_name: Wrestling Scoreboard
-  publisher_display_name: Oberhauser Development
-  identity_name: dev.oberhauser.wrestling-scoreboard-client
   logo_path: assets/images/icons/launcher.png
   languages: en-us, de-de
   capabilities: internetClient, privateNetworkClientServer
