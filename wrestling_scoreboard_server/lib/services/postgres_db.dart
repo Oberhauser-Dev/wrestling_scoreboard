@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,7 +11,9 @@ import 'package:wrestling_scoreboard_server/services/base_dir.dart';
 import 'package:wrestling_scoreboard_server/services/environment.dart';
 
 const _isReleaseMode = bool.fromEnvironment('dart.vm.product');
+
 String get definitionDatabasePath => resolvePath('database/dump/wrestling_scoreboard-definition-dump.sql');
+
 String get prepopulatedDatabasePath => resolvePath('database/dump/wrestling_scoreboard-prepopulated-dump.sql');
 
 /// Resolves a PostgreSQL client executable (e.g. `psql`) in `POSTGRES_BIN_DIR`, or falls back to the `PATH`.
@@ -49,7 +52,8 @@ class PostgresDb {
   PostgresDb._internal();
 
   Future<void> open() async {
-    _connection ??= await psql.Connection.open(
+    if (_connection != null) return;
+    final connection = await psql.Connection.open(
       psql.Endpoint(
         host: postgresHost,
         port: postgresPort,
@@ -64,11 +68,48 @@ class PostgresDb {
         timeZone: 'UTC',
       ),
     );
+    if (_connection != null) {
+      // Another caller opened a connection concurrently.
+      await connection.close();
+      return;
+    }
+    _connection = connection;
+    unawaited(connection.closed.catchError((_) {}).then((_) => _onConnectionClosed(connection)));
   }
 
   Future<void> close() async {
-    await connection.close();
+    final connection = _connection;
+    // Unset before closing, so the close is not treated as a connection loss.
     _connection = null;
+    await connection?.close();
+  }
+
+  /// Reconnects, if the connection was closed unexpectedly, e.g. by a database restart or network failure.
+  Future<void> _onConnectionClosed(psql.Connection connection) async {
+    // Closed intentionally via [close] or already replaced.
+    if (_connection != connection) return;
+    _connection = null;
+    log.warning('Database connection was closed unexpectedly. Reconnecting...');
+
+    var delay = const Duration(seconds: 1);
+    while (_connection == null) {
+      try {
+        await open();
+        log.info('Reconnected to database.');
+      } catch (e, st) {
+        log.severe('Reconnecting to database failed. Retrying in ${delay.inSeconds}s.', e, st);
+        await Future.delayed(delay);
+        // Retry at least once a day.
+        if (delay < const Duration(days: 1)) delay *= 2;
+      }
+    }
+
+    try {
+      await _prepare();
+    } catch (e, st) {
+      // Schema may not be ready yet (e.g. during migration); the regular prepare will follow.
+      log.warning('Re-preparing statements after reconnect failed.', e, st);
+    }
   }
 }
 
