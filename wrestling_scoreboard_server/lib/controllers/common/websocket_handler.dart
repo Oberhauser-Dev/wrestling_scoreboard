@@ -333,7 +333,7 @@ void broadcastDependantsRaw<T extends DataObject>(Map<String, dynamic> single) a
     final teamMatchController = TeamMatchController();
 
     final homeTeamId = (await EntityController.query(
-      await TeamLineupController.teamIdStmt,
+      TeamLineupController().teamIdStmt,
       substitutionValues: {'id': single['home_id']},
     ))['team_id'];
     final homeMatches = await teamMatchController.getManyRawFromQuery(
@@ -348,7 +348,7 @@ void broadcastDependantsRaw<T extends DataObject>(Map<String, dynamic> single) a
     );
 
     final guestTeamId = (await EntityController.query(
-      await TeamLineupController.teamIdStmt,
+      TeamLineupController().teamIdStmt,
       substitutionValues: {'id': single['guest_id']},
     ))['team_id'];
     final guestMatches = await teamMatchController.getManyRawFromQuery(
