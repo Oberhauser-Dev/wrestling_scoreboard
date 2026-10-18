@@ -4,6 +4,7 @@ import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/tooltip.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
@@ -147,7 +148,7 @@ class _ActionControl extends StatelessWidget {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           minimumSize: Size.square(isOnMobile ? 44 : 28),
           visualDensity: VisualDensity.compact,
-          foregroundColor: Colors.white,
+          foregroundColor: ThemedContainer.textColorOn(color),
           backgroundColor: color,
           side: BorderSide(color: color.shade900, width: 0.5),
           padding: EdgeInsets.zero,

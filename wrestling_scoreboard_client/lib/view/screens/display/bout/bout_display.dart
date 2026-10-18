@@ -779,7 +779,7 @@ class BoutState extends ConsumerState<BoutScreen> {
                                   return TimeDisplay(
                                     showDeciSecond: true,
                                     mainStopwatch.stopwatch,
-                                    isBreak ? Colors.orange : Theme.of(context).colorScheme.onSurface,
+                                    color: isBreak ? Colors.orange : Theme.of(context).colorScheme.onSurface,
                                     fontSize: 128,
                                     maxDuration: isBreak ? boutConfig.breakDuration : boutConfig.totalPeriodDuration,
                                   );
@@ -989,7 +989,10 @@ class _ParticipantDisplay extends StatelessWidget {
           classificationPoints.toString(),
           fontSize: 54,
           minFontSize: 30,
-          color: pStatus?.classificationPoints == null ? Colors.white38 : null,
+          // Predicted points are faded.
+          color: pStatus?.classificationPoints == null
+              ? ThemedContainer.textColorOn(color.shade800).withValues(alpha: 0.38)
+              : null,
         ),
       ),
     );
@@ -1006,6 +1009,8 @@ class _NameDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
+    // The text color on the background of the participant, as set by the surrounding ThemedContainer.
+    final textColor = DefaultTextStyle.of(context).style.color!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -1019,7 +1024,7 @@ class _NameDisplay extends StatelessWidget {
               children: [
                 ScaledText(
                   pStatus?.prename ?? localizations.participantVacant,
-                  color: pStatus == null ? Colors.white30 : Colors.white,
+                  color: pStatus == null ? textColor.withValues(alpha: 0.3) : null,
                   fontSize: 30,
                   minFontSize: 20,
                   textAlign: TextAlign.center,
@@ -1027,7 +1032,6 @@ class _NameDisplay extends StatelessWidget {
                 if (pStatus != null)
                   ScaledText(
                     pStatus!.surname,
-                    color: Colors.white,
                     fontSize: 40,
                     minFontSize: 20,
                     textAlign: TextAlign.center,
@@ -1038,7 +1042,13 @@ class _NameDisplay extends StatelessWidget {
           ),
         ),
         if (weight != null)
-          Center(child: ScaledText('${weight!.toStringAsFixed(1)} $weightUnit', color: Colors.white70, fontSize: 22)),
+          Center(
+            child: ScaledText(
+              '${weight!.toStringAsFixed(1)} $weightUnit',
+              color: textColor.withValues(alpha: 0.7),
+              fontSize: 22,
+            ),
+          ),
       ],
     );
   }

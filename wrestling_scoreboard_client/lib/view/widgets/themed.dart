@@ -9,12 +9,13 @@ class ThemedContainer extends StatelessWidget {
 
   const ThemedContainer({required this.child, this.height, this.color, this.padding, this.margin, super.key});
 
+  /// The text color on the background [color], which is either black or white depending on its brightness.
+  static Color textColorOn(Color color) =>
+      ThemeData.estimateBrightnessForColor(color) == Brightness.light ? Colors.black : Colors.white;
+
   @override
   Widget build(BuildContext context) {
-    final textColor =
-        ThemeData.estimateBrightnessForColor(color ?? Theme.of(context).colorScheme.surface) == Brightness.light
-        ? Colors.black
-        : Colors.white;
+    final textColor = textColorOn(color ?? Theme.of(context).colorScheme.surface);
     return Container(
       color: color,
       padding: padding,

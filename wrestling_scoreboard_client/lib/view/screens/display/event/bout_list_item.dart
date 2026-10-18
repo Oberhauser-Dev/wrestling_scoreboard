@@ -44,8 +44,10 @@ class BoutListItem extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: CircularImage(imageUri: pStatus!.membership.person.imageUri!, size: width / 35, borderWidth: 1),
           );
+    final color = role.color(context);
+    final textColor = ThemedContainer.textColorOn(color);
     return ThemedContainer(
-      color: role.color(context),
+      color: color,
       child: Row(
         children: [
           if (avatar != null && role == BoutRole.red) avatar,
@@ -56,7 +58,7 @@ class BoutListItem extends ConsumerWidget {
                 children: [
                   ScaledText(
                     pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.prename,
-                    color: pStatus == null ? Colors.white.disabled() : Colors.white,
+                    color: pStatus == null ? textColor.disabled() : null,
                     fontSize: 17,
                     minFontSize: 14,
                     textAlign: TextAlign.center,
@@ -64,7 +66,6 @@ class BoutListItem extends ConsumerWidget {
                   if (pStatus != null)
                     ScaledText(
                       ' ${pStatus.membership.person.surname}',
-                      color: Colors.white,
                       fontSize: 17,
                       minFontSize: 14,
                       textAlign: TextAlign.center,
