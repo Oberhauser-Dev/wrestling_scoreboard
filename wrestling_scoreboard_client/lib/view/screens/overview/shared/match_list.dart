@@ -60,7 +60,7 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
                         text: match.home.team.name,
                         style: filterObject is! Team || match.home.team == filterObject
                             ? TextStyle(
-                                color: context.roleColors.red,
+                                color: context.roleColors.redText,
                                 fontWeight: filterObject is! Team ? null : FontWeight.bold,
                               )
                             : null,
@@ -70,7 +70,7 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
                         text: match.guest.team.name,
                         style: filterObject is! Team || match.guest.team == filterObject
                             ? TextStyle(
-                                color: context.roleColors.blue,
+                                color: context.roleColors.blueText,
                                 fontWeight: filterObject is! Team ? null : FontWeight.bold,
                               )
                             : null,

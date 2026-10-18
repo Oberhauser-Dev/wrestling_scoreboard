@@ -58,6 +58,8 @@ dependencies:
   flutter_svg: ^2.2.2
   flutter_svg_provider: ^1.0.7
   flex_color_picker: ^3.8.0
+  # Version is pinned by the Flutter SDK.
+  material_color_utilities: any
 
 dev_dependencies:
   flutter_test:
