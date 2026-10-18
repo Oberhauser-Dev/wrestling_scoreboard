@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/themed.dart';
 
 /// Lets the user select a base color, from which the shades are derived.
 /// A null color represents the [defaultColor].
@@ -10,7 +11,7 @@ import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 Future<void> showColorDialog({
   required BuildContext context,
   required Color? initialColor,
-  required MaterialColor defaultColor,
+  required Color defaultColor,
   required Map<ColorSwatch<Object>, String> swatches,
   Widget? title,
   required void Function(Color? color) onSelect,
@@ -25,7 +26,7 @@ Future<void> showColorDialog({
 
 class ColorDialog extends StatefulWidget {
   final Color? initialColor;
-  final MaterialColor defaultColor;
+  final Color defaultColor;
 
   /// The color swatches with their names, whose shades can be selected.
   final Map<ColorSwatch<Object>, String> swatches;
@@ -55,7 +56,7 @@ class _ColorDialogState extends State<ColorDialog> {
   @override
   Widget build(BuildContext context) {
     final localizations = context.l10n;
-    final materialColor = _color == null ? widget.defaultColor : createMaterialColor(_color!);
+    final materialColor = RoleColors.swatchOf(_color ?? widget.defaultColor);
     return OkCancelDialog<(Color?,)>(
       title: widget.title,
       getResult: () => (_color,),
@@ -100,19 +101,16 @@ class _ColorDialogState extends State<ColorDialog> {
           ),
           Text(localizations.preview),
           const SizedBox(height: 8),
-          // Preview the derived shades with white text, as used on the scoreboard.
+          // Preview the derived shades with their text color, as used on the scoreboard.
           Row(
             children: [500, 800, 900]
                 .map(
                   (shade) => Expanded(
-                    child: Container(
+                    child: ThemedContainer(
                       color: materialColor[shade],
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       child: const Center(
-                        child: Text(
-                          '12',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
+                        child: Text('12', style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ),

@@ -72,7 +72,9 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
     }
     final (red, blue) = roleBaseColors;
     theme = theme.copyWith(
-      extensions: [RoleColors.fromBase(red: red, blue: blue, background: theme.colorScheme.surface)],
+      extensions: [
+        RoleColors.fromBase(red: red, blue: blue, brightness: brightness, background: theme.colorScheme.surface),
+      ],
     );
     if (fontFamily != null) {
       return theme.copyWith(textTheme: GoogleFonts.getTextTheme(fontFamily, theme.textTheme));

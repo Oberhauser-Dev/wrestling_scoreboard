@@ -17,7 +17,8 @@ const MaterialColor white = MaterialColor(0xFFFFFFFF, <int, Color>{
 });
 
 /// Creates a [MaterialColor] with [color] as shade 500, lightening the lower and darkening the higher shades.
-MaterialColor createMaterialColor(Color color) {
+/// If [mirrored], the higher shades are lightened and the lower shades darkened instead.
+MaterialColor createMaterialColor(Color color, {bool mirrored = false}) {
   final strengths = <double>[.05];
   final Map<int, Color> swatch = {};
   final double r = color.r, g = color.g, b = color.b;
@@ -26,7 +27,7 @@ MaterialColor createMaterialColor(Color color) {
     strengths.add(0.1 * i);
   }
   for (final strength in strengths) {
-    final double ds = 0.5 - strength;
+    final double ds = mirrored ? strength - 0.5 : 0.5 - strength;
     swatch[(strength * 1000).round()] = Color.from(
       red: r + ((ds < 0 ? r : (1 - r)) * ds),
       green: g + ((ds < 0 ? g : (1 - g)) * ds),
@@ -87,11 +88,38 @@ Color contrastingColor(Color color, Color background, {double minContrast = minT
 /// The colors of the red and blue corner (and home and guest team) in the UI.
 /// Reports are not affected, as they use their own colors.
 class RoleColors extends ThemeExtension<RoleColors> {
-  static const defaultRed = Colors.red;
-  static const defaultBlue = Colors.blue;
+  /// The default base color of the red corner in the theme with the [brightness], both with white text:
+  /// a vivid red with the highest chroma and a contrast of 5.0 in the light theme,
+  /// and the darker Material red 800 with a contrast of more than 5.5 in the dark theme.
+  static Color defaultRedOf(Brightness brightness) =>
+      brightness == Brightness.light ? const Color(0xFFDF000D) : const Color(0xFFC62828);
 
-  /// Warm color swatches to select the base color of the red corner from, with their names.
-  static final Map<ColorSwatch<Object>, String> redSwatches = {
+  /// The default base color of the blue corner in the theme with the [brightness], both with white text:
+  /// a vivid blue with the highest chroma and a contrast of 5.0 in the light theme,
+  /// and the darker Material blue 800 with a contrast of more than 5.5 in the dark theme.
+  static Color defaultBlueOf(Brightness brightness) =>
+      brightness == Brightness.light ? const Color(0xFF0072BE) : const Color(0xFF1565C0);
+
+  /// Warm color swatches to select the base color of the red corner from in the theme with the [brightness],
+  /// with their names. The default color of the theme comes first.
+  static Map<ColorSwatch<Object>, String> redSwatchesOf(Brightness brightness) => _redSwatchesOf[brightness]!;
+
+  /// Cold color swatches to select the base color of the blue corner from in the theme with the [brightness],
+  /// with their names. The default color of the theme comes first.
+  static Map<ColorSwatch<Object>, String> blueSwatchesOf(Brightness brightness) => _blueSwatchesOf[brightness]!;
+
+  // Created once, as the color picker resets, when it gets other swatches.
+  static final Map<Brightness, Map<ColorSwatch<Object>, String>> _redSwatchesOf = {
+    for (final brightness in Brightness.values)
+      brightness: {swatchOf(defaultRedOf(brightness)): 'Default red', ..._redSwatches},
+  };
+
+  static final Map<Brightness, Map<ColorSwatch<Object>, String>> _blueSwatchesOf = {
+    for (final brightness in Brightness.values)
+      brightness: {swatchOf(defaultBlueOf(brightness)): 'Default blue', ..._blueSwatches},
+  };
+
+  static final Map<ColorSwatch<Object>, String> _redSwatches = {
     Colors.red: 'Red',
     createMaterialColor(const Color(0xFFFF0000)): 'Pure red',
     Colors.redAccent: 'Red accent',
@@ -102,8 +130,7 @@ class RoleColors extends ThemeExtension<RoleColors> {
     Colors.yellow: 'Yellow',
   };
 
-  /// Cold color swatches to select the base color of the blue corner from, with their names.
-  static final Map<ColorSwatch<Object>, String> blueSwatches = {
+  static final Map<ColorSwatch<Object>, String> _blueSwatches = {
     Colors.blue: 'Blue',
     createMaterialColor(const Color(0xFF0000FF)): 'Pure blue',
     Colors.blueAccent: 'Blue accent',
@@ -115,6 +142,11 @@ class RoleColors extends ThemeExtension<RoleColors> {
     Colors.green: 'Green',
   };
 
+  /// Creates the shades of a base [color]. The emphasized (higher) shades of a light color are lighter,
+  /// so they keep the dark text, while those of a dark color are darker.
+  static MaterialColor swatchOf(Color color) =>
+      createMaterialColor(color, mirrored: ThemeData.estimateBrightnessForColor(color) == Brightness.light);
+
   final MaterialColor red;
   final MaterialColor blue;
 
@@ -124,23 +156,22 @@ class RoleColors extends ThemeExtension<RoleColors> {
   /// The color of blue text on the theme background, e.g. a name of the blue corner.
   final Color blueText;
 
-  const RoleColors({
-    this.red = defaultRed,
-    this.blue = defaultBlue,
-    this.redText = defaultRed,
-    this.blueText = defaultBlue,
-  });
+  const RoleColors({required this.red, required this.blue, required this.redText, required this.blueText});
 
-  /// Creates the role colors from the base colors, which is the default color if null.
+  /// Creates the role colors of the theme with the [brightness] from the base colors,
+  /// which are the default colors if null.
   /// The text colors are derived from the base colors, so they are readable on the [background], see [textColorOf].
-  factory RoleColors.fromBase({Color? red, Color? blue, required Color background}) {
-    final redSwatch = red == null ? defaultRed : createMaterialColor(red);
-    final blueSwatch = blue == null ? defaultBlue : createMaterialColor(blue);
+  /// In the light theme, they get the highest possible chroma, as the usually pale base colors
+  /// would otherwise result in dull dark text colors.
+  factory RoleColors.fromBase({Color? red, Color? blue, required Brightness brightness, required Color background}) {
+    final redSwatch = swatchOf(red ?? defaultRedOf(brightness));
+    final blueSwatch = swatchOf(blue ?? defaultBlueOf(brightness));
+    final maxChroma = brightness == Brightness.light;
     return RoleColors(
       red: redSwatch,
       blue: blueSwatch,
-      redText: textColorOf(redSwatch, background),
-      blueText: textColorOf(blueSwatch, background),
+      redText: textColorOf(redSwatch, background, maxChroma: maxChroma),
+      blueText: textColorOf(blueSwatch, background, maxChroma: maxChroma),
     );
   }
 
@@ -163,5 +194,9 @@ class RoleColors extends ThemeExtension<RoleColors> {
 }
 
 extension RoleColorsContext on BuildContext {
-  RoleColors get roleColors => Theme.of(this).extension<RoleColors>() ?? const RoleColors();
+  RoleColors get roleColors {
+    final theme = Theme.of(this);
+    return theme.extension<RoleColors>() ??
+        RoleColors.fromBase(brightness: theme.brightness, background: theme.colorScheme.surface);
+  }
 }
