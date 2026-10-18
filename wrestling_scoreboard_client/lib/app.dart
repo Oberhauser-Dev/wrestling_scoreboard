@@ -56,7 +56,8 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
 
   static MaterialColor primaryColor = createMaterialColor(Colors.blue); // const Color.fromARGB(255, 180, 0, 10)
 
-  ThemeData _buildTheme(Brightness brightness, String? fontFamily, RoleColors roleColors) {
+  /// Builds the theme with the base colors of the red and blue corner, which are the default colors if null.
+  ThemeData _buildTheme(Brightness brightness, String? fontFamily, (Color?, Color?) roleBaseColors) {
     ThemeData theme;
     if (brightness == Brightness.light) {
       theme = ThemeData.light();
@@ -69,15 +70,18 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
         colorScheme: theme.colorScheme.copyWith(primary: primaryColor, secondary: primaryColor.shade300),
       );
     }
-    theme = theme.copyWith(extensions: [roleColors]);
+    final (red, blue) = roleBaseColors;
+    theme = theme.copyWith(
+      extensions: [RoleColors.fromBase(red: red, blue: blue, background: theme.colorScheme.surface)],
+    );
     if (fontFamily != null) {
       return theme.copyWith(textTheme: GoogleFonts.getTextTheme(fontFamily, theme.textTheme));
     }
     return theme;
   }
 
-  /// Loads the role colors for the light and dark theme.
-  Future<Map<Brightness, RoleColors>> _loadRoleColors() async {
+  /// Loads the base colors of the red and blue corner for the light and dark theme.
+  Future<Map<Brightness, (Color?, Color?)>> _loadRoleBaseColors() async {
     // Watch all providers synchronously, before awaiting any of them.
     final futures = {
       for (final brightness in Brightness.values)
@@ -87,8 +91,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
         ),
     };
     return {
-      for (final MapEntry(key: brightness, value: (red, blue)) in futures.entries)
-        brightness: RoleColors.fromBase(red: await red, blue: await blue),
+      for (final MapEntry(key: brightness, value: (red, blue)) in futures.entries) brightness: (await red, await blue),
     };
   }
 
@@ -103,15 +106,15 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
             return LoadingBuilder<String?>(
               future: ref.watch(fontFamilyProvider),
               builder: (context, fontFamily) {
-                return LoadingBuilder<Map<Brightness, RoleColors>>(
-                  future: _loadRoleColors(),
-                  builder: (context, roleColors) {
+                return LoadingBuilder<Map<Brightness, (Color?, Color?)>>(
+                  future: _loadRoleBaseColors(),
+                  builder: (context, roleBaseColors) {
                     return MaterialApp.router(
                       scaffoldMessengerKey: scaffoldMessengerKey,
                       debugShowCheckedModeBanner: false,
                       title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
-                      theme: _buildTheme(Brightness.light, fontFamily, roleColors[Brightness.light]!),
-                      darkTheme: _buildTheme(Brightness.dark, fontFamily, roleColors[Brightness.dark]!),
+                      theme: _buildTheme(Brightness.light, fontFamily, roleBaseColors[Brightness.light]!),
+                      darkTheme: _buildTheme(Brightness.dark, fontFamily, roleBaseColors[Brightness.dark]!),
                       themeMode: themeMode,
                       localizationsDelegates: const [
                         AppLocalizations.delegate,
