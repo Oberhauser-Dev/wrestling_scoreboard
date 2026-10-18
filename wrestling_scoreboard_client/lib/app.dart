@@ -23,6 +23,7 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/routes/router.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
+import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/package_info.dart';
@@ -53,30 +54,9 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
     AudioCache.instance = AudioCache(prefix: '');
   }
 
-  static MaterialColor primaryColor = _createMaterialColor(Colors.blue); // const Color.fromARGB(255, 180, 0, 10)
+  static MaterialColor primaryColor = createMaterialColor(Colors.blue); // const Color.fromARGB(255, 180, 0, 10)
 
-  static MaterialColor _createMaterialColor(Color color) {
-    final strengths = <double>[.05];
-    final Map<int, Color> swatch = {};
-    final double r = color.r, g = color.g, b = color.b;
-
-    for (int i = 1; i < 10; i++) {
-      strengths.add(0.1 * i);
-    }
-    for (final strength in strengths) {
-      final double ds = 0.5 - strength;
-      swatch[(strength * 1000).round()] = Color.from(
-        red: r + ((ds < 0 ? r : (1 - r)) * ds),
-        green: g + ((ds < 0 ? g : (1 - g)) * ds),
-        blue: b + ((ds < 0 ? b : (1 - b)) * ds),
-        alpha: 1,
-      );
-    }
-    // ignore: deprecated_member_use
-    return MaterialColor(color.value, swatch);
-  }
-
-  ThemeData _buildTheme(Brightness brightness, String? fontFamily) {
+  ThemeData _buildTheme(Brightness brightness, String? fontFamily, RoleColors roleColors) {
     ThemeData theme;
     if (brightness == Brightness.light) {
       theme = ThemeData.light();
@@ -89,10 +69,27 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
         colorScheme: theme.colorScheme.copyWith(primary: primaryColor, secondary: primaryColor.shade300),
       );
     }
+    theme = theme.copyWith(extensions: [roleColors]);
     if (fontFamily != null) {
       return theme.copyWith(textTheme: GoogleFonts.getTextTheme(fontFamily, theme.textTheme));
     }
     return theme;
+  }
+
+  /// Loads the role colors for the light and dark theme.
+  Future<Map<Brightness, RoleColors>> _loadRoleColors() async {
+    // Watch all providers synchronously, before awaiting any of them.
+    final futures = {
+      for (final brightness in Brightness.values)
+        brightness: (
+          ref.watch(roleColorProvider(BoutRole.red, brightness)),
+          ref.watch(roleColorProvider(BoutRole.blue, brightness)),
+        ),
+    };
+    return {
+      for (final MapEntry(key: brightness, value: (red, blue)) in futures.entries)
+        brightness: RoleColors.fromBase(red: await red, blue: await blue),
+    };
   }
 
   @override
@@ -106,24 +103,29 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
             return LoadingBuilder<String?>(
               future: ref.watch(fontFamilyProvider),
               builder: (context, fontFamily) {
-                return MaterialApp.router(
-                  scaffoldMessengerKey: scaffoldMessengerKey,
-                  debugShowCheckedModeBanner: false,
-                  title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
-                  theme: _buildTheme(Brightness.light, fontFamily),
-                  darkTheme: _buildTheme(Brightness.dark, fontFamily),
-                  themeMode: themeMode,
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                    GlobalMaterialDurationPickerLocalizations.delegate,
-                  ],
-                  supportedLocales: Preferences.supportedLanguages,
-                  builder: (context, child) => GlobalWidget(child: child ?? const CircularProgressIndicator()),
-                  locale: locale,
-                  routerConfig: routerConfig,
+                return LoadingBuilder<Map<Brightness, RoleColors>>(
+                  future: _loadRoleColors(),
+                  builder: (context, roleColors) {
+                    return MaterialApp.router(
+                      scaffoldMessengerKey: scaffoldMessengerKey,
+                      debugShowCheckedModeBanner: false,
+                      title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
+                      theme: _buildTheme(Brightness.light, fontFamily, roleColors[Brightness.light]!),
+                      darkTheme: _buildTheme(Brightness.dark, fontFamily, roleColors[Brightness.dark]!),
+                      themeMode: themeMode,
+                      localizationsDelegates: const [
+                        AppLocalizations.delegate,
+                        GlobalMaterialLocalizations.delegate,
+                        GlobalWidgetsLocalizations.delegate,
+                        GlobalCupertinoLocalizations.delegate,
+                        GlobalMaterialDurationPickerLocalizations.delegate,
+                      ],
+                      supportedLocales: Preferences.supportedLanguages,
+                      builder: (context, child) => GlobalWidget(child: child ?? const CircularProgressIndicator()),
+                      locale: locale,
+                      routerConfig: routerConfig,
+                    );
+                  },
                 );
               },
             );

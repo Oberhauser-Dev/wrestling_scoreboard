@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
+import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
@@ -58,14 +59,20 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
                       TextSpan(
                         text: match.home.team.name,
                         style: filterObject is! Team || match.home.team == filterObject
-                            ? TextStyle(color: Colors.red, fontWeight: filterObject is! Team ? null : FontWeight.bold)
+                            ? TextStyle(
+                                color: context.roleColors.red,
+                                fontWeight: filterObject is! Team ? null : FontWeight.bold,
+                              )
                             : null,
                       ),
                       const TextSpan(text: ' - '),
                       TextSpan(
                         text: match.guest.team.name,
                         style: filterObject is! Team || match.guest.team == filterObject
-                            ? TextStyle(color: Colors.blue, fontWeight: filterObject is! Team ? null : FontWeight.bold)
+                            ? TextStyle(
+                                color: context.roleColors.blue,
+                                fontWeight: filterObject is! Team ? null : FontWeight.bold,
+                              )
                             : null,
                       ),
                       if (match.home.classificationPoints != null && match.guest.classificationPoints != null)

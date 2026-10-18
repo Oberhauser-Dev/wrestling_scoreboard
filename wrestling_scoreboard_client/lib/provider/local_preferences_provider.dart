@@ -71,6 +71,22 @@ class FontFamilyNotifier extends _$FontFamilyNotifier {
   }
 }
 
+/// The base color of the [role] in the light or dark theme.
+/// Null value represents the default color of the [role].
+@Riverpod(keepAlive: true)
+class RoleColorNotifier extends _$RoleColorNotifier {
+  @override
+  Raw<Future<Color?>> build(BoutRole role, Brightness brightness) async {
+    final colorValue = await Preferences.getInt(Preferences.keyRoleColor(role, brightness));
+    return colorValue == null ? null : Color(colorValue);
+  }
+
+  Future<void> setState(Color? val) async {
+    await Preferences.setInt(Preferences.keyRoleColor(role, brightness), val?.toARGB32());
+    state = Future.value(val);
+  }
+}
+
 @Riverpod(keepAlive: true)
 class WebSocketUrlNotifier extends _$WebSocketUrlNotifier {
   @override

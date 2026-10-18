@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
@@ -26,7 +27,7 @@ class BoutActionControls extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = context.l10n;
     final bool isRed = role == BoutRole.red;
-    final MaterialColor color = isRed ? Colors.red : Colors.blue;
+    final MaterialColor color = role.color(context);
     void Function()? prepareCallback(Intent intentRed, Intent intentBlue) {
       return callback == null ? null : () => callback!(isRed ? intentRed : intentBlue);
     }

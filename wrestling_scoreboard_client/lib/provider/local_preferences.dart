@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wrestling_scoreboard_common/common.dart';
 
 class Preferences {
   static const keyLocale = 'locale';
@@ -22,6 +23,9 @@ class Preferences {
   static const keyTeamMatchChronologicalSort = 'team-match-chronological-sort';
 
   static const keyFontFamily = 'font-family';
+
+  /// Base color of the red or blue corner for the light or dark theme as ARGB integer, e.g. `red-color-dark`.
+  static String keyRoleColor(BoutRole role, Brightness brightness) => '${role.name}-color-${brightness.name}';
   static const keyFavorites = 'favorites';
   static const keyOrganizationAuth = 'org-auth';
   static const keyJwtToken = 'jwt';

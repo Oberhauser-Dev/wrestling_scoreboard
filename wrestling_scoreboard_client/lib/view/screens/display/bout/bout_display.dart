@@ -848,7 +848,7 @@ class _ParticipantDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = role.color();
+    final color = role.color(context);
     return ThemedContainer(
       color: color,
       child: IntrinsicHeight(

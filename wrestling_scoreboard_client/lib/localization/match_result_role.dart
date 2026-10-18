@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 extension MatchResultRoleLocalization on MatchResultRole {
-  MaterialColor color() {
+  MaterialColor color(BuildContext context) {
     return switch (this) {
-      MatchResultRole.home => Colors.red,
-      MatchResultRole.guest => Colors.blue,
+      MatchResultRole.home => context.roleColors.red,
+      MatchResultRole.guest => context.roleColors.blue,
       MatchResultRole.tie => Colors.grey,
     };
   }

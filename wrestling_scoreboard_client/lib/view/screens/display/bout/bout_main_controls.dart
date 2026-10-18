@@ -172,7 +172,7 @@ class _ResultDropDown extends ConsumerWidget {
         final AthleteBoutState? pStatus = role == BoutRole.red ? bout.r : bout.b;
         final AthleteBoutState? pStatusOpponent = role == BoutRole.blue ? bout.r : bout.b;
         return ThemedContainer(
-          color: role == bout.winnerRole ? role.color() : null,
+          color: role == bout.winnerRole ? role.color(context) : null,
           child: ManyConsumer<BoutAction, Bout>(
             filterObject: bout,
             builder: (context, actions) {

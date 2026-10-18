@@ -432,5 +432,11 @@
   "genderMale": "Male",
   "genderFemale": "Female",
   "genderTransgender": "Diverse",
-  "nationality": "Nationality"
+  "nationality": "Nationality",
+  "redColor": "Red color",
+  "blueColor": "Blue color",
+  "preview": "Preview",
+  "colorPresets": "Presets",
+  "colorShade": "Shade",
+  "customColor": "Custom"
 }

@@ -45,7 +45,7 @@ class BoutListItem extends ConsumerWidget {
             child: CircularImage(imageUri: pStatus!.membership.person.imageUri!, size: width / 35, borderWidth: 1),
           );
     return ThemedContainer(
-      color: role.color(),
+      color: role.color(context),
       child: Row(
         children: [
           if (avatar != null && role == BoutRole.red) avatar,
@@ -160,7 +160,13 @@ class SmallBoutStateDisplay extends ConsumerWidget {
             children: [
               Expanded(
                 flex: 50,
-                child: displayParticipantState(pState: bout.r, role: BoutRole.red, bout: bout, actions: actions),
+                child: _displayParticipantState(
+                  pState: bout.r,
+                  role: BoutRole.red,
+                  bout: bout,
+                  actions: actions,
+                  context: context,
+                ),
               ),
               Expanded(
                 flex: 100,
@@ -169,7 +175,7 @@ class SmallBoutStateDisplay extends ConsumerWidget {
                     Expanded(
                       flex: 70,
                       child: ThemedContainer(
-                        color: bout.winnerRole?.color().shade800,
+                        color: bout.winnerRole?.color(context).shade800,
                         child: Center(child: ScaledText(bout.result?.abbreviation(context) ?? '', fontSize: 12)),
                       ),
                     ),
@@ -196,7 +202,13 @@ class SmallBoutStateDisplay extends ConsumerWidget {
               ),
               Expanded(
                 flex: 50,
-                child: displayParticipantState(pState: bout.b, role: BoutRole.blue, bout: bout, actions: actions),
+                child: _displayParticipantState(
+                  pState: bout.b,
+                  role: BoutRole.blue,
+                  bout: bout,
+                  actions: actions,
+                  context: context,
+                ),
               ),
             ],
           ),
@@ -205,13 +217,14 @@ class SmallBoutStateDisplay extends ConsumerWidget {
     );
   }
 
-  Widget displayParticipantState({
+  Widget _displayParticipantState({
     AthleteBoutState? pState,
     required Bout bout,
     required BoutRole role,
     required List<BoutAction> actions,
+    required BuildContext context,
   }) {
-    final color = (role == bout.winnerRole) ? role.color().shade800 : null;
+    final color = (role == bout.winnerRole) ? role.color(context).shade800 : null;
     final fontWeight = (role == bout.winnerRole) ? FontWeight.bold : FontWeight.normal;
     return NullableSingleConsumer<AthleteBoutState>(
       id: pState?.id,

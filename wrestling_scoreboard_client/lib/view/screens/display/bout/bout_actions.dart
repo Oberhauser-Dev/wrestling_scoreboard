@@ -60,7 +60,7 @@ class ActionsWidget extends ConsumerWidget {
                       id: action.id,
                       initialData: action,
                       builder: (context, action) {
-                        final color = action.role.color();
+                        final color = action.role.color(context);
                         return MenuAnchor(
                           builder: (context, controller, child) {
                             return InkWell(
