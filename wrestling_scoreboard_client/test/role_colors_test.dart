@@ -91,18 +91,70 @@ void main() {
   });
 
   test('RoleColors.fromBase derives readable text colors', () {
-    for (final background in [ThemeData.light().colorScheme.surface, ThemeData.dark().colorScheme.surface]) {
-      final roleColors = RoleColors.fromBase(red: const Color(0xFF7F0000), blue: null, background: background);
+    for (final theme in [ThemeData.light(), ThemeData.dark()]) {
+      final background = theme.colorScheme.surface;
+      final roleColors = RoleColors.fromBase(
+        red: const Color(0xFF7F0000),
+        blue: null,
+        brightness: theme.brightness,
+        background: background,
+      );
       expect(contrastRatio(roleColors.redText, background), greaterThanOrEqualTo(minTextContrast));
       expect(contrastRatio(roleColors.blueText, background), greaterThanOrEqualTo(minTextContrast));
       // The background colors are not changed.
       expect(roleColors.red.toARGB32(), 0xFF7F0000);
-      expect(roleColors.blue, RoleColors.defaultBlue);
+      expect(roleColors.blue.toARGB32(), RoleColors.defaultBlueOf(theme.brightness).toARGB32());
+    }
+  });
+
+  group('Default colors', () {
+    Color autoTextColor(Color background) =>
+        ThemeData.estimateBrightnessForColor(background) == Brightness.light ? Colors.black : Colors.white;
+
+    for (final brightness in Brightness.values) {
+      test('have readable text on all used shades in the ${brightness.name} theme', () {
+        for (final base in [RoleColors.defaultRedOf(brightness), RoleColors.defaultBlueOf(brightness)]) {
+          final swatch = RoleColors.swatchOf(base);
+          for (final shade in [swatch, swatch.shade800, swatch.shade900]) {
+            // Same text color as estimated by ThemedContainer.
+            final textColor = autoTextColor(shade);
+            expect(contrastRatio(textColor, shade), greaterThanOrEqualTo(minTextContrast));
+          }
+        }
+      });
+    }
+  });
+
+  test('Default colors are shades of the preset swatches', () {
+    bool isShadeOf(Color color, Map<ColorSwatch<Object>, String> swatches) => swatches.keys.any(
+      (swatch) => [
+        50,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+      ].any((shade) => swatch[shade]?.toARGB32() == color.toARGB32()),
+    );
+    for (final brightness in Brightness.values) {
+      expect(isShadeOf(RoleColors.defaultRedOf(brightness), RoleColors.redSwatchesOf(brightness)), isTrue);
+      expect(isShadeOf(RoleColors.defaultBlueOf(brightness), RoleColors.blueSwatchesOf(brightness)), isTrue);
     }
   });
 
   test('Presets contain pure red and blue', () {
-    expect(RoleColors.redSwatches.keys.map((swatch) => swatch.toARGB32()), contains(0xFFFF0000));
-    expect(RoleColors.blueSwatches.keys.map((swatch) => swatch.toARGB32()), contains(0xFF0000FF));
+    expect(RoleColors.redSwatchesOf(Brightness.light).keys.map((swatch) => swatch.toARGB32()), contains(0xFFFF0000));
+    expect(RoleColors.blueSwatchesOf(Brightness.light).keys.map((swatch) => swatch.toARGB32()), contains(0xFF0000FF));
+  });
+
+  test('Shades of a light color are lighter, those of a dark color are darker', () {
+    final lightSwatch = RoleColors.swatchOf(const Color(0xFFEF9A9A));
+    expect(lightSwatch.shade800.computeLuminance(), greaterThan(lightSwatch.computeLuminance()));
+    final darkSwatch = RoleColors.swatchOf(const Color(0xFFC62828));
+    expect(darkSwatch.shade800.computeLuminance(), lessThan(darkSwatch.computeLuminance()));
   });
 }

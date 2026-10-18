@@ -21,7 +21,7 @@ void main() {
               context: context,
               initialColor: initialColor,
               defaultColor: Colors.red,
-              swatches: RoleColors.redSwatches,
+              swatches: RoleColors.redSwatchesOf(Brightness.light),
               onSelect: onSelect,
             ),
             child: const Text('open'),
@@ -46,7 +46,7 @@ void main() {
     expect(find.byType(ColorPicker), findsOneWidget);
     // Only the preset swatches and the wheel are offered.
     final picker = tester.widget<ColorPicker>(find.byType(ColorPicker));
-    expect(picker.customColorSwatchesAndNames, RoleColors.redSwatches);
+    expect(picker.customColorSwatchesAndNames, RoleColors.redSwatchesOf(Brightness.light));
     expect(find.text('Presets'), findsOneWidget);
     expect(find.text('Custom'), findsOneWidget);
     // The default labels of the primary and accent pickers.

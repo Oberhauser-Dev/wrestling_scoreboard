@@ -186,15 +186,15 @@ class CustomSettingsScreen extends ConsumerWidget {
                   _RoleColorTile(
                     title: localizations.redColor,
                     color: redColor,
-                    defaultColor: RoleColors.defaultRed,
-                    swatches: RoleColors.redSwatches,
+                    defaultColor: RoleColors.defaultRedOf(brightness),
+                    swatches: RoleColors.redSwatchesOf(brightness),
                     onSelect: (value) => ref.read(roleColorProvider(BoutRole.red, brightness).notifier).setState(value),
                   ),
                   _RoleColorTile(
                     title: localizations.blueColor,
                     color: blueColor,
-                    defaultColor: RoleColors.defaultBlue,
-                    swatches: RoleColors.blueSwatches,
+                    defaultColor: RoleColors.defaultBlueOf(brightness),
+                    swatches: RoleColors.blueSwatchesOf(brightness),
                     onSelect: (value) =>
                         ref.read(roleColorProvider(BoutRole.blue, brightness).notifier).setState(value),
                   ),
@@ -630,7 +630,7 @@ class _RoleColorTile extends StatelessWidget {
 
   /// The selected base color of the current theme, null represents the [defaultColor].
   final Color? color;
-  final MaterialColor defaultColor;
+  final Color defaultColor;
 
   /// The color swatches with their names, whose shades can be selected.
   final Map<ColorSwatch<Object>, String> swatches;
