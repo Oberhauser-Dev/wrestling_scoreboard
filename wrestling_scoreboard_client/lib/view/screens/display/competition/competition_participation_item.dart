@@ -107,7 +107,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
                   item = InkWell(
                     onTap: () => CompetitionBoutDisplay.navigateTo(context, cBout),
                     child: Container(
-                      decoration: BoxDecoration(border: Border.all(color: role.color())),
+                      decoration: BoxDecoration(border: Border.all(color: role.color(context))),
                       child: Row(
                         children: [
                           Expanded(
@@ -119,7 +119,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
                           ),
                           Expanded(
                             child: Container(
-                              color: cBout.bout.winnerRole == role ? role.color() : null,
+                              color: cBout.bout.winnerRole == role ? role.color(context) : null,
                               child: Column(
                                 children: [
                                   ScaledText(cBout.bout.result?.abbreviation(context) ?? '-', fontSize: 8),

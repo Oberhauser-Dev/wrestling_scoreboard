@@ -1137,4 +1137,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nationality => 'Nationality';
+
+  @override
+  String get redColor => 'Red color';
+
+  @override
+  String get blueColor => 'Blue color';
+
+  @override
+  String get preview => 'Preview';
+
+  @override
+  String get colorPresets => 'Presets';
+
+  @override
+  String get colorShade => 'Shade';
+
+  @override
+  String get customColor => 'Custom';
 }

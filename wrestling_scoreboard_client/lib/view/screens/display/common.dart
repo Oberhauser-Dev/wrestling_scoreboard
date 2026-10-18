@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
+import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
@@ -56,7 +57,7 @@ class CommonElements {
 
     return [
       ThemedContainer(
-        color: Colors.red.shade800,
+        color: context.roleColors.red.shade800,
         padding: edgeInsets,
         child: Row(
           children: [
@@ -77,19 +78,19 @@ class CommonElements {
           Expanded(
             child: ClassificationPointsDisplay(
               participationStates: bouts.map((bout) => bout.r),
-              color: Colors.red.shade900,
+              color: context.roleColors.red.shade900,
             ),
           ),
           Expanded(
             child: ClassificationPointsDisplay(
               participationStates: bouts.map((bout) => bout.b),
-              color: Colors.blue.shade900,
+              color: context.roleColors.blue.shade900,
             ),
           ),
         ],
       ),
       ThemedContainer(
-        color: Colors.blue.shade800,
+        color: context.roleColors.blue.shade800,
         padding: edgeInsets,
         child: Row(
           children: [

@@ -50,7 +50,7 @@ class CompetitionDisplay extends StatelessWidget {
 
         Widget displayParticipant(AthleteBoutState? state, BoutRole role) {
           return Container(
-            color: role.color(),
+            color: role.color(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

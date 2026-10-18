@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
+import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 extension BoutRoleLocalization on BoutRole {
-  MaterialColor color() {
-    return this == BoutRole.red ? Colors.red : Colors.blue;
+  MaterialColor color(BuildContext context) {
+    final roleColors = context.roleColors;
+    return this == BoutRole.red ? roleColors.red : roleColors.blue;
   }
 
   String localize(BuildContext context) {

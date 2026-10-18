@@ -76,7 +76,7 @@ class TechnicalPoints extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final cellHeight = context.isMediumScreenOrLarger ? (width / 6) : (width / 3);
     return ThemedContainer(
-      color: role.color(),
+      color: role.color(context),
       height: cellHeight,
       child: Column(
         mainAxisSize: MainAxisSize.max,

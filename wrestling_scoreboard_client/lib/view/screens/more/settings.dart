@@ -15,11 +15,13 @@ import 'package:wrestling_scoreboard_client/provider/local_preferences.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/asset.dart';
+import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/export.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
+import 'package:wrestling_scoreboard_client/view/widgets/color.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/duration_picker.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
@@ -67,14 +69,25 @@ class CustomSettingsScreen extends ConsumerWidget {
       }
     }
 
-    Future<(Locale?, ThemeMode, String?)> loadGeneralSettings() async {
+    // The role colors are set for the currently displayed theme (light or dark).
+    final brightness = Theme.of(context).brightness;
+
+    Future<(Locale?, ThemeMode, String?, Color?, Color?)> loadGeneralSettings() async {
       final results = await Future.wait([
         ref.watch(localeProvider),
         ref.watch(themeModeProvider),
         ref.watch(fontFamilyProvider),
+        ref.watch(roleColorProvider(BoutRole.red, brightness)),
+        ref.watch(roleColorProvider(BoutRole.blue, brightness)),
       ]);
 
-      return (results[0] as Locale?, results[1] as ThemeMode, results[2] as String?);
+      return (
+        results[0] as Locale?,
+        results[1] as ThemeMode,
+        results[2] as String?,
+        results[3] as Color?,
+        results[4] as Color?,
+      );
     }
 
     Future<(Duration, String, String, String?)> loadNetworkSettings() async {
@@ -92,10 +105,10 @@ class CustomSettingsScreen extends ConsumerWidget {
       appBarTitle: Text(localizations.settings),
       body: ResponsiveColumn(
         children: [
-          LoadingBuilder<(Locale?, ThemeMode, String?)>(
+          LoadingBuilder<(Locale?, ThemeMode, String?, Color?, Color?)>(
             future: loadGeneralSettings(),
             builder: (context, generalSettings) {
-              var (locale, themeMode, fontFamily) = generalSettings;
+              var (locale, themeMode, fontFamily, redColor, blueColor) = generalSettings;
 
               return SettingsSection(
                 title: localizations.general,
@@ -109,6 +122,13 @@ class CustomSettingsScreen extends ConsumerWidget {
 
                     const defaultFontFamily = 'Roboto';
                     await ref.read(fontFamilyProvider.notifier).setState(defaultFontFamily);
+
+                    // Reset the role colors of both the light and dark theme.
+                    for (final role in BoutRole.values) {
+                      for (final brightness in Brightness.values) {
+                        await ref.read(roleColorProvider(role, brightness).notifier).setState(null);
+                      }
+                    }
                   },
                   child: Text(localizations.reset),
                 ),
@@ -133,6 +153,21 @@ class CustomSettingsScreen extends ConsumerWidget {
                     },
                   ),
                   ListTile(
+                    leading: const Icon(Icons.abc),
+                    trailing: IconButton(
+                      tooltip: 'Google Fonts',
+                      icon: const Icon(Icons.link),
+                      onPressed: () => launchUrl(Uri.parse('https://fonts.google.com/')),
+                    ),
+                    title: Text(localizations.fontFamily),
+                    subtitle: Text(fontFamily ?? localizations.systemSetting),
+                    onTap: () async => await Font.showFontDialog(
+                      context,
+                      initialFontFamily: fontFamily,
+                      onSelect: (value) => ref.read(fontFamilyProvider.notifier).setState(value),
+                    ),
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.brush),
                     title: Text(localizations.themeMode),
                     subtitle: Text(getTranslationOfThemeMode(themeMode)),
@@ -148,20 +183,20 @@ class CustomSettingsScreen extends ConsumerWidget {
                       );
                     },
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.abc),
-                    trailing: IconButton(
-                      tooltip: 'Google Fonts',
-                      icon: const Icon(Icons.link),
-                      onPressed: () => launchUrl(Uri.parse('https://fonts.google.com/')),
-                    ),
-                    title: Text(localizations.fontFamily),
-                    subtitle: Text(fontFamily ?? localizations.systemSetting),
-                    onTap: () async => await Font.showFontDialog(
-                      context,
-                      initialFontFamily: fontFamily,
-                      onSelect: (value) => ref.read(fontFamilyProvider.notifier).setState(value),
-                    ),
+                  _RoleColorTile(
+                    title: localizations.redColor,
+                    color: redColor,
+                    defaultColor: RoleColors.defaultRed,
+                    swatches: RoleColors.redSwatches,
+                    onSelect: (value) => ref.read(roleColorProvider(BoutRole.red, brightness).notifier).setState(value),
+                  ),
+                  _RoleColorTile(
+                    title: localizations.blueColor,
+                    color: blueColor,
+                    defaultColor: RoleColors.defaultBlue,
+                    swatches: RoleColors.blueSwatches,
+                    onSelect: (value) =>
+                        ref.read(roleColorProvider(BoutRole.blue, brightness).notifier).setState(value),
                   ),
                 ],
               );
@@ -586,6 +621,49 @@ class SettingsSection extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _RoleColorTile extends StatelessWidget {
+  final String title;
+
+  /// The selected base color of the current theme, null represents the [defaultColor].
+  final Color? color;
+  final MaterialColor defaultColor;
+
+  /// The color swatches with their names, whose shades can be selected.
+  final Map<ColorSwatch<Object>, String> swatches;
+  final void Function(Color? color) onSelect;
+
+  const _RoleColorTile({
+    required this.title,
+    required this.color,
+    required this.defaultColor,
+    required this.swatches,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = context.l10n;
+    final color = this.color;
+    return ListTile(
+      leading: Icon(Icons.circle, color: color ?? defaultColor),
+      title: Text(title),
+      subtitle: Text(
+        color == null
+            ? localizations.systemSetting
+            : '#${(color.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}',
+      ),
+      onTap: () => showColorDialog(
+        context: context,
+        title: Text(title),
+        initialColor: color,
+        defaultColor: defaultColor,
+        swatches: swatches,
+        onSelect: onSelect,
+      ),
     );
   }
 }

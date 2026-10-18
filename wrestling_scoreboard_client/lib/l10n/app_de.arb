@@ -429,5 +429,11 @@
   "genderMale": "Männlich",
   "genderFemale": "Weiblich",
   "genderTransgender": "Divers",
-  "nationality": "Nationalität"
+  "nationality": "Nationalität",
+  "redColor": "Farbe Rot",
+  "blueColor": "Farbe Blau",
+  "preview": "Vorschau",
+  "colorPresets": "Vorlagen",
+  "colorShade": "Abstufung",
+  "customColor": "Benutzerdefiniert"
 }

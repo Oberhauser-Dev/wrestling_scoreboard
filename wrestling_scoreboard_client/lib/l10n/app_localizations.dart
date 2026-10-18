@@ -2281,6 +2281,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nationality'**
   String get nationality;
+
+  /// No description provided for @redColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Red color'**
+  String get redColor;
+
+  /// No description provided for @blueColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue color'**
+  String get blueColor;
+
+  /// No description provided for @preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get preview;
+
+  /// No description provided for @colorPresets.
+  ///
+  /// In en, this message translates to:
+  /// **'Presets'**
+  String get colorPresets;
+
+  /// No description provided for @colorShade.
+  ///
+  /// In en, this message translates to:
+  /// **'Shade'**
+  String get colorShade;
+
+  /// No description provided for @customColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get customColor;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

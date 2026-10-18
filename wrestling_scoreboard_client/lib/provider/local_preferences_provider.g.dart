@@ -158,6 +158,116 @@ abstract class _$FontFamilyNotifier extends $Notifier<Raw<Future<String?>>> {
   }
 }
 
+/// The base color of the [role] in the light or dark theme.
+/// Null value represents the default color of the [role].
+
+@ProviderFor(RoleColorNotifier)
+final roleColorProvider = RoleColorNotifierFamily._();
+
+/// The base color of the [role] in the light or dark theme.
+/// Null value represents the default color of the [role].
+final class RoleColorNotifierProvider extends $NotifierProvider<RoleColorNotifier, Raw<Future<Color?>>> {
+  /// The base color of the [role] in the light or dark theme.
+  /// Null value represents the default color of the [role].
+  RoleColorNotifierProvider._({
+    required RoleColorNotifierFamily super.from,
+    required (BoutRole, Brightness) super.argument,
+  }) : super(
+         retry: null,
+         name: r'roleColorProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$roleColorNotifierHash();
+
+  @override
+  String toString() {
+    return r'roleColorProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  RoleColorNotifier create() => RoleColorNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<Color?>> value) {
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<Color?>>>(value));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RoleColorNotifierProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$roleColorNotifierHash() => r'fb87089c518348c461306fb0e3b2623200615db9';
+
+/// The base color of the [role] in the light or dark theme.
+/// Null value represents the default color of the [role].
+
+final class RoleColorNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          RoleColorNotifier,
+          Raw<Future<Color?>>,
+          Raw<Future<Color?>>,
+          Raw<Future<Color?>>,
+          (BoutRole, Brightness)
+        > {
+  RoleColorNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'roleColorProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// The base color of the [role] in the light or dark theme.
+  /// Null value represents the default color of the [role].
+
+  RoleColorNotifierProvider call(BoutRole role, Brightness brightness) =>
+      RoleColorNotifierProvider._(argument: (role, brightness), from: this);
+
+  @override
+  String toString() => r'roleColorProvider';
+}
+
+/// The base color of the [role] in the light or dark theme.
+/// Null value represents the default color of the [role].
+
+abstract class _$RoleColorNotifier extends $Notifier<Raw<Future<Color?>>> {
+  late final _$args = ref.$arg as (BoutRole, Brightness);
+  BoutRole get role => _$args.$1;
+  Brightness get brightness => _$args.$2;
+
+  Raw<Future<Color?>> build(BoutRole role, Brightness brightness);
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<Raw<Future<Color?>>, Raw<Future<Color?>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<Future<Color?>>, Raw<Future<Color?>>>,
+              Raw<Future<Color?>>,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
+  }
+}
+
 @ProviderFor(WebSocketUrlNotifier)
 final webSocketUrlProvider = WebSocketUrlNotifierProvider._();
 
