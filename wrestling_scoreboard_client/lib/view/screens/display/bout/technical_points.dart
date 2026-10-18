@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
-import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/models/participant_state_model.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_action_controls.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/time_display.dart';
@@ -112,7 +111,6 @@ class TechnicalPoints extends StatelessWidget {
                       ),
                       TimeDisplay(
                         activityStopwatch,
-                        white,
                         fontSize: timerFontSize,
                         minFontSize: _timerMinFontSize,
                         maxDuration: boutConfig.activityDuration!,
@@ -140,7 +138,6 @@ class TechnicalPoints extends StatelessWidget {
                         ),
                         TimeDisplay(
                           pStatusModel.injuryStopwatch,
-                          white,
                           fontSize: timerFontSize,
                           minFontSize: _timerMinFontSize,
                           maxDuration: boutConfig.injuryDuration!,
@@ -169,7 +166,6 @@ class TechnicalPoints extends StatelessWidget {
                         ),
                         TimeDisplay(
                           pStatusModel.bleedingInjuryStopwatch,
-                          white,
                           fontSize: timerFontSize,
                           minFontSize: _timerMinFontSize,
                           maxDuration: boutConfig.bleedingInjuryDuration!,

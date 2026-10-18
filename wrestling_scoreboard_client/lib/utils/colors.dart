@@ -3,19 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
-const MaterialColor white = MaterialColor(0xFFFFFFFF, <int, Color>{
-  50: Colors.white10,
-  100: Colors.white24,
-  200: Colors.white38,
-  300: Colors.white54,
-  400: Colors.white70,
-  500: Colors.white,
-  600: Colors.white,
-  700: Colors.white,
-  800: Colors.white,
-  900: Colors.white,
-});
-
 /// Creates a [MaterialColor] with [color] as shade 500, lightening the lower and darkening the higher shades.
 /// If [mirrored], the higher shades are lightened and the lower shades darkened instead.
 MaterialColor createMaterialColor(Color color, {bool mirrored = false}) {
