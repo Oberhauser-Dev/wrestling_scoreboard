@@ -990,9 +990,7 @@ class _ParticipantDisplay extends StatelessWidget {
           fontSize: 54,
           minFontSize: 30,
           // Predicted points are faded.
-          color: pStatus?.classificationPoints == null
-              ? ThemedContainer.textColorOn(color.shade800).withValues(alpha: 0.38)
-              : null,
+          color: pStatus?.classificationPoints == null ? ThemedContainer.textColorOn(color.shade800).disabled() : null,
         ),
       ),
     );
@@ -1024,7 +1022,7 @@ class _NameDisplay extends StatelessWidget {
               children: [
                 ScaledText(
                   pStatus?.prename ?? localizations.participantVacant,
-                  color: pStatus == null ? textColor.withValues(alpha: 0.3) : null,
+                  color: pStatus == null ? textColor.disabled() : null,
                   fontSize: 30,
                   minFontSize: 20,
                   textAlign: TextAlign.center,
@@ -1045,7 +1043,7 @@ class _NameDisplay extends StatelessWidget {
           Center(
             child: ScaledText(
               '${weight!.toStringAsFixed(1)} $weightUnit',
-              color: textColor.withValues(alpha: 0.7),
+              color: textColor.withValues(alpha: 0.8),
               fontSize: 22,
             ),
           ),

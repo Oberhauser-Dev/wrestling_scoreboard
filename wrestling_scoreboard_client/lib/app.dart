@@ -28,6 +28,7 @@ import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/shortcuts/app_shortcuts.dart';
+import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -72,6 +73,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
     }
     final (red, blue) = roleBaseColors;
     theme = theme.copyWith(
+      disabledColor: theme.colorScheme.onSurface.disabled(),
       extensions: [
         RoleColors.fromBase(red: red, blue: blue, brightness: brightness, background: theme.colorScheme.surface),
       ],
