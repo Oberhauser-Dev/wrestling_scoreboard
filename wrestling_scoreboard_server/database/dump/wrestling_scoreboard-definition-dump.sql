@@ -73,9 +73,11 @@ CREATE TYPE public.bout_result AS ENUM (
     'vsu',
     'vpo',
     'vfo',
+    'vfw',
     'dsq',
     'bothDsq',
     'bothVfo',
+    'bothVfw',
     'bothVin'
 );
 
@@ -2094,7 +2096,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.16-pre.1	0.3.15
+0.3.16-pre.2	0.3.15
 \.
 
 

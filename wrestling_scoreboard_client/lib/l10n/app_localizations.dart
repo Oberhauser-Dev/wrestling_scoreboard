@@ -1679,14 +1679,26 @@ abstract class AppLocalizations {
   /// No description provided for @boutResultVfo.
   ///
   /// In en, this message translates to:
-  /// **'Victory by forfeit - no show up on the mat / not attending or failing the weigh-in'**
+  /// **'Victory by forfeit - no show up on the mat / not attending the weigh-in'**
   String get boutResultVfo;
 
   /// No description provided for @boutResultBothVfo.
   ///
   /// In en, this message translates to:
-  /// **'None of wrestlers pass the weight or show up on the mat'**
+  /// **'None of the wrestlers attended the weigh-in or showed up on the mat'**
   String get boutResultBothVfo;
+
+  /// No description provided for @boutResultVfw.
+  ///
+  /// In en, this message translates to:
+  /// **'Victory by failed weight - the opponent was over or under the weight limit'**
+  String get boutResultVfw;
+
+  /// No description provided for @boutResultBothVfw.
+  ///
+  /// In en, this message translates to:
+  /// **'None of the wrestlers made the weight'**
+  String get boutResultBothVfw;
 
   /// No description provided for @boutResultDsq.
   ///
@@ -1747,6 +1759,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'2VFO'**
   String get boutResultBothVfoAbbr;
+
+  /// No description provided for @boutResultVfwAbbr.
+  ///
+  /// In en, this message translates to:
+  /// **'VFW'**
+  String get boutResultVfwAbbr;
+
+  /// No description provided for @boutResultBothVfwAbbr.
+  ///
+  /// In en, this message translates to:
+  /// **'2VFW'**
+  String get boutResultBothVfwAbbr;
 
   /// No description provided for @boutResultDsqAbbr.
   ///

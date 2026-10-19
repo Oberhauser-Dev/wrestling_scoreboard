@@ -253,6 +253,12 @@ void main() {
         ),
         BoutResultRule(
           boutConfig: config,
+          boutResult: BoutResult.vfw,
+          winnerClassificationPoints: 4,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
           boutResult: BoutResult.dsq,
           winnerClassificationPoints: 4,
           loserClassificationPoints: 0,
@@ -266,6 +272,12 @@ void main() {
         BoutResultRule(
           boutConfig: config,
           boutResult: BoutResult.bothVfo,
+          winnerClassificationPoints: 0,
+          loserClassificationPoints: 0,
+        ),
+        BoutResultRule(
+          boutConfig: config,
+          boutResult: BoutResult.bothVfw,
           winnerClassificationPoints: 0,
           loserClassificationPoints: 0,
         ),

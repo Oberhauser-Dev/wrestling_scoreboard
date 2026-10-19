@@ -45,6 +45,8 @@ const _$BoutResultEnumMap = {
   BoutResult.vpo: 'vpo',
   BoutResult.vfo: 'vfo',
   BoutResult.bothVfo: 'bothVfo',
+  BoutResult.vfw: 'vfw',
+  BoutResult.bothVfw: 'bothVfw',
   BoutResult.dsq: 'dsq',
   BoutResult.bothDsq: 'bothDsq',
 };

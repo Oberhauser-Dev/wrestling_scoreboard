@@ -73,9 +73,11 @@ CREATE TYPE public.bout_result AS ENUM (
     'vsu',
     'vpo',
     'vfo',
+    'vfw',
     'dsq',
     'bothDsq',
     'bothVfo',
+    'bothVfw',
     'bothVin'
 );
 
@@ -2010,6 +2012,8 @@ COPY public.bout_result_rule (id, bout_config_id, bout_result, winner_technical_
 11	1	bothVfo	\N	\N	\N	0	0	\N
 12	1	bothVin	\N	\N	\N	0	0	\N
 7	1	vpo	1	\N	0	1	0	\N
+13	1	vfw	\N	\N	\N	4	0	\N
+14	1	bothVfw	\N	\N	\N	0	0	\N
 \.
 
 
@@ -2235,7 +2239,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.16-pre.1	0.3.15
+0.3.16-pre.2	0.3.15
 \.
 
 
@@ -2491,7 +2495,7 @@ SELECT pg_catalog.setval('public.bout_id_seq', 51, true);
 -- Name: bout_result_rule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.bout_result_rule_id_seq', 12, true);
+SELECT pg_catalog.setval('public.bout_result_rule_id_seq', 14, true);
 
 
 --
