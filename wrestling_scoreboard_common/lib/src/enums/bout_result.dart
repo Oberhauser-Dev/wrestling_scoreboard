@@ -25,12 +25,22 @@ enum BoutResult {
 
   /// Victory by forfeit - no show up on the mat
   /// - If an athlete doesn’t show up on the mat
-  /// - If an athlete doesn’t attend or fail the weigh-in
+  /// - If an athlete doesn’t attend the weigh-in
   /// Sieger durch Ausschluss des Gegners vom Wettkampf wegen Nichtantritt (DN)
   vfo,
 
-  /// Double forfeit - None of wrestlers pass the weight or show up on the mat (2VFO)
+  /// Double forfeit - None of the wrestlers attended the weigh-in or showed up on the mat (2VFO)
   bothVfo,
+
+  /// Victory by failed weight - the opponent attended the weigh-in, but was over or under the weight limit (VFW)
+  /// This result might not comply with UWW international rules.
+  /// Sieger durch Übergewicht / Untergewicht des Gegners (ÜG)
+  vfw,
+
+  /// Double failed weight - None of the wrestlers made the weight (2VFW)
+  /// This result might not comply with UWW international rules.
+  /// Beide Ringer haben Übergewicht / Untergewicht (ÜG2)
+  bothVfw,
 
   /// Victory by disqualification of the opponent from the whole competition due to infringement of the rules
   /// Sieger durch Ausschluss des Gegners vom Wettkampf wegen Unsportlichkeit / Tätlichkeit (DQ)
@@ -41,6 +51,9 @@ enum BoutResult {
   bothDsq;
 
   bool affectsBoth() {
-    return this == BoutResult.bothVfo || this == BoutResult.bothVin || this == BoutResult.bothDsq;
+    return this == BoutResult.bothVfo ||
+        this == BoutResult.bothVfw ||
+        this == BoutResult.bothVin ||
+        this == BoutResult.bothDsq;
   }
 }

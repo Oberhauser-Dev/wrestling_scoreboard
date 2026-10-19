@@ -831,10 +831,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boutResultVpo => 'Victory by points';
 
   @override
-  String get boutResultVfo => 'Victory by forfeit - no show up on the mat / not attending or failing the weigh-in';
+  String get boutResultVfo => 'Victory by forfeit - no show up on the mat / not attending the weigh-in';
 
   @override
-  String get boutResultBothVfo => 'None of wrestlers pass the weight or show up on the mat';
+  String get boutResultBothVfo => 'None of the wrestlers attended the weigh-in or showed up on the mat';
+
+  @override
+  String get boutResultVfw => 'Victory by failed weight - the opponent was over or under the weight limit';
+
+  @override
+  String get boutResultBothVfw => 'None of the wrestlers made the weight';
 
   @override
   String get boutResultDsq =>
@@ -866,6 +872,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get boutResultBothVfoAbbr => '2VFO';
+
+  @override
+  String get boutResultVfwAbbr => 'VFW';
+
+  @override
+  String get boutResultBothVfwAbbr => '2VFW';
 
   @override
   String get boutResultDsqAbbr => 'DSQ';

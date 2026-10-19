@@ -124,6 +124,12 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     ),
     BoutResultRule(
       boutConfig: config,
+      boutResult: BoutResult.vfw,
+      winnerClassificationPoints: 4,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: config,
       boutResult: BoutResult.dsq,
       winnerClassificationPoints: 4,
       loserClassificationPoints: 0,
@@ -137,6 +143,12 @@ class ByGermanyWrestlingApi extends WrestlingApi {
     BoutResultRule(
       boutConfig: config,
       boutResult: BoutResult.bothVfo,
+      winnerClassificationPoints: 0,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: config,
+      boutResult: BoutResult.bothVfw,
       winnerClassificationPoints: 0,
       loserClassificationPoints: 0,
     ),
@@ -703,8 +715,8 @@ class ByGermanyWrestlingApi extends WrestlingApi {
                 'SS' => BoutResult.vfa, // Schultersieg
                 'TÜ' => BoutResult.vsu, // Technische Überlegenheit
                 'TÜ1' => BoutResult.vsu, // Technische Überlegenheit, Verlierer hat Punkte
-                'ÜG' => BoutResult.vfo, // Übergewicht
-                'UG' => BoutResult.vfo, // Untergewicht
+                'ÜG' => BoutResult.vfw, // Übergewicht
+                'UG' => BoutResult.vfw, // Untergewicht
                 'AS' => BoutResult.vin, // Aufgabesieg
                 'AS2' => BoutResult.bothVin, // Beide verletzt
                 'DV' => BoutResult.vca, // Disqualifikation aufgrund von Regelwidrigkeit

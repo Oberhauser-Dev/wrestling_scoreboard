@@ -239,6 +239,12 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     ),
     BoutResultRule(
       boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.vfw,
+      winnerClassificationPoints: 4,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
       boutResult: BoutResult.dsq,
       winnerClassificationPoints: 4,
       loserClassificationPoints: 0,
@@ -252,6 +258,12 @@ abstract class TeamMatch extends WrestlingEvent with _$TeamMatch {
     BoutResultRule(
       boutConfig: defaultBoutConfig,
       boutResult: BoutResult.bothVfo,
+      winnerClassificationPoints: 0,
+      loserClassificationPoints: 0,
+    ),
+    BoutResultRule(
+      boutConfig: defaultBoutConfig,
+      boutResult: BoutResult.bothVfw,
       winnerClassificationPoints: 0,
       loserClassificationPoints: 0,
     ),

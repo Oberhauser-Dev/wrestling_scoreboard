@@ -835,11 +835,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get boutResultVpo => 'Punktsieg';
 
   @override
-  String get boutResultVfo =>
-      'Sieger durch Ausschluss des Gegners vom Wettkampf wegen Nichtantritt / Übergewicht / Untergewicht';
+  String get boutResultVfo => 'Sieger durch Ausschluss des Gegners vom Wettkampf wegen Nichtantritt';
 
   @override
-  String get boutResultBothVfo => 'Keiner der Ringer ist erschienen oder erfüllte das Gewicht';
+  String get boutResultBothVfo => 'Keiner der Ringer ist zur Waage oder zum Kampf erschienen';
+
+  @override
+  String get boutResultVfw => 'Sieger durch Übergewicht / Untergewicht des Gegners';
+
+  @override
+  String get boutResultBothVfw => 'Beide Ringer haben Übergewicht / Untergewicht';
 
   @override
   String get boutResultDsq => 'Sieger durch Ausschluss des Gegners vom Wettkampf wegen Unsportlichkeit / Tätlichkeit';
@@ -870,6 +875,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get boutResultBothVfoAbbr => 'DN2';
+
+  @override
+  String get boutResultVfwAbbr => 'ÜG';
+
+  @override
+  String get boutResultBothVfwAbbr => 'ÜG2';
 
   @override
   String get boutResultDsqAbbr => 'DQ';

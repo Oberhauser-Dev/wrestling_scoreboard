@@ -44,10 +44,13 @@ extension _GerBoutResultAbbreviation on BoutResult {
       case BoutResult.vpo:
         return 'PS';
       case BoutResult.vfo:
-        return 'KL'; // Also known as 'DN' or 'ÜG'
+        return 'KL'; // Also known as 'DN'
+      case BoutResult.vfw:
+        return 'ÜG'; // Or 'UG'
       case BoutResult.dsq:
         return 'DQ';
       case BoutResult.bothVfo:
+      case BoutResult.bothVfw:
       case BoutResult.bothVin:
         return 'o.W.'; // ohne Wertung
       case BoutResult.bothDsq:
@@ -83,10 +86,13 @@ extension _GerBoutResultAbbreviation on BoutResult {
       case BoutResult.vpo:
         return 'PS';
       case BoutResult.vfo:
-        return 'KLS'; // Also known 'ÜGS' and 'DN'
+        return 'KLS'; // Also known as 'DN'
+      case BoutResult.vfw:
+        return 'ÜGS'; // Also known as 'UGS'
       case BoutResult.dsq:
         return 'DQS';
       case BoutResult.bothVfo:
+      case BoutResult.bothVfw:
       case BoutResult.bothVin:
       case BoutResult.bothDsq:
         return 'DQ2';
@@ -106,10 +112,13 @@ extension _GerBoutResultAbbreviation on BoutResult {
       case BoutResult.vpo:
         return 'PN';
       case BoutResult.vfo:
-        return 'KLN'; // Also known as 'ÜGN'
+        return 'KLN';
+      case BoutResult.vfw:
+        return 'ÜGN'; // Also known as 'UGN'
       case BoutResult.dsq:
         return 'DQN';
       case BoutResult.bothVfo:
+      case BoutResult.bothVfw:
       case BoutResult.bothVin:
       case BoutResult.bothDsq:
         return 'DQ2';

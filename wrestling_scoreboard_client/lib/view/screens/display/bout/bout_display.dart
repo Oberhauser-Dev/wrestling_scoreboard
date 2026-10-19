@@ -318,18 +318,43 @@ class BoutState extends ConsumerState<BoutScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final useSmartBoutActions = await ref.readAsync(smartBoutActionsProvider);
-      if (mounted && useSmartBoutActions && bout.result == null && weightClass != null) {
-        final isRedForfeit = bout.r == null || (widget.weightR != null && weightClass!.weight < widget.weightR!);
-        final isBlueForfeit = bout.b == null || (widget.weightB != null && weightClass!.weight < widget.weightB!);
-        if (isRedForfeit || isBlueForfeit) {
+      if (mounted && useSmartBoutActions && bout.result == null) {
+        BoutResult? boutResult;
+        BoutRole? winnerRole;
+
+        final isRedAbsent = bout.r == null;
+        final isBlueAbsent = bout.b == null;
+        final maxWeight = weightClass?.weight;
+        if (isRedAbsent || isBlueAbsent) {
+          // Forfeit: at least one wrestler is not present
+          if (isRedAbsent && isBlueAbsent) {
+            boutResult = BoutResult.bothVfo;
+          } else {
+            boutResult = BoutResult.vfo;
+            winnerRole = isRedAbsent ? BoutRole.blue : BoutRole.red;
+          }
+        } else if (maxWeight != null &&
+            boutRules.any((rule) => rule.boutResult == BoutResult.vfw || rule.boutResult == BoutResult.bothVfw)) {
+          // Failed weight: at least one wrestler exceeds the weight of the weight class.
+          // Only applies if supported by the rules (e.g. not in competitions).
+          final isRedFailedWeight = widget.weightR != null && maxWeight < widget.weightR!;
+          final isBlueFailedWeight = widget.weightB != null && maxWeight < widget.weightB!;
+          if (isRedFailedWeight && isBlueFailedWeight) {
+            boutResult = BoutResult.bothVfw;
+          } else if (isRedFailedWeight || isBlueFailedWeight) {
+            boutResult = BoutResult.vfw;
+            winnerRole = isRedFailedWeight ? BoutRole.blue : BoutRole.red;
+          }
+        }
+
+        if (boutResult != null) {
           final result = await showOkCancelDialog(context: context, child: Text(context.l10n.warningVictoryOnForfeit));
 
           if (result) {
-            final bothForfeit = isRedForfeit && isBlueForfeit;
             await (await ref.read(dataManagerProvider)).updateBoutResult(
               bout: bout,
-              result: bothForfeit ? BoutResult.bothVfo : BoutResult.vfo,
-              winnerRole: bothForfeit ? null : (isRedForfeit ? BoutRole.blue : BoutRole.red),
+              result: boutResult,
+              winnerRole: winnerRole,
               style: weightClass?.style,
               actions: await _getActions(),
               rules: boutRules,

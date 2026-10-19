@@ -276,6 +276,8 @@ extension DatabaseExt on PostgresDb {
     sqlString = sqlString.replaceAll(RegExp(r'\nCOPY public.api_metadata.*?\\\.\n', dotAll: true), '');
     sqlString = sqlString.replaceAll(RegExp(r'\n\\restrict.*\n'), '');
     sqlString = sqlString.replaceAll(RegExp(r'\n\\unrestrict.*\n'), '');
+    // PostgreSQL 18 dumps non-default names of NOT NULL constraints, e.g. of renamed tables or columns.
+    sqlString = sqlString.replaceAll(RegExp(r'CONSTRAINT \w+_not_null NOT NULL'), 'NOT NULL');
     return sqlString
         .split('\n')
         .where((line) {
