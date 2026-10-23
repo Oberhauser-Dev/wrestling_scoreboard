@@ -184,21 +184,19 @@ abstract class PdfSheet {
     Context context,
     WrestlingEvent wrestlingEvent, {
     required List<PersonRole> order,
-    int Function(PersonRole personRole)? getPlaceHolderCount,
     required Map<PersonRole, Set<Person>> groupedOfficials,
     double? width,
   }) {
     return [
+      // Show all specified officials of a role, or one placeholder otherwise.
       for (final personRole in order)
-        ...((groupedOfficials[personRole] as Iterable<Person?>?) ??
-                List<Person?>.filled(getPlaceHolderCount?.call(personRole) ?? 1, null))
-            .map(
-              (person) => buildPerson(
-                title: personRole.localize(buildContext).toUpperCase(),
-                no: person == null ? '' : person.fullName,
-                width: width,
-              ),
-            ),
+        ...((groupedOfficials[personRole] as Iterable<Person?>?) ?? [null]).map(
+          (person) => buildPerson(
+            title: personRole.localize(buildContext).toUpperCase(),
+            no: person == null ? '' : person.fullName,
+            width: width,
+          ),
+        ),
     ];
   }
 }
