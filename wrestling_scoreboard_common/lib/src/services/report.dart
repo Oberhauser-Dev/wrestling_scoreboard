@@ -19,10 +19,17 @@ enum WrestlingReportProvider {
 abstract class WrestlingReporter {
   Organization get organization;
 
+  /// Suggests the eligibility status text of the [person] at the [date] of a wrestling event,
+  /// using the abbreviations of the report format, e.g. `J` or `N`.
+  /// Returns `null`, if no status text is proposed.
+  String? suggestEligibilityStatusText(Person person, {required DateTime date});
+
   String exportTeamMatchReport({
     required TeamMatch teamMatch,
     required Map<TeamMatchBout, List<BoutAction>> boutMap,
     required Map<Person, PersonRole> officials,
+    required Iterable<TeamLineupParticipation> homeParticipations,
+    required Iterable<TeamLineupParticipation> guestParticipations,
   });
 
   (TeamMatch teamMatch, Map<TeamMatchBout, List<BoutAction>> boutMap) importTeamMatchReport(String report);

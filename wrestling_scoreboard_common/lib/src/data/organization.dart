@@ -60,6 +60,15 @@ abstract class Organization with _$Organization implements DataObject, ImageObje
 
   WrestlingReporter? getReporter() => reportProvider?.getReporter(this);
 
+  /// Suggests the eligibility status text of the [person] at the [date] of a wrestling event,
+  /// according to the report provider of this organization, or of its parents if not specified.
+  /// Returns `null`, if no status text is proposed.
+  String? suggestEligibilityStatusText(Person person, {required DateTime date}) {
+    final reporter = getReporter();
+    if (reporter != null) return reporter.suggestEligibilityStatusText(person, date: date);
+    return parent?.suggestEligibilityStatusText(person, date: date);
+  }
+
   @override
   Organization copyWithId(int? id) {
     return copyWith(id: id);

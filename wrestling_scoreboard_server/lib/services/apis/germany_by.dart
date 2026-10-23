@@ -602,7 +602,7 @@ class ByGermanyWrestlingApi extends WrestlingApi {
   }
 
   @override
-  Future<Map<TeamMatchBout, Iterable<BoutAction>>> importTeamMatchBouts({required TeamMatch teamMatch}) async {
+  Future<Map<TeamMatchBout, TeamMatchBoutImport>> importTeamMatchBouts({required TeamMatch teamMatch}) async {
     final competitionJson = (await _getCompetition(
       seasonId: teamMatch.league!.startDate.year.toString(),
       competitionId: teamMatch.orgSyncId!,
@@ -847,7 +847,23 @@ class ByGermanyWrestlingApi extends WrestlingApi {
             pos: index,
             orgSyncId: bout.orgSyncId,
           );
-          return MapEntry(teamMatchBout, boutActions);
+
+          // Empty status texts are ignored, so they don't override a status set by hand.
+          String? getEligibilityStatusText(String jsonPrefix) {
+            final status = (boutJson['${jsonPrefix}WrestlerStatus'] as String?)?.trim();
+            return (status == null || status.isEmpty) ? null : status;
+          }
+
+          final homeEligibilityStatusText = getEligibilityStatusText('home');
+          final opponentEligibilityStatusText = getEligibilityStatusText('opponent');
+          return MapEntry(teamMatchBout, (
+            actions: boutActions,
+            eligibilityStatusTexts: {
+              if (homeMembership != null && homeEligibilityStatusText != null) BoutRole.red: homeEligibilityStatusText,
+              if (opponentMembership != null && opponentEligibilityStatusText != null)
+                BoutRole.blue: opponentEligibilityStatusText,
+            },
+          ));
         }),
       );
       return Map.fromEntries(boutActionMapEntries.nonNulls);

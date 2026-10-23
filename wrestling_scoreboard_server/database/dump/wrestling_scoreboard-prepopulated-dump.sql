@@ -721,7 +721,8 @@ CREATE TABLE public.competition_participation (
     weight numeric(5,2),
     contestant_status public.contestant_status,
     pool_groups smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL,
-    pool_draw_numbers smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL
+    pool_draw_numbers smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL,
+    eligibility_status_text character varying(100)
 );
 
 
@@ -1251,7 +1252,8 @@ CREATE TABLE public.team_lineup_participation (
     lineup_id integer NOT NULL,
     weight_class_id integer,
     weight numeric(5,2),
-    is_substitute boolean DEFAULT false NOT NULL
+    is_substitute boolean DEFAULT false NOT NULL,
+    eligibility_status_text character varying(100)
 );
 
 
@@ -2081,7 +2083,7 @@ COPY public.competition_lineup_membership (id, competition_lineup_id, membership
 -- Data for Name: competition_participation; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_participation (id, competition_lineup_id, membership_id, weight_category_id, weight, contestant_status, pool_groups, pool_draw_numbers) FROM stdin;
+COPY public.competition_participation (id, competition_lineup_id, membership_id, weight_category_id, weight, contestant_status, pool_groups, pool_draw_numbers, eligibility_status_text) FROM stdin;
 \.
 
 
@@ -2239,7 +2241,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.16-pre.2	0.3.15
+0.3.16-pre.3	0.3.15
 \.
 
 
@@ -2342,34 +2344,34 @@ COPY public.team_lineup_membership (id, lineup_id, membership_id, lineup_role) F
 -- Data for Name: team_lineup_participation; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_class_id, weight, is_substitute) FROM stdin;
-4	4	1	10	110.00	f
-8	8	2	10	129.80	f
-13	21	1	19	40.00	f
-14	4	1	20	110.00	f
-9	2	1	23	66.00	f
-10	19	1	22	98.00	f
-11	20	1	25	75.00	f
-15	1	1	21	61.00	f
-12	22	1	24	86.00	f
-1	1	1	1	50.12	f
-16	18	1	28	61.00	f
-20	19	1	29	97.00	f
-21	17	1	32	75.00	f
-22	2	1	30	66.00	f
-3	3	1	31	77.12	f
-23	8	2	20	130.00	f
-24	13	2	19	56.00	f
-25	15	2	23	66.00	f
-26	10	2	21	61.00	f
-7	5	2	31	80.20	f
-27	12	2	29	98.00	f
-28	12	2	22	98.00	f
-29	7	2	30	66.00	f
-5	13	2	26	55.30	f
-30	5	2	24	86.00	f
-6	9	2	32	70.95	f
-31	9	2	25	75.00	f
+COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_class_id, weight, is_substitute, eligibility_status_text) FROM stdin;
+4	4	1	10	110.00	f	\N
+8	8	2	10	129.80	f	\N
+13	21	1	19	40.00	f	\N
+14	4	1	20	110.00	f	\N
+9	2	1	23	66.00	f	\N
+10	19	1	22	98.00	f	\N
+11	20	1	25	75.00	f	\N
+15	1	1	21	61.00	f	\N
+12	22	1	24	86.00	f	\N
+1	1	1	1	50.12	f	\N
+16	18	1	28	61.00	f	\N
+20	19	1	29	97.00	f	\N
+21	17	1	32	75.00	f	\N
+22	2	1	30	66.00	f	\N
+3	3	1	31	77.12	f	\N
+23	8	2	20	130.00	f	\N
+24	13	2	19	56.00	f	\N
+25	15	2	23	66.00	f	\N
+26	10	2	21	61.00	f	\N
+7	5	2	31	80.20	f	\N
+27	12	2	29	98.00	f	\N
+28	12	2	22	98.00	f	\N
+29	7	2	30	66.00	f	\N
+5	13	2	26	55.30	f	\N
+30	5	2	24	86.00	f	\N
+6	9	2	32	70.95	f	\N
+31	9	2	25	75.00	f	\N
 \.
 
 

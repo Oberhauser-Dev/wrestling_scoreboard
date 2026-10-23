@@ -317,6 +317,8 @@ class TeamMatchOverview extends ConsumerWidget {
                           teamMatch: match,
                           boutMap: boutMap,
                           officials: officials,
+                          homeParticipations: await _getParticipations(ref, lineup: match.home),
+                          guestParticipations: await _getParticipations(ref, lineup: match.guest),
                         );
                         await exportRDB(fileBaseName: match.fileBaseName, rdbString: reportStr);
                       },
@@ -408,6 +410,26 @@ class TeamMatchOverview extends ConsumerWidget {
     );
   }
 
+  /// Get the participations of the [lineup].
+  /// The list is not updated, if only a participation changes, so each one is read from its own provider.
+  /// The initial data is only used, if the provider of the participation doesn't exist yet.
+  static Future<List<TeamLineupParticipation>> _getParticipations(WidgetRef ref, {required TeamLineup lineup}) async {
+    final participations = await ref.readAsync(
+      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
+        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: lineup),
+      ).future,
+    );
+    return await Future.wait(
+      participations.map(
+        (p) => ref.readAsync(
+          singleDataStreamProvider<TeamLineupParticipation>(
+            SingleProviderData<TeamLineupParticipation>(id: p.id!, initialData: p),
+          ).future,
+        ),
+      ),
+    );
+  }
+
   static Future<Map<Person, PersonRole>> _getOfficials(WidgetRef ref, {required TeamMatch match}) async {
     final officials = await ref.readAsync(
       manyDataStreamProvider<TeamMatchPerson, TeamMatch>(
@@ -444,11 +466,7 @@ class TeamMatchOverview extends ConsumerWidget {
   ) async {
     final weightClasses = await _getWeightClasses(ref, match);
 
-    final participations = await ref.readAsync(
-      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: lineup),
-      ).future,
-    );
+    final participations = await _getParticipations(ref, lineup: lineup);
 
     final officials = await _getOfficials(ref, match: match);
     final homeLineupMemberships = await _getLineupMemberships(ref, lineup: match.home);
@@ -474,17 +492,8 @@ class TeamMatchOverview extends ConsumerWidget {
 
     final teamMatchBoutActions = await _getBoutActionsOrPlaceholders(ref, match: match, teamMatchBouts: teamMatchBouts);
 
-    final homeParticipations = await ref.readAsync(
-      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.home),
-      ).future,
-    );
-
-    final guestParticipations = await ref.readAsync(
-      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: match.guest),
-      ).future,
-    );
+    final homeParticipations = await _getParticipations(ref, lineup: match.home);
+    final guestParticipations = await _getParticipations(ref, lineup: match.guest);
 
     final officials = await _getOfficials(ref, match: match);
     final homeLineupMemberships = await _getLineupMemberships(ref, lineup: match.home);
@@ -584,21 +593,7 @@ class TeamMatchOverview extends ConsumerWidget {
     TeamMatch match,
     NavigatorState navigator,
   ) async {
-    List<TeamLineupParticipation> participations = await ref.readAsync(
-      manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-        ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: lineup),
-      ).future,
-    );
-    // Update cached participations:
-    participations = await Future.wait(
-      participations.map(
-        (p) async => await ref.readAsync(
-          singleDataStreamProvider<TeamLineupParticipation>(
-            SingleProviderData<TeamLineupParticipation>(id: p.id!),
-          ).future,
-        ),
-      ),
-    );
+    final participations = await _getParticipations(ref, lineup: lineup);
     final lineupMemberships = await _getLineupMemberships(ref, lineup: lineup);
     final weightClasses = await _getWeightClasses(ref, match);
     List<TeamLineupMembership>? proposedLineupMemberships;
@@ -627,11 +622,7 @@ class TeamMatchOverview extends ConsumerWidget {
         );
         final proposedLineup = resolvedMatch.home.team == lineup.team ? resolvedMatch.home : resolvedMatch.guest;
         proposedLineupMemberships = await _getLineupMemberships(ref, lineup: proposedLineup);
-        proposedParticipations = await ref.readAsync(
-          manyDataStreamProvider<TeamLineupParticipation, TeamLineup>(
-            ManyProviderData<TeamLineupParticipation, TeamLineup>(filterObject: proposedLineup),
-          ).future,
-        );
+        proposedParticipations = await _getParticipations(ref, lineup: proposedLineup);
       }
     }
     navigator.push(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/contestant_status.dart';
@@ -42,6 +43,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
   CompetitionWeightCategory? _weightCategory;
   ContestantStatus? _contestantStatus;
   double? _weight;
+  String? _eligibilityStatusText;
 
   @override
   void initState() {
@@ -51,6 +53,8 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
     _weightCategory = widget.competitionParticipation?.weightCategory ?? widget.initialWeightCategory;
     _weight = widget.competitionParticipation?.weight;
     _contestantStatus = widget.competitionParticipation?.contestantStatus;
+    // Existing participations are shown as stored, a new one is prefilled when selecting the membership.
+    _eligibilityStatusText = widget.competitionParticipation?.eligibilityStatusText;
   }
 
   @override
@@ -93,10 +97,32 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
           organization: widget.initialCompetition.organization,
           selectedItem: _membership,
           allowEmpty: false,
+          onChange: (value) => setState(() {
+            _membership = value;
+            // Prefill the status of the new wrestler, it can still be adapted by hand.
+            _eligibilityStatusText = value == null
+                ? null
+                : widget.initialCompetition.organization?.suggestEligibilityStatusText(
+                    value.person,
+                    date: widget.initialCompetition.date,
+                  );
+          }),
           onSave: (value) => setState(() {
             _membership = value;
           }),
         ),
+      ),
+      CustomTextInput.icon(
+        // Recreate the field to show the prefilled status of a newly selected wrestler.
+        key: ValueKey(_membership),
+        iconData: Icons.badge,
+        label: localizations.status,
+        initialValue: _eligibilityStatusText,
+        inputFormatters: [LengthLimitingTextInputFormatter(100)],
+        onSaved: (value) {
+          final trimmed = value?.trim();
+          _eligibilityStatusText = (trimmed == null || trimmed.isEmpty) ? null : trimmed;
+        },
       ),
       ListTile(
         title: SearchableDropdown<CompetitionWeightCategory>.stringItems(
@@ -171,6 +197,7 @@ class CompetitionParticipationEditState extends ConsumerState<CompetitionPartici
         weightCategory: _weightCategory,
         weight: _weight,
         contestantStatus: _contestantStatus,
+        eligibilityStatusText: _eligibilityStatusText,
         poolDrawNumbers: widget.competitionParticipation?.poolDrawNumbers ?? [],
         poolGroups: widget.competitionParticipation?.poolGroups ?? [],
       );

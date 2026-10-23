@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'competition_participation.dart';
@@ -9,13 +9,16 @@ part of 'competition_participation.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$CompetitionParticipation {
 
- int? get id; Membership get membership; CompetitionLineup get lineup; CompetitionWeightCategory? get weightCategory; double? get weight; List<int> get poolGroups; List<int> get poolDrawNumbers; ContestantStatus? get contestantStatus;
+ int? get id; Membership get membership; CompetitionLineup get lineup; CompetitionWeightCategory? get weightCategory; double? get weight; List<int> get poolGroups; List<int> get poolDrawNumbers; ContestantStatus? get contestantStatus;/// Free-text eligibility markers, see [TeamLineupParticipation.eligibilityStatusText].
+/// Not to be confused with the [contestantStatus], which describes the state in the competition.
+ String? get eligibilityStatusText;
 /// Create a copy of CompetitionParticipation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +31,21 @@ $CompetitionParticipationCopyWith<CompetitionParticipation> get copyWith => _$Co
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CompetitionParticipation&&(identical(other.id, id) || other.id == id)&&(identical(other.membership, membership) || other.membership == membership)&&(identical(other.lineup, lineup) || other.lineup == lineup)&&(identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory)&&(identical(other.weight, weight) || other.weight == weight)&&const DeepCollectionEquality().equals(other.poolGroups, poolGroups)&&const DeepCollectionEquality().equals(other.poolDrawNumbers, poolDrawNumbers)&&(identical(other.contestantStatus, contestantStatus) || other.contestantStatus == contestantStatus));
+  final _this = this as CompetitionParticipation;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CompetitionParticipation&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.membership, _this.membership) || other.membership == _this.membership)&&(identical(other.lineup, _this.lineup) || other.lineup == _this.lineup)&&(identical(other.weightCategory, _this.weightCategory) || other.weightCategory == _this.weightCategory)&&(identical(other.weight, _this.weight) || other.weight == _this.weight)&&const DeepCollectionEquality().equals(other.poolGroups, _this.poolGroups)&&const DeepCollectionEquality().equals(other.poolDrawNumbers, _this.poolDrawNumbers)&&(identical(other.contestantStatus, _this.contestantStatus) || other.contestantStatus == _this.contestantStatus)&&(identical(other.eligibilityStatusText, _this.eligibilityStatusText) || other.eligibilityStatusText == _this.eligibilityStatusText));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,membership,lineup,weightCategory,weight,const DeepCollectionEquality().hash(poolGroups),const DeepCollectionEquality().hash(poolDrawNumbers),contestantStatus);
+int get hashCode {
+  final _this = this as CompetitionParticipation;
+  return Object.hash(runtimeType,_this.id,_this.membership,_this.lineup,_this.weightCategory,_this.weight,const DeepCollectionEquality().hash(_this.poolGroups),const DeepCollectionEquality().hash(_this.poolDrawNumbers),_this.contestantStatus,_this.eligibilityStatusText);
+}
 
 @override
 String toString() {
-  return 'CompetitionParticipation(id: $id, membership: $membership, lineup: $lineup, weightCategory: $weightCategory, weight: $weight, poolGroups: $poolGroups, poolDrawNumbers: $poolDrawNumbers, contestantStatus: $contestantStatus)';
+  final _this = this as CompetitionParticipation;
+  return 'CompetitionParticipation(id: ${_this.id}, membership: ${_this.membership}, lineup: ${_this.lineup}, weightCategory: ${_this.weightCategory}, weight: ${_this.weight}, poolGroups: ${_this.poolGroups}, poolDrawNumbers: ${_this.poolDrawNumbers}, contestantStatus: ${_this.contestantStatus}, eligibilityStatusText: ${_this.eligibilityStatusText})';
 }
 
 
@@ -48,7 +56,7 @@ abstract mixin class $CompetitionParticipationCopyWith<$Res>  {
   factory $CompetitionParticipationCopyWith(CompetitionParticipation value, $Res Function(CompetitionParticipation) _then) = _$CompetitionParticipationCopyWithImpl;
 @useResult
 $Res call({
- int? id, Membership membership, CompetitionLineup lineup, CompetitionWeightCategory? weightCategory, double? weight, List<int> poolGroups, List<int> poolDrawNumbers, ContestantStatus? contestantStatus
+ int? id, Membership membership, CompetitionLineup lineup, CompetitionWeightCategory? weightCategory, double? weight, List<int> poolGroups, List<int> poolDrawNumbers, ContestantStatus? contestantStatus, String? eligibilityStatusText
 });
 
 
@@ -65,8 +73,8 @@ class _$CompetitionParticipationCopyWithImpl<$Res>
 
 /// Create a copy of CompetitionParticipation
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? membership = null,Object? lineup = null,Object? weightCategory = freezed,Object? weight = freezed,Object? poolGroups = null,Object? poolDrawNumbers = null,Object? contestantStatus = freezed,}) {
-  return _then(_self.copyWith(
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? membership = null,Object? lineup = null,Object? weightCategory = freezed,Object? weight = freezed,Object? poolGroups = null,Object? poolDrawNumbers = null,Object? contestantStatus = freezed,Object? eligibilityStatusText = freezed,}) {
+  return _then(CompetitionParticipation(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,membership: null == membership ? _self.membership : membership // ignore: cast_nullable_to_non_nullable
 as Membership,lineup: null == lineup ? _self.lineup : lineup // ignore: cast_nullable_to_non_nullable
@@ -75,7 +83,8 @@ as CompetitionWeightCategory?,weight: freezed == weight ? _self.weight : weight 
 as double?,poolGroups: null == poolGroups ? _self.poolGroups : poolGroups // ignore: cast_nullable_to_non_nullable
 as List<int>,poolDrawNumbers: null == poolDrawNumbers ? _self.poolDrawNumbers : poolDrawNumbers // ignore: cast_nullable_to_non_nullable
 as List<int>,contestantStatus: freezed == contestantStatus ? _self.contestantStatus : contestantStatus // ignore: cast_nullable_to_non_nullable
-as ContestantStatus?,
+as ContestantStatus?,eligibilityStatusText: freezed == eligibilityStatusText ? _self.eligibilityStatusText : eligibilityStatusText // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of CompetitionParticipation
@@ -190,10 +199,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  Membership membership,  CompetitionLineup lineup,  CompetitionWeightCategory? weightCategory,  double? weight,  List<int> poolGroups,  List<int> poolDrawNumbers,  ContestantStatus? contestantStatus)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  Membership membership,  CompetitionLineup lineup,  CompetitionWeightCategory? weightCategory,  double? weight,  List<int> poolGroups,  List<int> poolDrawNumbers,  ContestantStatus? contestantStatus,  String? eligibilityStatusText)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CompetitionParticipation() when $default != null:
-return $default(_that.id,_that.membership,_that.lineup,_that.weightCategory,_that.weight,_that.poolGroups,_that.poolDrawNumbers,_that.contestantStatus);case _:
+return $default(_that.id,_that.membership,_that.lineup,_that.weightCategory,_that.weight,_that.poolGroups,_that.poolDrawNumbers,_that.contestantStatus,_that.eligibilityStatusText);case _:
   return orElse();
 
 }
@@ -211,10 +220,10 @@ return $default(_that.id,_that.membership,_that.lineup,_that.weightCategory,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  Membership membership,  CompetitionLineup lineup,  CompetitionWeightCategory? weightCategory,  double? weight,  List<int> poolGroups,  List<int> poolDrawNumbers,  ContestantStatus? contestantStatus)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  Membership membership,  CompetitionLineup lineup,  CompetitionWeightCategory? weightCategory,  double? weight,  List<int> poolGroups,  List<int> poolDrawNumbers,  ContestantStatus? contestantStatus,  String? eligibilityStatusText)  $default,) {final _that = this;
 switch (_that) {
 case _CompetitionParticipation():
-return $default(_that.id,_that.membership,_that.lineup,_that.weightCategory,_that.weight,_that.poolGroups,_that.poolDrawNumbers,_that.contestantStatus);case _:
+return $default(_that.id,_that.membership,_that.lineup,_that.weightCategory,_that.weight,_that.poolGroups,_that.poolDrawNumbers,_that.contestantStatus,_that.eligibilityStatusText);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -231,10 +240,10 @@ return $default(_that.id,_that.membership,_that.lineup,_that.weightCategory,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  Membership membership,  CompetitionLineup lineup,  CompetitionWeightCategory? weightCategory,  double? weight,  List<int> poolGroups,  List<int> poolDrawNumbers,  ContestantStatus? contestantStatus)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  Membership membership,  CompetitionLineup lineup,  CompetitionWeightCategory? weightCategory,  double? weight,  List<int> poolGroups,  List<int> poolDrawNumbers,  ContestantStatus? contestantStatus,  String? eligibilityStatusText)?  $default,) {final _that = this;
 switch (_that) {
 case _CompetitionParticipation() when $default != null:
-return $default(_that.id,_that.membership,_that.lineup,_that.weightCategory,_that.weight,_that.poolGroups,_that.poolDrawNumbers,_that.contestantStatus);case _:
+return $default(_that.id,_that.membership,_that.lineup,_that.weightCategory,_that.weight,_that.poolGroups,_that.poolDrawNumbers,_that.contestantStatus,_that.eligibilityStatusText);case _:
   return null;
 
 }
@@ -246,7 +255,7 @@ return $default(_that.id,_that.membership,_that.lineup,_that.weightCategory,_tha
 @JsonSerializable()
 
 class _CompetitionParticipation extends CompetitionParticipation {
-  const _CompetitionParticipation({this.id, required this.membership, required this.lineup, this.weightCategory, this.weight, final  List<int> poolGroups = const [], final  List<int> poolDrawNumbers = const [], this.contestantStatus}): _poolGroups = poolGroups,_poolDrawNumbers = poolDrawNumbers,super._();
+  const _CompetitionParticipation({this.id, required this.membership, required this.lineup, this.weightCategory, this.weight,  List<int> poolGroups = const [],  List<int> poolDrawNumbers = const [], this.contestantStatus, this.eligibilityStatusText}): _poolGroups = poolGroups,_poolDrawNumbers = poolDrawNumbers,super._();
   factory _CompetitionParticipation.fromJson(Map<String, dynamic> json) => _$CompetitionParticipationFromJson(json);
 
 @override final  int? id;
@@ -269,6 +278,9 @@ class _CompetitionParticipation extends CompetitionParticipation {
 }
 
 @override final  ContestantStatus? contestantStatus;
+/// Free-text eligibility markers, see [TeamLineupParticipation.eligibilityStatusText].
+/// Not to be confused with the [contestantStatus], which describes the state in the competition.
+@override final  String? eligibilityStatusText;
 
 /// Create a copy of CompetitionParticipation
 /// with the given fields replaced by the non-null parameter values.
@@ -283,16 +295,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CompetitionParticipation&&(identical(other.id, id) || other.id == id)&&(identical(other.membership, membership) || other.membership == membership)&&(identical(other.lineup, lineup) || other.lineup == lineup)&&(identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory)&&(identical(other.weight, weight) || other.weight == weight)&&const DeepCollectionEquality().equals(other._poolGroups, _poolGroups)&&const DeepCollectionEquality().equals(other._poolDrawNumbers, _poolDrawNumbers)&&(identical(other.contestantStatus, contestantStatus) || other.contestantStatus == contestantStatus));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _CompetitionParticipation&&(identical(other.id, id) || other.id == id)&&(identical(other.membership, membership) || other.membership == membership)&&(identical(other.lineup, lineup) || other.lineup == lineup)&&(identical(other.weightCategory, weightCategory) || other.weightCategory == weightCategory)&&(identical(other.weight, weight) || other.weight == weight)&&const DeepCollectionEquality().equals(other.poolGroups, _poolGroups)&&const DeepCollectionEquality().equals(other.poolDrawNumbers, _poolDrawNumbers)&&(identical(other.contestantStatus, contestantStatus) || other.contestantStatus == contestantStatus)&&(identical(other.eligibilityStatusText, eligibilityStatusText) || other.eligibilityStatusText == eligibilityStatusText));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,membership,lineup,weightCategory,weight,const DeepCollectionEquality().hash(_poolGroups),const DeepCollectionEquality().hash(_poolDrawNumbers),contestantStatus);
+int get hashCode {
+    return Object.hash(runtimeType,id,membership,lineup,weightCategory,weight,const DeepCollectionEquality().hash(_poolGroups),const DeepCollectionEquality().hash(_poolDrawNumbers),contestantStatus,eligibilityStatusText);
+}
 
 @override
 String toString() {
-  return 'CompetitionParticipation(id: $id, membership: $membership, lineup: $lineup, weightCategory: $weightCategory, weight: $weight, poolGroups: $poolGroups, poolDrawNumbers: $poolDrawNumbers, contestantStatus: $contestantStatus)';
+    return 'CompetitionParticipation(id: $id, membership: $membership, lineup: $lineup, weightCategory: $weightCategory, weight: $weight, poolGroups: $poolGroups, poolDrawNumbers: $poolDrawNumbers, contestantStatus: $contestantStatus, eligibilityStatusText: $eligibilityStatusText)';
 }
 
 
@@ -303,7 +317,7 @@ abstract mixin class _$CompetitionParticipationCopyWith<$Res> implements $Compet
   factory _$CompetitionParticipationCopyWith(_CompetitionParticipation value, $Res Function(_CompetitionParticipation) _then) = __$CompetitionParticipationCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, Membership membership, CompetitionLineup lineup, CompetitionWeightCategory? weightCategory, double? weight, List<int> poolGroups, List<int> poolDrawNumbers, ContestantStatus? contestantStatus
+ int? id, Membership membership, CompetitionLineup lineup, CompetitionWeightCategory? weightCategory, double? weight, List<int> poolGroups, List<int> poolDrawNumbers, ContestantStatus? contestantStatus, String? eligibilityStatusText
 });
 
 
@@ -320,7 +334,7 @@ class __$CompetitionParticipationCopyWithImpl<$Res>
 
 /// Create a copy of CompetitionParticipation
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? membership = null,Object? lineup = null,Object? weightCategory = freezed,Object? weight = freezed,Object? poolGroups = null,Object? poolDrawNumbers = null,Object? contestantStatus = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? membership = null,Object? lineup = null,Object? weightCategory = freezed,Object? weight = freezed,Object? poolGroups = null,Object? poolDrawNumbers = null,Object? contestantStatus = freezed,Object? eligibilityStatusText = freezed,}) {
   return _then(_CompetitionParticipation(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,membership: null == membership ? _self.membership : membership // ignore: cast_nullable_to_non_nullable
@@ -330,7 +344,8 @@ as CompetitionWeightCategory?,weight: freezed == weight ? _self.weight : weight 
 as double?,poolGroups: null == poolGroups ? _self._poolGroups : poolGroups // ignore: cast_nullable_to_non_nullable
 as List<int>,poolDrawNumbers: null == poolDrawNumbers ? _self._poolDrawNumbers : poolDrawNumbers // ignore: cast_nullable_to_non_nullable
 as List<int>,contestantStatus: freezed == contestantStatus ? _self.contestantStatus : contestantStatus // ignore: cast_nullable_to_non_nullable
-as ContestantStatus?,
+as ContestantStatus?,eligibilityStatusText: freezed == eligibilityStatusText ? _self.eligibilityStatusText : eligibilityStatusText // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

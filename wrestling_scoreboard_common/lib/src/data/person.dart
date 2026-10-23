@@ -67,13 +67,14 @@ abstract class Person with _$Person implements DataObject, ImageObjectData, Orga
     };
   }
 
-  int? get age {
-    final today = MockableDateTime.now();
+  int? get age => ageAt(MockableDateTime.now());
 
+  /// The age at the given [date], e.g. of a wrestling event.
+  int? ageAt(DateTime date) {
     if (birthDate != null) {
-      final yearDiff = today.year - birthDate!.year;
-      final monthDiff = today.month - birthDate!.month;
-      final dayDiff = today.day - birthDate!.day;
+      final yearDiff = date.year - birthDate!.year;
+      final monthDiff = date.month - birthDate!.month;
+      final dayDiff = date.day - birthDate!.day;
 
       return monthDiff > 0 || (monthDiff == 0 && dayDiff >= 0) ? yearDiff : yearDiff - 1;
     }

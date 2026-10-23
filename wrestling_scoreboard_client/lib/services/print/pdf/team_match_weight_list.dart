@@ -206,7 +206,7 @@ class TeamMatchWeightList extends PdfSheet {
         buildTextCell(teamMatchParticipation?.weight?.toString() ?? '', height: cellHeight, fontSize: cellFontSize),
         buildTextCell(membership?.person.fullName ?? '', height: cellHeight, fontSize: cellFontSize),
         buildTextCell(membership?.no ?? '', height: cellHeight, fontSize: cellFontSize),
-        buildTextCell(membership?.person.toStatus() ?? '', height: cellHeight, fontSize: cellFontSize),
+        buildTextCell(teamMatchParticipation?.eligibilityStatusText ?? '', height: cellHeight, fontSize: cellFontSize),
       ];
     }
 

@@ -1,6 +1,10 @@
 import 'package:wrestling_scoreboard_common/common.dart';
 import 'package:wrestling_scoreboard_server/services/apis/germany_by.dart';
 
+/// The imported data of a team match bout, which is not part of the bout itself.
+/// The [eligibilityStatusTexts] of the participants are only present, if provided by the API.
+typedef TeamMatchBoutImport = ({Iterable<BoutAction> actions, Map<BoutRole, String> eligibilityStatusTexts});
+
 /// Abstraction for providing an api interface.
 abstract class WrestlingApi {
   final timeout = Duration(seconds: 10);
@@ -29,7 +33,7 @@ abstract class WrestlingApi {
 
   Future<Map<TeamMatch, Map<Person, PersonRole>>> importTeamMatches({required League league});
 
-  Future<Map<TeamMatchBout, Iterable<BoutAction>>> importTeamMatchBouts({required TeamMatch teamMatch});
+  Future<Map<TeamMatchBout, TeamMatchBoutImport>> importTeamMatchBouts({required TeamMatch teamMatch});
 
   Future<bool> checkCredentials();
 
