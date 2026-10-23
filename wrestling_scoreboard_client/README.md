@@ -16,7 +16,15 @@ If using [Nginx](https://en.wikipedia.org/wiki/Nginx) as Reverse Proxy, you can 
 
 ## Development
 
-### Environment variables:
+### Dependencies
+
+Linux dependencies from `audioplayers` package for Debian/Ubuntu:
+
+```
+sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+```
+
+### Environment variables
 
 ```shell
 flutter run \
