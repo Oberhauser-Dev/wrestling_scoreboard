@@ -13,16 +13,15 @@ jobs:
   call-build-server:
     needs:
       - call-test
-    uses: ./.github/workflows/build-server.yml
+    uses: ./.github/workflows/release-server.yml
+    with:
+      channel: nightly
+      dry_run: true
   call-build-client:
     needs:
       - call-test
-    uses: ./.github/workflows/build-client.yml
+    if: github.event.pull_request.draft == false
+    uses: ./.github/workflows/release-client.yml
     with:
-      enable_android: ${{ github.event.pull_request.draft == false }}
-      enable_web: ${{ github.event.pull_request.draft == false }}
-      enable_ios: ${{ github.event.pull_request.draft == false }}
-      enable_windows: ${{ github.event.pull_request.draft == false }}
-      enable_linux: ${{ github.event.pull_request.draft == false }}
-      enable_macos: ${{ github.event.pull_request.draft == false }}
-      upload_pages_artifact: false
+      channel: nightly
+      dry_run: true
