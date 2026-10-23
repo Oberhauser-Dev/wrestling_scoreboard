@@ -92,7 +92,6 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
       future: ref.watch(timeCountDownProvider),
       builder: (context, isTimeCountDown) {
         Duration adjustedTime() => _currentTime.invertIf(isTimeCountDown, max: widget.maxDuration);
-        final color = widget.color ?? DefaultTextStyle.of(context).style.color!;
         return GestureDetector(
           onTap: () async {
             final val = await showDurationDialog(
@@ -111,7 +110,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
               ScaledText(
                 adjustedTime().formatMinutesAndSeconds(),
                 fontSize: widget.fontSize ?? 14,
-                color: _stopwatch.isRunning ? color : color.disabled(),
+                foreground: _stopwatch.isRunning ? null : ScaledText.outlinePaint(context),
                 minFontSize: widget.minFontSize ?? 12,
                 softWrap: false,
                 fontWeight: FontWeight.w600,
@@ -128,7 +127,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
                     child: ScaledText(
                       adjustedTime().formatDeciSeconds(),
                       fontSize: (widget.fontSize ?? 14) / 4,
-                      color: _stopwatch.isRunning ? color : color.disabled(),
+                      foreground: _stopwatch.isRunning ? null : ScaledText.outlinePaint(context),
                       minFontSize: 8,
                       softWrap: false,
                     ),

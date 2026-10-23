@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/font.dart';
 
 class ScaledText extends StatelessWidget {
@@ -6,6 +6,7 @@ class ScaledText extends StatelessWidget {
   final double fontSize;
   final FontWeight? fontWeight;
   final FontStyle? fontStyle;
+  final Paint? foreground;
   final Color? color;
   final double? minFontSize;
   final double? scale;
@@ -19,6 +20,7 @@ class ScaledText extends StatelessWidget {
     this.fontSize = 14,
     this.fontWeight,
     this.fontStyle,
+    this.foreground,
     this.minFontSize,
     this.color,
     this.scale,
@@ -28,6 +30,13 @@ class ScaledText extends StatelessWidget {
     this.overflow,
     super.key,
   });
+
+  static Paint outlinePaint(BuildContext context) => Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1.5
+    ..color = Theme.of(context).brightness == Brightness.light
+        ? Colors.black
+        : Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +49,7 @@ class ScaledText extends StatelessWidget {
         decoration: decoration,
         fontWeight: fontWeight,
         fontStyle: fontStyle,
+        foreground: foreground,
       ),
       textScaler: AutoTextScaler(minFontSize: minFontSize ?? fontSize),
       softWrap: softWrap,
