@@ -725,87 +725,88 @@ void main() {
           orgSyncId: '005029c_61_kg_free',
         );
         // "2R26,2B37,PB98,AB124,1R156,PR252,AR292,1B326,1R337,AB360,2B360"
-        expect(teamMatchBouts, <TeamMatchBout, Iterable<BoutAction>>{
-          expectedBout: <BoutAction>[
-            BoutAction(
-              role: BoutRole.red,
-              actionType: BoutActionType.points,
-              duration: Duration(seconds: 26),
-              pointCount: 2,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.blue,
-              actionType: BoutActionType.points,
-              duration: Duration(seconds: 37),
-              pointCount: 2,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.blue,
-              actionType: BoutActionType.verbal,
-              duration: Duration(seconds: 98),
-              pointCount: null,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.blue,
-              actionType: BoutActionType.passivity,
-              duration: Duration(seconds: 124),
-              pointCount: null,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.red,
-              actionType: BoutActionType.points,
-              duration: Duration(seconds: 156),
-              pointCount: 1,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.red,
-              actionType: BoutActionType.verbal,
-              duration: Duration(seconds: 252),
-              pointCount: null,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.red,
-              actionType: BoutActionType.passivity,
-              duration: Duration(seconds: 292),
-              pointCount: null,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.blue,
-              actionType: BoutActionType.points,
-              duration: Duration(seconds: 326),
-              pointCount: 1,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.red,
-              actionType: BoutActionType.points,
-              duration: Duration(seconds: 337),
-              pointCount: 1,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.blue,
-              actionType: BoutActionType.passivity,
-              duration: Duration(seconds: 359),
-              pointCount: null,
-              bout: bout,
-            ),
-            BoutAction(
-              role: BoutRole.blue,
-              actionType: BoutActionType.points,
-              duration: Duration(seconds: 359),
-              pointCount: 2,
-              bout: bout,
-            ),
-          ],
-        });
+        expect(teamMatchBouts.keys, [expectedBout]);
+        // The empty status of the opponent is ignored.
+        expect(teamMatchBouts[expectedBout]!.eligibilityStatusTexts, {BoutRole.red: 'N'});
+        expect(teamMatchBouts[expectedBout]!.actions, <BoutAction>[
+          BoutAction(
+            role: BoutRole.red,
+            actionType: BoutActionType.points,
+            duration: Duration(seconds: 26),
+            pointCount: 2,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.blue,
+            actionType: BoutActionType.points,
+            duration: Duration(seconds: 37),
+            pointCount: 2,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.blue,
+            actionType: BoutActionType.verbal,
+            duration: Duration(seconds: 98),
+            pointCount: null,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.blue,
+            actionType: BoutActionType.passivity,
+            duration: Duration(seconds: 124),
+            pointCount: null,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.red,
+            actionType: BoutActionType.points,
+            duration: Duration(seconds: 156),
+            pointCount: 1,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.red,
+            actionType: BoutActionType.verbal,
+            duration: Duration(seconds: 252),
+            pointCount: null,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.red,
+            actionType: BoutActionType.passivity,
+            duration: Duration(seconds: 292),
+            pointCount: null,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.blue,
+            actionType: BoutActionType.points,
+            duration: Duration(seconds: 326),
+            pointCount: 1,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.red,
+            actionType: BoutActionType.points,
+            duration: Duration(seconds: 337),
+            pointCount: 1,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.blue,
+            actionType: BoutActionType.passivity,
+            duration: Duration(seconds: 359),
+            pointCount: null,
+            bout: bout,
+          ),
+          BoutAction(
+            role: BoutRole.blue,
+            actionType: BoutActionType.points,
+            duration: Duration(seconds: 359),
+            pointCount: 2,
+            bout: bout,
+          ),
+        ]);
       });
     });
   });

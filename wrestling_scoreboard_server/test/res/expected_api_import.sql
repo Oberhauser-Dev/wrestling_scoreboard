@@ -721,7 +721,8 @@ CREATE TABLE public.competition_participation (
     weight numeric(5,2),
     contestant_status public.contestant_status,
     pool_groups smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL,
-    pool_draw_numbers smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL
+    pool_draw_numbers smallint[] DEFAULT ARRAY[]::smallint[] NOT NULL,
+    eligibility_status_text character varying(100)
 );
 
 
@@ -1251,7 +1252,8 @@ CREATE TABLE public.team_lineup_participation (
     lineup_id integer NOT NULL,
     weight_class_id integer,
     weight numeric(5,2),
-    is_substitute boolean DEFAULT false NOT NULL
+    is_substitute boolean DEFAULT false NOT NULL,
+    eligibility_status_text character varying(100)
 );
 
 
@@ -2123,7 +2125,7 @@ COPY public.competition_lineup_membership (id, competition_lineup_id, membership
 -- Data for Name: competition_participation; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.competition_participation (id, competition_lineup_id, membership_id, weight_category_id, weight, contestant_status, pool_groups, pool_draw_numbers) FROM stdin;
+COPY public.competition_participation (id, competition_lineup_id, membership_id, weight_category_id, weight, contestant_status, pool_groups, pool_draw_numbers, eligibility_status_text) FROM stdin;
 \.
 
 
@@ -2456,7 +2458,7 @@ COPY public.membership (id, person_id, club_id, no, org_sync_id, organization_id
 --
 
 COPY public.migration (semver, min_client_version) FROM stdin;
-0.3.16-pre.2	0.3.15
+0.3.16-pre.3	0.3.15
 \.
 
 
@@ -2565,9 +2567,9 @@ COPY public.team_lineup_membership (id, lineup_id, membership_id, lineup_role) F
 -- Data for Name: team_lineup_participation; Type: TABLE DATA; Schema: public; Owner: wrestling
 --
 
-COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_class_id, weight, is_substitute) FROM stdin;
-32	23	5	85	\N	f
-33	24	6	85	\N	f
+COPY public.team_lineup_participation (id, membership_id, lineup_id, weight_class_id, weight, is_substitute, eligibility_status_text) FROM stdin;
+33	24	6	85	\N	f	\N
+34	23	5	85	\N	f	N
 \.
 
 
@@ -3015,7 +3017,7 @@ SELECT pg_catalog.setval('public.participant_state_id_seq', 80, true);
 -- Name: participation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wrestling
 --
 
-SELECT pg_catalog.setval('public.participation_id_seq', 33, true);
+SELECT pg_catalog.setval('public.participation_id_seq', 34, true);
 
 
 --

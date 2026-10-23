@@ -21,6 +21,10 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
     @Default([]) List<int> poolGroups,
     @Default([]) List<int> poolDrawNumbers,
     ContestantStatus? contestantStatus,
+
+    /// Free-text eligibility markers, see [TeamLineupParticipation.eligibilityStatusText].
+    /// Not to be confused with the [contestantStatus], which describes the state in the competition.
+    String? eligibilityStatusText,
   }) = _CompetitionParticipation;
 
   factory CompetitionParticipation.fromJson(Map<String, Object?> json) => _$CompetitionParticipationFromJson(json);
@@ -55,6 +59,7 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
       poolGroups: (e['pool_groups'] as List<int?>).nonNulls.toList(),
       poolDrawNumbers: (e['pool_draw_numbers'] as List<int?>).nonNulls.toList(),
       contestantStatus: contestantStatus == null ? null : ContestantStatus.values.byName(contestantStatus),
+      eligibilityStatusText: e['eligibility_status_text'] as String?,
     );
   }
 
@@ -118,6 +123,7 @@ abstract class CompetitionParticipation with _$CompetitionParticipation implemen
       'pool_groups': poolGroups,
       'pool_draw_numbers': poolDrawNumbers,
       'contestant_status': contestantStatus?.name,
+      'eligibility_status_text': eligibilityStatusText,
     };
   }
 

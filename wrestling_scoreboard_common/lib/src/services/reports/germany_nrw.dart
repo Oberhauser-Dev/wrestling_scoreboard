@@ -2,25 +2,10 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
+
 import 'package:country/country.dart';
 
 import '../../../common.dart';
-
-extension StatusParser on Person {
-  String toStatus() {
-    var status = '';
-
-    if ((age ?? 18) < 18) status += 'J';
-    if (nationality != null && nationality != Countries.deu) {
-      if (nationality!.euMember) {
-        status += 'EU';
-      } else {
-        status += 'N';
-      }
-    }
-    return status;
-  }
-}
 
 extension _BooleanParser on bool {
   String get toGerman => this ? 'Wahr' : 'Falsch';
@@ -143,6 +128,18 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
 
   NrwGermanyWrestlingReporter(this.organization);
 
+  /// Statuses which have to be applied for (e.g. N6, ND) cannot be suggested.
+  @override
+  String? suggestEligibilityStatusText(Person person, {required DateTime date}) {
+    var status = '';
+    if ((person.ageAt(date) ?? 18) < 18) status += 'J';
+    final nationality = person.nationality;
+    if (nationality != null && nationality != Countries.deu) {
+      status += nationality.euMember ? 'EU' : 'N';
+    }
+    return status.isEmpty ? null : status;
+  }
+
   /// Parsing for the comment inside parentheses.
   /// The specification for RDB 2.7.4. (2013):
   /// https://www.brv-ringen.de/index.php?option=com_wbw&view=wbw&Itemid=516&tk=dw&dwbid=1&dwcid=15&op=da&opa=0&dwnid=18&opv=lql#top
@@ -186,8 +183,24 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
     required TeamMatch teamMatch,
     required Map<TeamMatchBout, List<BoutAction>> boutMap,
     required Map<Person, PersonRole> officials,
+    required Iterable<TeamLineupParticipation> homeParticipations,
+    required Iterable<TeamLineupParticipation> guestParticipations,
   }) {
     final bouts = boutMap.keys;
+    String getStatus(
+      AthleteBoutState? athleteBoutState,
+      Iterable<TeamLineupParticipation> participations,
+      WeightClass? weightClass,
+    ) {
+      if (athleteBoutState == null) return '';
+      final participation = TeamLineupParticipation.fromParticipationsAndMembership(
+        participations: participations,
+        membership: athleteBoutState.membership,
+        weightClass: weightClass,
+      );
+      return participation?.eligibilityStatusText ?? '';
+    }
+
     final referee = officials.entries
         .where((official) => official.value == PersonRole.referee)
         .map((e) => e.key)
@@ -246,11 +259,11 @@ class NrwGermanyWrestlingReporter extends WrestlingReporter {
         bout.r?.membership.no ?? '', // 2:HeimLiz
         _sanitizeString(bout.r?.membership.person.surname ?? ''),
         _sanitizeString(bout.r?.membership.person.prename ?? ''),
-        bout.r?.membership.person.toStatus() ?? '',
+        getStatus(bout.r, homeParticipations, teamMatchBout.weightClass),
         bout.b?.membership.no ?? '', // 6:GastLiz
         _sanitizeString(bout.b?.membership.person.surname ?? ''),
         _sanitizeString(bout.b?.membership.person.prename ?? ''),
-        bout.b?.membership.person.toStatus() ?? '',
+        getStatus(bout.b, guestParticipations, teamMatchBout.weightClass),
         bout.r?.classificationPoints ?? 0, // 10:HeimPunkte
         bout.b?.classificationPoints ?? 0, // 11:GastPunkte
         bout.result?.toGerman ?? '', // 12:Ergebnis

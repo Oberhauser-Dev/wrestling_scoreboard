@@ -302,6 +302,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
                     key: ValueKey((weightClass, false)),
                     getOrSetMemberships: _getMemberships,
                     lineup: widget.lineup,
+                    teamMatch: widget.teamMatch,
                     participation: mapEntry.value,
                     weightClass: weightClass,
                     createOrUpdateParticipation: (participation) => _createOrUpdateParticipations.add(participation),
@@ -320,6 +321,7 @@ class LineupEditState extends ConsumerState<TeamLineupEdit> {
                       key: ValueKey((weightClass, true)),
                       getOrSetMemberships: _getMemberships,
                       lineup: widget.lineup,
+                      teamMatch: widget.teamMatch,
                       participation: _substitutes[weightClass],
                       weightClass: weightClass,
                       isSubstitute: true,
@@ -388,11 +390,15 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
   final Future<Iterable<Membership>> Function() getOrSetMemberships;
   final Iterable<Club>? clubFilter;
 
+  /// The team match, whose organization rules and date are used to suggest the eligibility status.
+  final TeamMatch teamMatch;
+
   const ParticipationEditTile({
     super.key,
     this.participation,
     required this.weightClass,
     required this.lineup,
+    required this.teamMatch,
     this.isSubstitute = false,
     this.trailing,
     required this.deleteParticipation,
@@ -408,19 +414,40 @@ class ParticipationEditTile extends ConsumerStatefulWidget {
 class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
   Membership? _curMembership;
   double? _curWeight;
+  late final TextEditingController _eligibilityStatusTextController;
 
   @override
   void initState() {
     super.initState();
     _curMembership = widget.participation?.membership;
     _curWeight = widget.participation?.weight;
+    final participation = widget.participation;
+    _eligibilityStatusTextController = TextEditingController(
+      // Only prefill new participations (e.g. copied from a previous match), existing ones are shown as stored.
+      text: participation?.id == null
+          ? participation?.resolveEligibilityStatusText(widget.teamMatch.organization, date: widget.teamMatch.date)
+          : participation?.eligibilityStatusText,
+    );
   }
 
+  @override
+  void dispose() {
+    _eligibilityStatusTextController.dispose();
+    super.dispose();
+  }
+
+  String? _suggestEligibilityStatusText(Membership? membership) => membership == null
+      ? null
+      : widget.teamMatch.organization?.suggestEligibilityStatusText(membership.person, date: widget.teamMatch.date);
+
   void onSave() {
+    final eligibilityStatusTextTrimmed = _eligibilityStatusTextController.text.trim();
+    final eligibilityStatusText = eligibilityStatusTextTrimmed.isEmpty ? null : eligibilityStatusTextTrimmed;
     // Preloaded new participations (without id) should also be saved.
     if (widget.participation?.id != null &&
         widget.participation?.membership == _curMembership &&
-        widget.participation?.weight == _curWeight) {
+        widget.participation?.weight == _curWeight &&
+        widget.participation?.eligibilityStatusText == eligibilityStatusText) {
       return;
     }
 
@@ -439,6 +466,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
           weightClass: widget.weightClass,
           weight: _curWeight,
           isSubstitute: widget.isSubstitute,
+          eligibilityStatusText: eligibilityStatusText,
         );
       } else {
         curParticipation = TeamLineupParticipation(
@@ -447,6 +475,7 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
           weightClass: widget.weightClass,
           weight: _curWeight,
           isSubstitute: widget.isSubstitute,
+          eligibilityStatusText: eligibilityStatusText,
         );
       }
       widget.createOrUpdateParticipation(curParticipation);
@@ -484,6 +513,8 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
                 getOrSetMemberships: widget.getOrSetMemberships,
                 onChange: (Membership? newMembership) {
                   _curMembership = newMembership;
+                  // Prefill the status of the new wrestler, it can still be adapted by hand.
+                  _eligibilityStatusTextController.text = _suggestEligibilityStatusText(newMembership) ?? '';
                 },
                 organization: widget.lineup.team.organization,
                 selectedItem: widget.participation?.membership,
@@ -517,6 +548,21 @@ class _ParticipationEditTileState extends ConsumerState<ParticipationEditTile> {
                     _curWeight = newValue;
                   });
                 },
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 15,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: TextFormField(
+                controller: _eligibilityStatusTextController,
+                decoration: CustomInputDecoration(
+                  isMandatory: false,
+                  label: localizations.status,
+                  localizations: localizations,
+                ),
+                inputFormatters: [LengthLimitingTextInputFormatter(100)],
               ),
             ),
           ),

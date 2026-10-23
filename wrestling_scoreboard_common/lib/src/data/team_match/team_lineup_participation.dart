@@ -19,6 +19,12 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
     WeightClass? weightClass,
     double? weight,
     @Default(false) bool isSubstitute,
+
+    /// Free-text eligibility markers as written on the weigh-in list or the bout protocol,
+    /// e.g. `J`, `N6` (DRB) or `NW S20` (ÖRSV). The format depends on the organization and may contain multiple markers.
+    /// Prefilled by the rules of the organization, see [Organization.suggestEligibilityStatusText].
+    /// If `null`, there are no markers or they have not been set yet.
+    String? eligibilityStatusText,
   }) = _TeamLineupParticipation;
 
   factory TeamLineupParticipation.fromJson(Map<String, Object?> json) => _$TeamLineupParticipationFromJson(json);
@@ -32,6 +38,21 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
         .where((element) => element.weightClass == weightClass && element.isSubstitute == isSubstitute)
         .zeroOrOne;
   }
+
+  /// The participation of the [membership], preferring the one of the [weightClass].
+  static TeamLineupParticipation? fromParticipationsAndMembership({
+    required Iterable<TeamLineupParticipation> participations,
+    required Membership membership,
+    WeightClass? weightClass,
+  }) {
+    final memberParticipations = participations.where((element) => element.membership == membership);
+    return memberParticipations.where((element) => element.weightClass == weightClass).firstOrNull ??
+        memberParticipations.firstOrNull;
+  }
+
+  /// The [eligibilityStatusText], or the suggestion by the rules of the [organization] if not set yet.
+  String? resolveEligibilityStatusText(Organization? organization, {required DateTime date}) =>
+      eligibilityStatusText ?? organization?.suggestEligibilityStatusText(membership.person, date: date);
 
   static Future<TeamLineupParticipation> fromRaw(Map<String, dynamic> e, GetSingleOfTypeCallback getSingle) async {
     final weightClassId = e['weight_class_id'] as int?;
@@ -50,6 +71,7 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
       membership: membership,
       weight: weight,
       isSubstitute: e['is_substitute'] as bool? ?? false,
+      eligibilityStatusText: e['eligibility_status_text'] as String?,
     );
   }
 
@@ -62,6 +84,7 @@ abstract class TeamLineupParticipation with _$TeamLineupParticipation implements
       'membership_id': membership.id!,
       'weight': weight?.toString(),
       'is_substitute': isSubstitute,
+      'eligibility_status_text': eligibilityStatusText,
     };
   }
 

@@ -235,7 +235,7 @@ class TeamMatchController extends ShelfController<TeamMatch>
         filterId: entity.id,
         onUpdateOrCreate: (previous, current) async {
           var bout = current.bout;
-          final actions = tmbMap[current]!;
+          final actions = tmbMap[current]!.actions;
 
           bout = await BoutController().updateOrCreateSingleOfOrg(
             bout,
@@ -276,13 +276,18 @@ class TeamMatchController extends ShelfController<TeamMatch>
         },
       );
 
+      final eligibilityStatusTexts = Map.fromEntries(
+        tmbMap.entries.map((entry) => MapEntry(entry.key.weightClass!, entry.value.eligibilityStatusTexts)),
+      );
       await _updateLineupParticipations(
         entity.home,
         Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.r))),
+        eligibilityStatusTexts: eligibilityStatusTexts.map((wc, texts) => MapEntry(wc, texts[BoutRole.red])),
       );
       await _updateLineupParticipations(
         entity.guest,
         Map.fromEntries(teamMatchBouts.map((tmb) => MapEntry(tmb.weightClass!, tmb.bout.b))),
+        eligibilityStatusTexts: eligibilityStatusTexts.map((wc, texts) => MapEntry(wc, texts[BoutRole.blue])),
       );
     }
 
@@ -297,8 +302,9 @@ class TeamMatchController extends ShelfController<TeamMatch>
 
   Future<void> _updateLineupParticipations(
     TeamLineup lineup,
-    Map<WeightClass, AthleteBoutState?> participantsMap,
-  ) async {
+    Map<WeightClass, AthleteBoutState?> participantsMap, {
+    required Map<WeightClass, String?> eligibilityStatusTexts,
+  }) async {
     final updated = participantsMap.entries
         .map((entry) {
           final weightClass = entry.key;
@@ -309,6 +315,7 @@ class TeamMatchController extends ShelfController<TeamMatch>
             membership: athleteBoutState.membership,
             weight: null, // TODO: Weight not available in import (yet)
             weightClass: weightClass,
+            eligibilityStatusText: eligibilityStatusTexts[weightClass],
           );
         })
         .nonNulls
@@ -321,13 +328,20 @@ class TeamMatchController extends ShelfController<TeamMatch>
       // TODO: remove when weight is available on import.
       modify: (previous) {
         return [
-          ...updated.map(
-            (c) => c.copyWith(
-              weight:
-                  c.weight ??
-                  previous.where((p) => p.weightClass == c.weightClass && !p.isSubstitute).firstOrNull?.weight,
-            ),
-          ),
+          ...updated.map((c) {
+            final previousParticipation = previous
+                .where((p) => p.weightClass == c.weightClass && !p.isSubstitute)
+                .firstOrNull;
+            return c.copyWith(
+              weight: c.weight ?? previousParticipation?.weight,
+              // Keep the status, if not provided by the import, as it may have been adapted by hand.
+              eligibilityStatusText:
+                  c.eligibilityStatusText ??
+                  (previousParticipation?.membership.id == c.membership.id
+                      ? previousParticipation?.eligibilityStatusText
+                      : null),
+            );
+          }),
           // Keep substitutes, as they are not part of the import, unless they became the regular participant.
           ...previous
               .where(

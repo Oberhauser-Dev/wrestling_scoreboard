@@ -302,6 +302,14 @@ class TeamMatchTranscript extends PdfSheet {
       final boutState = role == BoutRole.red ? bout.r : bout.b;
       final membership = boutState?.membership;
       assert(teamMatchParticipation?.membership == membership, 'Memberships do not match');
+      // The wrestler of the bout may differ from the participation of the weight class, e.g. a substitute.
+      final eligibilityStatusText = membership == null
+          ? null
+          : TeamLineupParticipation.fromParticipationsAndMembership(
+              participations: participations,
+              membership: membership,
+              weightClass: weightClass,
+            )?.eligibilityStatusText;
       return [
         buildTextCell(
           teamMatchParticipation?.weight?.toString() ?? '',
@@ -327,7 +335,7 @@ class TeamMatchTranscript extends PdfSheet {
           alignment: Alignment.center,
         ),
         buildTextCell(
-          membership?.person.toStatus() ?? '',
+          eligibilityStatusText ?? '',
           height: cellHeight,
           alignment: Alignment.center,
           borderColor: borderColor,

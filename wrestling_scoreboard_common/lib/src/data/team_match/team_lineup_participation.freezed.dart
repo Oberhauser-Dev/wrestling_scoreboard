@@ -16,7 +16,11 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TeamLineupParticipation {
 
- int? get id; Membership get membership; TeamLineup get lineup; WeightClass? get weightClass; double? get weight; bool get isSubstitute;
+ int? get id; Membership get membership; TeamLineup get lineup; WeightClass? get weightClass; double? get weight; bool get isSubstitute;/// Free-text eligibility markers as written on the weigh-in list or the bout protocol,
+/// e.g. `J`, `N6` (DRB) or `NW S20` (ÖRSV). The format depends on the organization and may contain multiple markers.
+/// Prefilled by the rules of the organization, see [OrganizationEligibilityStatus.suggestEligibilityStatusText].
+/// If `null`, it has not been set yet, whereas an empty string means no markers.
+ String? get eligibilityStatusText;
 /// Create a copy of TeamLineupParticipation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,20 +34,20 @@ $TeamLineupParticipationCopyWith<TeamLineupParticipation> get copyWith => _$Team
 @override
 bool operator ==(Object other) {
   final _this = this as TeamLineupParticipation;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamLineupParticipation&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.membership, _this.membership) || other.membership == _this.membership)&&(identical(other.lineup, _this.lineup) || other.lineup == _this.lineup)&&(identical(other.weightClass, _this.weightClass) || other.weightClass == _this.weightClass)&&(identical(other.weight, _this.weight) || other.weight == _this.weight)&&(identical(other.isSubstitute, _this.isSubstitute) || other.isSubstitute == _this.isSubstitute));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamLineupParticipation&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.membership, _this.membership) || other.membership == _this.membership)&&(identical(other.lineup, _this.lineup) || other.lineup == _this.lineup)&&(identical(other.weightClass, _this.weightClass) || other.weightClass == _this.weightClass)&&(identical(other.weight, _this.weight) || other.weight == _this.weight)&&(identical(other.isSubstitute, _this.isSubstitute) || other.isSubstitute == _this.isSubstitute)&&(identical(other.eligibilityStatusText, _this.eligibilityStatusText) || other.eligibilityStatusText == _this.eligibilityStatusText));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as TeamLineupParticipation;
-  return Object.hash(runtimeType,_this.id,_this.membership,_this.lineup,_this.weightClass,_this.weight,_this.isSubstitute);
+  return Object.hash(runtimeType,_this.id,_this.membership,_this.lineup,_this.weightClass,_this.weight,_this.isSubstitute,_this.eligibilityStatusText);
 }
 
 @override
 String toString() {
   final _this = this as TeamLineupParticipation;
-  return 'TeamLineupParticipation(id: ${_this.id}, membership: ${_this.membership}, lineup: ${_this.lineup}, weightClass: ${_this.weightClass}, weight: ${_this.weight}, isSubstitute: ${_this.isSubstitute})';
+  return 'TeamLineupParticipation(id: ${_this.id}, membership: ${_this.membership}, lineup: ${_this.lineup}, weightClass: ${_this.weightClass}, weight: ${_this.weight}, isSubstitute: ${_this.isSubstitute}, eligibilityStatusText: ${_this.eligibilityStatusText})';
 }
 
 
@@ -54,7 +58,7 @@ abstract mixin class $TeamLineupParticipationCopyWith<$Res>  {
   factory $TeamLineupParticipationCopyWith(TeamLineupParticipation value, $Res Function(TeamLineupParticipation) _then) = _$TeamLineupParticipationCopyWithImpl;
 @useResult
 $Res call({
- int? id, Membership membership, TeamLineup lineup, WeightClass? weightClass, double? weight, bool isSubstitute
+ int? id, Membership membership, TeamLineup lineup, WeightClass? weightClass, double? weight, bool isSubstitute, String? eligibilityStatusText
 });
 
 
@@ -71,7 +75,7 @@ class _$TeamLineupParticipationCopyWithImpl<$Res>
 
 /// Create a copy of TeamLineupParticipation
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? membership = null,Object? lineup = null,Object? weightClass = freezed,Object? weight = freezed,Object? isSubstitute = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? membership = null,Object? lineup = null,Object? weightClass = freezed,Object? weight = freezed,Object? isSubstitute = null,Object? eligibilityStatusText = freezed,}) {
   return _then(TeamLineupParticipation(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,membership: null == membership ? _self.membership : membership // ignore: cast_nullable_to_non_nullable
@@ -79,7 +83,8 @@ as Membership,lineup: null == lineup ? _self.lineup : lineup // ignore: cast_nul
 as TeamLineup,weightClass: freezed == weightClass ? _self.weightClass : weightClass // ignore: cast_nullable_to_non_nullable
 as WeightClass?,weight: freezed == weight ? _self.weight : weight // ignore: cast_nullable_to_non_nullable
 as double?,isSubstitute: null == isSubstitute ? _self.isSubstitute : isSubstitute // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,eligibilityStatusText: freezed == eligibilityStatusText ? _self.eligibilityStatusText : eligibilityStatusText // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of TeamLineupParticipation
@@ -194,10 +199,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  Membership membership,  TeamLineup lineup,  WeightClass? weightClass,  double? weight,  bool isSubstitute)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  Membership membership,  TeamLineup lineup,  WeightClass? weightClass,  double? weight,  bool isSubstitute,  String? eligibilityStatusText)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TeamLineupParticipation() when $default != null:
-return $default(_that.id,_that.membership,_that.lineup,_that.weightClass,_that.weight,_that.isSubstitute);case _:
+return $default(_that.id,_that.membership,_that.lineup,_that.weightClass,_that.weight,_that.isSubstitute,_that.eligibilityStatusText);case _:
   return orElse();
 
 }
@@ -215,10 +220,10 @@ return $default(_that.id,_that.membership,_that.lineup,_that.weightClass,_that.w
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  Membership membership,  TeamLineup lineup,  WeightClass? weightClass,  double? weight,  bool isSubstitute)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  Membership membership,  TeamLineup lineup,  WeightClass? weightClass,  double? weight,  bool isSubstitute,  String? eligibilityStatusText)  $default,) {final _that = this;
 switch (_that) {
 case _TeamLineupParticipation():
-return $default(_that.id,_that.membership,_that.lineup,_that.weightClass,_that.weight,_that.isSubstitute);case _:
+return $default(_that.id,_that.membership,_that.lineup,_that.weightClass,_that.weight,_that.isSubstitute,_that.eligibilityStatusText);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -235,10 +240,10 @@ return $default(_that.id,_that.membership,_that.lineup,_that.weightClass,_that.w
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  Membership membership,  TeamLineup lineup,  WeightClass? weightClass,  double? weight,  bool isSubstitute)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  Membership membership,  TeamLineup lineup,  WeightClass? weightClass,  double? weight,  bool isSubstitute,  String? eligibilityStatusText)?  $default,) {final _that = this;
 switch (_that) {
 case _TeamLineupParticipation() when $default != null:
-return $default(_that.id,_that.membership,_that.lineup,_that.weightClass,_that.weight,_that.isSubstitute);case _:
+return $default(_that.id,_that.membership,_that.lineup,_that.weightClass,_that.weight,_that.isSubstitute,_that.eligibilityStatusText);case _:
   return null;
 
 }
@@ -250,7 +255,7 @@ return $default(_that.id,_that.membership,_that.lineup,_that.weightClass,_that.w
 @JsonSerializable()
 
 class _TeamLineupParticipation extends TeamLineupParticipation {
-  const _TeamLineupParticipation({this.id, required this.membership, required this.lineup, this.weightClass, this.weight, this.isSubstitute = false}): super._();
+  const _TeamLineupParticipation({this.id, required this.membership, required this.lineup, this.weightClass, this.weight, this.isSubstitute = false, this.eligibilityStatusText}): super._();
   factory _TeamLineupParticipation.fromJson(Map<String, dynamic> json) => _$TeamLineupParticipationFromJson(json);
 
 @override final  int? id;
@@ -259,6 +264,11 @@ class _TeamLineupParticipation extends TeamLineupParticipation {
 @override final  WeightClass? weightClass;
 @override final  double? weight;
 @override@JsonKey() final  bool isSubstitute;
+/// Free-text eligibility markers as written on the weigh-in list or the bout protocol,
+/// e.g. `J`, `N6` (DRB) or `NW S20` (ÖRSV). The format depends on the organization and may contain multiple markers.
+/// Prefilled by the rules of the organization, see [OrganizationEligibilityStatus.suggestEligibilityStatusText].
+/// If `null`, it has not been set yet, whereas an empty string means no markers.
+@override final  String? eligibilityStatusText;
 
 /// Create a copy of TeamLineupParticipation
 /// with the given fields replaced by the non-null parameter values.
@@ -273,18 +283,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamLineupParticipation&&(identical(other.id, id) || other.id == id)&&(identical(other.membership, membership) || other.membership == membership)&&(identical(other.lineup, lineup) || other.lineup == lineup)&&(identical(other.weightClass, weightClass) || other.weightClass == weightClass)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.isSubstitute, isSubstitute) || other.isSubstitute == isSubstitute));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamLineupParticipation&&(identical(other.id, id) || other.id == id)&&(identical(other.membership, membership) || other.membership == membership)&&(identical(other.lineup, lineup) || other.lineup == lineup)&&(identical(other.weightClass, weightClass) || other.weightClass == weightClass)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.isSubstitute, isSubstitute) || other.isSubstitute == isSubstitute)&&(identical(other.eligibilityStatusText, eligibilityStatusText) || other.eligibilityStatusText == eligibilityStatusText));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,membership,lineup,weightClass,weight,isSubstitute);
+    return Object.hash(runtimeType,id,membership,lineup,weightClass,weight,isSubstitute,eligibilityStatusText);
 }
 
 @override
 String toString() {
-    return 'TeamLineupParticipation(id: $id, membership: $membership, lineup: $lineup, weightClass: $weightClass, weight: $weight, isSubstitute: $isSubstitute)';
+    return 'TeamLineupParticipation(id: $id, membership: $membership, lineup: $lineup, weightClass: $weightClass, weight: $weight, isSubstitute: $isSubstitute, eligibilityStatusText: $eligibilityStatusText)';
 }
 
 
@@ -295,7 +305,7 @@ abstract mixin class _$TeamLineupParticipationCopyWith<$Res> implements $TeamLin
   factory _$TeamLineupParticipationCopyWith(_TeamLineupParticipation value, $Res Function(_TeamLineupParticipation) _then) = __$TeamLineupParticipationCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, Membership membership, TeamLineup lineup, WeightClass? weightClass, double? weight, bool isSubstitute
+ int? id, Membership membership, TeamLineup lineup, WeightClass? weightClass, double? weight, bool isSubstitute, String? eligibilityStatusText
 });
 
 
@@ -312,7 +322,7 @@ class __$TeamLineupParticipationCopyWithImpl<$Res>
 
 /// Create a copy of TeamLineupParticipation
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? membership = null,Object? lineup = null,Object? weightClass = freezed,Object? weight = freezed,Object? isSubstitute = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? membership = null,Object? lineup = null,Object? weightClass = freezed,Object? weight = freezed,Object? isSubstitute = null,Object? eligibilityStatusText = freezed,}) {
   return _then(_TeamLineupParticipation(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,membership: null == membership ? _self.membership : membership // ignore: cast_nullable_to_non_nullable
@@ -320,7 +330,8 @@ as Membership,lineup: null == lineup ? _self.lineup : lineup // ignore: cast_nul
 as TeamLineup,weightClass: freezed == weightClass ? _self.weightClass : weightClass // ignore: cast_nullable_to_non_nullable
 as WeightClass?,weight: freezed == weight ? _self.weight : weight // ignore: cast_nullable_to_non_nullable
 as double?,isSubstitute: null == isSubstitute ? _self.isSubstitute : isSubstitute // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,eligibilityStatusText: freezed == eligibilityStatusText ? _self.eligibilityStatusText : eligibilityStatusText // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

@@ -13,6 +13,7 @@ _TeamLineupParticipation _$TeamLineupParticipationFromJson(Map<String, dynamic> 
   weightClass: json['weightClass'] == null ? null : WeightClass.fromJson(json['weightClass'] as Map<String, dynamic>),
   weight: (json['weight'] as num?)?.toDouble(),
   isSubstitute: json['isSubstitute'] as bool? ?? false,
+  eligibilityStatusText: json['eligibilityStatusText'] as String?,
 );
 
 Map<String, dynamic> _$TeamLineupParticipationToJson(_TeamLineupParticipation instance) => <String, dynamic>{
@@ -22,4 +23,5 @@ Map<String, dynamic> _$TeamLineupParticipationToJson(_TeamLineupParticipation in
   'weightClass': instance.weightClass?.toJson(),
   'weight': instance.weight,
   'isSubstitute': instance.isSubstitute,
+  'eligibilityStatusText': instance.eligibilityStatusText,
 };
