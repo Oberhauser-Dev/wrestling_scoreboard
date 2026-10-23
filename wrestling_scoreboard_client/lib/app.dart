@@ -64,11 +64,13 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
       theme = ThemeData.light();
       theme = theme.copyWith(
         colorScheme: theme.colorScheme.copyWith(primary: primaryColor, secondary: primaryColor.shade800),
+        textTheme: theme.textTheme.apply(bodyColor: Colors.black, displayColor: Colors.black),
       );
     } else {
       theme = ThemeData.dark();
       theme = theme.copyWith(
         colorScheme: theme.colorScheme.copyWith(primary: primaryColor, secondary: primaryColor.shade300),
+        textTheme: theme.textTheme.apply(bodyColor: Colors.white, displayColor: Colors.white),
       );
     }
     final (red, blue) = roleBaseColors;
