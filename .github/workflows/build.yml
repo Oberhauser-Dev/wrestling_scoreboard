@@ -15,16 +15,28 @@ concurrency:
 jobs:
   call-test:
     uses: ./.github/workflows/test.yml
-  call-build-client:
+  call-release-client:
     needs:
       - call-test
-    uses: ./.github/workflows/build-client.yml
+    permissions:
+      contents: write
+    uses: ./.github/workflows/release-client.yml
     with:
-      upload_pages_artifact: true
+      channel: nightly
+    secrets: inherit
+  call-release-server:
+    needs:
+      - call-test
+    permissions:
+      contents: write
+    uses: ./.github/workflows/release-server.yml
+    with:
+      channel: nightly
+    secrets: inherit
 
   deploy-client:
     needs:
-      - call-build-client
+      - call-release-client
     permissions:
       pages: write
       id-token: write
@@ -36,52 +48,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-  
-  deploy-server:
-    name: Deploy Server for ${{ matrix.platform }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            platform: linux
-    steps:
-      - uses: actions/checkout@v6
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.47.4'
-          channel: 'stable'
-      - uses: bluefireteam/melos-action@v3
-      - name: Calculate short SHA
-        run: echo "GITHUB_SHA_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
-        # Windows powershell does not parse correctly
-        shell: bash
-      - name: Deploy
-        uses: oberhauser-dev/dart-release-action@v0
-        with:
-          working-directory: wrestling_scoreboard_server
-          dry-run: false
-          main-path: 'bin/server.dart'
-          app-name: 'wrestling_scoreboard_server'
-          build-metadata: nightly.${{ env.GITHUB_SHA_SHORT }}
-          tag: ${{ github.ref }}
-          token: ${{ github.token }}
-          # build-args: |-
-          include-paths: |-
-            public
-            database
-            .env.example
-            pubspec.yaml
-          # Deploy
-          deploy-web-host: ${{ secrets.WEB_HOST }}
-          deploy-web-path: ${{ secrets.SERVER_DEPLOY_PATH_DEV }}
-          deploy-web-ssh-port: ${{ secrets.WEB_SSH_PORT }}
-          deploy-web-ssh-user: ${{ secrets.WEB_SSH_USER }}
-          deploy-web-ssh-private-key-base64: ${{ secrets.WEB_SSH_PRIVATE_KEY }}
-          deploy-pre-run: |
-            systemctl --user stop wrestling-scoreboard-server-dev.service
-          deploy-post-run: |
-            systemctl --user start wrestling-scoreboard-server-dev.service
-
-

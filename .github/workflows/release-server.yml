@@ -3,26 +3,78 @@ name: release server
 on:
   push:
     tags:
-      - 'wrestling_scoreboard_server-*'
+      - 'wrestling_scoreboard_server-v*'
   workflow_dispatch:
+    inputs:
+      channel:
+        description: 'Release channel: `stable` releases the tag and deploys to production, `nightly` replaces the nightly prerelease and deploys to dev.'
+        required: false
+        default: 'stable'
+        type: choice
+        options:
+          - 'stable'
+          - 'nightly'
+      dry_run:
+        description: 'Only build, without releasing or deploying'
+        required: false
+        default: false
+        type: boolean
+  workflow_call:
+    inputs:
+      channel:
+        required: false
+        default: 'stable'
+        type: string
+      dry_run:
+        required: false
+        default: false
+        type: boolean
+
+env:
+  # The inputs are empty on tag pushes, which are stable releases.
+  IS_NIGHTLY: ${{ inputs.channel == 'nightly' }}
+  NIGHTLY_TAG: 'wrestling_scoreboard_server-nightly'
 
 jobs:
   pre-run:
     name: Calculate release version
     runs-on: ubuntu-latest
     steps:
+      - name: Recreate nightly prerelease
+        # The builds upload their assets to the existing release of the tag.
+        if: env.IS_NIGHTLY == 'true' && !inputs.dry_run
+        run: |
+          gh release delete "$NIGHTLY_TAG" --cleanup-tag --yes || true
+          gh release create "$NIGHTLY_TAG" \
+            --prerelease \
+            --latest=false \
+            --target "$GITHUB_SHA" \
+            --title "Server nightly (${GITHUB_SHA::7})" \
+            --notes "Rolling build of \`main\` at $GITHUB_SHA. Not intended for production use."
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
       - id: release-version
         run: |
-          TAG="${{ github.ref_name }}"
-          RELEASE_VERSION="${TAG#*wrestling_scoreboard_server-}"
-          echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+          if [ "$IS_NIGHTLY" = "true" ]; then
+            # Use the version of the pubspec.yaml
+            echo "version=" >> $GITHUB_OUTPUT
+            echo "build-metadata=nightly.${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+          else
+            TAG="${{ github.ref_name }}"
+            RELEASE_VERSION="${TAG#*wrestling_scoreboard_server-}"
+            echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
+            echo "build-metadata=" >> $GITHUB_OUTPUT
+          fi
     outputs:
       release-version: ${{ steps.release-version.outputs.version }}
+      build-metadata: ${{ steps.release-version.outputs.build-metadata }}
 
   release-server:
     name: Release Server for ${{ matrix.platform }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     needs: pre-run
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -52,11 +104,12 @@ jobs:
         uses: oberhauser-dev/dart-release-action@v0
         with:
           working-directory: wrestling_scoreboard_server
-          dry-run: false
+          dry-run: ${{ inputs.dry_run == true }}
           main-path: 'bin/server.dart'
           app-name: 'wrestling_scoreboard_server'
           app-version: ${{ needs.pre-run.outputs.release-version }}
-          tag: ${{ github.ref }}
+          build-metadata: ${{ needs.pre-run.outputs.build-metadata }}
+          tag: ${{ env.IS_NIGHTLY != 'true' && github.ref || env.NIGHTLY_TAG }}
           token: ${{ github.token }}
           # build-args: |-
           include-paths: |-
@@ -66,6 +119,7 @@ jobs:
 
   deploy-server:
     name: Deploy Server for ${{ matrix.platform }}
+    if: ${{ !inputs.dry_run }}
     runs-on: ${{ matrix.os }}
     needs: pre-run
     strategy:
@@ -89,6 +143,7 @@ jobs:
           main-path: 'bin/server.dart'
           app-name: 'wrestling_scoreboard_server'
           app-version: ${{ needs.pre-run.outputs.release-version }}
+          build-metadata: ${{ needs.pre-run.outputs.build-metadata }}
           tag: ${{ github.ref }}
           token: ${{ github.token }}
           # build-args: |-
@@ -99,11 +154,11 @@ jobs:
             pubspec.yaml
           # Deploy
           deploy-web-host: ${{ secrets.WEB_HOST }}
-          deploy-web-path: ${{ secrets.SERVER_DEPLOY_PATH }}
+          deploy-web-path: ${{ env.IS_NIGHTLY != 'true' && secrets.SERVER_DEPLOY_PATH || secrets.SERVER_DEPLOY_PATH_DEV }}
           deploy-web-ssh-port: ${{ secrets.WEB_SSH_PORT }}
           deploy-web-ssh-user: ${{ secrets.WEB_SSH_USER }}
           deploy-web-ssh-private-key-base64: ${{ secrets.WEB_SSH_PRIVATE_KEY }}
           deploy-pre-run: |
-            systemctl --user stop wrestling-scoreboard-server.service
+            systemctl --user stop wrestling-scoreboard-server${{ env.IS_NIGHTLY == 'true' && '-dev' || '' }}.service
           deploy-post-run: |
-            systemctl --user start wrestling-scoreboard-server.service
+            systemctl --user start wrestling-scoreboard-server${{ env.IS_NIGHTLY == 'true' && '-dev' || '' }}.service
