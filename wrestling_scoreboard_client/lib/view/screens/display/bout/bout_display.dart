@@ -1047,7 +1047,7 @@ class _NameDisplay extends StatelessWidget {
               children: [
                 ScaledText(
                   pStatus?.prename ?? localizations.participantVacant,
-                  color: pStatus == null ? textColor.disabled() : null,
+                  fontStyle: pStatus == null ? FontStyle.italic : null,
                   fontSize: 30,
                   minFontSize: 20,
                   textAlign: TextAlign.center,

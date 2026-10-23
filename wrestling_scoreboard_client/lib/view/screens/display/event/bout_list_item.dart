@@ -58,7 +58,7 @@ class BoutListItem extends ConsumerWidget {
                 children: [
                   ScaledText(
                     pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.prename,
-                    color: pStatus == null ? textColor.disabled() : null,
+                    fontStyle: pStatus == null ? FontStyle.italic : null,
                     fontSize: 17,
                     minFontSize: 14,
                     textAlign: TextAlign.center,
