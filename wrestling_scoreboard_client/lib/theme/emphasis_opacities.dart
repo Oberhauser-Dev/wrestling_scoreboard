@@ -13,7 +13,7 @@ class EmphasisOpacities extends ThemeExtension<EmphasisOpacities> {
   static const standard = EmphasisOpacities(onSurfaceAlpha: 0.87, onSurfaceVariantAlpha: 0.74, disabledAlpha: 0.38);
 
   /// The opacities of the high contrast theme.
-  static const highContrast = EmphasisOpacities(onSurfaceAlpha: 1.0, onSurfaceVariantAlpha: 1.0, disabledAlpha: 0.6);
+  static const highContrast = EmphasisOpacities(onSurfaceAlpha: 1.0, onSurfaceVariantAlpha: 1.0, disabledAlpha: 0.38);
 
   /// The opacity of high emphasis (active) content, see [ColorScheme.onSurface].
   /// The default M3 colors correspond to 0.89 (light) and 0.88 (dark).
