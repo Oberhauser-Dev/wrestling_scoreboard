@@ -53,15 +53,15 @@ class ExceptionInfo extends StatelessWidget {
     } else {
       title = localizations.errorOccurred;
     }
-    final disabledColor = Theme.of(context).disabledColor;
+    final textColor = Theme.of(context).colorScheme.onSurfaceVariant;
 
     return ExpansionTile(
       title: Text(title),
       childrenPadding: const EdgeInsets.all(16),
       children: [
-        SelectableText(exception.toString(), style: TextStyle(color: disabledColor, fontSize: 14)),
+        SelectableText(exception.toString(), style: TextStyle(color: textColor, fontSize: 14)),
         if (stackTrace != null)
-          SelectableText(stackTrace!.toString(), style: TextStyle(color: disabledColor, fontSize: 11)),
+          SelectableText(stackTrace!.toString(), style: TextStyle(color: textColor, fontSize: 11)),
       ],
     );
   }

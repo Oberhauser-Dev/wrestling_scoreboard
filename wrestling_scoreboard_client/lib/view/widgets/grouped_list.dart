@@ -66,8 +66,10 @@ class ContentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: icon,
-      title: Text(title, style: isDisabled ? TextStyle(color: Theme.of(context).disabledColor) : null),
-      subtitle: (subtitle != null) ? Text(subtitle!, style: TextStyle(color: Theme.of(context).disabledColor)) : null,
+      title: Text(title, style: isDisabled ? TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant) : null),
+      subtitle: (subtitle != null)
+          ? Text(subtitle!, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant))
+          : null,
       trailing: trailing ?? (onTap == null ? null : Icon(Icons.chevron_right)),
       onTap: onTap,
     );

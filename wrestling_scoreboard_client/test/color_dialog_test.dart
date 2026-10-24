@@ -1,8 +1,8 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wrestling_scoreboard_client/theme/role_colors.dart';
 import 'package:wrestling_scoreboard_client/l10n/app_localizations.dart';
-import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/color.dart';
 
 void main() {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wrestling_scoreboard_client/theme/role_colors.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
-import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
 
 extension BoutRoleLocalization on BoutRole {

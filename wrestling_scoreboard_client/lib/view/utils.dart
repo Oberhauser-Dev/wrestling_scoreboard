@@ -11,23 +11,6 @@ final isMobile = !kIsWeb && isOnMobile;
 final isOnDesktop = !isOnMobile;
 final isDesktop = !kIsWeb && isOnDesktop;
 
-/// The opacity of disabled content, e.g. a vacant participant or a past match.
-/// Material Design uses 0.38 for disabled controls, which are not meant to be read:
-/// https://m3.material.io/foundations/interaction/states/applying-states#4aff9c51-d20f-4580-a510-862d2e25e931
-/// As disabled content still carries information here, a higher opacity is used, which keeps a contrast
-/// of at least 4.5 (WCAG AA) on the theme backgrounds, e.g. also on a projector.
-const double disabledAlpha = 0.5;
-
-/// The opacity of disabled content in high contrast mode, see [disabledAlpha].
-const double highContrastDisabledAlpha = 0.9;
-
-extension ColorExtension on Color {
-  /// Get disabled state of a color, see [disabledAlpha] and [highContrastDisabledAlpha].
-  Color disabled({bool highContrast = false}) {
-    return withValues(alpha: highContrast ? highContrastDisabledAlpha : disabledAlpha);
-  }
-}
-
 // Below 600: extraSmallScreen
 const smallScreenMinWidth = 600.0;
 const mediumScreenMinWidth = 768.0;

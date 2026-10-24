@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wrestling_scoreboard_client/theme/role_colors.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/competition.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
-import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/competition/competition_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/competition/competition_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
@@ -44,7 +44,9 @@ class CompetitionBoutList<T extends DataObject?> extends StatelessWidget {
                   text: bout.r?.fullName(context) ?? localizations.participantVacant,
                   style: filterObject is! Membership || bout.r?.membership == filterObject
                       ? TextStyle(
-                          color: bout.r == null ? Theme.of(context).disabledColor : context.roleColors.redText,
+                          color: bout.r == null
+                              ? Theme.of(context).colorScheme.onSurfaceVariant
+                              : context.roleColors.redText,
                           fontWeight: filterObject is! Membership ? null : FontWeight.bold,
                         )
                       : null,
@@ -54,7 +56,9 @@ class CompetitionBoutList<T extends DataObject?> extends StatelessWidget {
                   text: bout.b?.fullName(context) ?? localizations.participantVacant,
                   style: filterObject is! Membership || bout.b?.membership == filterObject
                       ? TextStyle(
-                          color: bout.b == null ? Theme.of(context).disabledColor : context.roleColors.blueText,
+                          color: bout.b == null
+                              ? Theme.of(context).colorScheme.onSurfaceVariant
+                              : context.roleColors.blueText,
                           fontWeight: filterObject is! Membership ? null : FontWeight.bold,
                         )
                       : null,

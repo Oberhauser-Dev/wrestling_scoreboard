@@ -57,7 +57,7 @@ class CustomizableEditWidget extends StatelessWidget {
         title: Row(
           children: [
             Text('${id == null ? localizations.create : localizations.edit} $typeLocalization'),
-            if (id != null) Text(' #$id', style: TextStyle(color: Theme.of(context).disabledColor)),
+            if (id != null) Text(' #$id', style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           ],
         ),
         actions: [ResponsiveScaffoldActions(actionContents: buildActions(context))],

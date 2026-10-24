@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
 import 'package:material_duration_picker/material_duration_picker.dart';
 import 'package:path/path.dart' as path;
@@ -23,12 +22,11 @@ import 'package:wrestling_scoreboard_client/provider/network_provider.dart';
 import 'package:wrestling_scoreboard_client/routes/router.dart';
 import 'package:wrestling_scoreboard_client/services/network/data_manager.dart';
 import 'package:wrestling_scoreboard_client/services/network/remote/web_socket.dart';
-import 'package:wrestling_scoreboard_client/utils/colors.dart';
+import 'package:wrestling_scoreboard_client/theme/app_theme.dart';
 import 'package:wrestling_scoreboard_client/utils/environment.dart';
 import 'package:wrestling_scoreboard_client/utils/io.dart';
 import 'package:wrestling_scoreboard_client/utils/package_info.dart';
 import 'package:wrestling_scoreboard_client/view/shortcuts/app_shortcuts.dart';
-import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_common/common.dart';
@@ -53,56 +51,6 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
 
     // Need to init to listen to changes of settings.
     AudioCache.instance = AudioCache(prefix: '');
-  }
-
-  static MaterialColor primaryColor = createMaterialColor(Colors.blue); // const Color.fromARGB(255, 180, 0, 10)
-
-  /// Builds the theme with the base colors of the red and blue corner, which are the default colors if null.
-  /// If [highContrast] is true, the low contrast text colors of the default theme are overridden
-  /// and the background is pure white or black.
-  ThemeData _buildTheme(
-    Brightness brightness,
-    String? fontFamily,
-    (Color?, Color?) roleBaseColors, {
-    bool highContrast = false,
-  }) {
-    ThemeData theme;
-    if (brightness == Brightness.light) {
-      theme = ThemeData.light();
-      theme = theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-          primary: primaryColor,
-          secondary: primaryColor.shade800,
-          surface: highContrast ? Colors.white : null,
-        ),
-        scaffoldBackgroundColor: highContrast ? Colors.white : null,
-        canvasColor: highContrast ? Colors.white : null,
-        textTheme: highContrast ? theme.textTheme.apply(bodyColor: Colors.black, displayColor: Colors.black) : null,
-      );
-    } else {
-      theme = ThemeData.dark();
-      theme = theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-          primary: primaryColor,
-          secondary: primaryColor.shade300,
-          surface: highContrast ? Colors.black : null,
-        ),
-        scaffoldBackgroundColor: highContrast ? Colors.black : null,
-        canvasColor: highContrast ? Colors.black : null,
-        textTheme: highContrast ? theme.textTheme.apply(bodyColor: Colors.white, displayColor: Colors.white) : null,
-      );
-    }
-    final (red, blue) = roleBaseColors;
-    theme = theme.copyWith(
-      disabledColor: theme.colorScheme.onSurface.disabled(highContrast: highContrast),
-      extensions: [
-        RoleColors.fromBase(red: red, blue: blue, brightness: brightness, background: theme.colorScheme.surface),
-      ],
-    );
-    if (fontFamily != null) {
-      return theme.copyWith(textTheme: GoogleFonts.getTextTheme(fontFamily, theme.textTheme));
-    }
-    return theme;
   }
 
   /// Loads the base colors of the red and blue corner for the light and dark theme.
@@ -146,15 +94,15 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
                             scaffoldMessengerKey: scaffoldMessengerKey,
                             debugShowCheckedModeBanner: false,
                             title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
-                            theme: _buildTheme(Brightness.light, fontFamily, roleBaseColors[Brightness.light]!),
-                            darkTheme: _buildTheme(Brightness.dark, fontFamily, roleBaseColors[Brightness.dark]!),
-                            highContrastTheme: _buildTheme(
+                            theme: buildTheme(Brightness.light, fontFamily, roleBaseColors[Brightness.light]!),
+                            darkTheme: buildTheme(Brightness.dark, fontFamily, roleBaseColors[Brightness.dark]!),
+                            highContrastTheme: buildTheme(
                               Brightness.light,
                               fontFamily,
                               roleBaseColors[Brightness.light]!,
                               highContrast: true,
                             ),
-                            highContrastDarkTheme: _buildTheme(
+                            highContrastDarkTheme: buildTheme(
                               Brightness.dark,
                               fontFamily,
                               roleBaseColors[Brightness.dark]!,

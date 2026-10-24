@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wrestling_scoreboard_client/theme/role_colors.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
-import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/event/match_display.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_overview.dart';
@@ -52,7 +52,9 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
             builder: (context, match) {
               return ListTile(
                 title: Text.rich(
-                  style: match.date.isBefore(today) ? TextStyle(color: Theme.of(context).disabledColor) : null,
+                  style: match.date.isBefore(today)
+                      ? TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)
+                      : null,
                   TextSpan(
                     text: '${match.date.toDateString(context)} | ',
                     children: [

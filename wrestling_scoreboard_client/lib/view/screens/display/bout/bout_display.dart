@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
+import 'package:wrestling_scoreboard_client/theme/emphasis_opacities.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
@@ -1017,7 +1018,7 @@ class _ParticipantDisplay extends StatelessWidget {
           minFontSize: 30,
           // Predicted points are faded.
           color: pStatus?.classificationPoints == null
-              ? ThemedContainer.textColorOn(color.shade800).disabled(highContrast: MediaQuery.highContrastOf(context))
+              ? context.emphasis.onSurfaceVariant(ThemedContainer.textColorOn(color.shade800))
               : null,
         ),
       ),
@@ -1037,7 +1038,7 @@ class _NameDisplay extends StatelessWidget {
     final localizations = context.l10n;
     // The text color on the background of the participant, as set by the surrounding ThemedContainer.
     final textColor = DefaultTextStyle.of(context).style.color!;
-    final highContrast = MediaQuery.highContrastOf(context);
+    final emphasis = context.emphasis;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -1051,7 +1052,7 @@ class _NameDisplay extends StatelessWidget {
               children: [
                 ScaledText(
                   pStatus?.prename ?? localizations.participantVacant,
-                  color: pStatus == null ? textColor.disabled(highContrast: highContrast) : null,
+                  color: pStatus == null ? emphasis.onSurfaceVariant(textColor) : null,
                   fontStyle: pStatus == null ? FontStyle.italic : null,
                   fontSize: 30,
                   minFontSize: 20,

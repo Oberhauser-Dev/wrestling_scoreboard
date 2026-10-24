@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/theme/emphasis_opacities.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_result.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
@@ -8,7 +9,6 @@ import 'package:wrestling_scoreboard_client/localization/wrestling_style.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/duration.dart';
 import 'package:wrestling_scoreboard_client/utils/units.dart';
-import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
@@ -46,7 +46,6 @@ class BoutListItem extends ConsumerWidget {
           );
     final color = role.color(context);
     final textColor = ThemedContainer.textColorOn(color);
-    final highContrast = MediaQuery.highContrastOf(context);
     return ThemedContainer(
       color: color,
       child: Row(
@@ -59,7 +58,7 @@ class BoutListItem extends ConsumerWidget {
                 children: [
                   ScaledText(
                     pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.prename,
-                    color: pStatus == null ? textColor.disabled(highContrast: highContrast) : null,
+                    color: pStatus == null ? context.emphasis.onSurfaceVariant(textColor) : null,
                     fontStyle: pStatus == null ? FontStyle.italic : null,
                     fontSize: 17,
                     minFontSize: 14,
