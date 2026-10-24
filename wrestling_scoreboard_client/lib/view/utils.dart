@@ -16,7 +16,7 @@ final isDesktop = !kIsWeb && isOnDesktop;
 /// https://m3.material.io/foundations/interaction/states/applying-states#4aff9c51-d20f-4580-a510-862d2e25e931
 /// As disabled content still carries information here, a higher opacity is used, which keeps a contrast
 /// of at least 4.5 (WCAG AA) on the theme backgrounds, e.g. also on a projector.
-const double disabledAlpha = 0.65;
+const double disabledAlpha = 0.5;
 
 /// The opacity of disabled content in high contrast mode, see [disabledAlpha].
 const double highContrastDisabledAlpha = 0.9;
