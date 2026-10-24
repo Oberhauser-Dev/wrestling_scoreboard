@@ -110,6 +110,60 @@ abstract class _$ThemeModeNotifier extends $Notifier<Raw<Future<ThemeMode>>> {
   }
 }
 
+/// Whether the high contrast themes are forced, additionally to the high contrast setting of the system.
+
+@ProviderFor(HighContrastNotifier)
+final highContrastProvider = HighContrastNotifierProvider._();
+
+/// Whether the high contrast themes are forced, additionally to the high contrast setting of the system.
+final class HighContrastNotifierProvider extends $NotifierProvider<HighContrastNotifier, Raw<Future<bool>>> {
+  /// Whether the high contrast themes are forced, additionally to the high contrast setting of the system.
+  HighContrastNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'highContrastProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$highContrastNotifierHash();
+
+  @$internal
+  @override
+  HighContrastNotifier create() => HighContrastNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<Future<bool>> value) {
+    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Raw<Future<bool>>>(value));
+  }
+}
+
+String _$highContrastNotifierHash() => r'04374a9fb63521cd8e5ad7293dae750c52378f75';
+
+/// Whether the high contrast themes are forced, additionally to the high contrast setting of the system.
+
+abstract class _$HighContrastNotifier extends $Notifier<Raw<Future<bool>>> {
+  Raw<Future<bool>> build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<Raw<Future<bool>>, Raw<Future<bool>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<Future<bool>>, Raw<Future<bool>>>,
+              Raw<Future<bool>>,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
 @ProviderFor(FontFamilyNotifier)
 final fontFamilyProvider = FontFamilyNotifierProvider._();
 

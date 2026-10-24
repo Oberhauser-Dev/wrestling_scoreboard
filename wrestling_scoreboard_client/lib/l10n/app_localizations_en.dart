@@ -66,6 +66,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeModeDark => 'Dark mode';
 
   @override
+  String get highContrast => 'High contrast';
+
+  @override
   String get fontFamily => 'Font family';
 
   @override

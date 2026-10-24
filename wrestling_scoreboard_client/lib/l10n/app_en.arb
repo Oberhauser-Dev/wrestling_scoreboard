@@ -21,6 +21,7 @@
   "themeMode": "Theme mode",
   "themeModeLight": "Light mode",
   "themeModeDark": "Dark mode",
+  "highContrast": "High contrast",
   "fontFamily": "Font family",
   "systemFont": "System font",
   "apiUrl": "Api-Url",

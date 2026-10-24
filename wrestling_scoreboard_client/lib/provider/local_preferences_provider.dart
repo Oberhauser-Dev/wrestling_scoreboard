@@ -57,6 +57,20 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   }
 }
 
+/// Whether the high contrast themes are forced, additionally to the high contrast setting of the system.
+@Riverpod(keepAlive: true)
+class HighContrastNotifier extends _$HighContrastNotifier {
+  @override
+  Raw<Future<bool>> build() async {
+    return await Preferences.getBool(Preferences.keyHighContrast) ?? false;
+  }
+
+  Future<void> setState(bool val) async {
+    await Preferences.setBool(Preferences.keyHighContrast, val);
+    state = Future.value(val);
+  }
+}
+
 @Riverpod(keepAlive: true)
 class FontFamilyNotifier extends _$FontFamilyNotifier {
   @override
