@@ -52,7 +52,9 @@ class MatchList<T extends DataObject?> extends StatelessWidget {
             builder: (context, match) {
               return ListTile(
                 title: Text.rich(
-                  style: match.date.isBefore(today) ? TextStyle(color: Theme.of(context).disabledColor) : null,
+                  style: match.date.isBefore(today)
+                      ? TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)
+                      : null,
                   TextSpan(
                     text: '${match.date.toDateString(context)} | ',
                     children: [

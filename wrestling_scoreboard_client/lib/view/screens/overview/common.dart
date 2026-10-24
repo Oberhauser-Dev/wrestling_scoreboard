@@ -44,7 +44,7 @@ class AppBarTitle extends StatelessWidget {
         Expanded(
           child: Text(
             '  $details',
-            style: TextStyle(color: Theme.of(context).disabledColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
             overflow: TextOverflow.fade,
           ),
         ),

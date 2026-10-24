@@ -44,7 +44,9 @@ class CompetitionBoutList<T extends DataObject?> extends StatelessWidget {
                   text: bout.r?.fullName(context) ?? localizations.participantVacant,
                   style: filterObject is! Membership || bout.r?.membership == filterObject
                       ? TextStyle(
-                          color: bout.r == null ? Theme.of(context).disabledColor : context.roleColors.redText,
+                          color: bout.r == null
+                              ? Theme.of(context).colorScheme.onSurfaceVariant
+                              : context.roleColors.redText,
                           fontWeight: filterObject is! Membership ? null : FontWeight.bold,
                         )
                       : null,
@@ -54,7 +56,9 @@ class CompetitionBoutList<T extends DataObject?> extends StatelessWidget {
                   text: bout.b?.fullName(context) ?? localizations.participantVacant,
                   style: filterObject is! Membership || bout.b?.membership == filterObject
                       ? TextStyle(
-                          color: bout.b == null ? Theme.of(context).disabledColor : context.roleColors.blueText,
+                          color: bout.b == null
+                              ? Theme.of(context).colorScheme.onSurfaceVariant
+                              : context.roleColors.blueText,
                           fontWeight: filterObject is! Membership ? null : FontWeight.bold,
                         )
                       : null,

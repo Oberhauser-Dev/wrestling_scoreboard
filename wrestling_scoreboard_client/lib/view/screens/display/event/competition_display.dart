@@ -218,7 +218,7 @@ class _CompetitionBoutListItem extends ConsumerWidget {
       onTap: () => CompetitionBoutDisplay.navigateTo(context, competitionBout),
       child: IntrinsicHeight(
         child: DefaultTextStyle.merge(
-          style: competitionBout.mat == null ? null : TextStyle(color: Theme.of(context).disabledColor),
+          style: competitionBout.mat == null ? null : TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

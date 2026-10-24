@@ -95,7 +95,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
         final color = widget.color ?? DefaultTextStyle.of(context).style.color!;
         // In high contrast mode, outline the paused time instead of lowering its contrast.
         final outlined = !_stopwatch.isRunning && MediaQuery.highContrastOf(context);
-        final textColor = _stopwatch.isRunning || outlined ? color : color.disabled();
+        final textColor = _stopwatch.isRunning || outlined ? color : color.onSurfaceVariant();
         return GestureDetector(
           onTap: () async {
             final val = await showDurationDialog(

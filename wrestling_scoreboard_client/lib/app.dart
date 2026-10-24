@@ -58,43 +58,33 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
   static MaterialColor primaryColor = createMaterialColor(Colors.blue); // const Color.fromARGB(255, 180, 0, 10)
 
   /// Builds the theme with the base colors of the red and blue corner, which are the default colors if null.
-  /// If [highContrast] is true, the low contrast text colors of the default theme are overridden
-  /// and the background is pure white or black.
+  /// The text colors are black or white with the opacity of their emphasis, see [ColorExtension.onSurface].
+  /// If [highContrast] is true, their opacity is increased and the background is pure white or black.
   ThemeData _buildTheme(
     Brightness brightness,
     String? fontFamily,
     (Color?, Color?) roleBaseColors, {
     bool highContrast = false,
   }) {
-    ThemeData theme;
-    if (brightness == Brightness.light) {
-      theme = ThemeData.light();
-      theme = theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-          primary: primaryColor,
-          secondary: primaryColor.shade800,
-          surface: highContrast ? Colors.white : null,
-        ),
-        scaffoldBackgroundColor: highContrast ? Colors.white : null,
-        canvasColor: highContrast ? Colors.white : null,
-        textTheme: highContrast ? theme.textTheme.apply(bodyColor: Colors.black, displayColor: Colors.black) : null,
-      );
-    } else {
-      theme = ThemeData.dark();
-      theme = theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-          primary: primaryColor,
-          secondary: primaryColor.shade300,
-          surface: highContrast ? Colors.black : null,
-        ),
-        scaffoldBackgroundColor: highContrast ? Colors.black : null,
-        canvasColor: highContrast ? Colors.black : null,
-        textTheme: highContrast ? theme.textTheme.apply(bodyColor: Colors.white, displayColor: Colors.white) : null,
-      );
-    }
+    final isLight = brightness == Brightness.light;
+    var theme = isLight ? ThemeData.light() : ThemeData.dark();
+    final textColor = isLight ? Colors.black : Colors.white;
+    final onSurface = textColor.onSurface(highContrast: highContrast);
+    final surface = highContrast ? (isLight ? Colors.white : Colors.black) : null;
+    theme = theme.copyWith(
+      colorScheme: theme.colorScheme.copyWith(
+        primary: primaryColor,
+        secondary: isLight ? primaryColor.shade800 : primaryColor.shade300,
+        surface: surface,
+        onSurface: onSurface,
+        onSurfaceVariant: textColor.onSurfaceVariant(highContrast: highContrast),
+      ),
+      scaffoldBackgroundColor: surface,
+      canvasColor: surface,
+      textTheme: theme.textTheme.apply(bodyColor: onSurface, displayColor: onSurface),
+    );
     final (red, blue) = roleBaseColors;
     theme = theme.copyWith(
-      disabledColor: theme.colorScheme.onSurface.disabled(highContrast: highContrast),
       extensions: [
         RoleColors.fromBase(red: red, blue: blue, brightness: brightness, background: theme.colorScheme.surface),
       ],

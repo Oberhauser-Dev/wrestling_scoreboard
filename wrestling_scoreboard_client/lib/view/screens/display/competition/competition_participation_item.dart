@@ -201,7 +201,7 @@ class CompetitionParticipationItem extends ConsumerWidget {
         if (participation.isExcluded) {
           return DefaultTextStyle.merge(
             child: row,
-            style: TextStyle(color: Theme.of(context).disabledColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
           );
         }
         return row;
