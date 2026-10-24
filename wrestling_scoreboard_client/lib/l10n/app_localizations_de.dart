@@ -66,6 +66,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get themeModeDark => 'Dunkler Modus';
 
   @override
+  String get highContrast => 'Hoher Kontrast';
+
+  @override
   String get fontFamily => 'Schriftart';
 
   @override

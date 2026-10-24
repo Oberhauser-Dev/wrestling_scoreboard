@@ -7,6 +7,9 @@ import 'package:wrestling_scoreboard_common/common.dart';
 class Preferences {
   static const keyLocale = 'locale';
   static const keyThemeMode = 'theme-mode';
+
+  /// Forces the high contrast themes, additionally to the high contrast setting of the system.
+  static const keyHighContrast = 'high-contrast';
   static const keyApiUrl = 'api-url';
   static const keyWsUrl = 'ws-url';
   static const keyWebClientUrl = 'web-client-url';

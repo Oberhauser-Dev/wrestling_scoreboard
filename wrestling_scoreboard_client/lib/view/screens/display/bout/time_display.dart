@@ -93,6 +93,9 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
       builder: (context, isTimeCountDown) {
         Duration adjustedTime() => _currentTime.invertIf(isTimeCountDown, max: widget.maxDuration);
         final color = widget.color ?? DefaultTextStyle.of(context).style.color!;
+        // In high contrast mode, outline the paused time instead of lowering its contrast.
+        final outlined = !_stopwatch.isRunning && MediaQuery.highContrastOf(context);
+        final textColor = _stopwatch.isRunning || outlined ? color : color.disabled();
         return GestureDetector(
           onTap: () async {
             final val = await showDurationDialog(
@@ -111,7 +114,8 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
               ScaledText(
                 adjustedTime().formatMinutesAndSeconds(),
                 fontSize: widget.fontSize ?? 14,
-                color: _stopwatch.isRunning ? color : color.disabled(),
+                color: textColor,
+                outlined: outlined,
                 minFontSize: widget.minFontSize ?? 12,
                 softWrap: false,
                 fontWeight: FontWeight.w600,
@@ -128,7 +132,8 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
                     child: ScaledText(
                       adjustedTime().formatDeciSeconds(),
                       fontSize: (widget.fontSize ?? 14) / 4,
-                      color: _stopwatch.isRunning ? color : color.disabled(),
+                      color: textColor,
+                      outlined: outlined,
                       minFontSize: 8,
                       softWrap: false,
                     ),

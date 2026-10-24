@@ -18,6 +18,7 @@
   "themeMode": "Themen Modus",
   "themeModeLight": "Heller Modus",
   "themeModeDark": "Dunkler Modus",
+  "highContrast": "Hoher Kontrast",
   "fontFamily": "Schriftart",
   "systemFont": "System-Schrift",
   "apiUrl": "Api-Url",

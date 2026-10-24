@@ -58,22 +58,43 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
   static MaterialColor primaryColor = createMaterialColor(Colors.blue); // const Color.fromARGB(255, 180, 0, 10)
 
   /// Builds the theme with the base colors of the red and blue corner, which are the default colors if null.
-  ThemeData _buildTheme(Brightness brightness, String? fontFamily, (Color?, Color?) roleBaseColors) {
+  /// If [highContrast] is true, the low contrast text colors of the default theme are overridden
+  /// and the background is pure white or black.
+  ThemeData _buildTheme(
+    Brightness brightness,
+    String? fontFamily,
+    (Color?, Color?) roleBaseColors, {
+    bool highContrast = false,
+  }) {
     ThemeData theme;
     if (brightness == Brightness.light) {
       theme = ThemeData.light();
       theme = theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(primary: primaryColor, secondary: primaryColor.shade800),
+        colorScheme: theme.colorScheme.copyWith(
+          primary: primaryColor,
+          secondary: primaryColor.shade800,
+          surface: highContrast ? Colors.white : null,
+        ),
+        scaffoldBackgroundColor: highContrast ? Colors.white : null,
+        canvasColor: highContrast ? Colors.white : null,
+        textTheme: highContrast ? theme.textTheme.apply(bodyColor: Colors.black, displayColor: Colors.black) : null,
       );
     } else {
       theme = ThemeData.dark();
       theme = theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(primary: primaryColor, secondary: primaryColor.shade300),
+        colorScheme: theme.colorScheme.copyWith(
+          primary: primaryColor,
+          secondary: primaryColor.shade300,
+          surface: highContrast ? Colors.black : null,
+        ),
+        scaffoldBackgroundColor: highContrast ? Colors.black : null,
+        canvasColor: highContrast ? Colors.black : null,
+        textTheme: highContrast ? theme.textTheme.apply(bodyColor: Colors.white, displayColor: Colors.white) : null,
       );
     }
     final (red, blue) = roleBaseColors;
     theme = theme.copyWith(
-      disabledColor: theme.colorScheme.onSurface.disabled(),
+      disabledColor: theme.colorScheme.onSurface.disabled(highContrast: highContrast),
       extensions: [
         RoleColors.fromBase(red: red, blue: blue, brightness: brightness, background: theme.colorScheme.surface),
       ],
@@ -107,30 +128,54 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
         return LoadingBuilder<ThemeMode>(
           future: ref.watch(themeModeProvider),
           builder: (context, themeMode) {
-            return LoadingBuilder<String?>(
-              future: ref.watch(fontFamilyProvider),
-              builder: (context, fontFamily) {
-                return LoadingBuilder<Map<Brightness, (Color?, Color?)>>(
-                  future: _loadRoleBaseColors(),
-                  builder: (context, roleBaseColors) {
-                    return MaterialApp.router(
-                      scaffoldMessengerKey: scaffoldMessengerKey,
-                      debugShowCheckedModeBanner: false,
-                      title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
-                      theme: _buildTheme(Brightness.light, fontFamily, roleBaseColors[Brightness.light]!),
-                      darkTheme: _buildTheme(Brightness.dark, fontFamily, roleBaseColors[Brightness.dark]!),
-                      themeMode: themeMode,
-                      localizationsDelegates: const [
-                        AppLocalizations.delegate,
-                        GlobalMaterialLocalizations.delegate,
-                        GlobalWidgetsLocalizations.delegate,
-                        GlobalCupertinoLocalizations.delegate,
-                        GlobalMaterialDurationPickerLocalizations.delegate,
-                      ],
-                      supportedLocales: Preferences.supportedLanguages,
-                      builder: (context, child) => GlobalWidget(child: child ?? const CircularProgressIndicator()),
-                      locale: locale,
-                      routerConfig: routerConfig,
+            return LoadingBuilder<bool>(
+              future: ref.watch(highContrastProvider),
+              builder: (context, highContrast) {
+                return LoadingBuilder<String?>(
+                  future: ref.watch(fontFamilyProvider),
+                  builder: (context, fontFamily) {
+                    return LoadingBuilder<Map<Brightness, (Color?, Color?)>>(
+                      future: _loadRoleBaseColors(),
+                      builder: (context, roleBaseColors) {
+                        return MediaQuery(
+                          // Force the high contrast themes, if set in the preferences.
+                          data: MediaQuery.of(
+                            context,
+                          ).copyWith(highContrast: highContrast || MediaQuery.highContrastOf(context)),
+                          child: MaterialApp.router(
+                            scaffoldMessengerKey: scaffoldMessengerKey,
+                            debugShowCheckedModeBanner: false,
+                            title: AppLocalizations.of(context)?.appName ?? 'Wrestling Scoreboard',
+                            theme: _buildTheme(Brightness.light, fontFamily, roleBaseColors[Brightness.light]!),
+                            darkTheme: _buildTheme(Brightness.dark, fontFamily, roleBaseColors[Brightness.dark]!),
+                            highContrastTheme: _buildTheme(
+                              Brightness.light,
+                              fontFamily,
+                              roleBaseColors[Brightness.light]!,
+                              highContrast: true,
+                            ),
+                            highContrastDarkTheme: _buildTheme(
+                              Brightness.dark,
+                              fontFamily,
+                              roleBaseColors[Brightness.dark]!,
+                              highContrast: true,
+                            ),
+                            themeMode: themeMode,
+                            localizationsDelegates: const [
+                              AppLocalizations.delegate,
+                              GlobalMaterialLocalizations.delegate,
+                              GlobalWidgetsLocalizations.delegate,
+                              GlobalCupertinoLocalizations.delegate,
+                              GlobalMaterialDurationPickerLocalizations.delegate,
+                            ],
+                            supportedLocales: Preferences.supportedLanguages,
+                            builder: (context, child) =>
+                                GlobalWidget(child: child ?? const CircularProgressIndicator()),
+                            locale: locale,
+                            routerConfig: routerConfig,
+                          ),
+                        );
+                      },
                     );
                   },
                 );

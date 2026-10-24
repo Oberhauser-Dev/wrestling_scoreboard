@@ -18,10 +18,13 @@ final isDesktop = !kIsWeb && isOnDesktop;
 /// of at least 4.5 (WCAG AA) on the theme backgrounds, e.g. also on a projector.
 const double disabledAlpha = 0.65;
 
+/// The opacity of disabled content in high contrast mode, see [disabledAlpha].
+const double highContrastDisabledAlpha = 0.9;
+
 extension ColorExtension on Color {
-  /// Get disabled state of a color, see [disabledAlpha].
-  Color disabled() {
-    return withValues(alpha: disabledAlpha);
+  /// Get disabled state of a color, see [disabledAlpha] and [highContrastDisabledAlpha].
+  Color disabled({bool highContrast = false}) {
+    return withValues(alpha: highContrast ? highContrastDisabledAlpha : disabledAlpha);
   }
 }
 
