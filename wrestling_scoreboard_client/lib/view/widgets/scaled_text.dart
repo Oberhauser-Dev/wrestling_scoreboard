@@ -73,7 +73,7 @@ class _TextOutline extends StatelessWidget {
   Widget build(BuildContext context) {
     final stroke = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = math.max(2, style.fontSize! * 0.06)
+      ..strokeWidth = style.fontSize! * 0.07
       ..strokeJoin = StrokeJoin.round
       ..color = color;
     final eraser = Paint()..blendMode = BlendMode.dstOut;
