@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
+import 'package:wrestling_scoreboard_client/theme/emphasis_opacities.dart';
 import 'package:wrestling_scoreboard_client/view/screens/display/bout/bout_shortcuts.dart';
 import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_text.dart';
@@ -140,6 +141,7 @@ class _ActionControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = ThemedContainer.textColorOn(color);
     return DelayedTooltip(
       message: tooltipMessage,
       child: OutlinedButton(
@@ -148,7 +150,9 @@ class _ActionControl extends StatelessWidget {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           minimumSize: Size.square(isOnMobile ? 44 : 28),
           visualDensity: VisualDensity.compact,
-          foregroundColor: ThemedContainer.textColorOn(color),
+          foregroundColor: textColor,
+          // The default disabled color is meant for the theme background, not for the background [color].
+          disabledForegroundColor: context.emphasis.disabled(textColor),
           backgroundColor: color,
           side: BorderSide(color: color.shade900, width: 0.5),
           padding: EdgeInsets.zero,
