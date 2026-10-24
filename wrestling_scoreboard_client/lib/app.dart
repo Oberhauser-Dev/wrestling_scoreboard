@@ -81,6 +81,7 @@ class WrestlingScoreboardAppState extends ConsumerState<WrestlingScoreboardApp> 
       ),
       scaffoldBackgroundColor: surface,
       canvasColor: surface,
+      disabledColor: textColor.disabled(highContrast: highContrast),
       textTheme: theme.textTheme.apply(bodyColor: onSurface, displayColor: onSurface),
     );
     final (red, blue) = roleBaseColors;

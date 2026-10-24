@@ -11,38 +11,51 @@ final isMobile = !kIsWeb && isOnMobile;
 final isOnDesktop = !isOnMobile;
 final isDesktop = !kIsWeb && isOnDesktop;
 
-// Material Design distinguishes the emphasis of text by its opacity on the background:
-// https://m2.material.io/design/color/text-legibility.html#text-types
-// Material 3 replaced these with the color roles [ColorScheme.onSurface] and [ColorScheme.onSurfaceVariant],
-// which are named the same here. Disabled content (0.38), which is not meant to be read, is not covered here.
+// Material Design distinguishes the emphasis of text by the color roles [ColorScheme.onSurface] (high emphasis)
+// and [ColorScheme.onSurfaceVariant] (lower emphasis), which are named the same here:
+// https://m3.material.io/styles/color/roles
 
 /// The opacity of high emphasis (active) content, see [ColorScheme.onSurface].
-const double onSurfaceAlpha = 0.87;
+/// The default M3 colors correspond to 0.89 (light) and 0.88 (dark).
+const double _onSurfaceAlpha = 0.87;
 
-/// The opacity of high emphasis content in high contrast mode, see [onSurfaceAlpha].
-const double highContrastOnSurfaceAlpha = 1.0;
+/// The opacity of high emphasis content in high contrast mode.
+const double _highContrastOnSurfaceAlpha = 1.0;
 
 /// The opacity of medium emphasis (inactive) content, e.g. a vacant participant or a past match,
 /// see [ColorScheme.onSurfaceVariant].
 /// In contrast to disabled content it still carries information and keeps a contrast of at least 4.5 (WCAG AA)
 /// on the theme backgrounds, e.g. also on a projector.
-const double onSurfaceVariantAlpha = 0.6;
+/// The default M3 colors correspond to 0.72 (light) and 0.76 (dark).
+const double _onSurfaceVariantAlpha = 0.74;
 
-/// The opacity of medium emphasis content in high contrast mode, see [onSurfaceVariantAlpha].
-const double highContrastOnSurfaceVariantAlpha = 0.9;
+/// The opacity of medium emphasis content in high contrast mode.
+const double _highContrastOnSurfaceVariantAlpha = 0.9;
+
+/// The opacity of disabled content, e.g. a disabled control, which is not meant to be read.
+const double _disabledAlpha = 0.38;
+
+/// The opacity of disabled content in high contrast mode.
+const double _highContrastDisabledAlpha = 0.6;
 
 extension ColorExtension on Color {
-  /// Get the high emphasis (active) variant of a text color, see [onSurfaceAlpha] and [highContrastOnSurfaceAlpha].
+  /// Get the high emphasis (active) variant of a text color.
   /// Use [ColorScheme.onSurface] for text on the theme background, and this for text on other backgrounds.
   Color onSurface({bool highContrast = false}) {
-    return withValues(alpha: highContrast ? highContrastOnSurfaceAlpha : onSurfaceAlpha);
+    return withValues(alpha: highContrast ? _highContrastOnSurfaceAlpha : _onSurfaceAlpha);
   }
 
-  /// Get the medium emphasis (inactive) variant of a text color,
-  /// see [onSurfaceVariantAlpha] and [highContrastOnSurfaceVariantAlpha].
+  /// Get the medium emphasis (inactive) variant of a text color.
   /// Use [ColorScheme.onSurfaceVariant] for text on the theme background, and this for text on other backgrounds.
   Color onSurfaceVariant({bool highContrast = false}) {
-    return withValues(alpha: highContrast ? highContrastOnSurfaceVariantAlpha : onSurfaceVariantAlpha);
+    return withValues(alpha: highContrast ? _highContrastOnSurfaceVariantAlpha : _onSurfaceVariantAlpha);
+  }
+
+  /// Get the disabled variant of a color, e.g. of a disabled control.
+  /// Disabled content is not meant to be read and has a fixed opacity:
+  /// https://m3.material.io/foundations/interaction/states/applying-states#4aff9c51-d20f-4580-a510-862d2e25e931
+  Color disabled({bool highContrast = false}) {
+    return withValues(alpha: highContrast ? _highContrastDisabledAlpha : _disabledAlpha);
   }
 }
 
