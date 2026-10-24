@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/theme/emphasis_opacities.dart';
 import 'package:wrestling_scoreboard_client/localization/duration.dart';
 import 'package:wrestling_scoreboard_client/provider/local_preferences_provider.dart';
 import 'package:wrestling_scoreboard_client/utils/duration.dart';
-import 'package:wrestling_scoreboard_client/view/utils.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/dialogs.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/scaled_container.dart';
@@ -95,7 +95,7 @@ class TimeDisplayState extends ConsumerState<TimeDisplay> {
         final color = widget.color ?? DefaultTextStyle.of(context).style.color!;
         // In high contrast mode, outline the paused time instead of lowering its contrast.
         final outlined = !_stopwatch.isRunning && MediaQuery.highContrastOf(context);
-        final textColor = _stopwatch.isRunning || outlined ? color : color.onSurfaceVariant();
+        final textColor = _stopwatch.isRunning || outlined ? color : context.emphasis.onSurfaceVariant(color);
         return GestureDetector(
           onTap: () async {
             final val = await showDurationDialog(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wrestling_scoreboard_client/theme/role_colors.dart';
 import 'package:wrestling_scoreboard_client/provider/data_provider.dart';
-import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/consumer.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/image.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/loading_builder.dart';

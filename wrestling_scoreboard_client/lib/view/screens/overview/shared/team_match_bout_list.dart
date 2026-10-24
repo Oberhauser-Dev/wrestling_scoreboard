@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wrestling_scoreboard_client/theme/role_colors.dart';
 import 'package:wrestling_scoreboard_client/localization/bout_utils.dart';
 import 'package:wrestling_scoreboard_client/localization/build_context.dart';
 import 'package:wrestling_scoreboard_client/localization/date_time.dart';
 import 'package:wrestling_scoreboard_client/localization/weight_class.dart';
-import 'package:wrestling_scoreboard_client/utils/colors.dart';
 import 'package:wrestling_scoreboard_client/view/screens/edit/team_match/team_match_bout_edit.dart';
 import 'package:wrestling_scoreboard_client/view/screens/overview/team_match/team_match_bout_overview.dart';
 import 'package:wrestling_scoreboard_client/view/widgets/auth.dart';
