@@ -972,7 +972,7 @@ class _ParticipantDisplay extends StatelessWidget {
                             : predictedResultRule.loserClassificationPoints;
                       }
 
-                      return displayClassificationPoints(pStatus, color, padding, getPredictedPoints);
+                      return displayClassificationPoints(context, pStatus, color, padding, getPredictedPoints);
                     },
                   ),
                 ];
@@ -999,6 +999,7 @@ class _ParticipantDisplay extends StatelessWidget {
   }
 
   Widget displayClassificationPoints(
+    BuildContext context,
     AthleteBoutState? pStatus,
     MaterialColor color,
     double padding,
@@ -1015,7 +1016,9 @@ class _ParticipantDisplay extends StatelessWidget {
           fontSize: 54,
           minFontSize: 30,
           // Predicted points are faded.
-          color: pStatus?.classificationPoints == null ? ThemedContainer.textColorOn(color.shade800).disabled() : null,
+          color: pStatus?.classificationPoints == null
+              ? ThemedContainer.textColorOn(color.shade800).disabled(highContrast: MediaQuery.highContrastOf(context))
+              : null,
         ),
       ),
     );
@@ -1034,6 +1037,7 @@ class _NameDisplay extends StatelessWidget {
     final localizations = context.l10n;
     // The text color on the background of the participant, as set by the surrounding ThemedContainer.
     final textColor = DefaultTextStyle.of(context).style.color!;
+    final highContrast = MediaQuery.highContrastOf(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -1047,6 +1051,7 @@ class _NameDisplay extends StatelessWidget {
               children: [
                 ScaledText(
                   pStatus?.prename ?? localizations.participantVacant,
+                  color: pStatus == null ? textColor.disabled(highContrast: highContrast) : null,
                   fontStyle: pStatus == null ? FontStyle.italic : null,
                   fontSize: 30,
                   minFontSize: 20,

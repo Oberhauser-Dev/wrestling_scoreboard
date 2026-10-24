@@ -46,6 +46,7 @@ class BoutListItem extends ConsumerWidget {
           );
     final color = role.color(context);
     final textColor = ThemedContainer.textColorOn(color);
+    final highContrast = MediaQuery.highContrastOf(context);
     return ThemedContainer(
       color: color,
       child: Row(
@@ -58,6 +59,7 @@ class BoutListItem extends ConsumerWidget {
                 children: [
                   ScaledText(
                     pStatus == null ? context.l10n.participantVacant : pStatus.membership.person.prename,
+                    color: pStatus == null ? textColor.disabled(highContrast: highContrast) : null,
                     fontStyle: pStatus == null ? FontStyle.italic : null,
                     fontSize: 17,
                     minFontSize: 14,

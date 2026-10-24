@@ -206,6 +206,12 @@ abstract class AppLocalizations {
   /// **'Dark mode'**
   String get themeModeDark;
 
+  /// No description provided for @highContrast.
+  ///
+  /// In en, this message translates to:
+  /// **'High contrast'**
+  String get highContrast;
+
   /// No description provided for @fontFamily.
   ///
   /// In en, this message translates to:

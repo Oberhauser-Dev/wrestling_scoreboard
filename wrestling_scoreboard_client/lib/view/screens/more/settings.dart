@@ -72,10 +72,11 @@ class CustomSettingsScreen extends ConsumerWidget {
     // The role colors are set for the currently displayed theme (light or dark).
     final brightness = Theme.of(context).brightness;
 
-    Future<(Locale?, ThemeMode, String?, Color?, Color?)> loadGeneralSettings() async {
+    Future<(Locale?, ThemeMode, bool, String?, Color?, Color?)> loadGeneralSettings() async {
       final results = await Future.wait([
         ref.watch(localeProvider),
         ref.watch(themeModeProvider),
+        ref.watch(highContrastProvider),
         ref.watch(fontFamilyProvider),
         ref.watch(roleColorProvider(BoutRole.red, brightness)),
         ref.watch(roleColorProvider(BoutRole.blue, brightness)),
@@ -84,9 +85,10 @@ class CustomSettingsScreen extends ConsumerWidget {
       return (
         results[0] as Locale?,
         results[1] as ThemeMode,
-        results[2] as String?,
-        results[3] as Color?,
+        results[2] as bool,
+        results[3] as String?,
         results[4] as Color?,
+        results[5] as Color?,
       );
     }
 
@@ -105,10 +107,10 @@ class CustomSettingsScreen extends ConsumerWidget {
       appBarTitle: Text(localizations.settings),
       body: ResponsiveColumn(
         children: [
-          LoadingBuilder<(Locale?, ThemeMode, String?, Color?, Color?)>(
+          LoadingBuilder<(Locale?, ThemeMode, bool, String?, Color?, Color?)>(
             future: loadGeneralSettings(),
             builder: (context, generalSettings) {
-              var (locale, themeMode, fontFamily, redColor, blueColor) = generalSettings;
+              var (locale, themeMode, highContrast, fontFamily, redColor, blueColor) = generalSettings;
 
               return SettingsSection(
                 title: localizations.general,
@@ -119,6 +121,9 @@ class CustomSettingsScreen extends ConsumerWidget {
 
                     themeMode = ThemeMode.system;
                     await ref.read(themeModeProvider.notifier).setState(themeMode);
+
+                    highContrast = false;
+                    await ref.read(highContrastProvider.notifier).setState(highContrast);
 
                     const defaultFontFamily = 'Roboto';
                     await ref.read(fontFamilyProvider.notifier).setState(defaultFontFamily);
@@ -182,6 +187,12 @@ class CustomSettingsScreen extends ConsumerWidget {
                         onSuccess: (value) => ref.read(themeModeProvider.notifier).setState(value),
                       );
                     },
+                  ),
+                  SwitchListTile(
+                    title: Text(localizations.highContrast),
+                    secondary: const Icon(Icons.contrast),
+                    value: highContrast,
+                    onChanged: (val) => ref.read(highContrastProvider.notifier).setState(val),
                   ),
                   _RoleColorTile(
                     title: localizations.redColor,
