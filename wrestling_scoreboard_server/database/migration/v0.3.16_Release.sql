@@ -1,0 +1,1 @@
+-- Release without breaking changes, min_client_version stays unchanged.
