@@ -1,3 +1,9 @@
+## 0.3.16
+
+ - **FEAT**: Introduce eligibility status text of lineup and competition participations. ([f1386724](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f13867246907fe258334bb2e203999586d2cc837))
+ - **FEAT**: Introduce BoutResult.vfw and BoutResult.bothVfw for failed weight. ([44b122ee](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/44b122ee3a700bb6d6d73a52b0aec7a20393f063))
+ - **FEAT**: Introduce PersonRole.paramedic ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([fbb8bb66](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fbb8bb66f789008b3b2fb4ed30cebca71cf98870))
+
 ## 0.3.15
 
  - **FIX**: Differentiate escaping bout and match comment for BRV RDB results upload. ([76fc5ab5](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/76fc5ab592a31d2cc3e7695517987bfe55d9c7d2))

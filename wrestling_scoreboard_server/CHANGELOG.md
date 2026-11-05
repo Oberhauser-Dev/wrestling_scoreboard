@@ -1,3 +1,11 @@
+## 0.3.16
+
+ - **FIX**(server): Reconnect to database after connection loss. ([bee47bd6](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/bee47bd6bfee1e29382f590620d6be31ee15a7d1))
+ - **FEAT**: Introduce eligibility status text of lineup and competition participations. ([f1386724](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f13867246907fe258334bb2e203999586d2cc837))
+ - **FEAT**: Introduce BoutResult.vfw and BoutResult.bothVfw for failed weight. ([44b122ee](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/44b122ee3a700bb6d6d73a52b0aec7a20393f063))
+ - **FEAT**(server): Startup checks, config and interactive config command. ([93c85b53](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/93c85b538665f36e392956627933f50c89c69aac))
+ - **FEAT**: Introduce PersonRole.paramedic ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([fbb8bb66](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fbb8bb66f789008b3b2fb4ed30cebca71cf98870))
+
 ## 0.3.15
 
  - **FIX**: Avoid overriding bouts and times on import. ([e0f2cb49](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/e0f2cb49789d214a0cb3b08a19895feb743c5785))

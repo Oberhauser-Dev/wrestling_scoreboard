@@ -1,3 +1,20 @@
+## 0.3.16
+
+ - **FIX**: Use Material emphasis colors onSurface and onSurfaceVariant instead of disabled color ([#297](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/297)). ([5881eaf4](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/5881eaf4c0666ad3c491763193d9051feab2385b))
+ - **FIX**: Show only one steward placeholder in the team match transcript. ([fa7c5d7d](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fa7c5d7d2c531304289afcae3e5bea4a25107cd8))
+ - **FIX**: More readable disabled colors. ([b14c1c68](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/b14c1c6835929935494b51793240f5c4dd817609))
+ - **FIX**: Text color on red and blue backgrounds depends on the base color. ([ae0b31f7](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/ae0b31f7de279c2076b6c7583827f40e09239e78))
+ - **FIX**: Always show duration (no countdown) in PDF exports, avoid displaying accumulated points without result. ([f454bf7c](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f454bf7c699f3dfd083ee8a3848b8ef5122840b5))
+ - **FEAT**: High contrast mode ([#296](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/296)). ([7af0174a](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/7af0174a800c69c53e56589fc14061aa57002de8))
+ - **FEAT**: Introduce eligibility status text of lineup and competition participations. ([f1386724](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f13867246907fe258334bb2e203999586d2cc837))
+ - **FEAT**: Introduce BoutResult.vfw and BoutResult.bothVfw for failed weight. ([44b122ee](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/44b122ee3a700bb6d6d73a52b0aec7a20393f063))
+ - **FEAT**: More contrasting default red and blue colors. ([8f9566f0](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/8f9566f0b8e0c13b75204e8d97d1b44cc50000a8))
+ - **FEAT**: Readable red and blue text colors. ([48ad018b](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/48ad018bfc7d5ec21202195ce6ff78d6f0822f38))
+ - **FEAT**: Configurable red and blue colors. ([34797d42](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/34797d42790895ad21e14f1f012414bee0070e9a))
+ - **FEAT**: Support publishing MSIX installer. ([53280c19](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/53280c19fb222d51debc49d348039afa87083c80))
+ - **FEAT**: Introduce PersonRole.paramedic ([#276](https://github.com/Oberhauser-dev/wrestling_scoreboard/issues/276)). ([fbb8bb66](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/fbb8bb66f789008b3b2fb4ed30cebca71cf98870))
+ - **FEAT**: Batch print of scoresheets for team matches. ([d009c117](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/d009c117b34ecc159ddc96e0cb9729eb4eb9599b))
+
 ## 0.3.15
 
  - **REFACTOR**: Replace comment with remarks for events. ([f3e6ffa9](https://github.com/Oberhauser-dev/wrestling_scoreboard/commit/f3e6ffa9a26986409e1fc6888266c4787de3b69f))
