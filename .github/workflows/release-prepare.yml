@@ -46,17 +46,14 @@ jobs:
             echo "A migration for v$VERSION already exists, skipping."
             exit 0
           fi
-          # Breaking change: the major version changed, or the minor version for 0.x versions (like Dart's caret syntax).
-          PREV_VERSION=$(git tag -l 'wrestling_scoreboard_server-v*' --sort=-v:refname \
-            | sed -n 's/^wrestling_scoreboard_server-v\([0-9]*\.[0-9]*\.[0-9]*\)$/\1/p' | head -n 1)
-          IFS=. read -r MAJOR MINOR _ <<< "$VERSION"
-          IFS=. read -r PREV_MAJOR PREV_MINOR _ <<< "$PREV_VERSION"
-          if [ -z "$PREV_VERSION" ] || [ "$MAJOR" != "$PREV_MAJOR" ] || { [ "$MAJOR" = 0 ] && [ "$MINOR" != "$PREV_MINOR" ]; }; then
+          # Breaking change: the changelog entries added by the melos release commit (HEAD) contain a `**BREAKING**` entry.
+          if git diff HEAD~1 HEAD -- wrestling_scoreboard_server/CHANGELOG.md wrestling_scoreboard_common/CHANGELOG.md \
+            | grep -q '^+.*\*\*BREAKING\*\*'; then
             BREAKING=true
           else
             BREAKING=false
           fi
-          echo "Previous release: v$PREV_VERSION, breaking change: $BREAKING"
+          echo "Breaking change: $BREAKING"
           FILE="$DB_DIR/migration/v${VERSION}_Release.sql"
           MIGRATION_ROW='/^COPY public\.migration (semver, min_client_version) FROM stdin;$/'
           if [ "$BREAKING" = true ]; then
