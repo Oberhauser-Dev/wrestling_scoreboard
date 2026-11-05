@@ -46,11 +46,27 @@ jobs:
             echo "A migration for v$VERSION already exists, skipping."
             exit 0
           fi
+          # Breaking change: the changelog entries added by the melos release commit (HEAD) contain a `**BREAKING**` entry.
+          if git diff HEAD~1 HEAD -- wrestling_scoreboard_server/CHANGELOG.md wrestling_scoreboard_common/CHANGELOG.md \
+            | grep -q '^+.*\*\*BREAKING\*\*'; then
+            BREAKING=true
+          else
+            BREAKING=false
+          fi
+          echo "Breaking change: $BREAKING"
           FILE="$DB_DIR/migration/v${VERSION}_Release.sql"
-          printf "UPDATE public.migration\nSET min_client_version = '%s';\n" "$VERSION" > "$FILE"
-          # Set the migration row (semver, min_client_version) of the default dumps to the release version.
+          MIGRATION_ROW='/^COPY public\.migration (semver, min_client_version) FROM stdin;$/'
+          if [ "$BREAKING" = true ]; then
+            printf "UPDATE public.migration\nSET min_client_version = '%s';\n" "$VERSION" > "$FILE"
+            # Set semver and min_client_version of the default dumps to the release version.
+            DUMP_UPDATE="$MIGRATION_ROW"'{n;s/.*/'"$VERSION\t$VERSION"'/}'
+          else
+            printf -- "-- Release without breaking changes, min_client_version stays unchanged.\n" > "$FILE"
+            # Set only semver of the default dumps to the release version.
+            DUMP_UPDATE="$MIGRATION_ROW"'{n;s/^[^[:space:]]*/'"$VERSION"'/}'
+          fi
           for DUMP in "$DB_DIR"/dump/*.sql; do
-            sed -i '/^COPY public\.migration (semver, min_client_version) FROM stdin;$/{n;s/.*/'"$VERSION\t$VERSION"'/}' "$DUMP"
+            sed -i "$DUMP_UPDATE" "$DUMP"
           done
           git add "$FILE" "$DB_DIR/dump"
           git commit -m "chore(release): Update database to v$VERSION"
