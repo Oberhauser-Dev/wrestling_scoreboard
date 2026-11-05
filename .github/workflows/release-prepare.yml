@@ -40,13 +40,19 @@ jobs:
           git checkout -B "$BRANCH" FETCH_HEAD
           VERSION=$(sed -n 's/^version:[[:space:]]*//p' wrestling_scoreboard_server/pubspec.yaml)
           VERSION="${VERSION%%+*}"
-          DIR=wrestling_scoreboard_server/database/migration
-          FILE="$DIR/v${VERSION}_Release.sql"
-          if [ -f "$FILE" ]; then
-            echo "$FILE already exists, skipping."
+          DB_DIR=wrestling_scoreboard_server/database
+          FILE="$DB_DIR/migration/v${VERSION}_Release.sql"
+          if [ ! -f "$FILE" ]; then
+            printf "UPDATE public.migration\nSET min_client_version = '%s';\n" "$VERSION" > "$FILE"
+          fi
+          # Set the migration row (semver, min_client_version) of the default dumps to the release version.
+          for DUMP in "$DB_DIR"/dump/*.sql; do
+            sed -i '/^COPY public\.migration (semver, min_client_version) FROM stdin;$/{n;s/.*/'"$VERSION\t$VERSION"'/}' "$DUMP"
+          done
+          git add "$FILE" "$DB_DIR/dump"
+          if git diff --cached --quiet; then
+            echo "Database is already up to date for v$VERSION, skipping."
             exit 0
           fi
-          printf "UPDATE public.migration\nSET min_client_version = '%s';\n" "$VERSION" > "$FILE"
-          git add "$FILE"
-          git commit -m "chore(release): Add database migration for v$VERSION"
+          git commit -m "chore(release): Update database to v$VERSION"
           git push origin "$BRANCH"
