@@ -26,3 +26,27 @@ jobs:
           run-versioning-prerelease: ${{ inputs.prerelease == true }}
           include-private: true
           create-pr: true
+
+      - name: Add database migration for the release to the PR
+        if: ${{ inputs.prerelease == false }}
+        env:
+          BRANCH: release-${{ github.run_id }}
+        run: |
+          # melos-action pushes the PR to the branch `release-<run id>`.
+          if ! git fetch origin "$BRANCH"; then
+            echo "No release branch $BRANCH was pushed, skipping."
+            exit 0
+          fi
+          git checkout -B "$BRANCH" FETCH_HEAD
+          VERSION=$(sed -n 's/^version:[[:space:]]*//p' wrestling_scoreboard_server/pubspec.yaml)
+          VERSION="${VERSION%%+*}"
+          DIR=wrestling_scoreboard_server/database/migration
+          FILE="$DIR/v${VERSION}_Release.sql"
+          if [ -f "$FILE" ]; then
+            echo "$FILE already exists, skipping."
+            exit 0
+          fi
+          printf "UPDATE public.migration\nSET min_client_version = '%s';\n" "$VERSION" > "$FILE"
+          git add "$FILE"
+          git commit -m "chore(release): Add database migration for v$VERSION"
+          git push origin "$BRANCH"
