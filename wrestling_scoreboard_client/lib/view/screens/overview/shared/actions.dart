@@ -248,7 +248,7 @@ class OrganizationReportActionItem extends DefaultResponsiveScaffoldActionItem {
                      ).push(MaterialPageRoute(builder: (context) => OrganizationEdit(organization: organization)));
                    }
                  } else {
-                   onTap(reporter);
+                   await catchAsync(context, () => onTap(reporter));
                  }
                },
        );

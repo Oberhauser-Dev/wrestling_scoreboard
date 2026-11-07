@@ -24,12 +24,25 @@ Future<void> exportSQL({required String fileBaseName, required String sqlString}
 
 Future<void> exportRDB({required String fileBaseName, required String rdbString}) async {
   await downloadSelector(
-    content: rdbString,
+    content: toLatin1Compatible(rdbString),
     fileExtension: 'rdb',
     fileBaseName: fileBaseName,
     mimeType: 'text/rdb',
     encoding: latin1,
   );
+}
+
+/// Replaces characters which cannot be represented in Latin-1 (ISO-8859-1) with `?`.
+String toLatin1Compatible(String input) {
+  final buffer = StringBuffer();
+  for (final rune in input.runes) {
+    if (rune <= 0xFF) {
+      buffer.writeCharCode(rune);
+    } else {
+      buffer.write('?');
+    }
+  }
+  return buffer.toString();
 }
 
 /// Exports a [table] (list of rows) as CSV to the specified [fileBaseName] (without extension).
