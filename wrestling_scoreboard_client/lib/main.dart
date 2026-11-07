@@ -38,6 +38,10 @@ void main() async {
         Logger.root.shout('Framework caught an error', details.exception, details.stack);
       }
     };
+    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+      Logger.root.shout('Uncaught asynchronous error', error, stack);
+      return true;
+    };
   }
 
   // Use [HashUrlStrategy] by default to support Single Page Application without configuring the server.
