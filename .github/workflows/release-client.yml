@@ -80,8 +80,8 @@ jobs:
             {"platform": "linux", "os": "ubuntu-latest", "build-type": "debian"},
             {"platform": "linux", "os": "ubuntu-24.04-arm", "build-type": "debian"},
             {"platform": "web", "os": "ubuntu-latest", "build-type": "web"},
-            {"platform": "macos", "os": "macos-14", "build-type": "macos"},
-            ${{ inputs.dry_run && '{"platform": "ios", "os": "macos-14", "build-type": "ipa"},' || '' }}
+            {"platform": "macos", "os": "macos-latest", "build-type": "macos"},
+            ${{ inputs.dry_run && '{"platform": "ios", "os": "macos-latest", "build-type": "ipa"},' || '' }}
           '
           # Remove last ',' with ::-1 ❤️
           echo "jobs=[${content::-1}]" | tr -d '[:space:]' >> $GITHUB_OUTPUT
@@ -182,7 +182,7 @@ jobs:
           - os: ubuntu-latest
             platform: web
             publish-distributor: web-server
-          - os: macos-14
+          - os: macos-latest
             platform: ios
             publish-distributor: ios-app-store
           - os: windows-latest
